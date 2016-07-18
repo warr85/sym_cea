@@ -1,0 +1,56 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Inscripcion
+ *
+ * @ORM\Table(name="inscripcion", uniqueConstraints={@ORM\UniqueConstraint(name="i_inscripcion", columns={"id_oferta_academica", "id_estado_academico"})}, indexes={@ORM\Index(name="oferta_academica_inscripcion", columns={"id_oferta_academica"}), @ORM\Index(name="fki_estado_academico_inscripcion", columns={"id_estado_academico"}), @ORM\Index(name="fki_estatus_inscripcion", columns={"id_estatus"})})
+ * @ORM\Entity
+ */
+class Inscripcion
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false, options={"comment" = "Identificador de la inscripcion del estudiante"})
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\SequenceGenerator(sequenceName="inscripcion_id_seq", allocationSize=1, initialValue=1)
+     */
+    private $id;
+
+    /**
+     * @var \AppBundle\Entity\EstadoAcademico
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\EstadoAcademico")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_estado_academico", referencedColumnName="id", nullable=false)
+     * })
+     */
+    private $idEstadoAcademico;
+
+    /**
+     * @var \AppBundle\Entity\OfertaAcademica
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\OfertaAcademica")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_oferta_academica", referencedColumnName="id", nullable=false)
+     * })
+     */
+    private $idOfertaAcademica;
+
+    /**
+     * @var \AppBundle\Entity\Estatus
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Estatus")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_estatus", referencedColumnName="id", nullable=false)
+     * })
+     */
+    private $idEstatus;
+
+    
+}

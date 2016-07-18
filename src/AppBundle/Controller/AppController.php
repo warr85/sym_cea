@@ -167,21 +167,31 @@ class AppController extends Controller {
      */
     public function serviciosEditAction(DocenteServicio $servicios, $estatus)
     {
-        
-       $servicio = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->findOneById($servicios->getId());
-       
+               
+       $em = $this->getDoctrine()->getManager();
        if($estatus == "true") {
-           $servicio->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(1));           
+           $servicios->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(1));           
+           
+           if($servicios->getIdServicioCe()->getId() == '3'){
+                $user = $this->getDoctrine()->getRepository('AppBundle:Usuarios')->findOneByIdRolInstitucion($servicios->getIdRolInstitucion());
+                $user->addRol($this->getDoctrine()->getRepository('AppBundle:Role')->findOneByName("ROLE_ESTUDIANTE"));
+                $em->persist($user); 
+           }
+           
                                             
        }else{
-           $servicio->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(3));           
+           $servicios->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(3));           
+           if($servicios->getIdServicioCe()->getId() == '3'){
+                $user = $this->getDoctrine()->getRepository('AppBundle:Usuarios')->findOneByIdRolInstitucion($servicios->getIdRolInstitucion());
+                $user->removeRol($this->getDoctrine()->getRepository('AppBundle:Role')->findOneByName("ROLE_ESTUDIANTE"));
+                $em->persist($user); 
+           }
        }
-           
-       $em = $this->getDoctrine()->getManager();
-       $em->persist($servicio);       
+                  
+       $em->persist($servicios);       
        $em->flush();
        
-       $user = $this->getDoctrine()->getRepository('AppBundle:Usuarios')->findOneByIdRolInstitucion($servicio->getIdRolInstitucion());
+       $user = $this->getDoctrine()->getRepository('AppBundle:Usuarios')->findOneByIdRolInstitucion($servicios->getIdRolInstitucion());
        
        $message = \Swift_Message::newInstance()
                     ->setSubject('Resultado Solicitud de Servicio Docente CEA@UBV')
@@ -193,7 +203,7 @@ class AppController extends Controller {
                             array(    
                                 'nombres'   => $user->getIdRolInstitucion()->getIdRol()->getIdPersona()->getPrimerNombre(),
                                 'apellidos' => $user->getIdRolInstitucion()->getIdRol()->getIdPersona()->getPrimerApellido(),
-                                'servicio'  => $servicio                                
+                                'servicio'  => $servicios
                             )
                         ),
                         'text/html'
@@ -204,15 +214,17 @@ class AppController extends Controller {
        $this->addFlash('notice', 'Servicio Actualizada Correctamente, hemos enviado un correo al docente notificandole los cambios.');
        
        $escala = $this->getDoctrine()->getRepository('AppBundle:DocenteEscala')->findOneBy(array(
-                'idRolInstitucion' => $servicio->getIdRolInstitucion(),
+                'idRolInstitucion' => $servicios->getIdRolInstitucion(),
                  'idTipoEscala'   => 1
         ));
        
-       $adscripcion = $this->getDoctrine()->getRepository('AppBundle:Adscripcion')->findOneByIdRolInstitucion($servicio->getIdRolInstitucion());
+       $adscripcion = $this->getDoctrine()->getRepository('AppBundle:Adscripcion')->findOneByIdRolInstitucion($servicios->getIdRolInstitucion());
+       $ea = $this->getDoctrine()->getRepository('AppBundle:EstadoAcademico')->findOneByIdDocenteServicio($servicios);
         return $this->render('cea/servicios_mostar.html.twig', array(
-            'servicio' => $servicio,
+            'servicio' => $servicios,
             'oposicion' => $escala,
-            'adscripcion' => $adscripcion
+            'adscripcion' => $adscripcion,
+            'estado_academico' => $ea            
         ));
        
     }

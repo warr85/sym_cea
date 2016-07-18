@@ -67,11 +67,13 @@
                         {{servicio.idRolInstitucion.idInstitucion.idEjeParroquia.IdEje}}                         
                     </td>                    
                     <td>{{servicio.idRolInstitucion.idInstitucion.idEjeParroquia.idParroquia.idMunicipio.idEstado}} </td>
-                    <td>
+                    <td>                        
                         {% if servicio.idServicioCe.id == 1 %}
                             <a href="{{ path('cea_servicio_show', { 'id': servicio.id }) }}"  class="btn btn-xs btn-info"><i class="fa fa-eye"> </i></a>                        
                         {% elseif servicio.idServicioCe.id == 2 %}
-                            <a href="{{ path('cea_adscripcion_show', { 'id': servicio.id }) }}"  class="btn btn-xs btn-info"><i class="fa fa-eye"> </i></a>                        
+                            <a href="{{ path('cea_adscripcion_show', { 'id': servicio.id }) }}"  class="btn btn-xs btn-info"><i class="fa fa-eye"> </i></a>
+                        {% elseif servicio.idServicioCe.id == 3 %}
+                            <a href="{{ path('cea_estado_academico_show', { 'id': servicio.id }) }}"  class="btn btn-xs btn-info"><i class="fa fa-eye"> </i></a>
                          {% endif %}
                     </td>
                   </tr>

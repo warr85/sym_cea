@@ -55,20 +55,47 @@
                   {% if is_granted('ROLE_ADSCRITO') %}                      
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown"> <i class="fa fa-gears"></i>
-                            <span>Servicios Docente</span> <b class="caret"></b>
+                            <span>Serv. Docente</span> <b class="caret"></b>
                         </a>
                        <ul class="dropdown-menu">
                            <li><a href="{{ path('servicios_index') }}">Mis Servicios</a></li>                           
                            <li><a href="#">Solicitar Ascenso</a></li>
+                           <li><a href="{{ path( 'cea_solicitudes_estado_academico' ) }}">Solicitar Estado Académico</a></li>
                            <li><a href="{{ path('cea_solicitudes_recocimiento_antiguedad') }}">Reconocimiento de Antiguedad</a></li>                         
                        </ul>
                    </li>
-                  {% endif %}                     
+                  {% endif %}   
+
+                  
+                  {% if is_granted('ROLE_ESTUDIANTE') %}                      
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown"> <i class="fa fa-gears"></i>
+                            <span>Serv. Estudiante</span> <b class="caret"></b>
+                        </a>
+                       <ul class="dropdown-menu">                                                     
+                           <li><a href="#">Inscripción</a></li>
+                           <li><a href="#">Notas</a></li>                           
+                       </ul>
+                   </li>
+                  {% endif %}    
+
+
+                  
                 </ul>
                 <ul class="pull-right">
                 {% if is_granted('ROLE_COORDINADOR_REGIONAL') %}
+                    
+                <li class="dropdown"><a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown"> 
+                        <i class="fa fa-calendar-plus-o"></i><span>Adm. Academica</span> <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Oferta Academica</a></li>                                           
+                    </ul>
+                  </li>
+                    
+                    
                                      
-                  <li class="dropdown"><a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown"> <i class="fa fa-group"></i><span>Ver Solicitudes</span> <b class="caret"></b></a>
+                  <li class="dropdown"><a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown"> 
+                          <i class="fa fa-group"></i><span>Solicitudes</span> <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li> <a data-toggle="modal" data-target="#buscarServicios">Buscar Servicios</a></li> 
                       <li><a href="{{ path('cea_servicios', {'tipo' : 'antiguedad'})}}">En espera de Aprobación</a></li>
@@ -78,7 +105,7 @@
                   </li>
                     {% endif %}
                   {% if is_granted('ROLE_ADMINISTRADOR') %}
-                 <li {% if (app.request.attributes.get('_route') == 'admin_usuarios_index') %} class="active" {% endif %}><a href="{{path('admin_usuarios_index')}}"><i class="fa fa-user"></i><span>Gestión de Usuarios</span> </a> </li>                  
+                    <li {% if (app.request.attributes.get('_route') == 'admin_usuarios_index') %} class="active" {% endif %}><a href="{{path('admin_usuarios_index')}}"><i class="fa fa-user"></i><span>Usuarios</span> </a> </li>                  
                  {% endif %}
                   </ul>
                   

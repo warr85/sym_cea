@@ -1,0 +1,45 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Periodo
+ *
+ * @ORM\Table(name="periodo")
+ * @ORM\Entity
+ */
+class Periodo
+{
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nombre", type="string", length=8, nullable=false, options={"comment" = "nombre periodo"})
+     */
+    private $nombre;
+
+    /**
+     * @var \AppBundle\Entity\Estatus
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Estatus")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_estatus", referencedColumnName="id", nullable=false)
+     * })
+     */
+    private $idEstatus;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false, options={"comment" = "identificador del periodo lectivo"})
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\SequenceGenerator(sequenceName="periodo_id_seq", allocationSize=1, initialValue=1)
+     */
+    private $id;
+
+
+
+    
+}

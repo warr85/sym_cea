@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>OfertaAcademica list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Aula</th>
+                <th>Cupo</th>
+                <th>Id</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for ofertaAcademica in ofertaAcademicas %}
+            <tr>
+                <td><a href="{{ path('ceapp_gestion_oferta_academica_show', { 'id': ofertaAcademica.id }) }}">{{ ofertaAcademica.aula }}</a></td>
+                <td>{{ ofertaAcademica.cupo }}</td>
+                <td>{{ ofertaAcademica.id }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('ceapp_gestion_oferta_academica_show', { 'id': ofertaAcademica.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('ceapp_gestion_oferta_academica_edit', { 'id': ofertaAcademica.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('ceapp_gestion_oferta_academica_new') }}">Create a new entry</a>
+        </li>
+    </ul>
+{% endblock %}

@@ -1,0 +1,81 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * EstadoAcademico
+ *
+ * @ORM\Table(name="estado_academico", indexes={@ORM\Index(name="fki_id_perido", columns={"id_periodo"}), @ORM\Index(name="fki_docente_servicio_estado_academico", columns={"id_docente_servicio"}), @ORM\Index(name="fki_grado_academico_estado_academico", columns={"id_grado_academico"}), @ORM\Index(name="fki_malla_curricular_estado_academico", columns={"id_malla_curricular"}), @ORM\Index(name="fki_rol_institucion_estado_academico", columns={"id_rol_institucion"})})
+ * @ORM\Entity
+ */
+class EstadoAcademico
+{
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fecha", type="date", nullable=false, options={"comment" = "fecha de registro del estdo academico"})
+     */
+    private $fecha;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="observacion", type="string", length=255, nullable=true, options={"comment" = "observacion del registro"})
+     */
+    private $observacion;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false, options={"comment" = "identificador del estado academico"})
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\SequenceGenerator(sequenceName="estado_academico_id_seq", allocationSize=1, initialValue=1)
+     */
+    private $id;
+
+    /**
+     * @var \AppBundle\Entity\DocenteServicio
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\DocenteServicio")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_docente_servicio", referencedColumnName="id", nullable=false)
+     * })
+     */
+    private $idDocenteServicio;
+
+    /**
+     * @var \AppBundle\Entity\RolInstitucion
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\RolInstitucion")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_rol_institucion", referencedColumnName="id", nullable=false)
+     * })
+     */
+    private $idRolInstitucion;
+
+    
+    /**
+     * @var \AppBundle\Entity\MallaCurricular
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\OfertaMallaCurricular")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_oferta_malla_curricular", referencedColumnName="id", nullable=false)
+     * })
+     */
+    private $idOfertaMallaCurricular;
+
+    /**
+     * @var \AppBundle\Entity\GradoAcademico
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\GradoAcademico")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_grado_academico", referencedColumnName="id",nullable=false)
+     * })
+     */
+    private $idGradoAcademico;
+
+    
+}

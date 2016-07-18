@@ -127,13 +127,13 @@ class DocenteServicio {
    */
     public function setFechaSolicitud()
     {
-	    $this->fechaSolicitud = new \DateTime();
-	    $this->fechaUltimaActualizacion = new \DateTime();
+	    $this->fecha_solicitud = new \DateTime();
+	    $this->fecha_ultima_actualizacion = new \DateTime();
     }
     
     public function getFechaSolicitud()
     {
-	    return $this->fechaSolicitud;
+	    return $this->fecha_solicitud;
     }
 
     /**
@@ -141,7 +141,7 @@ class DocenteServicio {
     */
     public function setFechaUltimaActualizacion()
     {
-        $this->fechaUltimaActualizacion = new \DateTime();
+        $this->fecha_utlima_actualizacion = new \DateTime();
     }
     
     
@@ -190,15 +190,5 @@ class DocenteServicio {
     public function getIdServicioCe()
     {
         return $this->idServicioCe;
-    }
-
-    /**
-     * Get fechaUltimaActualizacion
-     *
-     * @return \DateTime 
-     */
-    public function getFechaUltimaActualizacion()
-    {
-        return $this->fechaUltimaActualizacion;
     }
 }
