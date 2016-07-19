@@ -7,8 +7,9 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * EstadoAcademico
  *
- * @ORM\Table(name="estado_academico", indexes={@ORM\Index(name="fki_id_perido", columns={"id_periodo"}), @ORM\Index(name="fki_docente_servicio_estado_academico", columns={"id_docente_servicio"}), @ORM\Index(name="fki_grado_academico_estado_academico", columns={"id_grado_academico"}), @ORM\Index(name="fki_malla_curricular_estado_academico", columns={"id_malla_curricular"}), @ORM\Index(name="fki_rol_institucion_estado_academico", columns={"id_rol_institucion"})})
+ * @ORM\Table(name="estado_academico", uniqueConstraints={@ORM\UniqueConstraint(name="i_rol_institucion_oferta_malla", columns={"id_rol_institucion", "id_oferta_malla_curricular"})}, indexes = {@ORM\Index(name="fki_docente_servicio_estado_academico", columns={"id_docente_servicio"}), @ORM\Index(name="fki_grado_academico_estado_academico", columns={"id_grado_academico"}), @ORM\Index(name="fki_oferta_malla_curricular_estado_academico", columns={"id_oferta_malla_curricular"}), @ORM\Index(name="fki_rol_institucion_estado_academico", columns={"id_rol_institucion"})})
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks()
  */
 class EstadoAcademico
 {
@@ -76,6 +77,12 @@ class EstadoAcademico
      * })
      */
     private $idGradoAcademico;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Inscripcion", mappedBy="idEstadoAcademico", cascade={"all"})
+     * */
+    protected $hasInscripcion;
 
+   
     
 }

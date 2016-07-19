@@ -44,9 +44,15 @@ class OfertaAcademica
      *   @ORM\JoinColumn(name="id_malla_curricular_uc", referencedColumnName="id", nullable=false)
      * })
      * 
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Inscripcion", inversedBy="uc")
      */
-    private $inscripcion;
+    private $idMallaCurricularUc;
+    
+    
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Inscripcion" , mappedBy="idOfertaAcademica" , cascade={"all"})
+     * */
+    protected $hasInscripcion;
+    
 
     /**
      * @var \AppBundle\Entity\Turno
@@ -89,178 +95,5 @@ class OfertaAcademica
     private $idOfertaMallaCurricular;
    
 
-    /**
-     * Set aula
-     *
-     * @param string $aula
-     * @return OfertaAcademica
-     */
-    public function setAula($aula)
-    {
-        $this->aula = $aula;
-
-        return $this;
-    }
-
-    /**
-     * Get aula
-     *
-     * @return string 
-     */
-    public function getAula()
-    {
-        return $this->aula;
-    }
-
-    /**
-     * Set cupo
-     *
-     * @param string $cupo
-     * @return OfertaAcademica
-     */
-    public function setCupo($cupo)
-    {
-        $this->cupo = $cupo;
-
-        return $this;
-    }
-
-    /**
-     * Get cupo
-     *
-     * @return string 
-     */
-    public function getCupo()
-    {
-        return $this->cupo;
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer 
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set idMallaCurricularUc
-     *
-     * @param \AppBundle\Entity\MallaCurricularUC $idMallaCurricularUc
-     * @return OfertaAcademica
-     */
-    public function setIdMallaCurricularUc(\AppBundle\Entity\MallaCurricularUC $idMallaCurricularUc)
-    {
-        $this->idMallaCurricularUc = $idMallaCurricularUc;
-
-        return $this;
-    }
-
-    /**
-     * Get idMallaCurricularUc
-     *
-     * @return \AppBundle\Entity\MallaCurricularUC 
-     */
-    public function getIdMallaCurricularUc()
-    {
-        return $this->idMallaCurricularUc;
-    }
-
-    /**
-     * Set idTurno
-     *
-     * @param \AppBundle\Entity\Turno $idTurno
-     * @return OfertaAcademica
-     */
-    public function setIdTurno(\AppBundle\Entity\Turno $idTurno)
-    {
-        $this->idTurno = $idTurno;
-
-        return $this;
-    }
-
-    /**
-     * Get idTurno
-     *
-     * @return \AppBundle\Entity\Turno 
-     */
-    public function getIdTurno()
-    {
-        return $this->idTurno;
-    }
-
-    /**
-     * Set idSeccion
-     *
-     * @param \AppBundle\Entity\Seccion $idSeccion
-     * @return OfertaAcademica
-     */
-    public function setIdSeccion(\AppBundle\Entity\Seccion $idSeccion)
-    {
-        $this->idSeccion = $idSeccion;
-
-        return $this;
-    }
-
-    /**
-     * Get idSeccion
-     *
-     * @return \AppBundle\Entity\Seccion 
-     */
-    public function getIdSeccion()
-    {
-        return $this->idSeccion;
-    }
-
-    /**
-     * Set idRolInstitucion
-     *
-     * @param \AppBundle\Entity\RolInstitucion $idRolInstitucion
-     * @return OfertaAcademica
-     */
-    public function setIdRolInstitucion(\AppBundle\Entity\RolInstitucion $idRolInstitucion)
-    {
-        $this->idRolInstitucion = $idRolInstitucion;
-
-        return $this;
-    }
-
-    /**
-     * Get idRolInstitucion
-     *
-     * @return \AppBundle\Entity\RolInstitucion 
-     */
-    public function getIdRolInstitucion()
-    {
-        return $this->idRolInstitucion;
-    }
-
-    /**
-     * Set idOfertaMallaCurricular
-     *
-     * @param \AppBundle\Entity\OfertaMallaCurricular $idOfertaMallaCurricular
-     * @return OfertaAcademica
-     */
-    public function setIdOfertaMallaCurricular(\AppBundle\Entity\OfertaMallaCurricular $idOfertaMallaCurricular)
-    {
-        $this->idOfertaMallaCurricular = $idOfertaMallaCurricular;
-
-        return $this;
-    }
-
-    /**
-     * Get idOfertaMallaCurricular
-     *
-     * @return \AppBundle\Entity\OfertaMallaCurricular 
-     */
-    public function getIdOfertaMallaCurricular()
-    {
-        return $this->idOfertaMallaCurricular;
-    }
     
-    public function __toString() {
-        return $this->getIdMallaCurricularUc()->getIdUnidadCurricularVolumen()->getIdUnidadCurricular()->getNombre();
-    }
 }

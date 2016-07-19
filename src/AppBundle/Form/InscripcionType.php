@@ -16,10 +16,10 @@ class InscripcionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            /*->add('idEstadoAcademico')
+            /*->add('idRolInstitucion')
             ->add('idOfertaAcademica')
             ->add('idEstatus')*/
-            ->add('uc', EntityType::class, array(
+            ->add('OfertaAcademica', EntityType::class, array(
                 'class' => 'AppBundle:OfertaAcademica',
                 'expanded'  => true,
                 'multiple'  => true
@@ -33,7 +33,7 @@ class InscripcionType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\Inscripcion',
+            'data_class' => 'AppBundle\Entity\EstadoAcademico',
         ));
     }
 }

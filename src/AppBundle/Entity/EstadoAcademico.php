@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use AppBundle\Entity\Inscripcion;
 
 /**
  * EstadoAcademico
@@ -77,15 +78,34 @@ class EstadoAcademico
      * })
      */
     private $idGradoAcademico;
-
     
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Inscripcion", mappedBy="idEstadoAcademico", cascade={"all"})
+     * */
+    protected $hasInscripcion;
+    
+    protected $OfertaAcademica;
+
+   
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->OfertaAcademica = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->hasInscripcion = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
-   * @ORM\PrePersist
-   */
-    public function setFecha()
+     * Set fecha
+     *
+     * @param \DateTime $fecha
+     * @return EstadoAcademico
+     */
+    public function setFecha($fecha)
     {
-        $this->fecha = new \DateTime();	
+        $this->fecha = $fecha;
 
         return $this;
     }
@@ -223,5 +243,67 @@ class EstadoAcademico
     public function getIdGradoAcademico()
     {
         return $this->idGradoAcademico;
+    }
+
+    /**
+     * Add hasInscripcion
+     *
+     * @param \AppBundle\Entity\Inscripcion $hasInscripcion
+     * @return EstadoAcademico
+     */
+    public function addHasInscripcion(\AppBundle\Entity\Inscripcion $hasInscripcion)
+    {
+        $this->hasInscripcion[] = $hasInscripcion;
+
+        return $this;
+    }
+
+    /**
+     * Remove hasInscripcion
+     *
+     * @param \AppBundle\Entity\Inscripcion $hasInscripcion
+     */
+    public function removeHasInscripcion(\AppBundle\Entity\Inscripcion $hasInscripcion)
+    {
+        $this->hasInscripcion->removeElement($hasInscripcion);
+    }
+
+    /**
+     * Get hasInscripcion
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getHasInscripcion()
+    {
+        return $this->hasInscripcion;
+    }
+    
+    
+     // Important 
+    public function getOfertaAcademica()
+    {
+        $ofertaAcademica = new \Doctrine\Common\Collections\ArrayCollection();
+        
+        foreach($this->hasInscripcion as $p)
+        {
+            $ofertaAcademica[] = $p->getOfertaAcademica();
+        }
+
+        return $ofertaAcademica;
+    }
+    // Important
+    public function setOfertaAcademica($ofertaAcademica)
+    {
+        foreach($ofertaAcademica as $o)
+        {
+            $inscripcion = new Inscripcion();
+
+            $inscripcion->setIdEstadoAcademico($this);
+            $inscripcion->setIdOfertaAcademica($o);
+            $inscripcion->setIdEstatus($this->getIdDocenteServicio()->getIdEstatus());
+
+            $this->addHasInscripcion($inscripcion);            
+        }
+
     }
 }

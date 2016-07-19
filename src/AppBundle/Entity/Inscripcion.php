@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Inscripcion
  *
- * @ORM\Table(name="inscripcion", uniqueConstraints={@ORM\UniqueConstraint(name="i_inscripcion", columns={"id_oferta_academica", "id_estado_academico"})}, indexes={@ORM\Index(name="oferta_academica_inscripcion", columns={"id_oferta_academica"}), @ORM\Index(name="fki_estado_academico_inscripcion", columns={"id_estado_academico"}), @ORM\Index(name="fki_estatus_inscripcion", columns={"id_estatus"})})
+ * @ORM\Table(name="inscripcion")
  * @ORM\Entity
  */
 class Inscripcion
@@ -23,30 +23,18 @@ class Inscripcion
     private $id;
 
     /**
-     * @var \AppBundle\Entity\EstadoAcademico
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\EstadoAcademico")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_estado_academico", referencedColumnName="id", nullable=false)
-     * })
-     */
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\EstadoAcademico", inversedBy="hasInscripcion")
+     * @ORM\JoinColumn(name="estado_academico_id", referencedColumnName="id")
+     * */
     private $idEstadoAcademico;
 
-    /**
-     * @var \AppBundle\Entity\OfertaAcademica
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\OfertaAcademica")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_oferta_academica", referencedColumnName="id", nullable=false)
-     * })
-     */
+     /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\OfertaAcademica", inversedBy="hasInscripcion")
+     * @ORM\JoinColumn(name="oferta_academica_id", referencedColumnName="id")
+     * */
     private $idOfertaAcademica;
     
-    /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\OfertaAcademica", mappedBy="idMallaCurricularUc")
-     */
-    private $uc;
-
+  
     /**
      * @var \AppBundle\Entity\Estatus
      *
@@ -57,7 +45,7 @@ class Inscripcion
      */
     private $idEstatus;
 
-    
+   
 
     /**
      * Get id
@@ -75,7 +63,7 @@ class Inscripcion
      * @param \AppBundle\Entity\EstadoAcademico $idEstadoAcademico
      * @return Inscripcion
      */
-    public function setIdEstadoAcademico(\AppBundle\Entity\EstadoAcademico $idEstadoAcademico)
+    public function setIdEstadoAcademico(\AppBundle\Entity\EstadoAcademico $idEstadoAcademico = null)
     {
         $this->idEstadoAcademico = $idEstadoAcademico;
 
@@ -98,7 +86,7 @@ class Inscripcion
      * @param \AppBundle\Entity\OfertaAcademica $idOfertaAcademica
      * @return Inscripcion
      */
-    public function setIdOfertaAcademica(\AppBundle\Entity\OfertaAcademica $idOfertaAcademica)
+    public function setIdOfertaAcademica(\AppBundle\Entity\OfertaAcademica $idOfertaAcademica = null)
     {
         $this->idOfertaAcademica = $idOfertaAcademica;
 
@@ -136,45 +124,5 @@ class Inscripcion
     public function getIdEstatus()
     {
         return $this->idEstatus;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->uc = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
-     * Add uc
-     *
-     * @param \AppBundle\Entity\OfertaAcademica $uc
-     * @return Inscripcion
-     */
-    public function addUc(\AppBundle\Entity\OfertaAcademica $uc)
-    {
-        $this->uc[] = $uc;
-
-        return $this;
-    }
-
-    /**
-     * Remove uc
-     *
-     * @param \AppBundle\Entity\OfertaAcademica $uc
-     */
-    public function removeUc(\AppBundle\Entity\OfertaAcademica $uc)
-    {
-        $this->uc->removeElement($uc);
-    }
-
-    /**
-     * Get uc
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getUc()
-    {
-        return $this->uc;
     }
 }

@@ -41,11 +41,11 @@ class InscripcionController extends Controller
      */
     public function newAction(Request $request)
     {
-        $inscripcion = new Inscripcion();
+        $inscripcion = $this->getDoctrine()->getRepository('AppBundle:EstadoAcademico')->findOneByIdRolInstitucion($this->getUser()->getIdRolInstitucion());
         $form = $this->createForm('AppBundle\Form\InscripcionType', $inscripcion);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {           
             $em = $this->getDoctrine()->getManager();
             $em->persist($inscripcion);
             $em->flush();

@@ -44,9 +44,15 @@ class OfertaAcademica
      *   @ORM\JoinColumn(name="id_malla_curricular_uc", referencedColumnName="id", nullable=false)
      * })
      * 
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Inscripcion", inversedBy="uc")
      */
     private $idMallaCurricularUc;
+    
+    
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Inscripcion" , mappedBy="idOfertaAcademica" , cascade={"all"})
+     * */
+    protected $hasInscripcion;
+    
 
     /**
      * @var \AppBundle\Entity\Turno
@@ -88,6 +94,15 @@ class OfertaAcademica
      */
     private $idOfertaMallaCurricular;
    
+
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->hasInscripcion = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Set aula
@@ -148,10 +163,10 @@ class OfertaAcademica
     /**
      * Set idMallaCurricularUc
      *
-     * @param \AppBundle\Entity\MallaCurricularUC $idMallaCurricularUc
+     * @param \AppBundle\Entity\MallaCurricularUc $idMallaCurricularUc
      * @return OfertaAcademica
      */
-    public function setIdMallaCurricularUc(\AppBundle\Entity\MallaCurricularUC $idMallaCurricularUc)
+    public function setIdMallaCurricularUc(\AppBundle\Entity\MallaCurricularUc $idMallaCurricularUc)
     {
         $this->idMallaCurricularUc = $idMallaCurricularUc;
 
@@ -161,11 +176,44 @@ class OfertaAcademica
     /**
      * Get idMallaCurricularUc
      *
-     * @return \AppBundle\Entity\MallaCurricularUC 
+     * @return \AppBundle\Entity\MallaCurricularUc 
      */
     public function getIdMallaCurricularUc()
     {
         return $this->idMallaCurricularUc;
+    }
+
+    /**
+     * Add hasInscripcion
+     *
+     * @param \AppBundle\Entity\Inscripcion $hasInscripcion
+     * @return OfertaAcademica
+     */
+    public function addHasInscripcion(\AppBundle\Entity\Inscripcion $hasInscripcion)
+    {
+        $this->hasInscripcion[] = $hasInscripcion;
+
+        return $this;
+    }
+
+    /**
+     * Remove hasInscripcion
+     *
+     * @param \AppBundle\Entity\Inscripcion $hasInscripcion
+     */
+    public function removeHasInscripcion(\AppBundle\Entity\Inscripcion $hasInscripcion)
+    {
+        $this->hasInscripcion->removeElement($hasInscripcion);
+    }
+
+    /**
+     * Get hasInscripcion
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getHasInscripcion()
+    {
+        return $this->hasInscripcion;
     }
 
     /**
@@ -262,28 +310,5 @@ class OfertaAcademica
     
     public function __toString() {
         return $this->getIdMallaCurricularUc()->getIdUnidadCurricularVolumen()->getIdUnidadCurricular()->getNombre();
-    }
-
-    /**
-     * Set inscripcion
-     *
-     * @param \AppBundle\Entity\MallaCurricularUc $inscripcion
-     * @return OfertaAcademica
-     */
-    public function setInscripcion(\AppBundle\Entity\MallaCurricularUc $inscripcion)
-    {
-        $this->inscripcion = $inscripcion;
-
-        return $this;
-    }
-
-    /**
-     * Get inscripcion
-     *
-     * @return \AppBundle\Entity\MallaCurricularUc 
-     */
-    public function getInscripcion()
-    {
-        return $this->inscripcion;
     }
 }
