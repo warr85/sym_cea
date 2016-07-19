@@ -15,7 +15,7 @@ class TipoUc
     /**
      * @var string
      *
-     * @ORM\Column(name="nombre", type="string", length=10, nullable=false, options={"comment" = "nombre del tipo de unidad curricular (optativa, obligatoria, electiva)"})
+     * @ORM\Column(name="nombre", type="string", length=80, nullable=false, options={"comment" = "nombre del tipo de unidad curricular (optativa, obligatoria, electiva)"})
      */
     private $nombre;
 

@@ -155,4 +155,13 @@ class UnidadCurricular
     {
         return $this->creditos;
     }
+    
+    /**
+     * 
+     * @return string
+     */
+    
+    public function __toString() {
+        return $this->getNombre();
+    }
 }

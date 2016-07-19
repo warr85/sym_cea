@@ -40,9 +40,9 @@ class MallaCurricularUc
     private $idUnidadCurricularVolumen;
 
     /**
-     * @var \AppBundle\Entity\TrayectoTramoModalidad
+     * @var \AppBundle\Entity\TrayectoTramoModalidadTipo
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\TrayectoTramoModalidad")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\TrayectoTramoModalidadTipo")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_trayecto_tramo_mod", referencedColumnName="id", nullable=false)
      * })
@@ -119,10 +119,10 @@ class MallaCurricularUc
     /**
      * Set idTrayectoTramoMod
      *
-     * @param \AppBundle\Entity\TrayectoTramoModalidad $idTrayectoTramoMod
+     * @param \AppBundle\Entity\TrayectoTramoModalidadTipo $idTrayectoTramoMod
      * @return MallaCurricularUc
      */
-    public function setIdTrayectoTramoMod(\AppBundle\Entity\TrayectoTramoModalidad $idTrayectoTramoMod)
+    public function setIdTrayectoTramoMod(\AppBundle\Entity\TrayectoTramoModalidadTipo $idTrayectoTramoMod)
     {
         $this->idTrayectoTramoMod = $idTrayectoTramoMod;
 
@@ -132,7 +132,7 @@ class MallaCurricularUc
     /**
      * Get idTrayectoTramoMod
      *
-     * @return \AppBundle\Entity\TrayectoTramoModalidad 
+     * @return \AppBundle\Entity\TrayectoTramoModalidadTipo 
      */
     public function getIdTrayectoTramoMod()
     {

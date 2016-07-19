@@ -5,12 +5,12 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * TrayectoTramoModalidad
+ * TrayectoTramoModalidadTipo
  *
- * @ORM\Table(name="trayecto_tramo_modalidad", uniqueConstraints={@ORM\UniqueConstraint(name="i_trayecto_tramo_modalidad", columns={"id_trayecto", "id_tramo"})}, indexes={@ORM\Index(name="fki_modalidad_trayecto_tramo_modalidad", columns={"id_modalidad"}), @ORM\Index(name="fki_tramo_trayecto_tramo_modalidad", columns={"id_tramo"}), @ORM\Index(name="IDX_AE063967814981A6", columns={"id_trayecto"})})
+ * @ORM\Table(name="trayecto_tramo_modalidad_tipo_uc", uniqueConstraints={@ORM\UniqueConstraint(name="i_trayecto_tramo_modalidad_tipo_uc", columns={"id_trayecto", "id_tramo", "id_modalidad", "id_tipo_uc"})}, indexes={@ORM\Index(name="fki_modalidad", columns={"id_modalidad"}), @ORM\Index(name="fki_tramo_trayecto_tramo_modalidad", columns={"id_tramo"}), @ORM\Index(name="IDX_AE063967814981A6", columns={"id_trayecto"}), @ORM\Index(name="IDX_TIPO_UC", columns={"id_tipo_uc"})})
  * @ORM\Entity
  */
-class TrayectoTramoModalidad
+class TrayectoTramoModalidadTipo
 {
     /**
      * @var integer
@@ -51,6 +51,16 @@ class TrayectoTramoModalidad
      * })
      */
     private $idModalidad;
+    
+    /**
+     * @var \AppBundle\Entity\TipoUc
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\TipoUc")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_tipo_uc", referencedColumnName="id", nullable=false)
+     * })
+     */
+    private $idTipoUc;
 
 
 
@@ -68,7 +78,7 @@ class TrayectoTramoModalidad
      * Set idTrayecto
      *
      * @param \AppBundle\Entity\Trayecto $idTrayecto
-     * @return TrayectoTramoModalidad
+     * @return TrayectoTramoModalidadTipo
      */
     public function setIdTrayecto(\AppBundle\Entity\Trayecto $idTrayecto)
     {
@@ -91,7 +101,7 @@ class TrayectoTramoModalidad
      * Set idTramo
      *
      * @param \AppBundle\Entity\Tramo $idTramo
-     * @return TrayectoTramoModalidad
+     * @return TrayectoTramoModalidadTipo
      */
     public function setIdTramo(\AppBundle\Entity\Tramo $idTramo)
     {
@@ -114,7 +124,7 @@ class TrayectoTramoModalidad
      * Set idModalidad
      *
      * @param \AppBundle\Entity\Modalidad $idModalidad
-     * @return TrayectoTramoModalidad
+     * @return TrayectoTramoModalidadTipo
      */
     public function setIdModalidad(\AppBundle\Entity\Modalidad $idModalidad)
     {
@@ -131,5 +141,28 @@ class TrayectoTramoModalidad
     public function getIdModalidad()
     {
         return $this->idModalidad;
+    }
+
+    /**
+     * Set idTipoUc
+     *
+     * @param \AppBundle\Entity\TipoUc $idTipoUc
+     * @return TrayectoTramoModalidadTipo
+     */
+    public function setIdTipoUc(\AppBundle\Entity\TipoUc $idTipoUc)
+    {
+        $this->idTipoUc = $idTipoUc;
+
+        return $this;
+    }
+
+    /**
+     * Get idTipoUc
+     *
+     * @return \AppBundle\Entity\TipoUc 
+     */
+    public function getIdTipoUc()
+    {
+        return $this->idTipoUc;
     }
 }
