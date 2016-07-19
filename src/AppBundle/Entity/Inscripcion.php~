@@ -41,6 +41,11 @@ class Inscripcion
      * })
      */
     private $idOfertaAcademica;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\OfertaAcademica", mappedBy="id_malla_curricular_uc")
+     */
+    private $uc;
 
     /**
      * @var \AppBundle\Entity\Estatus
@@ -53,4 +58,83 @@ class Inscripcion
     private $idEstatus;
 
     
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set idEstadoAcademico
+     *
+     * @param \AppBundle\Entity\EstadoAcademico $idEstadoAcademico
+     * @return Inscripcion
+     */
+    public function setIdEstadoAcademico(\AppBundle\Entity\EstadoAcademico $idEstadoAcademico)
+    {
+        $this->idEstadoAcademico = $idEstadoAcademico;
+
+        return $this;
+    }
+
+    /**
+     * Get idEstadoAcademico
+     *
+     * @return \AppBundle\Entity\EstadoAcademico 
+     */
+    public function getIdEstadoAcademico()
+    {
+        return $this->idEstadoAcademico;
+    }
+
+    /**
+     * Set idOfertaAcademica
+     *
+     * @param \AppBundle\Entity\OfertaAcademica $idOfertaAcademica
+     * @return Inscripcion
+     */
+    public function setIdOfertaAcademica(\AppBundle\Entity\OfertaAcademica $idOfertaAcademica)
+    {
+        $this->idOfertaAcademica = $idOfertaAcademica;
+
+        return $this;
+    }
+
+    /**
+     * Get idOfertaAcademica
+     *
+     * @return \AppBundle\Entity\OfertaAcademica 
+     */
+    public function getIdOfertaAcademica()
+    {
+        return $this->idOfertaAcademica;
+    }
+
+    /**
+     * Set idEstatus
+     *
+     * @param \AppBundle\Entity\Estatus $idEstatus
+     * @return Inscripcion
+     */
+    public function setIdEstatus(\AppBundle\Entity\Estatus $idEstatus)
+    {
+        $this->idEstatus = $idEstatus;
+
+        return $this;
+    }
+
+    /**
+     * Get idEstatus
+     *
+     * @return \AppBundle\Entity\Estatus 
+     */
+    public function getIdEstatus()
+    {
+        return $this->idEstatus;
+    }
 }

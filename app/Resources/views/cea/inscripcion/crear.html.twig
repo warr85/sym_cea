@@ -1,0 +1,58 @@
+{% extends 'base_app.html.twig' %}
+
+{% block body %}
+    
+   <div class="container">
+     <div class="widget widget-table action-table">
+            <div class="widget-header"> <i class="icon-th-list"></i>
+              <h3>Oferta Academica Activa para el Eje</h3>
+            </div>
+            <!-- /widget-header -->
+    <div class="widget-content">
+    <table class="table table-striped table-bordered table-hover table-condensed table-responsive">
+        <thead>
+            <tr>
+                <th>Malla</th>
+                <th>Codigo UC</th>
+                <th>Unidad Curricular</th>
+                <th>Seccion</th>
+                <th>Tipo</th>                       
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+           
+        {% for oa in ofertaAcademicas %}
+            <tr>
+                
+                <td>{{oa.idMallaCurricularUc.idMallaCurricular.codigo}}</td>
+                <td>{{oa.idMallaCurricularUc.idUnidadCurricularVolumen.idUnidadCurricular.codigo}}</td>
+                <td>{{oa.idMallaCurricularUc.idUnidadCurricularVolumen.idUnidadCurricular}}</td>
+                <td>{{oa.idSeccion}}</td>
+                <td>{{oa.idMallaCurricularUc.idTrayectoTramoModalidadTipoUc.idTipoUc}}</td>               
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('ceapp_gestion_oferta_academica_show', { 'id': oa.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('ceapp_gestion_oferta_academica_edit', { 'id': oa.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('ceapp_gestion_oferta_academica_new') }}">Create a new entry</a>
+        </li>
+    </ul>
+    </div>
+            
+    </div>
+   </div>
+            
+{% endblock %}

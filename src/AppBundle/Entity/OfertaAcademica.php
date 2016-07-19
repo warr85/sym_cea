@@ -43,6 +43,8 @@ class OfertaAcademica
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_malla_curricular_uc", referencedColumnName="id", nullable=false)
      * })
+     * 
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Inscripcion", inversedBy="uc")
      */
     private $idMallaCurricularUc;
 
@@ -256,5 +258,32 @@ class OfertaAcademica
     public function getIdOfertaMallaCurricular()
     {
         return $this->idOfertaMallaCurricular;
+    }
+    
+    public function __toString() {
+        return $this->getIdMallaCurricularUc()->getIdUnidadCurricularVolumen()->getIdUnidadCurricular()->getNombre();
+    }
+
+    /**
+     * Set inscripcion
+     *
+     * @param \AppBundle\Entity\MallaCurricularUc $inscripcion
+     * @return OfertaAcademica
+     */
+    public function setInscripcion(\AppBundle\Entity\MallaCurricularUc $inscripcion)
+    {
+        $this->inscripcion = $inscripcion;
+
+        return $this;
+    }
+
+    /**
+     * Get inscripcion
+     *
+     * @return \AppBundle\Entity\MallaCurricularUc 
+     */
+    public function getInscripcion()
+    {
+        return $this->inscripcion;
     }
 }

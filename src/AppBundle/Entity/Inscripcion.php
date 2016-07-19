@@ -41,6 +41,11 @@ class Inscripcion
      * })
      */
     private $idOfertaAcademica;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\OfertaAcademica", mappedBy="idMallaCurricularUc")
+     */
+    private $uc;
 
     /**
      * @var \AppBundle\Entity\Estatus
@@ -131,5 +136,45 @@ class Inscripcion
     public function getIdEstatus()
     {
         return $this->idEstatus;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->uc = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add uc
+     *
+     * @param \AppBundle\Entity\OfertaAcademica $uc
+     * @return Inscripcion
+     */
+    public function addUc(\AppBundle\Entity\OfertaAcademica $uc)
+    {
+        $this->uc[] = $uc;
+
+        return $this;
+    }
+
+    /**
+     * Remove uc
+     *
+     * @param \AppBundle\Entity\OfertaAcademica $uc
+     */
+    public function removeUc(\AppBundle\Entity\OfertaAcademica $uc)
+    {
+        $this->uc->removeElement($uc);
+    }
+
+    /**
+     * Get uc
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getUc()
+    {
+        return $this->uc;
     }
 }
