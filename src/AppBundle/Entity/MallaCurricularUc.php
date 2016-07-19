@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * MallaCurricularUc
  *
- * @ORM\Table(name="malla_curricular_uc", uniqueConstraints={@ORM\UniqueConstraint(name="i_malla_curricular", columns={"id_malla_curricular", "id_unidad_curricular_volumen"})}, indexes={@ORM\Index(name="fki_malla_curricular_malla_curricular_uc", columns={"id_malla_curricular"}), @ORM\Index(name="fki_trayecto_tramo_modalidad_malla_curricular_uc", columns={"id_trayecto_tramo_mod"}), @ORM\Index(name="fki_unidad_curricular_volumen_malla_curricular", columns={"id_unidad_curricular_volumen"})})
+ * @ORM\Table(name="malla_curricular_uc", uniqueConstraints={@ORM\UniqueConstraint(name="i_malla_curricular", columns={"id_malla_curricular", "id_unidad_curricular_volumen"})}, indexes={@ORM\Index(name="fki_malla_curricular_malla_curricular_uc", columns={"id_malla_curricular"}), @ORM\Index(name="fki_trayecto_tramo_modalidad_malla_curricular_tipo_uc", columns={"id_trayecto_tramo_modalidad_tipo_uc"}), @ORM\Index(name="fki_unidad_curricular_volumen_malla_curricular", columns={"id_unidad_curricular_volumen"})})
  * @ORM\Entity
  */
 class MallaCurricularUc
@@ -44,10 +44,10 @@ class MallaCurricularUc
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\TrayectoTramoModalidadTipo")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_trayecto_tramo_mod", referencedColumnName="id", nullable=false)
+     *   @ORM\JoinColumn(name="id_trayecto_tramo_modalidad_tipo_uc", referencedColumnName="id", nullable=false)
      * })
      */
-    private $idTrayectoTramoMod;
+    private $idTrayectoTramoModalidadTipoUc;
 
     /**
      * @var \AppBundle\Entity\MallaCurricular
@@ -117,26 +117,26 @@ class MallaCurricularUc
     }
 
     /**
-     * Set idTrayectoTramoMod
+     * Set idTrayectoTramoModalidadTipoUc
      *
-     * @param \AppBundle\Entity\TrayectoTramoModalidadTipo $idTrayectoTramoMod
+     * @param \AppBundle\Entity\TrayectoTramoModalidadTipo $idTrayectoTramoModalidadTipoUc
      * @return MallaCurricularUc
      */
-    public function setIdTrayectoTramoMod(\AppBundle\Entity\TrayectoTramoModalidadTipo $idTrayectoTramoMod)
+    public function setIdTrayectoTramoModalidadTipoUc(\AppBundle\Entity\TrayectoTramoModalidadTipo $idTrayectoTramoModalidadTipoUc)
     {
-        $this->idTrayectoTramoMod = $idTrayectoTramoMod;
+        $this->idTrayectoTramoModalidadTipoUc = $idTrayectoTramoModalidadTipoUc;
 
         return $this;
     }
 
     /**
-     * Get idTrayectoTramoMod
+     * Get idTrayectoTramoModalidadTipoUc
      *
      * @return \AppBundle\Entity\TrayectoTramoModalidadTipo 
      */
-    public function getIdTrayectoTramoMod()
+    public function getIdTrayectoTramoModalidadTipoUc()
     {
-        return $this->idTrayectoTramoMod;
+        return $this->idTrayectoTramoModalidadTipoUc;
     }
 
     /**
@@ -161,4 +161,6 @@ class MallaCurricularUc
     {
         return $this->idMallaCurricular;
     }
+    
+    
 }

@@ -1,8 +1,9 @@
-{% extends 'base.html.twig' %}
+{% extends 'base_app.html.twig' %}
 
 {% block body %}
-    <h1>OfertaAcademica creation</h1>
-
+    <div class="container">
+    <h1>Creacion de Oferta Academica</h1>
+{% form_theme form 'bootstrap_3_horizontal_layout.html.twig' %}       
     {{ form_start(form) }}
         {{ form_widget(form) }}
         <input type="submit" value="Create" />
@@ -13,4 +14,5 @@
             <a href="{{ path('ceapp_gestion_oferta_academica_index') }}">Back to the list</a>
         </li>
     </ul>
+            </div>
 {% endblock %}
