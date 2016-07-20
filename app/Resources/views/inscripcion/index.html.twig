@@ -15,7 +15,7 @@
                                 <h3> Unidades Curriculares Inscritas</h3>
                             </div>
                             <!-- /widget-header -->
-                            {% if not estado_academico.hasInscripcion %}
+                            {% if  not estado_academico.hasInscripcion | length > 0 %}
                             <div class="widget-content">
                                 <div class="widget big-stats-container">
                                     <div class="widget-content">                    
@@ -30,17 +30,20 @@
                                     <!-- /widget-content --> 
                                 </div>
                             </div>
-                            {% else %}
+<!--Si Tiene inscripcion-->{% else %}
                             <div class="widget-content">
                                 <div class="widget big-stats-container">
                                     <div class="widget-content">                    
-                                        <h6 class="bigstats">                        
+                                        <div class="container">                                                                                          
                                             {% for inscrita in estado_academico.hasInscripcion %}
-                                                <p>{{ inscrita.idOfertaAcademica.idMallaCurricularUc.idUnidadCurricularVolumen.idUnidadCurricular.nombre }}</p>
+                                                <p>
+                                                    {{ inscrita.idOfertaAcademica.idMallaCurricularUc.idUnidadCurricularVolumen.idUnidadCurricular.nombre }}                                                    
+                                                    <a class="btn btn-warning btn-xs" href="{{ path('ceapp_estudiante_inscripcion_edit', { 'id': inscrita.id }) }}"><i class="fa fa-edit"></i></a>
+                                                </p>
                                             {% endfor %}                        
-                                        </h6>                    
+                                        </div>                    
                                         <div class="col-md-2">
-                                            <a class="btn btn-primary" href="{{ path('ceapp_estudiante_inscripcion_new') }}">Inscribirme</a>
+                                            
                                         </div>
                                     </div>
                                     <!-- /widget-content --> 

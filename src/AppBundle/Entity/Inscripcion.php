@@ -125,4 +125,9 @@ class Inscripcion
     {
         return $this->idEstatus;
     }
+    
+    
+     public function __toString() {
+        return $this->getIdOfertaAcademica()->getIdMallaCurricularUc()->getIdUnidadCurricularVolumen()->getIdUnidadCurricular()->getNombre();
+    }
 }

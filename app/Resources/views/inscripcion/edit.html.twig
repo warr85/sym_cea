@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'base_app.html.twig' %}
 
 {% block body %}
     <h1>Inscripcion edit</h1>
@@ -10,7 +10,7 @@
 
     <ul>
         <li>
-            <a href="{{ path('ceapp_estudiante_inscripcion_index') }}">Back to the list</a>
+            <a href="{{ path('inscripcion_index') }}">Back to the list</a>
         </li>
         <li>
             {{ form_start(delete_form) }}

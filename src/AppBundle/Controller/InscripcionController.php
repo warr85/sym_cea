@@ -7,7 +7,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Entity\Inscripcion;
-use AppBundle\Form\InscripcionType;
+use AppBundle\Entity\EstadoAcademico;
+
 
 /**
  * Inscripcion controller.
@@ -42,7 +43,9 @@ class InscripcionController extends Controller
     public function newAction(Request $request)
     {
         $inscripcion = $this->getDoctrine()->getRepository('AppBundle:EstadoAcademico')->findOneByIdRolInstitucion($this->getUser()->getIdRolInstitucion());
-        $form = $this->createForm('AppBundle\Form\InscripcionType', $inscripcion);
+        $form = $this->createForm('AppBundle\Form\InscripcionType', $inscripcion, array(
+            'inscripcion' => $inscripcion
+        ));
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {           
@@ -50,7 +53,7 @@ class InscripcionController extends Controller
             $em->persist($inscripcion);
             $em->flush();
 
-            return $this->redirectToRoute('ceapp_estudiante_inscripcion_show', array('id' => $inscripcion->getId()));
+            return $this->redirectToRoute('inscripcion_index');
         }
 
         return $this->render('inscripcion/new.html.twig', array(
@@ -83,12 +86,15 @@ class InscripcionController extends Controller
      */
     public function editAction(Request $request, Inscripcion $inscripcion)
     {
+        $em = $this->getDoctrine()->getManager();
         $deleteForm = $this->createDeleteForm($inscripcion);
-        $editForm = $this->createForm('AppBundle\Form\InscripcionType', $inscripcion);
+        $estado_academico = $em->getRepository('AppBundle:EstadoAcademico')->findOneByIdRolInstitucion($this->getUser()->getIdRolInstitucion());
+        $editForm = $this->createForm('AppBundle\Form\InscripcionEditType', $inscripcion);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+           // $em = $this->getDoctrine()->getManager();
+            $em->persist($estado_academico);
             $em->persist($inscripcion);
             $em->flush();
 
@@ -119,7 +125,7 @@ class InscripcionController extends Controller
             $em->flush();
         }
 
-        return $this->redirectToRoute('ceapp_estudiante_inscripcion_index');
+        return $this->redirectToRoute('inscripcion_index');
     }
 
     /**

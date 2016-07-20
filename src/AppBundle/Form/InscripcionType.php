@@ -6,6 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Doctrine\ORM\EntityRepository;
 
 class InscripcionType extends AbstractType
 {
@@ -15,14 +16,32 @@ class InscripcionType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $this->estado_academico = $options['inscripcion'];
+        if (count($this->estado_academico->getHasInscripcion()) == 0){
+            $tray = 1;
+            $tram = 1; 
+        }        
+        echo $tray;
         $builder
             /*->add('idRolInstitucion')
             ->add('idOfertaAcademica')
             ->add('idEstatus')*/
-            ->add('OfertaAcademica', EntityType::class, array(
+            ->add('idOfertaAcademica', EntityType::class, array(
                 'class' => 'AppBundle:OfertaAcademica',
                 'expanded'  => true,
-                'multiple'  => true
+                'multiple'  => true,
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('u')
+                    ->orderBy('u.idMallaCurricularUc', 'ASC')
+                    ->innerJoin('u.idMallaCurricularUc', 'm', 'WITH', 'm.idTrayectoTramoModalidadTipoUc = ?2')
+                    ->innerJoin('m.idTrayectoTramoModalidadTipoUc', 't', 'WITH', 't.idTrayecto = ?3')
+                    ->where('u.idOfertaMallaCurricular = ?1 ') //que las uc conicidan con la malla del estado academico                    
+                    ->setParameters(array(
+                        1 => $this->estado_academico->getIdOfertaMallaCurricular(),
+                        2 => 1,
+                        3 => 1
+                     ));                   
+                 ;},
             ))
         ;
     }
@@ -34,6 +53,7 @@ class InscripcionType extends AbstractType
     {
         $resolver->setDefaults(array(
             'data_class' => 'AppBundle\Entity\EstadoAcademico',
+            'inscripcion' => null,
         ));
     }
 }

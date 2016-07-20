@@ -84,7 +84,7 @@ class EstadoAcademico
      * */
     protected $hasInscripcion;
     
-    private $OfertaAcademica;
+    private $idOfertaAcademica;
 
    
     
@@ -93,8 +93,9 @@ class EstadoAcademico
      */
     public function __construct()
     {
-        $this->OfertaAcademica = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->idOfertaAcademica = new \Doctrine\Common\Collections\ArrayCollection();
         $this->hasInscripcion = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->fecha = new \DateTime();
     }
 
     /**
@@ -280,30 +281,30 @@ class EstadoAcademico
     
     
      /**
-     * Get OfertaAcademica
+     * Get idOfertaAcademica
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getOfertaAcademica()
+    public function getIdOfertaAcademica()
     {
-        $ofertaAcademica = new \Doctrine\Common\Collections\ArrayCollection();
+        $idOfertaAcademica = new \Doctrine\Common\Collections\ArrayCollection();
         
         foreach($this->hasInscripcion as $inscrita)
         {
-            $ofertaAcademica[] = $inscrita->getOfertaAcademica();
+            $idOfertaAcademica[] = $inscrita->getIdOfertaAcademica();
         }
 
-        return $ofertaAcademica;
+        return $idOfertaAcademica;
     }
    
     
     /**
-     * Set OfertaAcademica
+     * Set idOfertaAcademica
      *
      */
-    public function setOfertaAcademica($ofertaAcademica)
+    public function setIdOfertaAcademica($idOfertaAcademica)
     {
-        foreach($ofertaAcademica as $inscrita)
+        foreach($idOfertaAcademica as $inscrita)
         {
             $inscripcion = new Inscripcion();
 
