@@ -26,10 +26,10 @@ class InscripcionController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $inscripcions = $em->getRepository('AppBundle:Inscripcion')->findAll();
-
+        $estado_academico = $em->getRepository('AppBundle:EstadoAcademico')->findOneByIdRolInstitucion($this->getUser()->getIdRolInstitucion());
+        
         return $this->render('inscripcion/index.html.twig', array(
-            'inscripcion' => $inscripcions,
+            'estado_academico' => $estado_academico
         ));
     }
 

@@ -84,7 +84,7 @@ class EstadoAcademico
      * */
     protected $hasInscripcion;
     
-    protected $OfertaAcademica;
+    private $OfertaAcademica;
 
    
     
@@ -279,27 +279,36 @@ class EstadoAcademico
     }
     
     
-     // Important 
+     /**
+     * Get OfertaAcademica
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
     public function getOfertaAcademica()
     {
         $ofertaAcademica = new \Doctrine\Common\Collections\ArrayCollection();
         
-        foreach($this->hasInscripcion as $p)
+        foreach($this->hasInscripcion as $inscrita)
         {
-            $ofertaAcademica[] = $p->getOfertaAcademica();
+            $ofertaAcademica[] = $inscrita->getOfertaAcademica();
         }
 
         return $ofertaAcademica;
     }
-    // Important
+   
+    
+    /**
+     * Set OfertaAcademica
+     *
+     */
     public function setOfertaAcademica($ofertaAcademica)
     {
-        foreach($ofertaAcademica as $o)
+        foreach($ofertaAcademica as $inscrita)
         {
             $inscripcion = new Inscripcion();
 
             $inscripcion->setIdEstadoAcademico($this);
-            $inscripcion->setIdOfertaAcademica($o);
+            $inscripcion->setIdOfertaAcademica($inscrita);
             $inscripcion->setIdEstatus($this->getIdDocenteServicio()->getIdEstatus());
 
             $this->addHasInscripcion($inscripcion);            

@@ -2,74 +2,94 @@
 {% block body %} 
 
     <div class="main">
-        
-  <div class="main-inner">
-    <div class="container">  
-        
-        {% for message in app.session.flashBag.get('danger') %}
-            <div class="alert alert-danger">{{ message }}</div>
-        {%endfor %}
-        
-        
-      <div class="row">
-        <div class="col-md-6">
-          <div class="widget widget-nopad">
-            <div class="widget-header"> <i class="fa fa-list-alt"></i>
-              <h3> Unidades Curriculares Inscritas</h3>
-            </div>
-            <!-- /widget-header -->
-            {% if not inscripcion %}
-            <div class="widget-content">
-              <div class="widget big-stats-container">
-                <div class="widget-content">
-                    
-                    <h6 class="bigstats">                        
-                        No ha formalizado su inscripcion para este periodo
-                        academico.
-                        
-                    </h6>                    
-                    <div class="col-md-2">
-                        <a class="btn btn-primary" href="{{ path('ceapp_estudiante_inscripcion_new') }}">Inscribirme</a>
-                     </div>
-                </div>
-                <!-- /widget-content --> 
-              {% endif %}
+        <div class="main-inner">
+            <div class="container">          
+                {% for message in app.session.flashBag.get('danger') %}
+                    <div class="alert alert-danger">{{ message }}</div>
+                {%endfor %}               
                 
-              </div>
-            </div>
-          </div>
-          <!-- /widget -->
-        </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="widget widget-nopad">
+                            <div class="widget-header"> <i class="fa fa-list-alt"></i>
+                                <h3> Unidades Curriculares Inscritas</h3>
+                            </div>
+                            <!-- /widget-header -->
+                            {% if not estado_academico.hasInscripcion %}
+                            <div class="widget-content">
+                                <div class="widget big-stats-container">
+                                    <div class="widget-content">                    
+                                        <h6 class="bigstats">                        
+                                            No ha formalizado su inscripcion para este periodo
+                                            academico.                        
+                                        </h6>                    
+                                        <div class="col-md-2">
+                                            <a class="btn btn-primary" href="{{ path('ceapp_estudiante_inscripcion_new') }}">Inscribirme</a>
+                                        </div>
+                                    </div>
+                                    <!-- /widget-content --> 
+                                </div>
+                            </div>
+                            {% else %}
+                            <div class="widget-content">
+                                <div class="widget big-stats-container">
+                                    <div class="widget-content">                    
+                                        <h6 class="bigstats">                        
+                                            {% for inscrita in estado_academico.hasInscripcion %}
+                                                <p>{{ inscrita.idOfertaAcademica.idMallaCurricularUc.idUnidadCurricularVolumen.idUnidadCurricular.nombre }}</p>
+                                            {% endfor %}                        
+                                        </h6>                    
+                                        <div class="col-md-2">
+                                            <a class="btn btn-primary" href="{{ path('ceapp_estudiante_inscripcion_new') }}">Inscribirme</a>
+                                        </div>
+                                    </div>
+                                    <!-- /widget-content --> 
+                                </div>
+                            </div>                                         
+                            {% endif %}
+                
+                            </div>
+                          </div>
           
-           <div class="col-md-6">
-          <div class="widget widget-nopad">
-            <div class="widget-header"> <i class="fa fa-list-alt"></i>
-              <h3> Cumplimiento de la programacion</h3>
-            </div>
-            <!-- /widget-header -->
-            <div class="widget-content">
-              <div class="widget big-stats-container">
-                  {% if not inscripcion %}
-                        <div class="widget-content">
+                    <div class="col-md-6">
+                   <div class="widget widget-nopad">
+                     <div class="widget-header"> <i class="fa fa-list-alt"></i>
+                       <h3> Cumplimiento de la programacion</h3>
+                     </div>
+                     <!-- /widget-header -->
+                     <div class="widget-content">
+                       <div class="widget big-stats-container">
+                           {% if not estado_academico.hasInscripcion %}
+                                 <div class="widget-content">
 
-                            <h6 class="bigstats alert alert-warning">                        
-                                Debe Formalizar primero una inscripcion para
-                                poder revisar la planificacion de la/s UC
+                                     <h6 class="bigstats alert alert-warning">                        
+                                         Debe Formalizar primero una inscripcion para
+                                         poder revisar la planificacion de la/s UC
 
-                            </h6>                                                
-                        </div>
-                  {% endif %}
-                <!-- /widget-content --> 
-                
-              </div>
-            </div>
-          </div>
-          <!-- /widget -->
-        </div>
+                                     </h6>                                                
+                                 </div>
+                           {% else %}
+                                 <div class="widget-content">
+                                 <h6 class="bigstats">                        
+                                      No ha formalizado su inscripcion para este periodo
+                                     academico.                        
+                                 </h6>                                                                                                      
+                            </div>
+
+
+                           {% endif %}
+                         <!-- /widget-content --> 
+
+                       </div>
+                     </div>
+                   </div>
+                   <!-- /widget -->
+                 </div>
          
       </div>
     </div>
   </div>
+    
     </div>
 
 {% endblock %}
