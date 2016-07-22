@@ -309,6 +309,8 @@ class OfertaAcademica
     }
     
     public function __toString() {
-        return $this->getIdMallaCurricularUc()->getIdUnidadCurricularVolumen()->getIdUnidadCurricular()->getNombre();
+        return 
+            $this->getIdMallaCurricularUc()->getIdUnidadCurricularVolumen()->getIdUnidadCurricular()->getNombre()
+            . " Seccion: " . $this->getIdSeccion()->getNombre();
     }
 }
