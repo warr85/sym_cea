@@ -3,9 +3,12 @@
 {% block body %}
     <h1>Inscripcion creation</h1>
 {{ dump(form.children.idOfertaAcademica.children) }}
+
 {% form_theme form 'bootstrap_3_horizontal_layout.html.twig' %}  
     {{ form_start(form) }}
-        {{ form_widget(form.children.idOfertaAcademica.children.1) }}
+    {% for f in form.children.idOfertaAcademica.children %}
+        {{ form_widget(f) }}
+    {% endfor %}
         <input type="submit" value="Create" />
     {{ form_end(form) }}
 
