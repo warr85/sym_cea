@@ -25,7 +25,7 @@ class InscripcionType extends AbstractType
         $builder
             /*->add('idRolInstitucion')
             ->add('idOfertaAcademica')
-            ->add('idEstatus')*/
+            ->add('idEstatus')*/            
             ->add('idOfertaAcademica', EntityType::class, array(
                 'class' => 'AppBundle:OfertaAcademica',
                 'expanded'  => true,
@@ -33,16 +33,16 @@ class InscripcionType extends AbstractType
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('u')
                     ->orderBy('u.idMallaCurricularUc', 'ASC')
-                    ->innerJoin('u.idMallaCurricularUc', 'm', 'WITH', 'm.idTrayectoTramoModalidadTipoUc = ?2')
-                    ->innerJoin('m.idTrayectoTramoModalidadTipoUc', 't', 'WITH', 't.idTrayecto = ?3')
-                    ->where('u.idOfertaMallaCurricular = ?1 ') //que las uc conicidan con la malla del estado academico                    
+                    ->innerJoin('u.idMallaCurricularUc', 'm', 'WITH', 'm.idTrayectoTramoModalidadTipoUc = ?2')                    
+                    ->where('u.idOfertaMallaCurricular = ?1') //que las uc conicidan con la malla del estado academico                                        
                     ->setParameters(array(
                         1 => $this->estado_academico->getIdOfertaMallaCurricular(),
                         2 => 1,
-                        3 => 1
                      ));                   
                  ;},
+                 'group_by'      => 'idSeccion'
             ))
+            
         ;
     }
     

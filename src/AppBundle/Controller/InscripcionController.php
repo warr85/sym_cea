@@ -42,23 +42,28 @@ class InscripcionController extends Controller
      */
     public function newAction(Request $request)
     {
-        $inscripcion = $this->getDoctrine()->getRepository('AppBundle:EstadoAcademico')->findOneByIdRolInstitucion($this->getUser()->getIdRolInstitucion());
-        $form = $this->createForm('AppBundle\Form\InscripcionType', $inscripcion, array(
-            'inscripcion' => $inscripcion
-        ));
+        $ea = $this->getDoctrine()->getRepository('AppBundle:EstadoAcademico')->findOneByIdRolInstitucion($this->getUser()->getIdRolInstitucion());
+        $oferta = $this->getDoctrine()->getRepository('AppBundle:OfertaAcademica')->findBy(
+            array('idOfertaMallaCurricular'   =>  $ea->getIdOfertaMallaCurricular()),
+            array('idMallaCurricularUc' => 'ASC')
+        );
+        
+        
+        $form = $this->createForm('AppBundle\Form\InscripcionType', $ea, array('inscripcion' => $ea,));
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {           
             $em = $this->getDoctrine()->getManager();
-            $em->persist($inscripcion);
+            $em->persist($ea);
             $em->flush();
 
             return $this->redirectToRoute('inscripcion_index');
         }
 
         return $this->render('inscripcion/new.html.twig', array(
-            'inscripcion' => $inscripcion,
-            'form' => $form->createView(),
+            'estado_academico'  => $ea,
+            'oferta'       => $oferta, 
+            'form'          => $form->createView()
         ));
     }
 
