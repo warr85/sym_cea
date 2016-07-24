@@ -2,19 +2,24 @@
 
 {% block body %}
     <h1>Inscripcion creation</h1>
-{{ dump(form.children.idOfertaAcademica.children) }}
+<form class="form-inline" method="post" name="seccion">
+    <div id="seccion">
+    {% for o in oferta %}  
+        <div class="form-group">
+    <b>{{ o.idMallaCurricularUc }}</b>
+    {% for seccion in o.seccion %}
+        <div class="radio">
+        <label>
+            <input id="seccion_idSeccion_{{seccion.id}}" type="radio" value="{{seccion.id}}" name="seccion[idSeccion][{{o.idMallaCurricularUc}}]">
+            {{ seccion.nombre }}
+        </label>
+        </div>
+    </div>
+    {% endfor %}<br>
+{% endfor %}
+</div>
+<input id="seccion__token" type="hidden" value="WbDyIPXIxm9WxU4oOf2a4_4CnXg3rxuY46e_TbVAggY" name="seccion[_token]">
+<input type="submit" value="Create" />
+</form>
 
-{% form_theme form 'bootstrap_3_horizontal_layout.html.twig' %}  
-    {{ form_start(form) }}
-    {% for f in form.children.idOfertaAcademica.children %}
-        {{ form_widget(f) }}
-    {% endfor %}
-        <input type="submit" value="Create" />
-    {{ form_end(form) }}
-
-    <ul>
-        <li>
-            <a href="{{ path('inscripcion_index') }}">Back to the list</a>
-        </li>
-    </ul>
 {% endblock %}

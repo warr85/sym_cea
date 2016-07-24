@@ -1,0 +1,90 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Seccion
+ *
+ * @ORM\Table(name="seccion", uniqueConstraints={@ORM\UniqueConstraint(name="uq_seccion", columns={"nombre"})})
+ * @ORM\Entity
+ */
+class Seccion
+{
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nombre", type="string", length=20, nullable=false, options={"comment" = "nombre de la seccion"})
+     */
+    private $nombre;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="aula", type="string", length=10, nullable=true, options={"comment" = "Indica el aula donde se va a dictar la unidad curricular (EN OBSERVACION, ESTE VALOR PUEDE SER VARIABLE PARA UNA MISMA OFERTA)"})
+     */
+    private $aula;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="cupo", type="decimal", precision=2, scale=0, nullable=false, options={"comment" = "Indica el numero de cupos para esa oferta"})
+     */
+    private $cupo;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Inscripcion" , mappedBy="idOfertaAcademica" , cascade={"all"})
+     * */
+    protected $hasInscripcion;
+    
+
+    /**
+     * @var \AppBundle\Entity\Turno
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Turno")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_turno", referencedColumnName="id", nullable=false)
+     * })
+     */
+    private $idTurno;
+    
+     /**
+     * @var \AppBundle\Entity\RolInstitucion
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\RolInstitucion")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_rol_institucion", referencedColumnName="id", nullable=false)
+     * })
+     */
+    private $idRolInstitucion;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false, options={"comment" = "Identificador de las seccion"})
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\SequenceGenerator(sequenceName="seccion_id_seq", allocationSize=1, initialValue=1)
+     */
+    private $id;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="OfertaAcademica", inversedBy="seccion")
+     * @ORM\JoinColumn(name="oferta_academica_id", referencedColumnName="id")
+     */
+    private $ofertaAcademica;
+
+
+
+    
+    
+    /**
+     * 
+     * @return string
+     */
+    
+    public function __toString() {
+        return $this->getNombre();
+    }
+}

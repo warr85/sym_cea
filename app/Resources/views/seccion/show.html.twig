@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Seccion</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Nombre</th>
+                <td>{{ seccion.nombre }}</td>
+            </tr>
+            <tr>
+                <th>Aula</th>
+                <td>{{ seccion.aula }}</td>
+            </tr>
+            <tr>
+                <th>Cupo</th>
+                <td>{{ seccion.cupo }}</td>
+            </tr>
+            <tr>
+                <th>Id</th>
+                <td>{{ seccion.id }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('ceapp_gestion_oferta_academica_seccion_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('ceapp_gestion_oferta_academica_seccion_edit', { 'id': seccion.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

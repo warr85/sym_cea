@@ -1,37 +1,19 @@
-{% extends 'base_app.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block body %}
-    
-   <div class="container">
-     <div class="widget widget-table action-table">
-            <div class="widget-header"> <i class="icon-th-list"></i>
-              <h3>Oferta Academica Activa para el Eje</h3>
-            </div>
-            <!-- /widget-header -->
-    <div class="widget-content">
-    <table class="table table-striped table-bordered table-hover table-condensed table-responsive">
+    <h1>OfertaAcademica list</h1>
+
+    <table>
         <thead>
             <tr>
-                <th>Malla</th>
-                <th>Codigo UC</th>
-                <th>Unidad Curricular</th>
-                <th>Modalidad</th>
-                <th>Tipo</th>
-                <th>Aula</th>
-                <th>Cupo</th>                
+                <th>Id</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
         {% for ofertaAcademica in ofertaAcademicas %}
             <tr>
-                <td>{{ofertaAcademica.idMallaCurricularUc.idMallaCurricular.codigo}}</td>
-                <td>{{ofertaAcademica.idMallaCurricularUc.idUnidadCurricularVolumen.idUnidadCurricular.codigo}}</td>
-                <td>{{ofertaAcademica.idMallaCurricularUc.idUnidadCurricularVolumen.idUnidadCurricular}}</td>
-                <td>{{ofertaAcademica.idMallaCurricularUc.idTrayectoTramoModalidadTipoUc.idModalidad}}</td>
-                <td>{{ofertaAcademica.idMallaCurricularUc.idTrayectoTramoModalidadTipoUc.idTipoUc}}</td>
-                <td><a href="{{ path('ceapp_gestion_oferta_academica_show', { 'id': ofertaAcademica.id }) }}">{{ ofertaAcademica.aula }}</a></td>
-                <td>{{ ofertaAcademica.cupo }}</td>                
+                <td><a href="{{ path('ceapp_gestion_oferta_academica_show', { 'id': ofertaAcademica.id }) }}">{{ ofertaAcademica.id }}</a></td>
                 <td>
                     <ul>
                         <li>
@@ -52,9 +34,4 @@
             <a href="{{ path('ceapp_gestion_oferta_academica_new') }}">Create a new entry</a>
         </li>
     </ul>
-    </div>
-            
-    </div>
-   </div>
-            
 {% endblock %}

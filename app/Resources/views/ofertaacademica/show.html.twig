@@ -6,14 +6,6 @@
     <table>
         <tbody>
             <tr>
-                <th>Aula</th>
-                <td>{{ ofertaAcademica.aula }}</td>
-            </tr>
-            <tr>
-                <th>Cupo</th>
-                <td>{{ ofertaAcademica.cupo }}</td>
-            </tr>
-            <tr>
                 <th>Id</th>
                 <td>{{ ofertaAcademica.id }}</td>
             </tr>
@@ -22,7 +14,7 @@
 
     <ul>
         <li>
-            <a href="{{ path('oferta_academica_index') }}">Back to the list</a>
+            <a href="{{ path('ceapp_gestion_oferta_academica_index') }}">Back to the list</a>
         </li>
         <li>
             <a href="{{ path('ceapp_gestion_oferta_academica_edit', { 'id': ofertaAcademica.id }) }}">Edit</a>

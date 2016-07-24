@@ -37,7 +37,7 @@
                                         <div class="container">                                                                                          
                                             {% for inscrita in estado_academico.hasInscripcion %}
                                                 <p>
-                                                    {{ inscrita.idOfertaAcademica.idMallaCurricularUc.idUnidadCurricularVolumen.idUnidadCurricular.nombre }}                                                    
+                                                    {{ inscrita.idSeccion.ofertaAcademica.idMallaCurricularUc.idUnidadCurricularVolumen.idUnidadCurricular.nombre }}                                                    
                                                     <a class="btn btn-warning btn-xs" href="{{ path('ceapp_estudiante_inscripcion_edit', { 'id': inscrita.id }) }}"><i class="fa fa-edit"></i></a>
                                                 </p>
                                             {% endfor %}                        

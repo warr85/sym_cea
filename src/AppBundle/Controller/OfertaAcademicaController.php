@@ -19,7 +19,7 @@ class OfertaAcademicaController extends Controller
     /**
      * Lists all OfertaAcademica entities.
      *
-     * @Route("/", name="oferta_academica_index")
+     * @Route("/", name="ceapp_gestion_oferta_academica_index")
      * @Method("GET")
      */
     public function indexAction()

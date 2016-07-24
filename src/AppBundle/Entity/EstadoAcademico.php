@@ -84,7 +84,7 @@ class EstadoAcademico
      * */
     protected $hasInscripcion;
     
-    private $idOfertaAcademica;
+    private $idSeccion;
 
    
     
@@ -93,7 +93,7 @@ class EstadoAcademico
      */
     public function __construct()
     {
-        $this->idOfertaAcademica = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->idSeccion = new \Doctrine\Common\Collections\ArrayCollection();
         $this->hasInscripcion = new \Doctrine\Common\Collections\ArrayCollection();
         $this->fecha = new \DateTime();
     }
@@ -285,35 +285,32 @@ class EstadoAcademico
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getIdOfertaAcademica()
+    public function getIdSeccion()
     {
-        $idOfertaAcademica = new \Doctrine\Common\Collections\ArrayCollection();
+        $idSeccion = new \Doctrine\Common\Collections\ArrayCollection();
         
         foreach($this->hasInscripcion as $inscrita)
         {
-            $idOfertaAcademica[] = $inscrita->getIdOfertaAcademica();
+            $idSeccion[] = $inscrita->getIdSeccion();
         }
 
-        return $idOfertaAcademica;
+        return $idSeccion;
     }
    
     
     /**
-     * Set idOfertaAcademica
+     * Set idSeccion
      *
      */
-    public function setIdOfertaAcademica($idOfertaAcademica)
+    public function setIdSeccion($idSeccion)
     {
-        foreach($idOfertaAcademica as $inscrita)
-        {
-            $inscripcion = new Inscripcion();
-
+        
+            $inscripcion = new Inscripcion();            
             $inscripcion->setIdEstadoAcademico($this);
-            $inscripcion->setIdOfertaAcademica($inscrita);
+            $inscripcion->setIdSeccion($idSeccion);
             $inscripcion->setIdEstatus($this->getIdDocenteServicio()->getIdEstatus());
-
             $this->addHasInscripcion($inscripcion);            
-        }
+        
 
     }
 }

@@ -26,10 +26,10 @@ class InscripcionType extends AbstractType
             /*->add('idRolInstitucion')
             ->add('idOfertaAcademica')
             ->add('idEstatus')*/            
-            ->add('idOfertaAcademica', EntityType::class, array(
+            ->add('idSeccion', EntityType::class, array(
                 'class' => 'AppBundle:OfertaAcademica',
                 'expanded'  => true,
-                'multiple'  => true,
+                'multiple'  => true, 
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('u')
                     ->orderBy('u.idMallaCurricularUc', 'ASC')
@@ -40,7 +40,7 @@ class InscripcionType extends AbstractType
                         2 => 1,
                      ));                   
                  ;},
-                 'group_by'      => 'idSeccion'
+                
             ))
             
         ;

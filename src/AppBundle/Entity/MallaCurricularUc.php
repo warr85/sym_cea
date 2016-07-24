@@ -163,4 +163,9 @@ class MallaCurricularUc
     }
     
     
+    public function __toString() 
+    {
+        return $this->getIdUnidadCurricularVolumen()->getIdUnidadCurricular()->getNombre();
+    }
+    
 }

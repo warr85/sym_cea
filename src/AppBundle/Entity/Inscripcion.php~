@@ -32,7 +32,7 @@ class Inscripcion
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\OfertaAcademica", inversedBy="hasInscripcion")
      * @ORM\JoinColumn(name="oferta_academica_id", referencedColumnName="id")
      * */
-    private $idOfertaAcademica;
+    private $idSeccion;
     
   
     /**
@@ -44,6 +44,8 @@ class Inscripcion
      * })
      */
     private $idEstatus;
+
+   
 
    
 }

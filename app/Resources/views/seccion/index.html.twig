@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Seccion list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Aula</th>
+                <th>Cupo</th>
+                <th>Id</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for seccion in seccions %}
+            <tr>
+                <td><a href="{{ path('ceapp_gestion_oferta_academica_seccion_show', { 'id': seccion.id }) }}">{{ seccion.nombre }}</a></td>
+                <td>{{ seccion.aula }}</td>
+                <td>{{ seccion.cupo }}</td>
+                <td>{{ seccion.id }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('ceapp_gestion_oferta_academica_seccion_show', { 'id': seccion.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('ceapp_gestion_oferta_academica_seccion_edit', { 'id': seccion.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('ceapp_gestion_oferta_academica_seccion_new') }}">Create a new entry</a>
+        </li>
+    </ul>
+{% endblock %}

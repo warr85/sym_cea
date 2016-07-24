@@ -101,4 +101,8 @@ class UnidadCurricularVolumen
     {
         return $this->idUnidadCurricular;
     }
+    
+    public function __toString() {
+        return $this->getIdUnidadCurricular();
+    }
 }

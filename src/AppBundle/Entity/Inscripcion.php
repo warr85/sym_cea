@@ -29,10 +29,10 @@ class Inscripcion
     private $idEstadoAcademico;
 
      /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\OfertaAcademica", inversedBy="hasInscripcion")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Seccion", inversedBy="hasInscripcion")
      * @ORM\JoinColumn(name="oferta_academica_id", referencedColumnName="id")
      * */
-    private $idOfertaAcademica;
+    private $idSeccion;
     
   
     /**
@@ -44,6 +44,8 @@ class Inscripcion
      * })
      */
     private $idEstatus;
+
+   
 
    
 
@@ -81,26 +83,26 @@ class Inscripcion
     }
 
     /**
-     * Set idOfertaAcademica
+     * Set idSeccion
      *
-     * @param \AppBundle\Entity\OfertaAcademica $idOfertaAcademica
+     * @param \AppBundle\Entity\Seccion $idSeccion
      * @return Inscripcion
      */
-    public function setIdOfertaAcademica(\AppBundle\Entity\OfertaAcademica $idOfertaAcademica = null)
+    public function setIdSeccion(\AppBundle\Entity\Seccion $idSeccion = null)
     {
-        $this->idOfertaAcademica = $idOfertaAcademica;
+        $this->idSeccion = $idSeccion;
 
         return $this;
     }
 
     /**
-     * Get idOfertaAcademica
+     * Get idSeccion
      *
-     * @return \AppBundle\Entity\OfertaAcademica 
+     * @return \AppBundle\Entity\Seccion 
      */
-    public function getIdOfertaAcademica()
+    public function getIdSeccion()
     {
-        return $this->idOfertaAcademica;
+        return $this->idSeccion;
     }
 
     /**
@@ -124,10 +126,5 @@ class Inscripcion
     public function getIdEstatus()
     {
         return $this->idEstatus;
-    }
-    
-    
-     public function __toString() {
-        return $this->getIdOfertaAcademica()->getIdMallaCurricularUc()->getIdUnidadCurricularVolumen()->getIdUnidadCurricular()->getNombre();
     }
 }

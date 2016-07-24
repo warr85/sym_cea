@@ -48,12 +48,21 @@ class InscripcionController extends Controller
             array('idMallaCurricularUc' => 'ASC')
         );
         
+        $seccion = $this->getDoctrine()->getRepository('AppBundle:Seccion')->findAll();
         
+
         $form = $this->createForm('AppBundle\Form\InscripcionType', $ea, array('inscripcion' => $ea,));
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {           
+        if ($request->isMethod("POST")) {
+            //var_dump($request->request->get('seccion')['idSeccion']); exit;
             $em = $this->getDoctrine()->getManager();
+            
+            foreach ($request->request->get('seccion')['idSeccion'] as $s ){
+                $inscripcion = $this->getDoctrine()->getRepository('AppBundle:Seccion')->findOneById($s);
+                //var_dump($inscripcion->getId()); exit;
+                $ea->setIdSeccion($inscripcion);
+            };            
             $em->persist($ea);
             $em->flush();
 
@@ -62,7 +71,8 @@ class InscripcionController extends Controller
 
         return $this->render('inscripcion/new.html.twig', array(
             'estado_academico'  => $ea,
-            'oferta'       => $oferta, 
+            'oferta'       => $oferta,
+            'seccion'       => $seccion,
             'form'          => $form->createView()
         ));
     }
