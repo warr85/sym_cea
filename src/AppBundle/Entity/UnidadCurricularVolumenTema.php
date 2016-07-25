@@ -14,9 +14,9 @@ use Doctrine\ORM\Mapping as ORM;
 class UnidadCurricularVolumenTema
 {
     /**
-     * @var string
+     * @var text
      *
-     * @ORM\Column(name="tema", type="string", length=50, nullable=false, options={"comment" = "nombre del estado"})
+     * @ORM\Column(name="tema", type="text", nullable=false, options={"comment" = "nombre del estado"})
      */
     private $nombre;
     
