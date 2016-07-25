@@ -49,7 +49,9 @@ class SeccionController extends Controller
             $em = $this->getDoctrine()->getManager();
             
             $user = $this->getDoctrine()->getRepository('AppBundle:Usuarios')->findOneByIdRolInstitucion($this->getUser()->getIdRolInstitucion());
-            $user->addRol($this->getDoctrine()->getRepository('AppBundle:Role')->findOneByName("ROLE_DOCENTE"));
+            if (false === $this->get('security.authorization_checker')->isGranted('ROLE_DOCENTE')) {
+                $user->addRol($this->getDoctrine()->getRepository('AppBundle:Role')->findOneByName("ROLE_DOCENTE"));
+            }
             
             $em->persist($user);                         
             $em->persist($seccion);
