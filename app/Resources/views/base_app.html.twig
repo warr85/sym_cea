@@ -65,6 +65,20 @@
                        </ul>
                    </li>
                   {% endif %}   
+                  
+                  
+                  
+                  {% if is_granted('ROLE_DOCENTE') %}                      
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown"> <i class="fa fa-list-alt"></i>
+                            <span>Serv. docentes</span> <b class="caret"></b>
+                        </a>
+                       <ul class="dropdown-menu">
+                           <li><a href="{{ path('servicios_index') }}">Mis Unidades Curriculaes</a></li>                           
+                           <li><a href="#">Mi Planificacion</a></li>                           
+                       </ul>
+                   </li>
+                  {% endif %}   
 
                   
                   {% if is_granted('ROLE_ESTUDIANTE') %}                      
