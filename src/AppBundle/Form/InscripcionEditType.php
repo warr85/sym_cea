@@ -10,6 +10,17 @@ use Doctrine\ORM\EntityRepository;
 
 class InscripcionEditType extends AbstractType
 {
+    
+    private $isGranted;
+
+    public function __construct($roleFlag)
+    {
+      $this->isGranted = $roleFlag;
+      //var_dump($this->isGranted); exit;
+    }
+        
+     
+    
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -28,10 +39,15 @@ class InscripcionEditType extends AbstractType
                             ));
                         
                 },
-                ))
-            ->add('idEstatus')
+                ));
+             
+        if($this->isGranted){
+            $builder->add('idEstatus'); 
+        }
 
-        ;
+        
+                
+                
     }
     
     /**
