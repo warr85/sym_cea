@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *              columns={"id_planificacion_seccion"})
  *          }, 
  *          indexes={ 
- *              @ORM\Index(name="fki_id_planificacion_seccion", 
+ *              @ORM\Index(name="fki_id_planificacion_evaluacion", 
  *                  columns={"id_planificacion_seccion"})
  *          }
  *  )
@@ -94,8 +94,17 @@ class PlanificacionSeccionEvaluacion
      * })
      */
     protected $idEstatus;
+    
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="PlanificacionSeccion", inversedBy="evaluacion")
+     * @ORM\JoinColumn(name="id_planificacion_evaluacion", referencedColumnName="id")
+     */
+    private $idPlanificacionEvaluacion;
 
     
 
    
+
+    
 }

@@ -10,10 +10,10 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="planificacion_seccion_especifico", 
  *      uniqueConstraints=
  *          {@ORM\UniqueConstraint(name="uq_planificacion_seccion_especifico", 
- *              columns={"id_planificacion_seccion_especifico"})
+ *              columns={"id_planificacion_seccion"})
  *          }, 
  *          indexes={ 
- *              @ORM\Index(name="fki_id_planificacion_seccion", 
+ *              @ORM\Index(name="fki_id_planificacion_especifico", 
  *                  columns={"id_planificacion_seccion"})
  *          }
  *  )
@@ -39,7 +39,8 @@ class PlanificacionSeccionEspecifico
      * @ORM\SequenceGenerator(sequenceName="municipio_id_seq", allocationSize=1, initialValue=1)
      */
     private $id;
-
+    
+    
     /**
      * @var \AppBundle\Entity\PlanificacionSeccion
      *
@@ -50,7 +51,13 @@ class PlanificacionSeccionEspecifico
      */
     private $idPlanificacionSeccion;
 
-
+    /**
+     * @ORM\ManyToOne(targetEntity="PlanificacionSeccion", inversedBy="objetivoEspecifico")
+     * @ORM\JoinColumn(name="id_planificacion_especifico", referencedColumnName="id")
+     */
+    private $idPlanificacionEspecifico;
+    
+    
 
     
 }

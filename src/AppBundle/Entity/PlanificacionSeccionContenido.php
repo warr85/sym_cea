@@ -65,8 +65,12 @@ class PlanificacionSeccionContenido
      * })
      */
     private $idPlanificacionSeccion;
-
-
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="PlanificacionSeccion", inversedBy="contenido")
+     * @ORM\JoinColumn(name="id_planificacion_contenido", referencedColumnName="id")
+     */
+    private $idPlanificacionContenido;
 
     
 
@@ -170,5 +174,28 @@ class PlanificacionSeccionContenido
     public function getIdPlanificacionSeccion()
     {
         return $this->idPlanificacionSeccion;
+    }
+
+    /**
+     * Set idPlanificacionContenido
+     *
+     * @param \AppBundle\Entity\PlanificacionSeccion $idPlanificacionContenido
+     * @return PlanificacionSeccionContenido
+     */
+    public function setIdPlanificacionContenido(\AppBundle\Entity\PlanificacionSeccion $idPlanificacionContenido = null)
+    {
+        $this->idPlanificacionContenido = $idPlanificacionContenido;
+
+        return $this;
+    }
+
+    /**
+     * Get idPlanificacionContenido
+     *
+     * @return \AppBundle\Entity\PlanificacionSeccion 
+     */
+    public function getIdPlanificacionContenido()
+    {
+        return $this->idPlanificacionContenido;
     }
 }

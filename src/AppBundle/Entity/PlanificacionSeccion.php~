@@ -9,12 +9,12 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="planificacion_seccion", 
  *      uniqueConstraints=
- *          {@ORM\UniqueConstraint(name="uq_planificacion_seccion_tema_especifico_contenido_estrategia_evaluacion", 
- *              columns={"id_planificacion_seccion", "id_tema_uc"})
+ *          {@ORM\UniqueConstraint(name="uq_tema_uc", 
+ *              columns={"id_tema_uc"})
  *          }, 
  *          indexes={ 
- *              @ORM\Index(name="fki_id_planificacion_seccion", 
- *                  columns={"id_planificacion_seccion"})
+ *              @ORM\Index(name="fki_id_tema_uc", 
+ *                  columns={"id_tema_uc"})
  *          }
  *  )
  * @ORM\Entity
@@ -34,27 +34,27 @@ class PlanificacionSeccion
     
     
     /**
-     * @ORM\OneToMany(targetEntity="PlanificacionSeccionEspecifico", mappedBy="idObjetivoEspecifico")
+     * @ORM\OneToMany(targetEntity="PlanificacionSeccionEspecifico", mappedBy="idPlanificacionEspecifico")
      */
-    private $idObjetivoEspecifico;
+    private $objetivoEspecifico;
     
     
     /**
-     * @ORM\OneToMany(targetEntity="PlanificacionSeccionContenido", mappedBy="idPlanificacionSeccionContenido")
+     * @ORM\OneToMany(targetEntity="PlanificacionSeccionContenido", mappedBy="idPlanificacionContenido")
      */
-    private $idPlanificacionSeccionContenido;
+    private $contenido;
     
     
     /**
-     * @ORM\OneToMany(targetEntity="PlanificacionSeccionEstrategia", mappedBy="idPlanificacionSeccionEstrategia")
+     * @ORM\OneToMany(targetEntity="PlanificacionSeccionEstrategia", mappedBy="idPlanificacionEstrategia")
      */
-    private $idPlanificacionSeccionEstrategia;
+    private $estrategia;
     
     
     /**
-     * @ORM\OneToMany(targetEntity="PlanificacionSeccionEvaluacion", mappedBy="idPlanificacionSeccionEvaluacion")
+     * @ORM\OneToMany(targetEntity="PlanificacionSeccionEvaluacion", mappedBy="idPlanificacionEvaluacion")
      */
-    private $idPlanificacionSeccionEvaluacion;
+    private $evaluacion;
     
    
     
@@ -97,14 +97,5 @@ class PlanificacionSeccion
     private $seccion;
     
     
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="objetivo", type="text", nullable=false, options={"comment" = "Objetivo de la seccion"})
-     */
-    private $objetivo;
-
-
-  
     
 }

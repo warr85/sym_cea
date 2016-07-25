@@ -34,27 +34,27 @@ class PlanificacionSeccion
     
     
     /**
-     * @ORM\OneToMany(targetEntity="PlanificacionSeccionEspecifico", mappedBy="idObjetivoEspecifico")
+     * @ORM\OneToMany(targetEntity="PlanificacionSeccionEspecifico", mappedBy="idPlanificacionEspecifico")
      */
-    private $idObjetivoEspecifico;
+    private $objetivoEspecifico;
     
     
     /**
-     * @ORM\OneToMany(targetEntity="PlanificacionSeccionContenido", mappedBy="idPlanificacionSeccionContenido")
+     * @ORM\OneToMany(targetEntity="PlanificacionSeccionContenido", mappedBy="idPlanificacionContenido")
      */
-    private $idPlanificacionSeccionContenido;
+    private $contenido;
     
     
     /**
-     * @ORM\OneToMany(targetEntity="PlanificacionSeccionEstrategia", mappedBy="idPlanificacionSeccionEstrategia")
+     * @ORM\OneToMany(targetEntity="PlanificacionSeccionEstrategia", mappedBy="idPlanificacionEstrategia")
      */
-    private $idPlanificacionSeccionEstrategia;
+    private $estrategia;
     
     
     /**
-     * @ORM\OneToMany(targetEntity="PlanificacionSeccionEvaluacion", mappedBy="idPlanificacionSeccionEvaluacion")
+     * @ORM\OneToMany(targetEntity="PlanificacionSeccionEvaluacion", mappedBy="idPlanificacionEvaluacion")
      */
-    private $idPlanificacionSeccionEvaluacion;
+    private $evaluacion;
     
    
     
@@ -97,25 +97,16 @@ class PlanificacionSeccion
     private $seccion;
     
     
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="objetivo", type="text", nullable=false, options={"comment" = "Objetivo de la seccion"})
-     */
-    private $objetivo;
-
-
-  
     
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->idObjetivoEspecifico = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->idPlanificacionSeccionContenido = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->idPlanificacionSeccionEstrategia = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->idPlanificacionSeccionEvaluacion = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->objetivoEspecifico = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->contenido = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->estrategia = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->evaluacion = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -198,29 +189,6 @@ class PlanificacionSeccion
     }
 
     /**
-     * Set objetivo
-     *
-     * @param string $objetivo
-     * @return PlanificacionSeccion
-     */
-    public function setObjetivo($objetivo)
-    {
-        $this->objetivo = $objetivo;
-
-        return $this;
-    }
-
-    /**
-     * Get objetivo
-     *
-     * @return string 
-     */
-    public function getObjetivo()
-    {
-        return $this->objetivo;
-    }
-
-    /**
      * Set idtemaUc
      *
      * @param \AppBundle\Entity\UnidadCurricularVolumenTema $idtemaUc
@@ -244,135 +212,135 @@ class PlanificacionSeccion
     }
 
     /**
-     * Add idObjetivoEspecifico
+     * Add objetivoEspecifico
      *
-     * @param \AppBundle\Entity\PlanificacionSeccionEspecifico $idObjetivoEspecifico
+     * @param \AppBundle\Entity\PlanificacionSeccionEspecifico $objetivoEspecifico
      * @return PlanificacionSeccion
      */
-    public function addIdObjetivoEspecifico(\AppBundle\Entity\PlanificacionSeccionEspecifico $idObjetivoEspecifico)
+    public function addObjetivoEspecifico(\AppBundle\Entity\PlanificacionSeccionEspecifico $objetivoEspecifico)
     {
-        $this->idObjetivoEspecifico[] = $idObjetivoEspecifico;
+        $this->objetivoEspecifico[] = $objetivoEspecifico;
 
         return $this;
     }
 
     /**
-     * Remove idObjetivoEspecifico
+     * Remove objetivoEspecifico
      *
-     * @param \AppBundle\Entity\PlanificacionSeccionEspecifico $idObjetivoEspecifico
+     * @param \AppBundle\Entity\PlanificacionSeccionEspecifico $objetivoEspecifico
      */
-    public function removeIdObjetivoEspecifico(\AppBundle\Entity\PlanificacionSeccionEspecifico $idObjetivoEspecifico)
+    public function removeObjetivoEspecifico(\AppBundle\Entity\PlanificacionSeccionEspecifico $objetivoEspecifico)
     {
-        $this->idObjetivoEspecifico->removeElement($idObjetivoEspecifico);
+        $this->objetivoEspecifico->removeElement($objetivoEspecifico);
     }
 
     /**
-     * Get idObjetivoEspecifico
+     * Get objetivoEspecifico
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getIdObjetivoEspecifico()
+    public function getObjetivoEspecifico()
     {
-        return $this->idObjetivoEspecifico;
+        return $this->objetivoEspecifico;
     }
 
     /**
-     * Add idPlanificacionSeccionContenido
+     * Add contenido
      *
-     * @param \AppBundle\Entity\PlanificacionSeccionContenido $idPlanificacionSeccionContenido
+     * @param \AppBundle\Entity\PlanificacionSeccionContenido $contenido
      * @return PlanificacionSeccion
      */
-    public function addIdPlanificacionSeccionContenido(\AppBundle\Entity\PlanificacionSeccionContenido $idPlanificacionSeccionContenido)
+    public function addContenido(\AppBundle\Entity\PlanificacionSeccionContenido $contenido)
     {
-        $this->idPlanificacionSeccionContenido[] = $idPlanificacionSeccionContenido;
+        $this->contenido[] = $contenido;
 
         return $this;
     }
 
     /**
-     * Remove idPlanificacionSeccionContenido
+     * Remove contenido
      *
-     * @param \AppBundle\Entity\PlanificacionSeccionContenido $idPlanificacionSeccionContenido
+     * @param \AppBundle\Entity\PlanificacionSeccionContenido $contenido
      */
-    public function removeIdPlanificacionSeccionContenido(\AppBundle\Entity\PlanificacionSeccionContenido $idPlanificacionSeccionContenido)
+    public function removeContenido(\AppBundle\Entity\PlanificacionSeccionContenido $contenido)
     {
-        $this->idPlanificacionSeccionContenido->removeElement($idPlanificacionSeccionContenido);
+        $this->contenido->removeElement($contenido);
     }
 
     /**
-     * Get idPlanificacionSeccionContenido
+     * Get contenido
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getIdPlanificacionSeccionContenido()
+    public function getContenido()
     {
-        return $this->idPlanificacionSeccionContenido;
+        return $this->contenido;
     }
 
     /**
-     * Add idPlanificacionSeccionEstrategia
+     * Add estrategia
      *
-     * @param \AppBundle\Entity\PlanificacionSeccionEstrategia $idPlanificacionSeccionEstrategia
+     * @param \AppBundle\Entity\PlanificacionSeccionEstrategia $estrategia
      * @return PlanificacionSeccion
      */
-    public function addIdPlanificacionSeccionEstrategium(\AppBundle\Entity\PlanificacionSeccionEstrategia $idPlanificacionSeccionEstrategia)
+    public function addEstrategium(\AppBundle\Entity\PlanificacionSeccionEstrategia $estrategia)
     {
-        $this->idPlanificacionSeccionEstrategia[] = $idPlanificacionSeccionEstrategia;
+        $this->estrategia[] = $estrategia;
 
         return $this;
     }
 
     /**
-     * Remove idPlanificacionSeccionEstrategia
+     * Remove estrategia
      *
-     * @param \AppBundle\Entity\PlanificacionSeccionEstrategia $idPlanificacionSeccionEstrategia
+     * @param \AppBundle\Entity\PlanificacionSeccionEstrategia $estrategia
      */
-    public function removeIdPlanificacionSeccionEstrategium(\AppBundle\Entity\PlanificacionSeccionEstrategia $idPlanificacionSeccionEstrategia)
+    public function removeEstrategium(\AppBundle\Entity\PlanificacionSeccionEstrategia $estrategia)
     {
-        $this->idPlanificacionSeccionEstrategia->removeElement($idPlanificacionSeccionEstrategia);
+        $this->estrategia->removeElement($estrategia);
     }
 
     /**
-     * Get idPlanificacionSeccionEstrategia
+     * Get estrategia
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getIdPlanificacionSeccionEstrategia()
+    public function getEstrategia()
     {
-        return $this->idPlanificacionSeccionEstrategia;
+        return $this->estrategia;
     }
 
     /**
-     * Add idPlanificacionSeccionEvaluacion
+     * Add evaluacion
      *
-     * @param \AppBundle\Entity\PlanificacionSeccionEvaluacion $idPlanificacionSeccionEvaluacion
+     * @param \AppBundle\Entity\PlanificacionSeccionEvaluacion $evaluacion
      * @return PlanificacionSeccion
      */
-    public function addIdPlanificacionSeccionEvaluacion(\AppBundle\Entity\PlanificacionSeccionEvaluacion $idPlanificacionSeccionEvaluacion)
+    public function addEvaluacion(\AppBundle\Entity\PlanificacionSeccionEvaluacion $evaluacion)
     {
-        $this->idPlanificacionSeccionEvaluacion[] = $idPlanificacionSeccionEvaluacion;
+        $this->evaluacion[] = $evaluacion;
 
         return $this;
     }
 
     /**
-     * Remove idPlanificacionSeccionEvaluacion
+     * Remove evaluacion
      *
-     * @param \AppBundle\Entity\PlanificacionSeccionEvaluacion $idPlanificacionSeccionEvaluacion
+     * @param \AppBundle\Entity\PlanificacionSeccionEvaluacion $evaluacion
      */
-    public function removeIdPlanificacionSeccionEvaluacion(\AppBundle\Entity\PlanificacionSeccionEvaluacion $idPlanificacionSeccionEvaluacion)
+    public function removeEvaluacion(\AppBundle\Entity\PlanificacionSeccionEvaluacion $evaluacion)
     {
-        $this->idPlanificacionSeccionEvaluacion->removeElement($idPlanificacionSeccionEvaluacion);
+        $this->evaluacion->removeElement($evaluacion);
     }
 
     /**
-     * Get idPlanificacionSeccionEvaluacion
+     * Get evaluacion
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getIdPlanificacionSeccionEvaluacion()
+    public function getEvaluacion()
     {
-        return $this->idPlanificacionSeccionEvaluacion;
+        return $this->evaluacion;
     }
 
     /**

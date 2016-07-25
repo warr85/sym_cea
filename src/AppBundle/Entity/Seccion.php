@@ -82,13 +82,13 @@ class Seccion
     private $id;
     
     /**
-     * @ORM\ManyToOne(targetEntity="OfertaAcademica", inversedBy="seccion")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\OfertaAcademica", inversedBy="seccion")
      * @ORM\JoinColumn(name="oferta_academica_id", referencedColumnName="id")
      */
     private $ofertaAcademica;
     
     /**
-     * @ORM\OneToMany(targetEntity="PlanificacionSeccion", mappedBy="planificacion")
+     * @ORM\OneToMany(targetEntity="PlanificacionSeccion", mappedBy="seccion")
      */
     private $planificacion;
 

@@ -65,8 +65,12 @@ class PlanificacionSeccionContenido
      * })
      */
     private $idPlanificacionSeccion;
-
-
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="PlanificacionSeccion", inversedBy="contenido")
+     * @ORM\JoinColumn(name="id_planificacion_contenido", referencedColumnName="id")
+     */
+    private $idPlanificacionContenido;
 
     
 }

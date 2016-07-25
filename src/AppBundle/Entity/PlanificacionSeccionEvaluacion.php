@@ -94,10 +94,19 @@ class PlanificacionSeccionEvaluacion
      * })
      */
     protected $idEstatus;
+    
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="PlanificacionSeccion", inversedBy="evaluacion")
+     * @ORM\JoinColumn(name="id_planificacion_evaluacion", referencedColumnName="id")
+     */
+    private $idPlanificacionEvaluacion;
 
     
 
    
+
+    
 
     /**
      * Get id
@@ -245,5 +254,28 @@ class PlanificacionSeccionEvaluacion
     public function getIdEstatus()
     {
         return $this->idEstatus;
+    }
+
+    /**
+     * Set idPlanificacionEvaluacion
+     *
+     * @param \AppBundle\Entity\PlanificacionSeccion $idPlanificacionEvaluacion
+     * @return PlanificacionSeccionEvaluacion
+     */
+    public function setIdPlanificacionEvaluacion(\AppBundle\Entity\PlanificacionSeccion $idPlanificacionEvaluacion = null)
+    {
+        $this->idPlanificacionEvaluacion = $idPlanificacionEvaluacion;
+
+        return $this;
+    }
+
+    /**
+     * Get idPlanificacionEvaluacion
+     *
+     * @return \AppBundle\Entity\PlanificacionSeccion 
+     */
+    public function getIdPlanificacionEvaluacion()
+    {
+        return $this->idPlanificacionEvaluacion;
     }
 }

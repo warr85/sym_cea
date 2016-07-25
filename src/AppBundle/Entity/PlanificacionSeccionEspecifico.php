@@ -39,7 +39,8 @@ class PlanificacionSeccionEspecifico
      * @ORM\SequenceGenerator(sequenceName="municipio_id_seq", allocationSize=1, initialValue=1)
      */
     private $id;
-
+    
+    
     /**
      * @var \AppBundle\Entity\PlanificacionSeccion
      *
@@ -50,10 +51,13 @@ class PlanificacionSeccionEspecifico
      */
     private $idPlanificacionSeccion;
 
-
-
+    /**
+     * @ORM\ManyToOne(targetEntity="PlanificacionSeccion", inversedBy="objetivoEspecifico")
+     * @ORM\JoinColumn(name="id_planificacion_especifico", referencedColumnName="id")
+     */
+    private $idPlanificacionEspecifico;
     
-
+  
     /**
      * Set objetivoEspecifico
      *
@@ -108,5 +112,28 @@ class PlanificacionSeccionEspecifico
     public function getIdPlanificacionSeccion()
     {
         return $this->idPlanificacionSeccion;
+    }
+
+    /**
+     * Set idPlanificacionEspecifico
+     *
+     * @param \AppBundle\Entity\PlanificacionSeccion $idPlanificacionEspecifico
+     * @return PlanificacionSeccionEspecifico
+     */
+    public function setIdPlanificacionEspecifico(\AppBundle\Entity\PlanificacionSeccion $idPlanificacionEspecifico = null)
+    {
+        $this->idPlanificacionEspecifico = $idPlanificacionEspecifico;
+
+        return $this;
+    }
+
+    /**
+     * Get idPlanificacionEspecifico
+     *
+     * @return \AppBundle\Entity\PlanificacionSeccion 
+     */
+    public function getIdPlanificacionEspecifico()
+    {
+        return $this->idPlanificacionEspecifico;
     }
 }

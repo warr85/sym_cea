@@ -51,7 +51,7 @@ class OfertaAcademica
     
 
     /**
-     * @ORM\OneToMany(targetEntity="Seccion", mappedBy="ofertaAcademica")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Seccion", mappedBy="ofertaAcademica")
      */
     private $seccion;
     

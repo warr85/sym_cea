@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>PlanificacionSeccion</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Fecha_creacion</th>
+                <td>{% if planificacionSeccion.fechacreacion %}{{ planificacionSeccion.fechacreacion|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Fecha_ultima_actualizacion</th>
+                <td>{% if planificacionSeccion.fechaultimaactualizacion %}{{ planificacionSeccion.fechaultimaactualizacion|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Observacion</th>
+                <td>{{ planificacionSeccion.observacion }}</td>
+            </tr>
+            <tr>
+                <th>Id</th>
+                <td>{{ planificacionSeccion.id }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('ceapp_docente_planificacion_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('ceapp_docente_planificacion_edit', { 'id': planificacionSeccion.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

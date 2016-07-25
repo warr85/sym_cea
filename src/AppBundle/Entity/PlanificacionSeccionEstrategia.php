@@ -56,6 +56,14 @@ class PlanificacionSeccionEstrategia
      * @ORM\Column(name="tipoRecurso", type="text", nullable=false, options={"comment" = "Recursos necesarios para el tema"})
      */
     private $tipoRecurso;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="PlanificacionSeccion", inversedBy="estrategia")
+     * @ORM\JoinColumn(name="id_planificacion_estrategia", referencedColumnName="id")
+     */
+    private $idPlanificacionEstrategia;
+
+    
 
     
 
@@ -136,5 +144,28 @@ class PlanificacionSeccionEstrategia
     public function getIdPlanificacionSeccion()
     {
         return $this->idPlanificacionSeccion;
+    }
+
+    /**
+     * Set idPlanificacionEstrategia
+     *
+     * @param \AppBundle\Entity\PlanificacionSeccion $idPlanificacionEstrategia
+     * @return PlanificacionSeccionEstrategia
+     */
+    public function setIdPlanificacionEstrategia(\AppBundle\Entity\PlanificacionSeccion $idPlanificacionEstrategia = null)
+    {
+        $this->idPlanificacionEstrategia = $idPlanificacionEstrategia;
+
+        return $this;
+    }
+
+    /**
+     * Get idPlanificacionEstrategia
+     *
+     * @return \AppBundle\Entity\PlanificacionSeccion 
+     */
+    public function getIdPlanificacionEstrategia()
+    {
+        return $this->idPlanificacionEstrategia;
     }
 }
