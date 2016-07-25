@@ -41,6 +41,12 @@ class UnidadCurricularVolumen
      * })
      */
     private $idUnidadCurricular;
+    
+    
+    /**
+     * @ORM\OneToMany(targetEntity="UnidadCurricularVolumenTema", mappedBy="idUnidadCurricularVolumen")
+     */
+    private $temas;
 
 
 
@@ -104,5 +110,45 @@ class UnidadCurricularVolumen
     
     public function __toString() {
         return $this->getIdUnidadCurricular();
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->temas = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add temas
+     *
+     * @param \AppBundle\Entity\UnidadCurricularVolumenTema $temas
+     * @return UnidadCurricularVolumen
+     */
+    public function addTema(\AppBundle\Entity\UnidadCurricularVolumenTema $temas)
+    {
+        $this->temas[] = $temas;
+
+        return $this;
+    }
+
+    /**
+     * Remove temas
+     *
+     * @param \AppBundle\Entity\UnidadCurricularVolumenTema $temas
+     */
+    public function removeTema(\AppBundle\Entity\UnidadCurricularVolumenTema $temas)
+    {
+        $this->temas->removeElement($temas);
+    }
+
+    /**
+     * Get temas
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTemas()
+    {
+        return $this->temas;
     }
 }

@@ -1,0 +1,56 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * PlanificacionSeccionEspecifico
+ *
+ * @ORM\Table(name="planificacion_seccion_especifico", 
+ *      uniqueConstraints=
+ *          {@ORM\UniqueConstraint(name="uq_planificacion_seccion_especifico", 
+ *              columns={"id_planificacion_seccion_especifico"})
+ *          }, 
+ *          indexes={ 
+ *              @ORM\Index(name="fki_id_planificacion_seccion", 
+ *                  columns={"id_planificacion_seccion"})
+ *          }
+ *  )
+ * @ORM\Entity
+ */
+class PlanificacionSeccionEspecifico
+{
+    /**
+     * @var text
+     *
+     * @ORM\Column(name="objetivo_especifico", type="text", nullable=false, options={"comment" = "Objetivo Especifico de un tema"})
+     */
+    private $objetivoEspecifico;
+    
+    
+        
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false, options={"comment" = "Identificador del municipio"})
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\SequenceGenerator(sequenceName="municipio_id_seq", allocationSize=1, initialValue=1)
+     */
+    private $id;
+
+    /**
+     * @var \AppBundle\Entity\PlanificacionSeccion
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\PlanificacionSeccion")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_planificacion_seccion", referencedColumnName="id", nullable=false)
+     * })
+     */
+    private $idPlanificacionSeccion;
+
+
+
+    
+}

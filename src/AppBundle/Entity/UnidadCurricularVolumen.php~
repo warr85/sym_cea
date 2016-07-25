@@ -41,8 +41,114 @@ class UnidadCurricularVolumen
      * })
      */
     private $idUnidadCurricular;
+    
+    
+    /**
+     * @ORM\OneToMany(targetEntity="UnidadCurricularVolumenTema", mappedBy="idUnidadCurricularVolumen")
+     */
+    private $temas;
 
 
 
    
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set idVolumen
+     *
+     * @param \AppBundle\Entity\Volumen $idVolumen
+     * @return UnidadCurricularVolumen
+     */
+    public function setIdVolumen(\AppBundle\Entity\Volumen $idVolumen)
+    {
+        $this->idVolumen = $idVolumen;
+
+        return $this;
+    }
+
+    /**
+     * Get idVolumen
+     *
+     * @return \AppBundle\Entity\Volumen 
+     */
+    public function getIdVolumen()
+    {
+        return $this->idVolumen;
+    }
+
+    /**
+     * Set idUnidadCurricular
+     *
+     * @param \AppBundle\Entity\UnidadCurricular $idUnidadCurricular
+     * @return UnidadCurricularVolumen
+     */
+    public function setIdUnidadCurricular(\AppBundle\Entity\UnidadCurricular $idUnidadCurricular)
+    {
+        $this->idUnidadCurricular = $idUnidadCurricular;
+
+        return $this;
+    }
+
+    /**
+     * Get idUnidadCurricular
+     *
+     * @return \AppBundle\Entity\UnidadCurricular 
+     */
+    public function getIdUnidadCurricular()
+    {
+        return $this->idUnidadCurricular;
+    }
+    
+    public function __toString() {
+        return $this->getIdUnidadCurricular();
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->temas = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add temas
+     *
+     * @param \AppBundle\Entity\UnidadCurricularVolumenTema $temas
+     * @return UnidadCurricularVolumen
+     */
+    public function addTema(\AppBundle\Entity\UnidadCurricularVolumenTema $temas)
+    {
+        $this->temas[] = $temas;
+
+        return $this;
+    }
+
+    /**
+     * Remove temas
+     *
+     * @param \AppBundle\Entity\UnidadCurricularVolumenTema $temas
+     */
+    public function removeTema(\AppBundle\Entity\UnidadCurricularVolumenTema $temas)
+    {
+        $this->temas->removeElement($temas);
+    }
+
+    /**
+     * Get temas
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTemas()
+    {
+        return $this->temas;
+    }
 }

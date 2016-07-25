@@ -86,6 +86,11 @@ class Seccion
      * @ORM\JoinColumn(name="oferta_academica_id", referencedColumnName="id")
      */
     private $ofertaAcademica;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="PlanificacionSeccion", mappedBy="planificacion")
+     */
+    private $planificacion;
 
 
     
@@ -95,6 +100,7 @@ class Seccion
     public function __construct()
     {
         $this->hasInscripcion = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->planificacion = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -286,5 +292,38 @@ class Seccion
     public function __toString() 
     {
         return $this->getNombre();
+    }
+
+    /**
+     * Add planificacion
+     *
+     * @param \AppBundle\Entity\PlanificacionSeccion $planificacion
+     * @return Seccion
+     */
+    public function addPlanificacion(\AppBundle\Entity\PlanificacionSeccion $planificacion)
+    {
+        $this->planificacion[] = $planificacion;
+
+        return $this;
+    }
+
+    /**
+     * Remove planificacion
+     *
+     * @param \AppBundle\Entity\PlanificacionSeccion $planificacion
+     */
+    public function removePlanificacion(\AppBundle\Entity\PlanificacionSeccion $planificacion)
+    {
+        $this->planificacion->removeElement($planificacion);
+    }
+
+    /**
+     * Get planificacion
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPlanificacion()
+    {
+        return $this->planificacion;
     }
 }

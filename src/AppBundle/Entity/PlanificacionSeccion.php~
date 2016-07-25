@@ -1,0 +1,110 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * PlanificacionSeccion
+ *
+ * @ORM\Table(name="planificacion_seccion", 
+ *      uniqueConstraints=
+ *          {@ORM\UniqueConstraint(name="uq_planificacion_seccion_tema_especifico_contenido_estrategia_evaluacion", 
+ *              columns={"id_planificacion_seccion", "id_tema_uc"})
+ *          }, 
+ *          indexes={ 
+ *              @ORM\Index(name="fki_id_planificacion_seccion", 
+ *                  columns={"id_planificacion_seccion"})
+ *          }
+ *  )
+ * @ORM\Entity
+ */
+class PlanificacionSeccion
+{
+    
+    /**
+     * @var \AppBundle\Entity\UnidadCurricularVolumenTema
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\UnidadCurricularVolumenTema")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_tema_uc", referencedColumnName="id", nullable=false)
+     * })
+     */
+    private $idtemaUc;
+    
+    
+    /**
+     * @ORM\OneToMany(targetEntity="PlanificacionSeccionEspecifico", mappedBy="idObjetivoEspecifico")
+     */
+    private $idObjetivoEspecifico;
+    
+    
+    /**
+     * @ORM\OneToMany(targetEntity="PlanificacionSeccionContenido", mappedBy="idPlanificacionSeccionContenido")
+     */
+    private $idPlanificacionSeccionContenido;
+    
+    
+    /**
+     * @ORM\OneToMany(targetEntity="PlanificacionSeccionEstrategia", mappedBy="idPlanificacionSeccionEstrategia")
+     */
+    private $idPlanificacionSeccionEstrategia;
+    
+    
+    /**
+     * @ORM\OneToMany(targetEntity="PlanificacionSeccionEvaluacion", mappedBy="idPlanificacionSeccionEvaluacion")
+     */
+    private $idPlanificacionSeccionEvaluacion;
+    
+   
+    
+    /** @ORM\Column(type="datetime", nullable=false, options={"comment" = "Fecha de creación de la solicitud"})
+    
+    */
+    
+    private $fecha_creacion;
+    
+    
+    /** @ORM\Column(type="datetime", nullable=false, options={"comment" = "Fecha de actualizacion de la solicitud"})
+    
+    */
+    
+    private $fecha_ultima_actualizacion;
+    
+    
+     /** @var text
+     *
+     * @ORM\Column(name="observacion", type="text", nullable=true, options={"comment" = "Observacion de la planificacion"})
+     */
+    private $observacion;
+    
+    
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false, options={"comment" = "Identificador de las seccion"})
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\SequenceGenerator(sequenceName="seccion_id_seq", allocationSize=1, initialValue=1)
+     */
+    private $id;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Seccion", inversedBy="planificacion")
+     * @ORM\JoinColumn(name="seccion_id", referencedColumnName="id")
+     */
+    private $seccion;
+    
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="objetivo", type="text", nullable=false, options={"comment" = "Objetivo de la seccion"})
+     */
+    private $objetivo;
+
+
+  
+    
+}

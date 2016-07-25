@@ -38,6 +38,22 @@ class Periodo
      * @ORM\SequenceGenerator(sequenceName="periodo_id_seq", allocationSize=1, initialValue=1)
      */
     private $id;
+    
+    
+    /** @ORM\Column(name="fecha_inicio", type="datetime", nullable=false, options={"comment" = "Fecha de creación de la solicitud"})
+    
+    */
+    
+    private $fechaInicio;
+    
+    
+    /** @ORM\Column(name="fecha_fin", type="datetime", nullable=false, options={"comment" = "Fecha de actualizacion de la solicitud"})
+    
+    */
+    
+    private $fechaFin;
+    
+    
 
     /**
      * Set nombre
@@ -97,5 +113,51 @@ class Periodo
     
     public function __toString() {
         return $this->getNombre();
+    }
+
+    /**
+     * Set fechaInicio
+     *
+     * @param \DateTime $fechaInicio
+     * @return Periodo
+     */
+    public function setFechaInicio($fechaInicio)
+    {
+        $this->fechaInicio = $fechaInicio;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaInicio
+     *
+     * @return \DateTime 
+     */
+    public function getFechaInicio()
+    {
+        return $this->fechaInicio;
+    }
+
+    /**
+     * Set fechaFin
+     *
+     * @param \DateTime $fechaFin
+     * @return Periodo
+     */
+    public function setFechaFin($fechaFin)
+    {
+        $this->fechaFin = $fechaFin;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaFin
+     *
+     * @return \DateTime 
+     */
+    public function getFechaFin()
+    {
+        return $this->fechaFin;
     }
 }

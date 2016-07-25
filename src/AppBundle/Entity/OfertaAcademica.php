@@ -20,6 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
  *          }
  *  )
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks()
  */
 class OfertaAcademica
 {
@@ -53,7 +54,20 @@ class OfertaAcademica
      * @ORM\OneToMany(targetEntity="Seccion", mappedBy="ofertaAcademica")
      */
     private $seccion;
-
+    
+    
+    /** @ORM\Column(name="fecha_creacion", type="datetime", nullable=false, options={"comment" = "Fecha de creación de la solicitud"})
+    
+    */
+    
+    private $fechaCreacion;
+    
+    
+    /** @ORM\Column(name="fecha_actualizacion", type="datetime", nullable=false, options={"comment" = "Fecha de actualizacion de la solicitud"})
+    
+    */
+    
+    private $fechaActualizacion;
    
 
     /**
@@ -163,7 +177,73 @@ class OfertaAcademica
         return $this->idOfertaMallaCurricular;
     }
     
+    
+    /**
+     * @ORM\PrePersist()
+     */
+    public function prePersist()
+    {
+        $this->fechaCreacion = new \DateTime();
+        $this->fechaActualizacion = new \DateTime();        
+    }
+    
+    
+    /**
+     * @ORM\PreUpdate()
+     */
+    public function preUpdate()
+    {
+        $this->fechaActualizacion = new \DateTime();        
+    }
+    
+    
     public function __toString() {
         return $this->getIdMallaCurricularUc()->getIdUnidadCurricularVolumen()->getIdUnidadCurricular()->getNombre();
+    }
+
+    /**
+     * Set fechaCreacion
+     *
+     * @param \DateTime $fechaCreacion
+     * @return OfertaAcademica
+     */
+    public function setFechaCreacion($fechaCreacion)
+    {
+        $this->fechaCreacion = $fechaCreacion;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaCreacion
+     *
+     * @return \DateTime 
+     */
+    public function getFechaCreacion()
+    {
+        return $this->fechaCreacion;
+    }
+
+    /**
+     * Set fechaActualizacion
+     *
+     * @param \DateTime $fechaActualizacion
+     * @return OfertaAcademica
+     */
+    public function setFechaActualizacion($fechaActualizacion)
+    {
+        $this->fechaActualizacion = $fechaActualizacion;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaActualizacion
+     *
+     * @return \DateTime 
+     */
+    public function getFechaActualizacion()
+    {
+        return $this->fechaActualizacion;
     }
 }
