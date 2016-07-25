@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="inscripcion")
  * @ORM\Entity
+ * @ORM\HasLifecycleCallBacks()
  */
 class Inscripcion
 {
@@ -47,6 +48,46 @@ class Inscripcion
 
    
 
+     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fecha_creacion", type="date", nullable=false, options={"comment" = "fecha de creacion de la inscripcion"})
+     */
+    protected $created;
+    
+    
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fecha_ultima_actualizacion", type="date", nullable=false, options={"comment" = "fecha de actualizacion de la inscripcion"})
+     */
+    protected $modified;
+
+
+
+
+
+
+    /**
+    * @ORM\PrePersist
+    */
+   public function prePersist()
+   {
+
+     $this->created = new \DateTime();
+     $this->modified = new \DateTime();
+
+   }
+   
+   
+   /**
+    * @ORM\PreUpdate
+    */
+   public function preUpdate()
+   {
+     $this->modified = new \DateTime();
+
+   }
    
 
     /**
@@ -126,5 +167,51 @@ class Inscripcion
     public function getIdEstatus()
     {
         return $this->idEstatus;
+    }
+
+    /**
+     * Set created
+     *
+     * @param \DateTime $created
+     * @return Inscripcion
+     */
+    public function setCreated($created)
+    {
+        $this->created = $created;
+
+        return $this;
+    }
+
+    /**
+     * Get created
+     *
+     * @return \DateTime 
+     */
+    public function getCreated()
+    {
+        return $this->created;
+    }
+
+    /**
+     * Set modified
+     *
+     * @param \DateTime $modified
+     * @return Inscripcion
+     */
+    public function setModified($modified)
+    {
+        $this->modified = $modified;
+
+        return $this;
+    }
+
+    /**
+     * Get modified
+     *
+     * @return \DateTime 
+     */
+    public function getModified()
+    {
+        return $this->modified;
     }
 }

@@ -302,13 +302,13 @@ class EstadoAcademico
      * Set idSeccion
      *
      */
-    public function setIdSeccion($idSeccion)
+    public function setIdSeccion($idSeccion, $estatus)
     {
         
             $inscripcion = new Inscripcion();            
             $inscripcion->setIdEstadoAcademico($this);
             $inscripcion->setIdSeccion($idSeccion);
-            $inscripcion->setIdEstatus($this->getIdDocenteServicio()->getIdEstatus());
+            $inscripcion->setIdEstatus($estatus);
             $this->addHasInscripcion($inscripcion);            
         
 

@@ -59,9 +59,10 @@ class InscripcionController extends Controller
             $em = $this->getDoctrine()->getManager();
             
             foreach ($request->request->get('seccion')['idSeccion'] as $s ){
-                $inscripcion = $this->getDoctrine()->getRepository('AppBundle:Seccion')->findOneById($s);
+                $secc = $this->getDoctrine()->getRepository('AppBundle:Seccion')->findOneById($s);
+                $estatus = $this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(2);
                 //var_dump($inscripcion->getId()); exit;
-                $ea->setIdSeccion($inscripcion);
+                $ea->setIdSeccion($secc, $estatus);
             };            
             $em->persist($ea);
             $em->flush();
