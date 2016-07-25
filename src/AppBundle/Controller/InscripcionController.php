@@ -104,7 +104,7 @@ class InscripcionController extends Controller
         $em = $this->getDoctrine()->getManager();
         $deleteForm = $this->createDeleteForm($inscripcion);
         $estado_academico = $em->getRepository('AppBundle:EstadoAcademico')->findOneByIdRolInstitucion($this->getUser()->getIdRolInstitucion());
-        $editForm = $this->createForm('AppBundle\Form\InscripcionEditType', $inscripcion);
+        $editForm = $this->createForm('AppBundle\Form\InscripcionEditType', $inscripcion, array('oferta' => $inscripcion->getIdSeccion()->getOfertaAcademica()->getId()));
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {

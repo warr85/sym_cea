@@ -6,6 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Doctrine\ORM\EntityRepository;
 
 class InscripcionEditType extends AbstractType
 {
@@ -15,8 +16,19 @@ class InscripcionEditType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $this->oferta = $options['oferta'];
         $builder
-            ->add('idSeccion')
+            ->add('idSeccion', EntityType::class, array(
+                'class' => 'AppBundle:Seccion',
+                'query_builder' => function (EntityRepository $er){
+                    return $er->createQueryBuilder('u')
+                            ->where('u.ofertaAcademica = ?1')
+                            ->setParameters(array(
+                                1 => $this->oferta   
+                            ));
+                        
+                },
+                ))
             ->add('idEstatus')
 
         ;
@@ -28,7 +40,8 @@ class InscripcionEditType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\Inscripcion',
+            'data_class'    => 'AppBundle\Entity\Inscripcion',
+            'oferta'        => null
         ));
     }
 }
