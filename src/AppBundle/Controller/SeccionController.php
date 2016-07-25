@@ -47,6 +47,11 @@ class SeccionController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            
+            $user = $this->getDoctrine()->getRepository('AppBundle:Usuarios')->findOneByIdRolInstitucion($this->getUser()->getIdRolInstitucion());
+            $user->addRol($this->getDoctrine()->getRepository('AppBundle:Role')->findOneByName("ROLE_DOCENTE"));
+            
+            $em->persist($user);                         
             $em->persist($seccion);
             $em->flush();
 
