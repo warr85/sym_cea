@@ -9,8 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="planificacion_seccion", 
  *      uniqueConstraints=
- *          {@ORM\UniqueConstraint(name="uq_tema_uc", 
- *              columns={"id_tema_uc"})
+ *          {@ORM\UniqueConstraint(name="uq_tema_uc_seccion", 
+ *              columns={"id_tema_uc", "seccion_id"})
  *          }, 
  *          indexes={ 
  *              @ORM\Index(name="fki_id_tema_uc", 
@@ -18,6 +18,7 @@ use Doctrine\ORM\Mapping as ORM;
  *          }
  *  )
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks()
  */
 class PlanificacionSeccion
 {
@@ -25,7 +26,7 @@ class PlanificacionSeccion
     /**
      * @var \AppBundle\Entity\UnidadCurricularVolumenTema
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\UnidadCurricularVolumenTema")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\UnidadCurricularVolumenTema", inversedBy="hasPlanificacion")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_tema_uc", referencedColumnName="id", nullable=false)
      * })
@@ -40,7 +41,8 @@ class PlanificacionSeccion
     
     
     /**
-     * @ORM\OneToMany(targetEntity="PlanificacionSeccionContenido", mappedBy="idPlanificacionContenido")
+     * @ORM\OneToMany(targetEntity="PlanificacionSeccionContenido", mappedBy="planificacionSeccionId", cascade={"all"})
+     * @var \Doctrine\Common\Collections\ArrayCollection
      */
     private $contenido;
     
@@ -58,18 +60,18 @@ class PlanificacionSeccion
     
    
     
-    /** @ORM\Column(type="datetime", nullable=false, options={"comment" = "Fecha de creación de la solicitud"})
+    /** @ORM\Column(name="fecha_creacion", type="datetime", nullable=false, options={"comment" = "Fecha de creación de la solicitud"})
     
     */
     
-    private $fecha_creacion;
+    private $fechaCreacion;
     
     
-    /** @ORM\Column(type="datetime", nullable=false, options={"comment" = "Fecha de actualizacion de la solicitud"})
+    /** @ORM\Column(name="fecha_ultima_actualizacion", type="datetime", nullable=false, options={"comment" = "Fecha de actualizacion de la solicitud"})
     
     */
     
-    private $fecha_ultima_actualizacion;
+    private $fechaUltimaActualizacion;
     
     
      /** @var text
@@ -109,51 +111,7 @@ class PlanificacionSeccion
         $this->evaluacion = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
-    /**
-     * Set fecha_creacion
-     *
-     * @param \DateTime $fechaCreacion
-     * @return PlanificacionSeccion
-     */
-    public function setFechaCreacion($fechaCreacion)
-    {
-        $this->fecha_creacion = $fechaCreacion;
-
-        return $this;
-    }
-
-    /**
-     * Get fecha_creacion
-     *
-     * @return \DateTime 
-     */
-    public function getFechaCreacion()
-    {
-        return $this->fecha_creacion;
-    }
-
-    /**
-     * Set fecha_ultima_actualizacion
-     *
-     * @param \DateTime $fechaUltimaActualizacion
-     * @return PlanificacionSeccion
-     */
-    public function setFechaUltimaActualizacion($fechaUltimaActualizacion)
-    {
-        $this->fecha_ultima_actualizacion = $fechaUltimaActualizacion;
-
-        return $this;
-    }
-
-    /**
-     * Get fecha_ultima_actualizacion
-     *
-     * @return \DateTime 
-     */
-    public function getFechaUltimaActualizacion()
-    {
-        return $this->fecha_ultima_actualizacion;
-    }
+    
 
     /**
      * Set observacion
@@ -252,7 +210,9 @@ class PlanificacionSeccion
      */
     public function addContenido(\AppBundle\Entity\PlanificacionSeccionContenido $contenido)
     {
+        $contenido->setPlanificacionSeccionId($this);
         $this->contenido[] = $contenido;
+        
 
         return $this;
     }
@@ -364,5 +324,70 @@ class PlanificacionSeccion
     public function getSeccion()
     {
         return $this->seccion;
+    }
+
+    /**
+     * @ORM\PrePersist()
+     */
+    public function prePersist()
+    {
+        $this->fechaCreacion = new \DateTime();
+        $this->fechaUltimaActualizacion = new \DateTime();
+    }
+    
+    
+    /**
+     * @ORM\PreUpdate()
+     */
+    public function preUpdate()
+    {
+        $this->fechaUltimaActualizacion = new \DateTime();
+    }
+
+    /**
+     * Get fechaCreacion
+     *
+     * @return \DateTime 
+     */
+    public function getFechaCreacion()
+    {
+        return $this->fechaCreacion;
+    }
+
+
+    /**
+     * Set fechaCreacion
+     *
+     * @param \DateTime $fechaCreacion
+     * @return PlanificacionSeccion
+     */
+    public function setFechaCreacion($fechaCreacion)
+    {
+        $this->fechaCreacion = $fechaCreacion;
+
+        return $this;
+    }
+
+    /**
+     * Set fechaUltimaActualizacion
+     *
+     * @param \DateTime $fechaUltimaActualizacion
+     * @return PlanificacionSeccion
+     */
+    public function setFechaUltimaActualizacion($fechaUltimaActualizacion)
+    {
+        $this->fechaUltimaActualizacion = $fechaUltimaActualizacion;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaUltimaActualizacion
+     *
+     * @return \DateTime 
+     */
+    public function getFechaUltimaActualizacion()
+    {
+        return $this->fechaUltimaActualizacion;
     }
 }

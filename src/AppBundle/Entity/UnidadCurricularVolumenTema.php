@@ -52,6 +52,13 @@ class UnidadCurricularVolumenTema
      */
     private $id;
     
+     /**
+     * @ORM\OneToMany(targetEntity="PlanificacionSeccion", mappedBy="idtemaUc")
+     */
+    private $hasPlanificacion;
+
+   
+    
 
 
     /**
@@ -168,5 +175,47 @@ class UnidadCurricularVolumenTema
     public function getOrden()
     {
         return $this->orden;
+    }
+
+  
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->hasPlanificacion = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add hasPlanificacion
+     *
+     * @param \AppBundle\Entity\PlanificacionSeccion $hasPlanificacion
+     * @return UnidadCurricularVolumenTema
+     */
+    public function addHasPlanificacion(\AppBundle\Entity\PlanificacionSeccion $hasPlanificacion)
+    {
+        $this->hasPlanificacion[] = $hasPlanificacion;
+
+        return $this;
+    }
+
+    /**
+     * Remove hasPlanificacion
+     *
+     * @param \AppBundle\Entity\PlanificacionSeccion $hasPlanificacion
+     */
+    public function removeHasPlanificacion(\AppBundle\Entity\PlanificacionSeccion $hasPlanificacion)
+    {
+        $this->hasPlanificacion->removeElement($hasPlanificacion);
+    }
+
+    /**
+     * Get hasPlanificacion
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getHasPlanificacion()
+    {
+        return $this->hasPlanificacion;
     }
 }

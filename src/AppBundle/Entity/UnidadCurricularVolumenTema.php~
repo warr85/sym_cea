@@ -14,9 +14,9 @@ use Doctrine\ORM\Mapping as ORM;
 class UnidadCurricularVolumenTema
 {
     /**
-     * @var string
+     * @var text
      *
-     * @ORM\Column(name="tema", type="string", length=50, nullable=false, options={"comment" = "nombre del estado"})
+     * @ORM\Column(name="tema", type="text", nullable=false, options={"comment" = "nombre del estado"})
      */
     private $nombre;
     
@@ -51,6 +51,13 @@ class UnidadCurricularVolumenTema
      * @ORM\SequenceGenerator(sequenceName="estado_id_seq", allocationSize=1, initialValue=1)
      */
     private $id;
+    
+     /**
+     * @ORM\OneToMany(targetEntity="PlanificacionSeccion", mappedBy="idtemaUc")
+     */
+    private $hasPlanificacion;
+
+   
     
 
 
@@ -146,4 +153,29 @@ class UnidadCurricularVolumenTema
     {
         return $this->objetivoGeneral;
     }
+
+    /**
+     * Set orden
+     *
+     * @param integer $orden
+     * @return UnidadCurricularVolumenTema
+     */
+    public function setOrden($orden)
+    {
+        $this->orden = $orden;
+
+        return $this;
+    }
+
+    /**
+     * Get orden
+     *
+     * @return integer 
+     */
+    public function getOrden()
+    {
+        return $this->orden;
+    }
+
+  
 }

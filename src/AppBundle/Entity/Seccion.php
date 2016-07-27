@@ -88,7 +88,7 @@ class Seccion
     private $ofertaAcademica;
     
     /**
-     * @ORM\OneToMany(targetEntity="PlanificacionSeccion", mappedBy="seccion")
+     * @ORM\OneToMany(targetEntity="PlanificacionSeccion", mappedBy="seccion", cascade={"all"})
      */
     private $planificacion;
 

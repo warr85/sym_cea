@@ -8,7 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Entity\PlanificacionSeccion;
 use AppBundle\Form\PlanificacionSeccionType;
-
+use AppBundle\Entity\Seccion;
 /**
  * PlanificacionSeccion controller.
  *
@@ -25,29 +25,42 @@ class PlanificacionSeccionController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-
+        $secciones = $em->getRepository('AppBundle:Seccion')->findBy(array(
+           'idRolInstitucion' => $this->getUser()->getIdRolInstitucion() 
+        ));
         $planificacionSeccions = $em->getRepository('AppBundle:PlanificacionSeccion')->findAll();
 
         return $this->render('planificacionseccion/index.html.twig', array(
             'planificacionSeccions' => $planificacionSeccions,
+            'secciones'             => $secciones
         ));
     }
 
     /**
      * Creates a new PlanificacionSeccion entity.
      *
-     * @Route("/new", name="ceapp_docente_planificacion_new")
+     * @Route("/new/{seccion}", name="ceapp_docente_planificacion_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request)
+    public function newAction(Request $request, Seccion $seccion)
     {
-        $planificacionSeccion = new PlanificacionSeccion();
-        $form = $this->createForm('AppBundle\Form\PlanificacionSeccionType', $planificacionSeccion);
+        $planificacionSeccion = new PlanificacionSeccion();        
+        $form = $this->createForm('AppBundle\Form\PlanificacionSeccionType', $planificacionSeccion, array('seccion' => $seccion));
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {            
+            
+            
+            
+            // ciclo a traves de las relaciones para cada contenido
+            foreach($planificacionSeccion->getContenido() as $contenido){
+              $contenido->setPlanificacionSeccionId($planificacionSeccion);
+              $seccion->addPlanificacion($planificacionSeccion);
+            }
+            //var_dump($seccion->getPlanificacion()->count()); exit;
             $em = $this->getDoctrine()->getManager();
             $em->persist($planificacionSeccion);
+            //$em->persist($seccion);
             $em->flush();
 
             return $this->redirectToRoute('ceapp_docente_planificacion_show', array('id' => $planificacionSeccion->getId()));
@@ -83,8 +96,9 @@ class PlanificacionSeccionController extends Controller
      */
     public function editAction(Request $request, PlanificacionSeccion $planificacionSeccion)
     {
+        $seccion = $this->getDoctrine()->getRepository('AppBundle:Seccion')->findOneById($planificacionSeccion->getSeccion());
         $deleteForm = $this->createDeleteForm($planificacionSeccion);
-        $editForm = $this->createForm('AppBundle\Form\PlanificacionSeccionType', $planificacionSeccion);
+        $editForm = $this->createForm('AppBundle\Form\PlanificacionSeccionType', $planificacionSeccion, array('seccion' => $seccion));
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {

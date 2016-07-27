@@ -7,16 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * PlanificacionSeccionContenido
  *
- * @ORM\Table(name="planificacion_seccion_contenido", 
- *      uniqueConstraints=
- *          {@ORM\UniqueConstraint(name="uq_planificacion_seccion_contenido", 
- *              columns={"id_planificacion_seccion"})
- *          }, 
- *          indexes={ 
- *              @ORM\Index(name="fki_id_planificacion_seccion", 
- *                  columns={"id_planificacion_seccion"})
- *          }
- *  )
+ * @ORM\Table(name="planificacion_seccion_contenido")
  * @ORM\Entity
  */
 class PlanificacionSeccionContenido
@@ -56,21 +47,12 @@ class PlanificacionSeccionContenido
      */
     private $id;
 
-    /**
-     * @var \AppBundle\Entity\PlanificacionSeccion
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\PlanificacionSeccion")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_planificacion_seccion", referencedColumnName="id", nullable=false)
-     * })
-     */
-    private $idPlanificacionSeccion;
     
     /**
      * @ORM\ManyToOne(targetEntity="PlanificacionSeccion", inversedBy="contenido")
-     * @ORM\JoinColumn(name="id_planificacion_contenido", referencedColumnName="id")
+     * @ORM\JoinColumn(name="planificacion_seccion_id", referencedColumnName="id", nullable=FALSE)
      */
-    private $idPlanificacionContenido;
+    protected $planificacionSeccionId;
 
     
 
@@ -153,49 +135,29 @@ class PlanificacionSeccionContenido
         return $this->id;
     }
 
+   
+    
+
     /**
-     * Set idPlanificacionSeccion
+     * Set planificacionSeccionId
      *
-     * @param \AppBundle\Entity\PlanificacionSeccion $idPlanificacionSeccion
+     * @param \AppBundle\Entity\PlanificacionSeccion $planificacionSeccionId
      * @return PlanificacionSeccionContenido
      */
-    public function setIdPlanificacionSeccion(\AppBundle\Entity\PlanificacionSeccion $idPlanificacionSeccion)
+    public function setPlanificacionSeccionId(\AppBundle\Entity\PlanificacionSeccion $planificacionSeccionId)
     {
-        $this->idPlanificacionSeccion = $idPlanificacionSeccion;
+        $this->planificacionSeccionId = $planificacionSeccionId;
 
         return $this;
     }
 
     /**
-     * Get idPlanificacionSeccion
+     * Get planificacionSeccionId
      *
      * @return \AppBundle\Entity\PlanificacionSeccion 
      */
-    public function getIdPlanificacionSeccion()
+    public function getPlanificacionSeccionId()
     {
-        return $this->idPlanificacionSeccion;
-    }
-
-    /**
-     * Set idPlanificacionContenido
-     *
-     * @param \AppBundle\Entity\PlanificacionSeccion $idPlanificacionContenido
-     * @return PlanificacionSeccionContenido
-     */
-    public function setIdPlanificacionContenido(\AppBundle\Entity\PlanificacionSeccion $idPlanificacionContenido = null)
-    {
-        $this->idPlanificacionContenido = $idPlanificacionContenido;
-
-        return $this;
-    }
-
-    /**
-     * Get idPlanificacionContenido
-     *
-     * @return \AppBundle\Entity\PlanificacionSeccion 
-     */
-    public function getIdPlanificacionContenido()
-    {
-        return $this->idPlanificacionContenido;
+        return $this->planificacionSeccionId;
     }
 }

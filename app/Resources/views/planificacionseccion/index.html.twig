@@ -1,43 +1,45 @@
-{% extends 'base.html.twig' %}
+{% extends 'base_app.html.twig' %}
 
 {% block body %}
-    <h1>PlanificacionSeccion list</h1>
+    <h1>Listado de Secciones Sin Planificacion</h1>
 
-    <table>
+    <table class="table table-bordered table-hover table-condensed">
         <thead>
             <tr>
-                <th>Fecha_creacion</th>
-                <th>Fecha_ultima_actualizacion</th>
-                <th>Observacion</th>
-                <th>Id</th>
-                <th>Actions</th>
+                <th>Unidad Curricular</th>
+                <th>Seccion</th>
+                <th>Cantidad Planificada</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
-        {% for planificacionSeccion in planificacionSeccions %}
+        {% for seccion in secciones %}                      
             <tr>
-                <td><a href="{{ path('ceapp_docente_planificacion_show', { 'id': planificacionSeccion.id }) }}">{{ planificacionSeccion.fechacreacion }}</a></td>
-                <td>{% if planificacionSeccion.fechaultimaactualizacion %}{{ planificacionSeccion.fechaultimaactualizacion|date('Y-m-d H:i:s') }}{% endif %}</td>
-                <td>{{ planificacionSeccion.observacion }}</td>
-                <td>{{ planificacionSeccion.id }}</td>
+                <td><a href="{{ path('ceapp_docente_planificacion_new', { 'seccion': seccion.id }) }}">{{ seccion.ofertaAcademica }}</a></td>                
+                <td>{{ seccion.nombre }}</td>
+                <td>
+                    {{ seccion.planificacion | length}} temas de {{ seccion.ofertaAcademica.idMallaCurricularUc.idUnidadCurricularVolumen.temas | length }} a planificar
+                    {% set porcentaje = 0 %}  
+                    {% if seccion.ofertaAcademica.idMallaCurricularUc.idUnidadCurricularVolumen.temas | length > 0 %}{% set porcentaje = ( seccion.planificacion | length * 100 ) / seccion.ofertaAcademica.idMallaCurricularUc.idUnidadCurricularVolumen.temas | length  %}{% endif %}                    
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="{{ seccion.planificacion | length}}" aria-valuemin="0" aria-valuemax="{{ seccion.ofertaAcademica.idMallaCurricularUc.idUnidadCurricularVolumen.temas | length }}" style="width:{{porcentaje}}%; min-width: 2em;" >
+                            {{ porcentaje }}
+                        </div>
+                    </div>
+                </td>
                 <td>
                     <ul>
                         <li>
-                            <a href="{{ path('ceapp_docente_planificacion_show', { 'id': planificacionSeccion.id }) }}">show</a>
+                            <a href="{{ path('ceapp_docente_planificacion_new', { 'seccion': seccion.id }) }}">Planificar</a>
                         </li>
                         <li>
-                            <a href="{{ path('ceapp_docente_planificacion_edit', { 'id': planificacionSeccion.id }) }}">edit</a>
+                            <a href="{{ path('ceapp_docente_planificacion_edit', { 'id': seccion.id }) }}">edit</a>
                         </li>
                     </ul>
                 </td>
-            </tr>
+            </tr>            
         {% endfor %}
         </tbody>
     </table>
-
-    <ul>
-        <li>
-            <a href="{{ path('ceapp_docente_planificacion_new') }}">Create a new entry</a>
-        </li>
-    </ul>
+    
 {% endblock %}

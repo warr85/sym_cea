@@ -7,16 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * PlanificacionSeccionContenido
  *
- * @ORM\Table(name="planificacion_seccion_contenido", 
- *      uniqueConstraints=
- *          {@ORM\UniqueConstraint(name="uq_planificacion_seccion_contenido", 
- *              columns={"id_planificacion_seccion"})
- *          }, 
- *          indexes={ 
- *              @ORM\Index(name="fki_id_planificacion_seccion", 
- *                  columns={"id_planificacion_seccion"})
- *          }
- *  )
+ * @ORM\Table(name="planificacion_seccion_contenido")
  * @ORM\Entity
  */
 class PlanificacionSeccionContenido
@@ -56,21 +47,94 @@ class PlanificacionSeccionContenido
      */
     private $id;
 
-    /**
-     * @var \AppBundle\Entity\PlanificacionSeccion
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\PlanificacionSeccion")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_planificacion_seccion", referencedColumnName="id", nullable=false)
-     * })
-     */
-    private $idPlanificacionSeccion;
     
     /**
      * @ORM\ManyToOne(targetEntity="PlanificacionSeccion", inversedBy="contenido")
-     * @ORM\JoinColumn(name="id_planificacion_contenido", referencedColumnName="id")
+     * @ORM\JoinColumn(name="planificacion_seccion_id", referencedColumnName="id", nullable=FALSE)
      */
-    private $idPlanificacionContenido;
+    protected $planificacionSeccion;
 
+    
+
+    /**
+     * Set conceptual
+     *
+     * @param string $conceptual
+     * @return PlanificacionSeccionContenido
+     */
+    public function setConceptual($conceptual)
+    {
+        $this->conceptual = $conceptual;
+
+        return $this;
+    }
+
+    /**
+     * Get conceptual
+     *
+     * @return string 
+     */
+    public function getConceptual()
+    {
+        return $this->conceptual;
+    }
+
+    /**
+     * Set procedimental
+     *
+     * @param string $procedimental
+     * @return PlanificacionSeccionContenido
+     */
+    public function setProcedimental($procedimental)
+    {
+        $this->procedimental = $procedimental;
+
+        return $this;
+    }
+
+    /**
+     * Get procedimental
+     *
+     * @return string 
+     */
+    public function getProcedimental()
+    {
+        return $this->procedimental;
+    }
+
+    /**
+     * Set actitudinal
+     *
+     * @param string $actitudinal
+     * @return PlanificacionSeccionContenido
+     */
+    public function setActitudinal($actitudinal)
+    {
+        $this->actitudinal = $actitudinal;
+
+        return $this;
+    }
+
+    /**
+     * Get actitudinal
+     *
+     * @return string 
+     */
+    public function getActitudinal()
+    {
+        return $this->actitudinal;
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+   
     
 }
