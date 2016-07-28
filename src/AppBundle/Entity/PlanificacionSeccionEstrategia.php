@@ -7,31 +7,13 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * PlanificacionSeccionEstrategia
  *
- * @ORM\Table(name="planificacion_seccion_estrategia", 
- *      uniqueConstraints=
- *          {@ORM\UniqueConstraint(name="uq_planificacion_estrategia", 
- *              columns={"id_planificacion_seccion"})
- *          }, 
- *          indexes={ 
- *              @ORM\Index(name="fki_id_planificacion_estrategia", 
- *                  columns={"id_planificacion_seccion"})
- *          }
- *  )
+ * @ORM\Table(name="planificacion_seccion_estrategia" )
  * @ORM\Entity
  */
 class PlanificacionSeccionEstrategia
 {
     
-    /**
-     * @var \AppBundle\Entity\PlanificacionSeccion
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\PlanificacionSeccion")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_planificacion_seccion", referencedColumnName="id", nullable=false)
-     * })
-     */
-    private $idPlanificacionSeccion;
-    
+        
     /**
      * @var integer
      *
@@ -42,26 +24,36 @@ class PlanificacionSeccionEstrategia
      */
     private $id;
 
-    /**
-     * @var text
+   /**
+     * @var \AppBundle\Entity\TecnicasPlanificacion
      *
-     * @ORM\Column(name="tipo_estrategia", type="text", nullable=false, options={"comment" = "Tipos de estrategia a utilizar"})
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\TecnicasPlanificacion")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_tecnicas_planificacion", referencedColumnName="id", nullable=false)
+     * })
      */
-    private $tipoEstrategia;
+    private $idTecnicasPlanificacion;
     
     
     /**
-     * @var text
+     * @var \AppBundle\Entity\RecursosPlanificacion
      *
-     * @ORM\Column(name="tipoRecurso", type="text", nullable=false, options={"comment" = "Recursos necesarios para el tema"})
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\RecursosPlanificacion")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_recursos_planificacion", referencedColumnName="id", nullable=false)
+     * })
      */
-    private $tipoRecurso;
+    private $idRecursosPlanificacion;
     
+    
+     
     /**
      * @ORM\ManyToOne(targetEntity="PlanificacionSeccion", inversedBy="estrategia")
-     * @ORM\JoinColumn(name="id_planificacion_estrategia", referencedColumnName="id")
+     * @ORM\JoinColumn(name="planificacion_seccion_id", referencedColumnName="id")
      */
-    private $idPlanificacionEstrategia;
+    private $planificacionSeccionId;
+
+    
 
     
 
@@ -78,94 +70,71 @@ class PlanificacionSeccionEstrategia
     }
 
     /**
-     * Set tipoEstrategia
+     * Set idTecnicasPlanificacion
      *
-     * @param string $tipoEstrategia
+     * @param \AppBundle\Entity\TecnicasPlanificacion $idTecnicasPlanificacion
      * @return PlanificacionSeccionEstrategia
      */
-    public function setTipoEstrategia($tipoEstrategia)
+    public function setIdTecnicasPlanificacion(\AppBundle\Entity\TecnicasPlanificacion $idTecnicasPlanificacion)
     {
-        $this->tipoEstrategia = $tipoEstrategia;
+        $this->idTecnicasPlanificacion = $idTecnicasPlanificacion;
 
         return $this;
     }
 
     /**
-     * Get tipoEstrategia
+     * Get idTecnicasPlanificacion
      *
-     * @return string 
+     * @return \AppBundle\Entity\TecnicasPlanificacion 
      */
-    public function getTipoEstrategia()
+    public function getIdTecnicasPlanificacion()
     {
-        return $this->tipoEstrategia;
+        return $this->idTecnicasPlanificacion;
     }
 
     /**
-     * Set tipoRecurso
+     * Set idRecursosPlanificacion
      *
-     * @param string $tipoRecurso
+     * @param \AppBundle\Entity\RecursosPlanificacion $idRecursosPlanificacion
      * @return PlanificacionSeccionEstrategia
      */
-    public function setTipoRecurso($tipoRecurso)
+    public function setIdRecursosPlanificacion(\AppBundle\Entity\RecursosPlanificacion $idRecursosPlanificacion)
     {
-        $this->tipoRecurso = $tipoRecurso;
+        $this->idRecursosPlanificacion = $idRecursosPlanificacion;
 
         return $this;
     }
 
     /**
-     * Get tipoRecurso
+     * Get idRecursosPlanificacion
      *
-     * @return string 
+     * @return \AppBundle\Entity\RecursosPlanificacion 
      */
-    public function getTipoRecurso()
+    public function getIdRecursosPlanificacion()
     {
-        return $this->tipoRecurso;
+        return $this->idRecursosPlanificacion;
     }
 
     /**
-     * Set idPlanificacionSeccion
+     * Set planificacionSeccionId
      *
-     * @param \AppBundle\Entity\PlanificacionSeccion $idPlanificacionSeccion
+     * @param \AppBundle\Entity\PlanificacionSeccion $planificacionSeccionId
      * @return PlanificacionSeccionEstrategia
      */
-    public function setIdPlanificacionSeccion(\AppBundle\Entity\PlanificacionSeccion $idPlanificacionSeccion)
+    public function setPlanificacionSeccionId(\AppBundle\Entity\PlanificacionSeccion $planificacionSeccionId = null)
     {
-        $this->idPlanificacionSeccion = $idPlanificacionSeccion;
+        $this->planificacionSeccionId = $planificacionSeccionId;
 
         return $this;
     }
 
     /**
-     * Get idPlanificacionSeccion
+     * Get planificacionSeccionId
      *
      * @return \AppBundle\Entity\PlanificacionSeccion 
      */
-    public function getIdPlanificacionSeccion()
+    public function getPlanificacionSeccionId()
     {
-        return $this->idPlanificacionSeccion;
-    }
-
-    /**
-     * Set idPlanificacionEstrategia
-     *
-     * @param \AppBundle\Entity\PlanificacionSeccion $idPlanificacionEstrategia
-     * @return PlanificacionSeccionEstrategia
-     */
-    public function setIdPlanificacionEstrategia(\AppBundle\Entity\PlanificacionSeccion $idPlanificacionEstrategia = null)
-    {
-        $this->idPlanificacionEstrategia = $idPlanificacionEstrategia;
-
-        return $this;
-    }
-
-    /**
-     * Get idPlanificacionEstrategia
-     *
-     * @return \AppBundle\Entity\PlanificacionSeccion 
-     */
-    public function getIdPlanificacionEstrategia()
-    {
-        return $this->idPlanificacionEstrategia;
+        return $this->planificacionSeccionId;
     }
 }

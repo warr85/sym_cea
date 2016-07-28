@@ -49,7 +49,7 @@ class PlanificacionSeccion
     
     
     /**
-     * @ORM\OneToMany(targetEntity="PlanificacionSeccionEstrategia", mappedBy="idPlanificacionEstrategia")
+     * @ORM\OneToMany(targetEntity="PlanificacionSeccionEstrategia", mappedBy="planificacionSeccionId", cascade={"all"})
      */
     private $estrategia;
     

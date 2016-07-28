@@ -68,6 +68,10 @@ class PlanificacionSeccionController extends Controller
               $especifico->setPlanificacionSeccionId($planificacionSeccion);              
             }
             
+            foreach($planificacionSeccion->getEstrategia() as $estrategias){
+              $estrategias->setPlanificacionSeccionId($planificacionSeccion);              
+            }
+            
             //var_dump($seccion->getPlanificacion()->count()); exit;
             $em = $this->getDoctrine()->getManager();
             $em->persist($planificacionSeccion);

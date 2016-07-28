@@ -7,31 +7,13 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * PlanificacionSeccionEstrategia
  *
- * @ORM\Table(name="planificacion_seccion_estrategia", 
- *      uniqueConstraints=
- *          {@ORM\UniqueConstraint(name="uq_planificacion_estrategia", 
- *              columns={"id_planificacion_seccion"})
- *          }, 
- *          indexes={ 
- *              @ORM\Index(name="fki_id_planificacion_estrategia", 
- *                  columns={"id_planificacion_seccion"})
- *          }
- *  )
+ * @ORM\Table(name="planificacion_seccion_estrategia" )
  * @ORM\Entity
  */
 class PlanificacionSeccionEstrategia
 {
     
-    /**
-     * @var \AppBundle\Entity\PlanificacionSeccion
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\PlanificacionSeccion")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_planificacion_seccion", referencedColumnName="id", nullable=false)
-     * })
-     */
-    private $idPlanificacionSeccion;
-    
+        
     /**
      * @var integer
      *
@@ -42,26 +24,36 @@ class PlanificacionSeccionEstrategia
      */
     private $id;
 
-    /**
-     * @var text
+   /**
+     * @var \AppBundle\Entity\TecnicasPlanificacion
      *
-     * @ORM\Column(name="tipo_estrategia", type="text", nullable=false, options={"comment" = "Tipos de estrategia a utilizar"})
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\TecnicasPlanificacion")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_tecnicas_planificacion", referencedColumnName="id", nullable=false)
+     * })
      */
-    private $tipoEstrategia;
+    private $idTecnicasPlanificacion;
     
     
     /**
-     * @var text
+     * @var \AppBundle\Entity\RecursosPlanificacion
      *
-     * @ORM\Column(name="tipoRecurso", type="text", nullable=false, options={"comment" = "Recursos necesarios para el tema"})
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\RecursosPlanificacion")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_recursos_planificacion", referencedColumnName="id", nullable=false)
+     * })
      */
-    private $tipoRecurso;
+    private $idRecursosPlanificacion;
     
+    
+     
     /**
      * @ORM\ManyToOne(targetEntity="PlanificacionSeccion", inversedBy="estrategia")
-     * @ORM\JoinColumn(name="id_planificacion_estrategia", referencedColumnName="id")
+     * @ORM\JoinColumn(name="planificacion_seccion_id", referencedColumnName="id")
      */
-    private $idPlanificacionEstrategia;
+    private $planificacionSeccionId;
+
+    
 
     
 

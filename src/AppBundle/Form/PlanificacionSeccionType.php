@@ -67,6 +67,12 @@ class PlanificacionSeccionType extends AbstractType
                     'allow_add'    => true,
                     'label'         => false
              ))
+                         
+            ->add('estrategia', CollectionType::class, array(
+                    'entry_type' => PlanificacionSeccionEstrategiaType::class,
+                    'allow_add'    => true,
+                    'label'         => false
+             ))
         ;
     }
     
