@@ -18,6 +18,15 @@ class PlanificacionSeccionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $this->seccion = $options['seccion'];
+        $this->planificacion = $options['planificacion'];        
+        if (!$this->planificacion){
+            $this->planes[] = 0;            
+        }else{
+            foreach ($this->planificacion as $p){
+                $this->planes[] = $p->getIdtemaUc()->getId();
+            }
+            
+        }
         //var_dump($this->seccion); exit;
         $builder
             
@@ -26,8 +35,10 @@ class PlanificacionSeccionType extends AbstractType
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('u')
                     ->orderBy('u.orden', 'ASC')                    
-                    ->where('u.idUnidadCurricularVolumen = ?1') //que las uc conicidan con la malla del estado academico                                        
+                    ->where('u.id not in (:query)') //que las uc conicidan con la malla del estado academico                                        
+                    ->andWhere('u.idUnidadCurricularVolumen = ?1')
                     ->setParameters(array(
+                        'query' => $this->planes,
                         1 => $this->seccion->getOfertaAcademica()->getIdMallaCurricularUc()->getIdUnidadCurricularVolumen()->getId()                       
                      ));                   
                  ;},
@@ -59,7 +70,8 @@ class PlanificacionSeccionType extends AbstractType
     {
         $resolver->setDefaults(array(
             'data_class'    => 'AppBundle\Entity\PlanificacionSeccion',
-            'seccion'       => null 
+            'seccion'       => null,
+            'planificacion' => null,
         ));
     }
 }

@@ -44,8 +44,14 @@ class PlanificacionSeccionController extends Controller
      */
     public function newAction(Request $request, Seccion $seccion)
     {
-        $planificacionSeccion = new PlanificacionSeccion();        
-        $form = $this->createForm('AppBundle\Form\PlanificacionSeccionType', $planificacionSeccion, array('seccion' => $seccion));
+        $em = $this->getDoctrine()->getManager();
+        $planificacionSeccion = new PlanificacionSeccion();  
+        $planificacion = $em->getRepository('AppBundle:PlanificacionSeccion')->findBySeccion($seccion);
+        //var_dump($planificacion->getIdtemaUc()->getId()); exit;
+        $form = $this->createForm('AppBundle\Form\PlanificacionSeccionType', $planificacionSeccion, array(
+            'seccion' => $seccion,
+            'planificacion' => $planificacion
+        ));
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {            
