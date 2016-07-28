@@ -8,31 +8,13 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * PlanificacionSeccionEvaluacion
  *
- * @ORM\Table(name="planificacion_seccion_evaluacion", 
- *      uniqueConstraints=
- *          {@ORM\UniqueConstraint(name="uq_planificacion_seccion", 
- *              columns={"id_planificacion_seccion"})
- *          }, 
- *          indexes={ 
- *              @ORM\Index(name="fki_id_planificacion_evaluacion", 
- *                  columns={"id_planificacion_seccion"})
- *          }
- *  )
+ * @ORM\Table(name="planificacion_seccion_evaluacion")
  * @ORM\Entity
  */
 class PlanificacionSeccionEvaluacion
 {
     
-    /**
-     * @var \AppBundle\Entity\PlanificacionSeccion
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\PlanificacionSeccion")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_planificacion_seccion", referencedColumnName="id", nullable=false)
-     * })
-     */
-    private $idPlanificacionSeccion;
-    
+        
     /**
      * @var integer
      *
@@ -54,12 +36,20 @@ class PlanificacionSeccionEvaluacion
     private $idTipoEvaluacion;
     
     
-    /**
-     * @var text
+   /**
+     * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\Column(name="tipo_instrumento_evaluacion", type="text", nullable=false, options={"comment" = "Instrumentos para la evaluacion"})
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\TipoInstrumentoEvaluacion", inversedBy="evaluacion")
+     * @ORM\JoinTable(name="evaluacion_instrumento",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="evaluacion_id", referencedColumnName="id", nullable=false)
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="instrumento_id", referencedColumnName="id", nullable=false)
+     *   }
+     * )
      */
-    private $tipoInstrumentoEvaluacion;
+    protected $instrumentos;
     
     
     /**
@@ -98,13 +88,9 @@ class PlanificacionSeccionEvaluacion
     
     /**
      * @ORM\ManyToOne(targetEntity="PlanificacionSeccion", inversedBy="evaluacion")
-     * @ORM\JoinColumn(name="id_planificacion_evaluacion", referencedColumnName="id")
+     * @ORM\JoinColumn(name="planificacion_seccion_id", referencedColumnName="id")
      */
-    private $idPlanificacionEvaluacion;
-
-    
-
-   
+    private $planificacionSeccionId;
 
     
 
@@ -187,28 +173,7 @@ class PlanificacionSeccionEvaluacion
         return $this->fechaEvaluacion;
     }
 
-    /**
-     * Set idPlanificacionSeccion
-     *
-     * @param \AppBundle\Entity\PlanificacionSeccion $idPlanificacionSeccion
-     * @return PlanificacionSeccionEvaluacion
-     */
-    public function setIdPlanificacionSeccion(\AppBundle\Entity\PlanificacionSeccion $idPlanificacionSeccion)
-    {
-        $this->idPlanificacionSeccion = $idPlanificacionSeccion;
-
-        return $this;
-    }
-
-    /**
-     * Get idPlanificacionSeccion
-     *
-     * @return \AppBundle\Entity\PlanificacionSeccion 
-     */
-    public function getIdPlanificacionSeccion()
-    {
-        return $this->idPlanificacionSeccion;
-    }
+    
 
     /**
      * Set idTipoEvaluacion
@@ -277,5 +242,68 @@ class PlanificacionSeccionEvaluacion
     public function getIdPlanificacionEvaluacion()
     {
         return $this->idPlanificacionEvaluacion;
+    }
+
+    /**
+     * Set planificacionSeccionId
+     *
+     * @param \AppBundle\Entity\PlanificacionSeccion $planificacionSeccionId
+     * @return PlanificacionSeccionEvaluacion
+     */
+    public function setPlanificacionSeccionId(\AppBundle\Entity\PlanificacionSeccion $planificacionSeccionId = null)
+    {
+        $this->planificacionSeccionId = $planificacionSeccionId;
+
+        return $this;
+    }
+
+    /**
+     * Get planificacionSeccionId
+     *
+     * @return \AppBundle\Entity\PlanificacionSeccion 
+     */
+    public function getPlanificacionSeccionId()
+    {
+        return $this->planificacionSeccionId;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->instrumentos = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add instrumentos
+     *
+     * @param \AppBundle\Entity\TipoInstrumentoEvaluacion $instrumentos
+     * @return PlanificacionSeccionEvaluacion
+     */
+    public function addInstrumento(\AppBundle\Entity\TipoInstrumentoEvaluacion $instrumentos)
+    {
+        $this->instrumentos[] = $instrumentos;
+
+        return $this;
+    }
+
+    /**
+     * Remove instrumentos
+     *
+     * @param \AppBundle\Entity\TipoInstrumentoEvaluacion $instrumentos
+     */
+    public function removeInstrumento(\AppBundle\Entity\TipoInstrumentoEvaluacion $instrumentos)
+    {
+        $this->instrumentos->removeElement($instrumentos);
+    }
+
+    /**
+     * Get instrumentos
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getInstrumentos()
+    {
+        return $this->instrumentos;
     }
 }

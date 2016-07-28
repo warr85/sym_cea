@@ -20,6 +20,10 @@
             
         </ul>
         
+        <ul class="evaluacion" data-prototype="{{ form_widget(form.evaluacion.vars.prototype)|e('html_attr') }}">
+            
+        </ul>
+        
         <input type="submit" value="Create" />
     {{ form_end(form) }}
 
@@ -40,11 +44,13 @@
         var $addEspecificoLink = $('<a href="#" class="add_especifico_link">Añadir Objetivos Especificos</a>');
         var $addContenidoLink = $('<a href="#" class="add_contenido_link">Añadir conceptos</a>');
         var $addEstrategiaLink = $('<a href="#" class="add_estrategia_link">Añadir estrategias</a>');
+        var $addEvaluacionLink = $('<a href="#" class="add_evaluacion_link">Añadir Evaluaciones</a>');
         var $RemoveContenidoLink = $('<a href="#" class="remove_contenido_link">Quitar Conceptos</a>');
         
         var $newLinkLiContenido = $('<li></li>').append($addContenidoLink);
         var $newLinkLiEspecifico = $('<li></li>').append($addEspecificoLink);
         var $newLinkLiEstrategia = $('<li></li>').append($addEstrategiaLink);        
+        var $newLinkLiEvaluacion = $('<li></li>').append($addEvaluacionLink);
         
         
         jQuery(document).ready(function() {
@@ -52,16 +58,19 @@
             $contenidoHolder = $('ul.contenido');
             $especificoHolder = $('ul.objetivoEspecifico');
             $estrategiaHolder = $('ul.estrategia');
+            $evaluacionHolder = $('ul.evaluacion');
             // add the "add a tag" anchor and li to the tags ul
             $contenidoHolder.append($newLinkLiContenido);
             $especificoHolder.append($newLinkLiEspecifico);
             $estrategiaHolder.append($newLinkLiEstrategia);
+            $evaluacionHolder.append($newLinkLiEvaluacion);
 
             // count the current form inputs we have (e.g. 2), use that as the new
             // index when inserting a new item (e.g. 2)
             $contenidoHolder.data('index', $contenidoHolder.find(':input').length);
             $especificoHolder.data('index', $especificoHolder.find(':input').length);
             $estrategiaHolder.data('index', $estrategiaHolder.find(':input').length);
+            $evaluacionHolder.data('index', $evaluacionHolder.find(':input').length);
 
             $addContenidoLink.on('click', function(e) {
                 // prevent the link from creating a "#" on the URL
@@ -86,6 +95,14 @@
 
                 // add a new tag form (see next code block)
                 addEstrategiaForm($estrategiaHolder, $newLinkLiEstrategia);
+            });
+            
+            $addEvaluacionLink.on('click', function(e) {
+                // prevent the link from creating a "#" on the URL
+                e.preventDefault();
+
+                // add a new tag form (see next code block)
+                addEvaluacionForm($evaluacionHolder, $newLinkLiEvaluacion);
             });
             
                        
@@ -181,6 +198,42 @@
                     $newFormLiEstrategia.append('<a href="#" class="remove-tag">x</a>');
 
                     $newLinkLiEstrategia.before($newFormLiEstrategia);
+
+                    // handle the removal, just for this example
+                    $('.remove-tag').click(function(e) {
+                        e.preventDefault();
+
+                        $(this).parent().remove();
+
+                        return false;
+                    });
+               
+                
+            }
+            
+            
+            
+            function addEvaluacionForm($evaluacionHolder, $newLinkLiEvaluacion) {
+                 // Get the data-prototype explained earlier
+                    var prototype = $evaluacionHolder.data('prototype');
+
+                    // get the new index
+                    var index = $evaluacionHolder.data('index');
+
+                    // Replace '$$name$$' in the prototype's HTML to
+                    // instead be a number based on how many items we have
+                    var newFormEvaluacion = prototype.replace(/__name__/g, index);
+
+                    // increase the index with one for the next item
+                    $evaluacionHolder.data('index', index + 1);
+
+                    // Display the form in the page in an li, before the "Add a tag" link li
+                    var $newFormLiEvaluacion = $('<li></li>').append(newFormEvaluacion);
+
+                    // also add a remove button, just for this example
+                    $newFormLiEvaluacion.append('<a href="#" class="remove-tag">x</a>');
+
+                    $newLinkLiEvaluacion.before($newFormLiEvaluacion);
 
                     // handle the removal, just for this example
                     $('.remove-tag').click(function(e) {

@@ -29,6 +29,11 @@ class TipoInstrumentoEvaluacion
      * @ORM\SequenceGenerator(sequenceName="estado_id_seq", allocationSize=1, initialValue=1)
      */
     private $id;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="PlanificacionSeccionEvaluacion", mappedBy="instrumentos", cascade={"all"})
+     */
+    private $evaluacion;
 
 
 
@@ -45,4 +50,6 @@ class TipoInstrumentoEvaluacion
     }
 
 
+
+    
 }

@@ -29,6 +29,13 @@ class TipoInstrumentoEvaluacion
      * @ORM\SequenceGenerator(sequenceName="estado_id_seq", allocationSize=1, initialValue=1)
      */
     private $id;
+    
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\PlanificacionSeccionEvaluacion", mappedBy="instrumentos", cascade={"all"})
+     */
+    protected $evaluacion;
 
 
 
@@ -45,6 +52,15 @@ class TipoInstrumentoEvaluacion
     }
 
 
+
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->evaluacion = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Set nombre
@@ -77,5 +93,38 @@ class TipoInstrumentoEvaluacion
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Add evaluacion
+     *
+     * @param \AppBundle\Entity\PlanificacionSeccionEvaluacion $evaluacion
+     * @return TipoInstrumentoEvaluacion
+     */
+    public function addEvaluacion(\AppBundle\Entity\PlanificacionSeccionEvaluacion $evaluacion)
+    {
+        $this->evaluacion[] = $evaluacion;
+
+        return $this;
+    }
+
+    /**
+     * Remove evaluacion
+     *
+     * @param \AppBundle\Entity\PlanificacionSeccionEvaluacion $evaluacion
+     */
+    public function removeEvaluacion(\AppBundle\Entity\PlanificacionSeccionEvaluacion $evaluacion)
+    {
+        $this->evaluacion->removeElement($evaluacion);
+    }
+
+    /**
+     * Get evaluacion
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getEvaluacion()
+    {
+        return $this->evaluacion;
     }
 }

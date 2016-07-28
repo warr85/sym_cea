@@ -8,31 +8,13 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * PlanificacionSeccionEvaluacion
  *
- * @ORM\Table(name="planificacion_seccion_evaluacion", 
- *      uniqueConstraints=
- *          {@ORM\UniqueConstraint(name="uq_planificacion_seccion", 
- *              columns={"id_planificacion_seccion"})
- *          }, 
- *          indexes={ 
- *              @ORM\Index(name="fki_id_planificacion_evaluacion", 
- *                  columns={"id_planificacion_seccion"})
- *          }
- *  )
+ * @ORM\Table(name="planificacion_seccion_evaluacion")
  * @ORM\Entity
  */
 class PlanificacionSeccionEvaluacion
 {
     
-    /**
-     * @var \AppBundle\Entity\PlanificacionSeccion
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\PlanificacionSeccion")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_planificacion_seccion", referencedColumnName="id", nullable=false)
-     * })
-     */
-    private $idPlanificacionSeccion;
-    
+        
     /**
      * @var integer
      *
@@ -54,12 +36,20 @@ class PlanificacionSeccionEvaluacion
     private $idTipoEvaluacion;
     
     
-    /**
-     * @var text
+   /**
+     * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\Column(name="tipo_instrumento_evaluacion", type="text", nullable=false, options={"comment" = "Instrumentos para la evaluacion"})
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\TipoInstrumentoEvaluacion", inversedBy="evaluacion")
+     * @ORM\JoinTable(name="evaluacion_instrumento",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="evaluacion_id", referencedColumnName="id", nullable=false)
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="instrumento_id", referencedColumnName="id", nullable=false)
+     *   }
+     * )
      */
-    private $tipoInstrumentoEvaluacion;
+    protected $instrumentos;
     
     
     /**
@@ -98,13 +88,182 @@ class PlanificacionSeccionEvaluacion
     
     /**
      * @ORM\ManyToOne(targetEntity="PlanificacionSeccion", inversedBy="evaluacion")
-     * @ORM\JoinColumn(name="id_planificacion_evaluacion", referencedColumnName="id")
+     * @ORM\JoinColumn(name="planificacion_seccion_id", referencedColumnName="id")
      */
-    private $idPlanificacionEvaluacion;
+    private $planificacionSeccionId;
 
     
 
-   
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set tipoInstrumentoEvaluacion
+     *
+     * @param string $tipoInstrumentoEvaluacion
+     * @return PlanificacionSeccionEvaluacion
+     */
+    public function setTipoInstrumentoEvaluacion($tipoInstrumentoEvaluacion)
+    {
+        $this->tipoInstrumentoEvaluacion = $tipoInstrumentoEvaluacion;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoInstrumentoEvaluacion
+     *
+     * @return string 
+     */
+    public function getTipoInstrumentoEvaluacion()
+    {
+        return $this->tipoInstrumentoEvaluacion;
+    }
+
+    /**
+     * Set ponderacion
+     *
+     * @param integer $ponderacion
+     * @return PlanificacionSeccionEvaluacion
+     */
+    public function setPonderacion($ponderacion)
+    {
+        $this->ponderacion = $ponderacion;
+
+        return $this;
+    }
+
+    /**
+     * Get ponderacion
+     *
+     * @return integer 
+     */
+    public function getPonderacion()
+    {
+        return $this->ponderacion;
+    }
+
+    /**
+     * Set fechaEvaluacion
+     *
+     * @param \DateTime $fechaEvaluacion
+     * @return PlanificacionSeccionEvaluacion
+     */
+    public function setFechaEvaluacion($fechaEvaluacion)
+    {
+        $this->fechaEvaluacion = $fechaEvaluacion;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaEvaluacion
+     *
+     * @return \DateTime 
+     */
+    public function getFechaEvaluacion()
+    {
+        return $this->fechaEvaluacion;
+    }
 
     
+
+    /**
+     * Set idTipoEvaluacion
+     *
+     * @param \AppBundle\Entity\TipoEvaluacion $idTipoEvaluacion
+     * @return PlanificacionSeccionEvaluacion
+     */
+    public function setIdTipoEvaluacion(\AppBundle\Entity\TipoEvaluacion $idTipoEvaluacion)
+    {
+        $this->idTipoEvaluacion = $idTipoEvaluacion;
+
+        return $this;
+    }
+
+    /**
+     * Get idTipoEvaluacion
+     *
+     * @return \AppBundle\Entity\TipoEvaluacion 
+     */
+    public function getIdTipoEvaluacion()
+    {
+        return $this->idTipoEvaluacion;
+    }
+
+    /**
+     * Set idEstatus
+     *
+     * @param \AppBundle\Entity\Estatus $idEstatus
+     * @return PlanificacionSeccionEvaluacion
+     */
+    public function setIdEstatus(\AppBundle\Entity\Estatus $idEstatus)
+    {
+        $this->idEstatus = $idEstatus;
+
+        return $this;
+    }
+
+    /**
+     * Get idEstatus
+     *
+     * @return \AppBundle\Entity\Estatus 
+     */
+    public function getIdEstatus()
+    {
+        return $this->idEstatus;
+    }
+
+    /**
+     * Set idPlanificacionEvaluacion
+     *
+     * @param \AppBundle\Entity\PlanificacionSeccion $idPlanificacionEvaluacion
+     * @return PlanificacionSeccionEvaluacion
+     */
+    public function setIdPlanificacionEvaluacion(\AppBundle\Entity\PlanificacionSeccion $idPlanificacionEvaluacion = null)
+    {
+        $this->idPlanificacionEvaluacion = $idPlanificacionEvaluacion;
+
+        return $this;
+    }
+
+    /**
+     * Get idPlanificacionEvaluacion
+     *
+     * @return \AppBundle\Entity\PlanificacionSeccion 
+     */
+    public function getIdPlanificacionEvaluacion()
+    {
+        return $this->idPlanificacionEvaluacion;
+    }
+
+    /**
+     * Set planificacionSeccionId
+     *
+     * @param \AppBundle\Entity\PlanificacionSeccion $planificacionSeccionId
+     * @return PlanificacionSeccionEvaluacion
+     */
+    public function setPlanificacionSeccionId(\AppBundle\Entity\PlanificacionSeccion $planificacionSeccionId = null)
+    {
+        $this->planificacionSeccionId = $planificacionSeccionId;
+
+        return $this;
+    }
+
+    /**
+     * Get planificacionSeccionId
+     *
+     * @return \AppBundle\Entity\PlanificacionSeccion 
+     */
+    public function getPlanificacionSeccionId()
+    {
+        return $this->planificacionSeccionId;
+    }
 }
