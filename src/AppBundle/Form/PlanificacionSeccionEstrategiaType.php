@@ -5,6 +5,7 @@ namespace AppBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class PlanificacionSeccionEstrategiaType extends AbstractType
 {
@@ -15,9 +16,16 @@ class PlanificacionSeccionEstrategiaType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('idTecnicasPlanificacion')
-            ->add('idRecursosPlanificacion')
-            
+            ->add('tecnicas',  EntityType::class, array(
+                'class' => 'AppBundle:TecnicasPlanificacion',
+                'multiple' => TRUE,
+                'expanded' => TRUE,                                                                
+            ))
+            ->add('recursos',  EntityType::class, array(
+                'class' => 'AppBundle:RecursosPlanificacion',
+                'multiple' => TRUE,
+                'expanded' => TRUE,                                                                
+            ))           
         ;
     }
     

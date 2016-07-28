@@ -29,6 +29,15 @@ class TecnicasPlanificacion
      * @ORM\SequenceGenerator(sequenceName="municipio_id_seq", allocationSize=1, initialValue=1)
      */
     private $id;
-
-   
+    
+    
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\PlanificacionSeccionEstrategia", mappedBy="tecnica")
+     */
+    protected $estrategia;
+    
+    
+    
 }

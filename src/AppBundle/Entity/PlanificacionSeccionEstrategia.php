@@ -20,33 +20,42 @@ class PlanificacionSeccionEstrategia
      * @ORM\Column(name="id", type="integer", nullable=false, options={"comment" = "Identificador del municipio"})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\SequenceGenerator(sequenceName="municipio_id_seq", allocationSize=1, initialValue=1)
+     * @ORM\SequenceGenerator(sequenceName="planificacion_seccion_estrategia_id_seq", allocationSize=1, initialValue=1)
      */
     private $id;
 
-   /**
-     * @var \AppBundle\Entity\TecnicasPlanificacion
+  /**
+     * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\TecnicasPlanificacion")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_tecnicas_planificacion", referencedColumnName="id", nullable=false)
-     * })
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\TecnicasPlanificacion", inversedBy="estrategia")
+     * @ORM\JoinTable(name="estrategia_tecnica",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="estrategia_id", referencedColumnName="id", nullable=false)
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="tecnica_id", referencedColumnName="id", nullable=false)
+     *   }
+     * )
      */
-    private $idTecnicasPlanificacion;
+    protected $tecnicas;
     
     
     /**
-     * @var \AppBundle\Entity\RecursosPlanificacion
+     * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\RecursosPlanificacion")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_recursos_planificacion", referencedColumnName="id", nullable=false)
-     * })
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\RecursosPlanificacion", inversedBy="estrategia")
+     * @ORM\JoinTable(name="estrategia_recurso",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="estrategia_id", referencedColumnName="id", nullable=false)
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="recurso_id", referencedColumnName="id", nullable=false)
+     *   }
+     * )
      */
-    private $idRecursosPlanificacion;
+    protected $recursos;
     
-    
-     
+ 
     /**
      * @ORM\ManyToOne(targetEntity="PlanificacionSeccion", inversedBy="estrategia")
      * @ORM\JoinColumn(name="planificacion_seccion_id", referencedColumnName="id")
@@ -54,10 +63,18 @@ class PlanificacionSeccionEstrategia
     private $planificacionSeccionId;
 
     
-
     
-
     
+    
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->tecnicas = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->recursos = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -70,49 +87,69 @@ class PlanificacionSeccionEstrategia
     }
 
     /**
-     * Set idTecnicasPlanificacion
+     * Add tecnicas
      *
-     * @param \AppBundle\Entity\TecnicasPlanificacion $idTecnicasPlanificacion
+     * @param \AppBundle\Entity\TecnicasPlanificacion $tecnicas
      * @return PlanificacionSeccionEstrategia
      */
-    public function setIdTecnicasPlanificacion(\AppBundle\Entity\TecnicasPlanificacion $idTecnicasPlanificacion)
+    public function addTecnica(\AppBundle\Entity\TecnicasPlanificacion $tecnicas)
     {
-        $this->idTecnicasPlanificacion = $idTecnicasPlanificacion;
+        $this->tecnicas[] = $tecnicas;
 
         return $this;
     }
 
     /**
-     * Get idTecnicasPlanificacion
+     * Remove tecnicas
      *
-     * @return \AppBundle\Entity\TecnicasPlanificacion 
+     * @param \AppBundle\Entity\TecnicasPlanificacion $tecnicas
      */
-    public function getIdTecnicasPlanificacion()
+    public function removeTecnica(\AppBundle\Entity\TecnicasPlanificacion $tecnicas)
     {
-        return $this->idTecnicasPlanificacion;
+        $this->tecnicas->removeElement($tecnicas);
     }
 
     /**
-     * Set idRecursosPlanificacion
+     * Get tecnicas
      *
-     * @param \AppBundle\Entity\RecursosPlanificacion $idRecursosPlanificacion
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTecnicas()
+    {
+        return $this->tecnicas;
+    }
+
+    /**
+     * Add recursos
+     *
+     * @param \AppBundle\Entity\RecursosPlanificacion $recursos
      * @return PlanificacionSeccionEstrategia
      */
-    public function setIdRecursosPlanificacion(\AppBundle\Entity\RecursosPlanificacion $idRecursosPlanificacion)
+    public function addRecurso(\AppBundle\Entity\RecursosPlanificacion $recursos)
     {
-        $this->idRecursosPlanificacion = $idRecursosPlanificacion;
+        $this->recursos[] = $recursos;
 
         return $this;
     }
 
     /**
-     * Get idRecursosPlanificacion
+     * Remove recursos
      *
-     * @return \AppBundle\Entity\RecursosPlanificacion 
+     * @param \AppBundle\Entity\RecursosPlanificacion $recursos
      */
-    public function getIdRecursosPlanificacion()
+    public function removeRecurso(\AppBundle\Entity\RecursosPlanificacion $recursos)
     {
-        return $this->idRecursosPlanificacion;
+        $this->recursos->removeElement($recursos);
+    }
+
+    /**
+     * Get recursos
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRecursos()
+    {
+        return $this->recursos;
     }
 
     /**

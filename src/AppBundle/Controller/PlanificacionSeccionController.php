@@ -56,7 +56,7 @@ class PlanificacionSeccionController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {            
             
-            
+            //var_dump($p->getId()); exit;
             
             // ciclo a traves de las relaciones para cada contenido
             foreach($planificacionSeccion->getContenido() as $contenido){
@@ -65,12 +65,28 @@ class PlanificacionSeccionController extends Controller
             }
             
             foreach($planificacionSeccion->getObjetivoEspecifico() as $especifico){
-              $especifico->setPlanificacionSeccionId($planificacionSeccion);              
+              $especifico->setPlanificacionSeccionId($planificacionSeccion);
+              
             }
             
-            foreach($planificacionSeccion->getEstrategia() as $estrategias){
-              $estrategias->setPlanificacionSeccionId($planificacionSeccion);              
+             foreach ($planificacionSeccion->getEstrategia() as $estrategias){
+                    $estrategias->setPlanificacionSeccionId($planificacionSeccion);
+                   
+               
             }
+            
+            /*foreach($planificacionSeccion->getEstrategia() as $estrategias){
+                $estrategias->setPlanificacionSeccionId($planificacionSeccion);  
+                foreach($estrategias->getTecnicasPlanificacion() as $t){
+                    $estrategias->addTecnicasPlanificacion($t);
+                }
+                foreach($estrategias->getRecursosPlanificacion() as $r){
+                    $estrategias->addRecursosPlanificacion($r);
+                }
+              
+            }*/
+            
+            
             
             //var_dump($seccion->getPlanificacion()->count()); exit;
             $em = $this->getDoctrine()->getManager();

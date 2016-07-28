@@ -29,8 +29,24 @@ class TecnicasPlanificacion
      * @ORM\SequenceGenerator(sequenceName="municipio_id_seq", allocationSize=1, initialValue=1)
      */
     private $id;
-
-   
+    
+    
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\PlanificacionSeccionEstrategia", mappedBy="tecnicas", cascade={"all"})
+     */
+    protected $estrategia;
+    
+    
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->estrategia = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Set nombre
@@ -64,6 +80,39 @@ class TecnicasPlanificacion
     {
         return $this->id;
     }
+
+    /**
+     * Add estrategia
+     *
+     * @param \AppBundle\Entity\PlanificacionSeccionEstrategia $estrategia
+     * @return TecnicasPlanificacion
+     */
+    public function addEstrategium(\AppBundle\Entity\PlanificacionSeccionEstrategia $estrategia)
+    {
+        $this->estrategia[] = $estrategia;
+
+        return $this;
+    }
+
+    /**
+     * Remove estrategia
+     *
+     * @param \AppBundle\Entity\PlanificacionSeccionEstrategia $estrategia
+     */
+    public function removeEstrategium(\AppBundle\Entity\PlanificacionSeccionEstrategia $estrategia)
+    {
+        $this->estrategia->removeElement($estrategia);
+    }
+
+    /**
+     * Get estrategia
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getEstrategia()
+    {
+        return $this->estrategia;
+    }
     
     /**
      * @return string
@@ -72,3 +121,4 @@ class TecnicasPlanificacion
         return $this->getNombre();
     }
 }
+

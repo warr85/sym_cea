@@ -29,14 +29,26 @@ class RecursosPlanificacion
      * @ORM\SequenceGenerator(sequenceName="municipio_id_seq", allocationSize=1, initialValue=1)
      */
     private $id;
+    
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\PlanificacionSeccionEstrategia", mappedBy="recursos")
+     */
+    protected $estrategia;
 
+    
+   
+    
+    
     
     
     /**
-     * @return string
+     * Constructor
      */
-    public function __toString() {
-        return $this->getNombre();
+    public function __construct()
+    {
+        $this->estrategia = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -70,5 +82,45 @@ class RecursosPlanificacion
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Add estrategia
+     *
+     * @param \AppBundle\Entity\PlanificacionSeccionEstrategia $estrategia
+     * @return RecursosPlanificacion
+     */
+    public function addEstrategium(\AppBundle\Entity\PlanificacionSeccionEstrategia $estrategia)
+    {
+        $this->estrategia[] = $estrategia;
+
+        return $this;
+    }
+
+    /**
+     * Remove estrategia
+     *
+     * @param \AppBundle\Entity\PlanificacionSeccionEstrategia $estrategia
+     */
+    public function removeEstrategium(\AppBundle\Entity\PlanificacionSeccionEstrategia $estrategia)
+    {
+        $this->estrategia->removeElement($estrategia);
+    }
+
+    /**
+     * Get estrategia
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getEstrategia()
+    {
+        return $this->estrategia;
+    }
+    
+    /**
+     * @return string
+     */
+    public function __toString() {
+        return $this->getNombre();
     }
 }

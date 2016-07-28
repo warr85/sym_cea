@@ -29,15 +29,18 @@ class RecursosPlanificacion
      * @ORM\SequenceGenerator(sequenceName="municipio_id_seq", allocationSize=1, initialValue=1)
      */
     private $id;
-
-   
-
-    
     
     /**
-     * @return string
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\PlanificacionSeccionEstrategia", mappedBy="tecnica")
      */
-    public function __toString() {
-        return $this->getNombre();
-    }
+    protected $estrategia;
+
+    
+   
+    
+    
+    
+    
 }
