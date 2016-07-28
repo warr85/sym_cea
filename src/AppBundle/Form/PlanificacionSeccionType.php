@@ -17,7 +17,9 @@ class PlanificacionSeccionType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        //que solo salga la seccion que estamos planificando
         $this->seccion = $options['seccion'];
+        //que solo salgan los temas que no han sido planificados de esa seccion
         $this->planificacion = $options['planificacion'];        
         if (!$this->planificacion){
             $this->planes[] = 0;            
@@ -54,12 +56,17 @@ class PlanificacionSeccionType extends AbstractType
                      ));                   
                  ;},
              ))
+            ->add('objetivoEspecifico', CollectionType::class, array(
+                    'entry_type' => PlanificacionSeccionEspecificoType::class,
+                    'allow_add'    => true,
+                    'label'         => false
+             ))
+                         
             ->add('contenido', CollectionType::class, array(
                     'entry_type' => PlanificacionSeccionContenidoType::class,
                     'allow_add'    => true,
                     'label'         => false
              ))
-            
         ;
     }
     

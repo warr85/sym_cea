@@ -12,6 +12,10 @@
             
         </ul>
         
+        <ul class="objetivoEspecifico" data-prototype="{{ form_widget(form.objetivoEspecifico.vars.prototype)|e('html_attr') }}">
+            
+        </ul>
+        
         <input type="submit" value="Create" />
     {{ form_end(form) }}
 
@@ -29,55 +33,102 @@
         var $collectionHolder;
 
         // setup an "add a tag" link
+        var $addEspecificoLink = $('<a href="#" class="add_especifico_link">Añadir Objetivos Especificos</a>');
         var $addContenidoLink = $('<a href="#" class="add_contenido_link">Añadir conceptos</a>');
         var $RemoveContenidoLink = $('<a href="#" class="remove_contenido_link">Quitar Conceptos</a>');
         
-        var $newLinkLi = $('<li></li>').append($addContenidoLink);
+        var $newLinkLiContenido = $('<li></li>').append($addContenidoLink);
+        var $newLinkLiEspecifico = $('<li></li>').append($addEspecificoLink);
         //$newLinkLi. = $('<li></li>').append($RemoveContenidoLink);
         
         
         jQuery(document).ready(function() {
             // Get the ul that holds the collection of tags
-            $collectionHolder = $('ul.contenido');
-
+            $contenidoHolder = $('ul.contenido');
+            $especificoHolder = $('ul.objetivoEspecifico');
             // add the "add a tag" anchor and li to the tags ul
-            $collectionHolder.append($newLinkLi);
+            $contenidoHolder.append($newLinkLiContenido);
+            $especificoHolder.append($newLinkLiEspecifico);
 
             // count the current form inputs we have (e.g. 2), use that as the new
             // index when inserting a new item (e.g. 2)
-            $collectionHolder.data('index', $collectionHolder.find(':input').length);
+            $contenidoHolder.data('index', $contenidoHolder.find(':input').length);
+            $especificoHolder.data('index', $especificoHolder.find(':input').length);
 
             $addContenidoLink.on('click', function(e) {
                 // prevent the link from creating a "#" on the URL
                 e.preventDefault();
 
                 // add a new tag form (see next code block)
-                addContenidoForm($collectionHolder, $newLinkLi);
+                addContenidoForm($contenidoHolder, $newLinkLiContenido);
+            });
+            
+            $addEspecificoLink.on('click', function(e) {
+                // prevent the link from creating a "#" on the URL
+                e.preventDefault();
+
+                // add a new tag form (see next code block)
+                addEspecificoForm($especificoHolder, $newLinkLiEspecifico);
             });
             
                        
             
-            function addContenidoForm($collectionHolder, $newLinkLi) {
+            function addContenidoForm($contenidoHolder, $newLinkLiContenido) {
                  // Get the data-prototype explained earlier
-                    var prototype = $collectionHolder.data('prototype');
+                    var prototype = $contenidoHolder.data('prototype');
 
                     // get the new index
-                    var index = $collectionHolder.data('index');
+                    var index = $contenidoHolder.data('index');
 
                     // Replace '$$name$$' in the prototype's HTML to
                     // instead be a number based on how many items we have
-                    var newForm = prototype.replace(/__name__/g, index);
+                    var newFormContenido = prototype.replace(/__name__/g, index);
 
                     // increase the index with one for the next item
-                    $collectionHolder.data('index', index + 1);
+                    $contenidoHolder.data('index', index + 1);
 
                     // Display the form in the page in an li, before the "Add a tag" link li
-                    var $newFormLi = $('<li></li>').append(newForm);
+                    var $newFormLiContenido = $('<li></li>').append(newFormContenido);
 
                     // also add a remove button, just for this example
-                    $newFormLi.append('<a href="#" class="remove-tag">x</a>');
+                    $newFormLiContenido.append('<a href="#" class="remove-tag">x</a>');
 
-                    $newLinkLi.before($newFormLi);
+                    $newLinkLiContenido.before($newFormLiContenido);
+
+                    // handle the removal, just for this example
+                    $('.remove-tag').click(function(e) {
+                        e.preventDefault();
+
+                        $(this).parent().remove();
+
+                        return false;
+                    });
+               
+                
+            }
+            
+            
+            function addEspecificoForm($especificoHolder, $newLinkLiEspecifico) {
+                 // Get the data-prototype explained earlier
+                    var prototype = $especificoHolder.data('prototype');
+
+                    // get the new index
+                    var index = $especificoHolder.data('index');
+
+                    // Replace '$$name$$' in the prototype's HTML to
+                    // instead be a number based on how many items we have
+                    var newFormEspecifico = prototype.replace(/__name__/g, index);
+
+                    // increase the index with one for the next item
+                    $especificoHolder.data('index', index + 1);
+
+                    // Display the form in the page in an li, before the "Add a tag" link li
+                    var $newFormLiEspecifico = $('<li></li>').append(newFormEspecifico);
+
+                    // also add a remove button, just for this example
+                    $newFormLiEspecifico.append('<a href="#" class="remove-tag">x</a>');
+
+                    $newLinkLiEspecifico.before($newFormLiEspecifico);
 
                     // handle the removal, just for this example
                     $('.remove-tag').click(function(e) {

@@ -35,7 +35,8 @@ class PlanificacionSeccion
     
     
     /**
-     * @ORM\OneToMany(targetEntity="PlanificacionSeccionEspecifico", mappedBy="idPlanificacionEspecifico")
+     * @ORM\OneToMany(targetEntity="PlanificacionSeccionEspecifico", mappedBy="planificacionSeccionId",cascade={"all"})
+     * @var \Doctrine\Common\Collections\ArrayCollection     
      */
     private $objetivoEspecifico;
     
@@ -169,38 +170,7 @@ class PlanificacionSeccion
         return $this->idtemaUc;
     }
 
-    /**
-     * Add objetivoEspecifico
-     *
-     * @param \AppBundle\Entity\PlanificacionSeccionEspecifico $objetivoEspecifico
-     * @return PlanificacionSeccion
-     */
-    public function addObjetivoEspecifico(\AppBundle\Entity\PlanificacionSeccionEspecifico $objetivoEspecifico)
-    {
-        $this->objetivoEspecifico[] = $objetivoEspecifico;
-
-        return $this;
-    }
-
-    /**
-     * Remove objetivoEspecifico
-     *
-     * @param \AppBundle\Entity\PlanificacionSeccionEspecifico $objetivoEspecifico
-     */
-    public function removeObjetivoEspecifico(\AppBundle\Entity\PlanificacionSeccionEspecifico $objetivoEspecifico)
-    {
-        $this->objetivoEspecifico->removeElement($objetivoEspecifico);
-    }
-
-    /**
-     * Get objetivoEspecifico
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getObjetivoEspecifico()
-    {
-        return $this->objetivoEspecifico;
-    }
+    
 
     /**
      * Add contenido
@@ -389,5 +359,38 @@ class PlanificacionSeccion
     public function getFechaUltimaActualizacion()
     {
         return $this->fechaUltimaActualizacion;
+    }
+
+    /**
+     * Add objetivoEspecifico
+     *
+     * @param \AppBundle\Entity\PlanificacionSeccionEspecifico $objetivoEspecifico
+     * @return PlanificacionSeccion
+     */
+    public function addObjetivoEspecifico(\AppBundle\Entity\PlanificacionSeccionEspecifico $objetivoEspecifico)
+    {
+        $this->objetivoEspecifico[] = $objetivoEspecifico;
+
+        return $this;
+    }
+
+    /**
+     * Remove objetivoEspecifico
+     *
+     * @param \AppBundle\Entity\PlanificacionSeccionEspecifico $objetivoEspecifico
+     */
+    public function removeObjetivoEspecifico(\AppBundle\Entity\PlanificacionSeccionEspecifico $objetivoEspecifico)
+    {
+        $this->objetivoEspecifico->removeElement($objetivoEspecifico);
+    }
+
+    /**
+     * Get objetivoEspecifico
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getObjetivoEspecifico()
+    {
+        return $this->objetivoEspecifico;
     }
 }

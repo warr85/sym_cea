@@ -9,8 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="planificacion_seccion", 
  *      uniqueConstraints=
- *          {@ORM\UniqueConstraint(name="uq_tema_uc", 
- *              columns={"id_tema_uc"})
+ *          {@ORM\UniqueConstraint(name="uq_tema_uc_seccion", 
+ *              columns={"id_tema_uc", "seccion_id"})
  *          }, 
  *          indexes={ 
  *              @ORM\Index(name="fki_id_tema_uc", 
@@ -26,7 +26,7 @@ class PlanificacionSeccion
     /**
      * @var \AppBundle\Entity\UnidadCurricularVolumenTema
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\UnidadCurricularVolumenTema")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\UnidadCurricularVolumenTema", inversedBy="hasPlanificacion")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_tema_uc", referencedColumnName="id", nullable=false)
      * })
@@ -35,13 +35,14 @@ class PlanificacionSeccion
     
     
     /**
-     * @ORM\OneToMany(targetEntity="PlanificacionSeccionEspecifico", mappedBy="idPlanificacionEspecifico")
+     * @ORM\OneToMany(targetEntity="PlanificacionSeccionEspecifico", mappedBy="planificacionSeccionId")
+     * @var \Doctrine\Common\Collections\ArrayCollection     
      */
     private $objetivoEspecifico;
     
     
     /**
-     * @ORM\OneToMany(targetEntity="PlanificacionSeccionContenido", mappedBy="PlanificacionSeccion",cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="PlanificacionSeccionContenido", mappedBy="planificacionSeccionId", cascade={"all"})
      * @var \Doctrine\Common\Collections\ArrayCollection
      */
     private $contenido;
@@ -169,38 +170,7 @@ class PlanificacionSeccion
         return $this->idtemaUc;
     }
 
-    /**
-     * Add objetivoEspecifico
-     *
-     * @param \AppBundle\Entity\PlanificacionSeccionEspecifico $objetivoEspecifico
-     * @return PlanificacionSeccion
-     */
-    public function addObjetivoEspecifico(\AppBundle\Entity\PlanificacionSeccionEspecifico $objetivoEspecifico)
-    {
-        $this->objetivoEspecifico[] = $objetivoEspecifico;
-
-        return $this;
-    }
-
-    /**
-     * Remove objetivoEspecifico
-     *
-     * @param \AppBundle\Entity\PlanificacionSeccionEspecifico $objetivoEspecifico
-     */
-    public function removeObjetivoEspecifico(\AppBundle\Entity\PlanificacionSeccionEspecifico $objetivoEspecifico)
-    {
-        $this->objetivoEspecifico->removeElement($objetivoEspecifico);
-    }
-
-    /**
-     * Get objetivoEspecifico
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getObjetivoEspecifico()
-    {
-        return $this->objetivoEspecifico;
-    }
+    
 
     /**
      * Add contenido
@@ -210,7 +180,9 @@ class PlanificacionSeccion
      */
     public function addContenido(\AppBundle\Entity\PlanificacionSeccionContenido $contenido)
     {
+        $contenido->setPlanificacionSeccionId($this);
         $this->contenido[] = $contenido;
+        
 
         return $this;
     }

@@ -7,16 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * PlanificacionSeccionEspecifico
  *
- * @ORM\Table(name="planificacion_seccion_especifico", 
- *      uniqueConstraints=
- *          {@ORM\UniqueConstraint(name="uq_planificacion_seccion_especifico", 
- *              columns={"id_planificacion_seccion"})
- *          }, 
- *          indexes={ 
- *              @ORM\Index(name="fki_id_planificacion_especifico", 
- *                  columns={"id_planificacion_seccion"})
- *          }
- *  )
+ * @ORM\Table(name="planificacion_seccion_especifico")
  * @ORM\Entity
  */
 class PlanificacionSeccionEspecifico
@@ -41,23 +32,16 @@ class PlanificacionSeccionEspecifico
     private $id;
     
     
-    /**
-     * @var \AppBundle\Entity\PlanificacionSeccion
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\PlanificacionSeccion")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_planificacion_seccion", referencedColumnName="id", nullable=false)
-     * })
-     */
-    private $idPlanificacionSeccion;
-
+    
     /**
      * @ORM\ManyToOne(targetEntity="PlanificacionSeccion", inversedBy="objetivoEspecifico")
-     * @ORM\JoinColumn(name="id_planificacion_especifico", referencedColumnName="id")
+     * @ORM\JoinColumn(name="planificacion_seccion_id", referencedColumnName="id", nullable=FALSE)
      */
-    private $idPlanificacionEspecifico;
+    private $planificacionSeccionId;
     
   
+    
+
     /**
      * Set objetivoEspecifico
      *
@@ -92,48 +76,27 @@ class PlanificacionSeccionEspecifico
     }
 
     /**
-     * Set idPlanificacionSeccion
+     * Set planificacionSeccionId
      *
-     * @param \AppBundle\Entity\PlanificacionSeccion $idPlanificacionSeccion
+     * @param \AppBundle\Entity\PlanificacionSeccion $planificacionSeccionId
      * @return PlanificacionSeccionEspecifico
      */
-    public function setIdPlanificacionSeccion(\AppBundle\Entity\PlanificacionSeccion $idPlanificacionSeccion)
+    public function setPlanificacionSeccionId(\AppBundle\Entity\PlanificacionSeccion $planificacionSeccionId)
     {
-        $this->idPlanificacionSeccion = $idPlanificacionSeccion;
+        $this->planificacionSeccionId = $planificacionSeccionId;
 
         return $this;
     }
 
     /**
-     * Get idPlanificacionSeccion
+     * Get planificacionSeccionId
      *
      * @return \AppBundle\Entity\PlanificacionSeccion 
      */
-    public function getIdPlanificacionSeccion()
+    public function getPlanificacionSeccionId()
     {
-        return $this->idPlanificacionSeccion;
+        return $this->planificacionSeccionId;
     }
-
-    /**
-     * Set idPlanificacionEspecifico
-     *
-     * @param \AppBundle\Entity\PlanificacionSeccion $idPlanificacionEspecifico
-     * @return PlanificacionSeccionEspecifico
-     */
-    public function setIdPlanificacionEspecifico(\AppBundle\Entity\PlanificacionSeccion $idPlanificacionEspecifico = null)
-    {
-        $this->idPlanificacionEspecifico = $idPlanificacionEspecifico;
-
-        return $this;
-    }
-
-    /**
-     * Get idPlanificacionEspecifico
-     *
-     * @return \AppBundle\Entity\PlanificacionSeccion 
-     */
-    public function getIdPlanificacionEspecifico()
-    {
-        return $this->idPlanificacionEspecifico;
-    }
+    
+    
 }
