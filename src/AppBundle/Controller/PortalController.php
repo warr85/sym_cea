@@ -57,7 +57,7 @@ class PortalController extends Controller
                     ->encodePassword($login, $login->getPlainPassword()); //encripta la contraseña
                 $login->setPassword($password);
                 $login->setIdRolInstitucion($rol);
-                $permiso = $this->getDoctrine()->getRepository('AppBundle:Role')->findOneByName("ROLE_DOCENTE");
+                $permiso = $this->getDoctrine()->getRepository('AppBundle:Role')->findOneByName("ROLE_USUARIO");
                 $login->addRol($permiso); //le añade la permisología básica de docente
                 
                 $rep = $this->getDoctrine()->getRepository('AppBundle:Rol');
