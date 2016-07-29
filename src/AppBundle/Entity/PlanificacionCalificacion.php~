@@ -1,0 +1,70 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * PlanificacionCalificacion
+ *
+ * @ORM\Table(name="planificacion_calificacion", uniqueConstraints={@ORM\UniqueConstraint(name="i_registro_nota", columns={"id_inscripcion", "id_calificacion"})}, indexes={@ORM\Index(name="fki_id_inscripcion", columns={"id_inscripcion"}), @ORM\Index(name="fki_id_calificacion", columns={"id_calificacion"}), @ORM\Index(name="fki_id_estatus_nota", columns={"id_estatus_nota"}), @ORM\Index(name="fki_id_planificacion_seccion", columns={"id_planificacion_seccion"})})
+ * @ORM\Entity
+ */
+class PlanificacionCalificacion
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false, options={"comment"= "identificador del registro de la nota"})
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\SequenceGenerator(sequenceName="registro_nota_id_seq", allocationSize=1, initialValue=1)
+     */
+    private $id;
+    
+    
+    /**
+     * @var \AppBundle\Entity\PlanificacionSeccion
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\PlanificacionSeccion")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_planificacion_seccion", referencedColumnName="id", nullable=false)
+     * })
+     */
+    private $idPlanificacionSeccion;
+
+    /**
+     * @var \AppBundle\Entity\Inscripcion
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Inscripcion")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_inscripcion", referencedColumnName="id", nullable=false)
+     * })
+     */
+    private $idInscripcion;
+
+    /**
+     * @var \AppBundle\Entity\Calificacion
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Calificacion")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_calificacion", referencedColumnName="id", nullable=false)
+     * })
+     */
+    private $idCalificacion;
+    
+    
+    /**
+     * @var \AppBundle\Entity\EstatusNota
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\EstatusNota")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_estatus_nota", referencedColumnName="id", nullable=false)
+     * })
+     */
+    private $idEstatusNota;
+
+
+
+    
+}
