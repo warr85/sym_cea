@@ -35,6 +35,11 @@
                         <li>
                             <a href="{{ path('ceapp_docente_planificacion_edit', { 'id': seccion.id }) }}">edit</a>
                         </li>
+                        {% if porcentaje == 100 %} 
+                            <li>
+                                <a href="{{ path('ceapp_docente_planificacion_show', { 'id': seccion.id, 'porcentaje' : porcentaje }) }}">Calificar</a>
+                            </li>                            
+                        {% endif %}
                     </ul>
                 </td>
             </tr>            

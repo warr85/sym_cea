@@ -94,16 +94,17 @@ class PlanificacionSeccionController extends Controller
     /**
      * Finds and displays a PlanificacionSeccion entity.
      *
-     * @Route("/{id}", name="ceapp_docente_planificacion_show")
+     * @Route("/{id}/{porcentaje}", name="ceapp_docente_planificacion_show")
      * @Method("GET")
      */
-    public function showAction(PlanificacionSeccion $planificacionSeccion)
+    public function showAction(Seccion $seccion, $porcentaje = null)
     {
-        $deleteForm = $this->createDeleteForm($planificacionSeccion);
-
+        $planificacionSeccion = $this->getDoctrine()->getRepository('AppBundle:PlanificacionSeccion')->findBySeccion($seccion);
+        //$deleteForm = $this->createDeleteForm($planificacionSeccion);
+        
         return $this->render('planificacionseccion/show.html.twig', array(
             'planificacionSeccion' => $planificacionSeccion,
-            'delete_form' => $deleteForm->createView(),
+            'porcentaje'            => $porcentaje
         ));
     }
 

@@ -313,4 +313,14 @@ class EstadoAcademico
         
 
     }
+    
+    /**
+     * @return string
+     * 
+     */
+    public function __toString() {
+        return $this->getIdRolInstitucion()->getIdRol()->getIdPersona()->getPrimerNombre();
+    }
+    
+    
 }

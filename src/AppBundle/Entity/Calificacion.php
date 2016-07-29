@@ -135,4 +135,11 @@ class Calificacion
     {
         return $this->idCondicionCalificacion;
     }
+    
+    /**
+     * @return string
+     */
+    public function __toString() {
+        return $this->getIdNota()->getIdNomenclaturaNota()->getNombre();
+    }
 }

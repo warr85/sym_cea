@@ -2,39 +2,43 @@
 
 {% block body %}
     <h1>PlanificacionSeccion</h1>
-
+    {% for planificacion in planificacionSeccion %}
     <table>
         <tbody>
             <tr>
                 <th>Fecha_creacion</th>
-                <td>{% if planificacionSeccion.fechacreacion %}{{ planificacionSeccion.fechacreacion|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if planificacion.fechacreacion %}{{ planificacion.fechacreacion|date('Y-m-d H:i:s') }}{% endif %}</td>
             </tr>
             <tr>
                 <th>Fecha_ultima_actualizacion</th>
-                <td>{% if planificacionSeccion.fechaultimaactualizacion %}{{ planificacionSeccion.fechaultimaactualizacion|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if planificacion.fechaultimaactualizacion %}{{ planificacion.fechaultimaactualizacion|date('Y-m-d H:i:s') }}{% endif %}</td>
             </tr>
             <tr>
                 <th>Observacion</th>
-                <td>{{ planificacionSeccion.observacion }}</td>
+                <td>{{ planificacion.observacion }}</td>
             </tr>
             <tr>
                 <th>Id</th>
-                <td>{{ planificacionSeccion.id }}</td>
+                <td>{{ planificacion.id }}</td>
             </tr>
         </tbody>
     </table>
-
     <ul>
         <li>
             <a href="{{ path('ceapp_docente_planificacion_index') }}">Back to the list</a>
         </li>
         <li>
-            <a href="{{ path('ceapp_docente_planificacion_edit', { 'id': planificacionSeccion.id }) }}">Edit</a>
+            <a href="{{ path('ceapp_docente_planificacion_edit', { 'id': planificacion.id }) }}">Edit</a>
         </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-        </li>
+    {% if porcentaje == 100 %}
+         <li>
+            <a href="{{ path('ceapp_docente_calificar_new', { 'planificacion': planificacion.id }) }}">Calificar</a>
+        </li> 
+    {% endif %}
     </ul>
+            
+            
+    {% endfor %}
+
+    
 {% endblock %}

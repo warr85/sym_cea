@@ -50,9 +50,7 @@ class InscripcionController extends Controller
         
         $seccion = $this->getDoctrine()->getRepository('AppBundle:Seccion')->findAll();
         
-
-        $form = $this->createForm('AppBundle\Form\InscripcionType', $ea, array('inscripcion' => $ea,));
-        $form->handleRequest($request);
+        
 
         if ($request->isMethod("POST")) {
             //var_dump($request->request->get('seccion')['idSeccion']); exit;
@@ -73,8 +71,7 @@ class InscripcionController extends Controller
         return $this->render('inscripcion/new.html.twig', array(
             'estado_academico'  => $ea,
             'oferta'       => $oferta,
-            'seccion'       => $seccion,
-            'form'          => $form->createView()
+            'seccion'       => $seccion,            
         ));
     }
 

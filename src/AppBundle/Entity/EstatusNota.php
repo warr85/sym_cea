@@ -63,4 +63,11 @@ class EstatusNota
     {
         return $this->id;
     }
+    
+    /**
+     * @return string
+     */
+    public function __toString() {
+        return $this->getNombre();
+    }
 }

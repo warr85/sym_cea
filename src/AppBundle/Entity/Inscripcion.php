@@ -214,4 +214,12 @@ class Inscripcion
     {
         return $this->modified;
     }
+    
+    /**
+     * @return string
+     * 
+     */
+    public function __toString() {
+        return $this->getIdEstadoAcademico()->getIdRolInstitucion()->getIdRol()->getIdPersona()->getPrimerNombre();
+    }
 }

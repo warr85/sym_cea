@@ -393,4 +393,8 @@ class PlanificacionSeccion
     {
         return $this->objetivoEspecifico;
     }
+    
+    public function __toString() {
+        return $this->getSeccion()->getNombre();
+    }
 }
