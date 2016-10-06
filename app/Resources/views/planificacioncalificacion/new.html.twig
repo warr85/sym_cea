@@ -3,23 +3,38 @@
 {% block body %}
     <h1>Registro Calificacion Planificacion</h1>
     <h3>{{planificacion.idtemaUc}}</h3>
+
+    
     
 <form class="form-inline" method="post" name="planificacion_calificacion">
     <div id="seccion">
         <ul>
     {% for o in planificacion.seccion.hasInscripcion %}  
-        
+        {% if planificacion.hasCalificacion | length < 1 %}
             <li>
                 {{o}}
                 <input type="hidden" id="planificacion_calificacion_idInscripcion_{{o.id}}" name="planificacion_calificacion[idInscripcion][inscripcion_{{o.id}}]" value ="{{o.id}}"/>
                 <input type="text" id="planificacion_calificacion_idCalificacion" name="planificacion_calificacion[idInscripcion][calificacion_{{o.id}}]" />
                 <input type="text" id="planificacion_calificacion_idCalificacion" name="planificacion_calificacion[idInscripcion][porcentaje_{{o.id}}]" />
-            </li>               
+            </li>    
+        {% else %}
+            <li>
+                {% for p in planificacion.hasCalificacion %}                      
+                    {{o}}               
+                    <input type="text" id="planificacion_calificacion_idCalificacion" name="planificacion_calificacion[idInscripcion][calificacion_{{o.id}}]" value="{{ p.idCalificacion.idNota.idNomenclaturaNota.nombre }}" disabled />
+                    <input type="text" id="planificacion_calificacion_idCalificacion" name="planificacion_calificacion[idInscripcion][porcentaje_{{o.id}}]" value="{{ p.idCalificacion.idPorcentaje.nombre }}" disabled />
+                {% endfor %}
+            </li>   
+                           
+            
+        {% endif %}
     {% endfor %}<br>
     </ul>
 </div>
-<input id="seccion__token" type="hidden" value="WbDyIPXIxm9WxU4oOf2a4_4CnXg3rxuY46e_TbVAggY" name="seccion[_token]">
-<input type="submit" value="Create" />
+     {% if planificacion.hasCalificacion | length < 1 %}
+        <input id="seccion__token" type="hidden" value="WbDyIPXIxm9WxU4oOf2a4_4CnXg3rxuY46e_TbVAggY" name="seccion[_token]">
+        <input type="submit" value="Create" />
+     {% endif %}
 </form>
 
 {% endblock %}

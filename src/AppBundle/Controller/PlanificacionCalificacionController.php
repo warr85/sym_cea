@@ -43,9 +43,10 @@ class PlanificacionCalificacionController extends Controller
      */
     public function newAction(Request $request, PlanificacionSeccion $planificacion)
     {
-         $planificacionCalificacion = new PlanificacionCalificacion();
+         
         
         if ($request->isMethod("POST")) {
+            $planificacionCalificacion = new PlanificacionCalificacion();
             $em = $this->getDoctrine()->getManager();
             //var_dump($request->request->get('planificacion_calificacion')); exit;
             foreach ($request->request->get('planificacion_calificacion')['idInscripcion'] as $key => $value ){

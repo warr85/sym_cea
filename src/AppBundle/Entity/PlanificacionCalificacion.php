@@ -26,7 +26,7 @@ class PlanificacionCalificacion
     /**
      * @var \AppBundle\Entity\PlanificacionSeccion
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\PlanificacionSeccion")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\PlanificacionSeccion", inversedBy="hasCalificacion")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_planificacion_seccion", referencedColumnName="id", nullable=false)
      * })

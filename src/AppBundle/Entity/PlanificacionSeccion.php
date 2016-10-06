@@ -99,6 +99,11 @@ class PlanificacionSeccion
      */
     private $seccion;
     
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\PlanificacionCalificacion", mappedBy="idPlanificacionSeccion", cascade={"all"})
+     * */
+    protected $hasCalificacion;
+    
     
     
     /**
@@ -110,6 +115,7 @@ class PlanificacionSeccion
         $this->contenido = new \Doctrine\Common\Collections\ArrayCollection();
         $this->estrategia = new \Doctrine\Common\Collections\ArrayCollection();
         $this->evaluacion = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->hasCalificacion = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     
@@ -396,5 +402,38 @@ class PlanificacionSeccion
     
     public function __toString() {
         return $this->getSeccion()->getNombre();
+    }
+
+    /**
+     * Add hasCalificacion
+     *
+     * @param \AppBundle\Entity\PlanificacionCalificacion $hasCalificacion
+     * @return PlanificacionSeccion
+     */
+    public function addHasCalificacion(\AppBundle\Entity\PlanificacionCalificacion $hasCalificacion)
+    {
+        $this->hasCalificacion[] = $hasCalificacion;
+
+        return $this;
+    }
+
+    /**
+     * Remove hasCalificacion
+     *
+     * @param \AppBundle\Entity\PlanificacionCalificacion $hasCalificacion
+     */
+    public function removeHasCalificacion(\AppBundle\Entity\PlanificacionCalificacion $hasCalificacion)
+    {
+        $this->hasCalificacion->removeElement($hasCalificacion);
+    }
+
+    /**
+     * Get hasCalificacion
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getHasCalificacion()
+    {
+        return $this->hasCalificacion;
     }
 }
