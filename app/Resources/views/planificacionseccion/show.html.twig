@@ -27,6 +27,7 @@
         <li>
             <a href="{{ path('ceapp_docente_planificacion_index') }}">Back to the list</a>
         </li>
+        {% if is_granted('ROLE_DOCENTE') %}
         <li>
             <a href="{{ path('ceapp_docente_planificacion_edit', { 'id': planificacion.id }) }}">Edit</a>
         </li>
@@ -35,6 +36,7 @@
             <a href="{{ path('ceapp_docente_calificar_new', { 'planificacion': planificacion.id }) }}">Calificar</a>
         </li> 
     {% endif %}
+        {% endif %}
     </ul>
             
             
