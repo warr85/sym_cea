@@ -94,7 +94,7 @@ class PlanificacionSeccionController extends Controller
     /**
      * Finds and displays a PlanificacionSeccion entity.
      *
-     * @Route("/{id}/{porcentaje}", name="ceapp_docente_planificacion_show")
+     * @Route("/show/{id}/{porcentaje}", name="ceapp_docente_planificacion_show")
      * @Method("GET")
      */
     public function showAction(Seccion $seccion, $porcentaje = null)

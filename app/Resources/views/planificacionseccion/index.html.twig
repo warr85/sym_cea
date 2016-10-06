@@ -32,14 +32,10 @@
                         <li>
                             <a href="{{ path('ceapp_docente_planificacion_new', { 'seccion': seccion.id }) }}">Planificar</a>
                         </li>
+
                         <li>
-                            <a href="{{ path('ceapp_docente_planificacion_edit', { 'id': seccion.id }) }}">edit</a>
-                        </li>
-                        {% if porcentaje == 100 %} 
-                            <li>
-                                <a href="{{ path('ceapp_docente_planificacion_show', { 'id': seccion.id, 'porcentaje' : porcentaje }) }}">Calificar</a>
-                            </li>                            
-                        {% endif %}
+                            <a href="{{ path('ceapp_docente_planificacion_show', { 'id': seccion.id, 'porcentaje' : porcentaje }) }}">Editar</a>
+                        </li>                            
                     </ul>
                 </td>
             </tr>            
