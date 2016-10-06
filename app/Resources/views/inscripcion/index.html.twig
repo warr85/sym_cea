@@ -62,7 +62,7 @@
                      <!-- /widget-header -->
                      <div class="widget-content">
                        <div class="widget big-stats-container">
-                           {% if not estado_academico.hasInscripcion %}
+                           {% if  not estado_academico.hasInscripcion | length > 0 %}
                                  <div class="widget-content">
 
                                      <h6 class="bigstats alert alert-warning">                        
@@ -73,9 +73,15 @@
                                  </div>
                            {% else %}
                                  <div class="widget-content">
-                                 <h6 class="bigstats">                        
-                                      No ha formalizado su inscripcion para este periodo
-                                     academico.                        
+                                 <h6 class="bigstats"> 
+                                     {% for inscritas in estado_academico.hasInscripcion %} 
+                                         Temas de la UC: {{ inscritas.idSeccion.ofertaAcademica.idMallaCurricularUc.idUnidadCurricularVolumen.idUnidadCurricular.nombre }}
+                                         <ol>
+                                         {% for planificacion in inscritas.getIdSeccion.getPlanificacion %}                                                     
+                                                 <li>{{ planificacion.idTemaUc.nombre }}</li>                                             
+                                         {% endfor %}
+                                         </ol>
+                                     {% endfor %}
                                  </h6>                                                                                                      
                             </div>
 
