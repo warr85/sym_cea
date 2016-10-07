@@ -9,26 +9,41 @@
 <form class="form-inline" method="post" name="planificacion_calificacion">
     <div id="seccion">
         <ul>
-    {% for o in planificacion.seccion.hasInscripcion %}  
-        {% if planificacion.hasCalificacion | length < 1 %}
-            <li>
-                {{o}}
-                <input type="hidden" id="planificacion_calificacion_idInscripcion_{{o.id}}" name="planificacion_calificacion[idInscripcion][inscripcion_{{o.id}}]" value ="{{o.id}}"/>
-                <input type="text" id="planificacion_calificacion_idCalificacion" name="planificacion_calificacion[idInscripcion][calificacion_{{o.id}}]" />
-                <input type="text" id="planificacion_calificacion_idCalificacion" name="planificacion_calificacion[idInscripcion][porcentaje_{{o.id}}]" />
-            </li>    
-        {% else %}
-            <li>
-                {% for p in planificacion.hasCalificacion %}                      
-                    {{o}}               
-                    <input type="text" id="planificacion_calificacion_idCalificacion" name="planificacion_calificacion[idInscripcion][calificacion_{{o.id}}]" value="{{ p.idCalificacion.idNota.idNomenclaturaNota.nombre }}" disabled />
-                    <input type="text" id="planificacion_calificacion_idCalificacion" name="planificacion_calificacion[idInscripcion][porcentaje_{{o.id}}]" value="{{ p.idCalificacion.idPorcentaje.nombre }}" disabled />
+            {% if planificacion.hasCalificacion | length < 1 %}
+                {% for o in planificacion.seccion.hasInscripcion %}  
+        
+                    <li>
+                        {{o}}
+                        <input type="hidden" id="planificacion_calificacion_idInscripcion_{{o.id}}" name="planificacion_calificacion[idInscripcion][inscripcion_{{o.id}}]" value ="{{o.id}}"/>
+                        <input type="text" id="planificacion_calificacion_idCalificacion" name="planificacion_calificacion[idInscripcion][calificacion_{{o.id}}]" />
+                        <input type="text" id="planificacion_calificacion_idCalificacion" name="planificacion_calificacion[idInscripcion][porcentaje_{{o.id}}]" />
+                    </li>  
                 {% endfor %}
-            </li>   
+            {% else %}
+            <table class="table table-bordered table-striped table-hover"  >
+                <tr>
+                        <th>Estudiante</th>
+                        <th>Calificacion</th>
+                        <th>porcentaje</th>
+                     </tr>  
+                {% for p in planificacion.hasCalificacion %}  
+                    {% set datos = p.idInscripcion.idEstadoAcademico.idRolInstitucion.idRol.idPersona %}
+                                                        
+                     
+                        <tr>
+                            <td>{{ datos.cedulaPasaporte }} {{ datos.primerNombre }}  {{ datos.primerApellido }}</td>
+                            <td><input type="text" id="planificacion_calificacion_idCalificacion" name="planificacion_calificacion[idInscripcion][calificacion_" value="{{ p.idCalificacion.idNota.idNomenclaturaNota.nombre }}" disabled /></td>
+                            <td><input type="text" id="planificacion_calificacion_idCalificacion" name="planificacion_calificacion[idInscripcion][porcentaje_" value="{{ p.idCalificacion.idPorcentaje.nombre }}" disabled /></td>
+                        </tr>
+                    
+                {% endfor %}
+                
+                </table>
+               
                            
             
         {% endif %}
-    {% endfor %}<br>
+    <br>
     </ul>
 </div>
      {% if planificacion.hasCalificacion | length < 1 %}
