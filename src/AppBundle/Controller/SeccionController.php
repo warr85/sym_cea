@@ -47,11 +47,14 @@ class SeccionController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            
-            $user = $this->getDoctrine()->getRepository('AppBundle:Usuarios')->findOneByIdRolInstitucion($this->getUser()->getIdRolInstitucion());
-            if (false === $this->get('security.authorization_checker')->isGranted('ROLE_DOCENTE')) {
-                $user->addRol($this->getDoctrine()->getRepository('AppBundle:Role')->findOneByName("ROLE_DOCENTE"));
-            }
+            $nuevo_docente = $form->get('idRolInstitucion')->getData();            
+            $user = $this->getDoctrine()->getRepository('AppBundle:Usuarios')->findOneByIdRolInstitucion($nuevo_docente->getId());
+            if( $user instanceof \Symfony\Component\Security\Core\User\UserInterface  ){
+                 $roles = $user->getRoles();
+                 if ( ! in_array( 'ROLE_DOCENTE' , $roles ) ){
+                     $user->addRol($this->getDoctrine()->getRepository('AppBundle:Role')->findOneByName("ROLE_DOCENTE"));
+                 }
+            }            
             
             $em->persist($user);                         
             $em->persist($seccion);
