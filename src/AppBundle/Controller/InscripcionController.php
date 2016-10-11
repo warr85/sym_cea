@@ -7,7 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Entity\Inscripcion;
-use AppBundle\Entity\EstadoAcademico;
+use AppBundle\Entity\PlanificacionSeccion;
 
 
 /**
@@ -78,7 +78,7 @@ class InscripcionController extends Controller
     /**
      * Finds and displays a Inscripcion entity.
      *
-     * @Route("/{id}", name="ceapp_estudiante_inscripcion_show")
+     * @Route("/show/{id}", name="ceapp_estudiante_inscripcion_show")
      * @Method("GET")
      */
     public function showAction(Inscripcion $inscripcion)
@@ -90,6 +90,28 @@ class InscripcionController extends Controller
             'delete_form' => $deleteForm->createView(),
         ));
     }
+    
+    
+    /**
+     * Displays la planificación creada por el docente.
+     *
+     * @Route("/planificacion/{id}", name="ceapp_estudiante_planificacion_show")
+     * @Method({"GET", "POST"})
+     */
+    public function showPlanificacionAction(Request $request, PlanificacionSeccion $planificacionSeccion)
+    {
+        $seccion = $this->getDoctrine()->getRepository('AppBundle:Seccion')->findOneById($planificacionSeccion->getSeccion());
+        
+        $showForm = $this->createForm('AppBundle\Form\PlanificacionSeccionShowType', $planificacionSeccion, array('seccion' => $seccion));
+               
+
+        return $this->render('planificacionseccion/estudiante_show.html.twig', array(
+            'planificacionSeccion' => $planificacionSeccion,
+            'show_form' => $showForm->createView(),            
+        ));
+    }
+    
+    
 
     /**
      * Displays a form to edit an existing Inscripcion entity.

@@ -79,7 +79,7 @@
                                          {% if inscritas.getIdSeccion.getPlanificacion | length > 0 %}
                                             <ol>
                                             {% for planificacion in inscritas.getIdSeccion.getPlanificacion %}                                                                                            
-                                                    <li> <a href="{{ path('ceapp_docente_planificacion_edit', { 'id': planificacion.id }) }}">{{ planificacion.idTemaUc.nombre }}</a></li>
+                                                    <li> <a href="{{ path('ceapp_estudiante_planificacion_show', { 'id': planificacion.id }) }}">{{ planificacion.idTemaUc.nombre }}</a></li>
                                             {% endfor %}
                                             </ol>
                                          {% else %}

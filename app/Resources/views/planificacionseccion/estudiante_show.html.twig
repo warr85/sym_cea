@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>PlanificacionSeccion edit</h1>
+
+    {{ form_start(show_form) }}
+        {{ form_widget(show_form) }}        
+    {{ form_end(show_form) }}
+
+    <ul>
+        <li>
+            <a href="{{ path('inscripcion_index') }}">Back to the list</a>
+        </li>
+       
+    </ul>
+{% endblock %}
