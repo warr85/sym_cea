@@ -15,7 +15,7 @@ class PlanHistoricoNacionalEstrategico
     /**
      * @var string
      *
-     * @ORM\Column(name="nombre", type="string", length=40, nullable=false, options={"comment" = "nombre de plan_historico_nacional_estrategico"})
+     * @ORM\Column(name="nombre", type="text", nullable=false, options={"comment" = "nombre de plan_historico_nacional_estrategico"})
      */
     private $nombre;
 
