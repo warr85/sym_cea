@@ -1,42 +1,35 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: ubv-cipee
- * Date: 29/06/16
- * Time: 08:44 AM
- */
-
 
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Parroquia
+ * PlanHistoricoNacionalEstrategico
  *
- * @ORM\Table(name="parroquia", uniqueConstraints={@ORM\UniqueConstraint(name="uq_parroquia", columns={"codigo"})}, indexes={@ORM\Index(name="fki_id_municipio_parroquia", columns={"id_municipio"})})
+ * @ORM\Table(name="plan_historico_nacional_estrategico", uniqueConstraints={@ORM\UniqueConstraint(name="uq_estrategico", columns={"numero"})}, indexes={@ORM\Index(name="fki_id_nacional_estrategico", columns={"id_plan_historico_nacional"})})
  * @ORM\Entity
  */
-class Parroquia
+class PlanHistoricoNacionalEstrategico
 {
     /**
      * @var string
      *
-     * @ORM\Column(name="nombre", type="string", length=40, nullable=false, options={"comment" = "nombre de parroquia"})
+     * @ORM\Column(name="nombre", type="string", length=40, nullable=false, options={"comment" = "nombre de plan_historico_nacional_estrategico"})
      */
     private $nombre;
 
     /**
-     * @var string
+     * @var integer
      *
-     * @ORM\Column(name="codigo", type="decimal", precision=6, scale=0, nullable=false, options={"comment" = "codigo parroquia"})
+     * @ORM\Column(name="numero", type="integer", nullable=false, options={"comment" = "codigo plan_historico_nacional_estrategico"})
      */
-    private $codigo;
+    private $numero;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="id", type="integer", nullable=false, options={"comment" = "identificador de la parroquia"})
+     * @ORM\Column(name="id", type="integer", nullable=false, options={"comment" = "identificador de la plan_historico_nacional_estrategico"})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @ORM\SequenceGenerator(sequenceName="parroquia_id_seq", allocationSize=1, initialValue=1)
@@ -44,22 +37,21 @@ class Parroquia
     private $id;
 
     /**
-     * @var \AppBundle\Entity\Municipio
+     * @var \AppBundle\Entity\PlanHistoricoNacional
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Municipio")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\PlanHistoricoNacional")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_municipio", referencedColumnName="id", nullable=false)
+     *   @ORM\JoinColumn(name="id_plan_historico_nacional", referencedColumnName="id", nullable=false)
      * })
      */
-    private $idMunicipio;
-
-
+    private $idPlanHistoricoNacional;
+    
 
     /**
      * Set nombre
      *
      * @param string $nombre
-     * @return Parroquia
+     * @return PlanHistoricoNacionalEstrategico
      */
     public function setNombre($nombre)
     {
@@ -71,7 +63,7 @@ class Parroquia
     /**
      * Get nombre
      *
-     * @return string
+     * @return string 
      */
     public function getNombre()
     {
@@ -79,32 +71,32 @@ class Parroquia
     }
 
     /**
-     * Set codigo
+     * Set numero
      *
-     * @param string $codigo
-     * @return Parroquia
+     * @param integer $numero
+     * @return PlanHistoricoNacionalEstrategico
      */
-    public function setCodigo($codigo)
+    public function setNumero($numero)
     {
-        $this->codigo = $codigo;
+        $this->numero = $numero;
 
         return $this;
     }
 
     /**
-     * Get codigo
+     * Get numero
      *
-     * @return string
+     * @return integer 
      */
-    public function getCodigo()
+    public function getNumero()
     {
-        return $this->codigo;
+        return $this->numero;
     }
 
     /**
      * Get id
      *
-     * @return integer
+     * @return integer 
      */
     public function getId()
     {
@@ -112,25 +104,35 @@ class Parroquia
     }
 
     /**
-     * Set idMunicipio
+     * Set idPlanHistoricoNacional
      *
-     * @param \AppBundle\Entity\Municipio $idMunicipio
-     * @return Parroquia
+     * @param \AppBundle\Entity\PlanHistoricoNacional $idPlanHistoricoNacional
+     * @return PlanHistoricoNacionalEstrategico
      */
-    public function setIdMunicipio(\AppBundle\Entity\Municipio $idMunicipio = null)
+    public function setIdPlanHistoricoNacional(\AppBundle\Entity\PlanHistoricoNacional $idPlanHistoricoNacional)
     {
-        $this->idMunicipio = $idMunicipio;
+        $this->idPlanHistoricoNacional = $idPlanHistoricoNacional;
 
         return $this;
     }
 
     /**
-     * Get idMunicipio
+     * Get idPlanHistoricoNacional
      *
-     * @return \AppBundle\Entity\Municipio
+     * @return \AppBundle\Entity\PlanHistoricoNacional 
      */
-    public function getIdMunicipio()
+    public function getIdPlanHistoricoNacional()
     {
-        return $this->idMunicipio;
+        return $this->idPlanHistoricoNacional;
+    }
+    
+    
+    /**
+     * Get nombre
+     *
+     * @return string
+     */
+    public function __toString() {
+        return $this->getNombre();
     }
 }
