@@ -223,6 +223,38 @@ class AdscripcionController extends Controller
     
     
     /**
+     * Solicita información al docente sobre su PIDA
+     * 
+     * @Route("/solicitud/pida", name="solicitud_pida")
+     */
+    public function pidaAction(Request $request)
+    {
+        
+         //verificar en las solicitudes la adscripcion del docente
+       $adscripcion = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->
+                findOneBy(array(
+                    'idRolInstitucion'  =>  $this->getUser()->getIdRolInstitucion()->getId(),
+                    'idServicioCe'      =>  2
+        ));
+       //si no ha solicitado adscripción regresa a la pagina de adscripcion
+        if(!$adscripcion) return $this->redirect($this->generateUrl('solicitud_adscripcion'));
+        
+        //si ya se tiene PIDA
+        if($this->getDoctrine()->getRepository('AppBundle:AdscripcionPida')->findOneByIdRolInstitucion($this->getUser()->getIdRolInstitucion()->getId())){
+            return $this->redirect($this->generateUrl('cea_index'));
+        }
+        
+        
+        return $this->render(
+            'solicitudes/pida.html.twig',
+            array('form' => $form->createView())
+        );
+        
+        
+    }
+    
+    
+    /**
      * Muestra las Solicitudes de Adscripción.  Por defecto las creadas (estatus = 2)
      *
      * @Route("/solicitudes/adscripcion/{estatus}", name="cea_adscripciones")

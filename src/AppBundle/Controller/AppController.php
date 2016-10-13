@@ -43,7 +43,7 @@ class AppController extends Controller {
                     'idServicioCe'      =>  2
         ));
        //si no ha solicitado adscripción regresa a la pagina de adscripcion
-        if(!$adscripcion) return $this->redirect($this->generateUrl('solicitud_adscripcion'));
+        if(!$adscripcion){ return $this->redirect($this->generateUrl('solicitud_adscripcion')); }
         
         $pida = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->
                 findOneBy(array(
@@ -51,7 +51,7 @@ class AppController extends Controller {
                     'idServicioCe'      =>  4
         ));
         
-        if(!$pida) return $this->redirect($this->generateUrl('solicitud_pida'));
+        if(!$pida){ return $this->redirect($this->generateUrl('solicitud_pida')); }
         
         
         //solicitud aprobada está en falso
