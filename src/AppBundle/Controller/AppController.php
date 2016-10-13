@@ -36,13 +36,24 @@ class AppController extends Controller {
      */
     public function indexAction()
     {
+        //verificar en las solicitudes la adscripcion del docente
        $adscripcion = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->
                 findOneBy(array(
                     'idRolInstitucion'  =>  $this->getUser()->getIdRolInstitucion()->getId(),
                     'idServicioCe'      =>  2
-               ));
+        ));
        //si no ha solicitado adscripción regresa a la pagina de adscripcion
         if(!$adscripcion) return $this->redirect($this->generateUrl('solicitud_adscripcion'));
+        
+        $pida = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->
+                findOneBy(array(
+                    'idRolInstitucion'  =>  $this->getUser()->getIdRolInstitucion()->getId(),
+                    'idServicioCe'      =>  4
+        ));
+        
+        if(!$pida) return $this->redirect($this->generateUrl('solicitud_pida'));
+        
+        
         //solicitud aprobada está en falso
         $adscrito = false;
         if($adscripcion->getIdEstatus()->getId() == 1) $adscrito = true;
