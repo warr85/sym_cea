@@ -1,31 +1,25 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Wilmer Ramones
- * Date: 29/06/16
- * Time: 07:52 AM
- */
+
 
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
-use Doctrine\Common\Collections\ArrayCollection;
+
 
 /**
- * Adscripcion
+ * AdscripcionPida
  *
- * @ORM\Table(name="solicitud_adscripcion", uniqueConstraints={@ORM\UniqueConstraint(name="adscripcion_id_rol_institucion_key", columns={"id_rol_institucion"})})
+ * @ORM\Table(name="solicitud_pida", uniqueConstraints={@ORM\UniqueConstraint(name="pida_id_rol_institucion_key", columns={"id_rol_institucion"})})
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks()
  */
-class Adscripcion
+class AdscripcionPida
 {
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="id", type="integer", nullable=false, options={"comment" = "Identificador de la Adscripcion"})
+     * @ORM\Column(name="id", type="integer", nullable=false, options={"comment" = "Identificador de la AdscripcionPida"})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @ORM\SequenceGenerator(sequenceName="adscripcion_id_seq", allocationSize=1, initialValue=1)
@@ -44,101 +38,29 @@ class Adscripcion
      */
     protected $idRolInstitucion;
     
-    /** @ORM\Column(type="date", nullable=false, options={"comment" = "Fecha de de Ingreso a la Institucion"})  
-     /**
-     * @Assert\Date()
-     */      
-    private $fecha_ingreso;
-
+    
 
     /**
-     * @var \AppBundle\Entity\LineasInvestigacion
+     * @var \AppBundle\Entity\PlanHistoricoNacionalEstrategico
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\LineasInvestigacion")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\PlanHistoricoNacionalEstrategico")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_linea_investigacion", referencedColumnName="id", nullable=true)
+     *   @ORM\JoinColumn(name="id_plan_historico_nacional_estrategico", referencedColumnName="id", nullable=true)
      * })
      */
-    protected $idLineaInvestigacion;
-
-    
-    /**
-     * @ORM\Column(type="string", nullable=false, options={"comment" = "ubicacion de la constancia de trabajo"})
-     *
-     * @Assert\NotBlank(message="Debe cargar su constancia de Trabajo, es obligatoria.")
-     * @Assert\File(mimeTypes={ "application/pdf" })
-     */
-    private $trabajo;
+    protected $idPlanHistoricoNacionalEstrategico;
     
     
     /**
-     * @ORM\Column(type="string", nullable=false, options={"comment" = "ubicacion del titulo de pregrado"})
+     * @var \AppBundle\Entity\ActividadDocente
      *
-     * @Assert\NotBlank(message="debe cargar su título de pregrado en digital, es obligatorio.")
-     * @Assert\File(mimeTypes={ "application/pdf" })
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ActividadDocente")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_actividad_docente", referencedColumnName="id", nullable=true)
+     * })
      */
-    private $pregrado;
-    
-    
-    /**
-     * @ORM\Column(type="string", nullable=true, options={"comment" = "ubicacion del titulo de postgrado en caso de tenerlo"})
-     *
-     *
-     * @Assert\File(mimeTypes={ "application/pdf" })
-     */
-    private $postgrado;
-
-    /**
-     * @ORM\Column(type="string", nullable=true, options={"comment" = "digital del documento de aprobación del concurso de oposicion"})
-     *
-     *
-     * @Assert\File(mimeTypes={ "application/pdf" })
-     */
-    private $oposicion;
-
-    /**
-     * @ORM\Column(type="string", nullable=true, options={"comment" = "digital del documento de ascenso de Asistente"})
-     *
-     *
-     * @Assert\File(mimeTypes={ "application/pdf" })
-     */
-    private $asistente;
-
-    /**
-     * @ORM\Column(type="string", nullable=true, options={"comment" = "digital del documento de ascenso de Asociado"})
-     *
-     *
-     * @Assert\File(mimeTypes={ "application/pdf" })
-     */
-    private $asociado;
-
-
-
-
-    /**
-     * @ORM\Column(type="string", nullable=true, options={"comment" = "digital del documento de ascenso de agregado"})
-     *
-     *
-     * @Assert\File(mimeTypes={ "application/pdf" })
-     */
-    private $agreado;
-
-
-    /**
-     * @ORM\Column(type="string", nullable=true, options={"comment" = "digital del documento de ascenso de titular"})
-     *
-     *
-     * @Assert\File(mimeTypes={ "application/pdf" })
-     */
-    private $titular;
-
-
-
-    /**
-     * @ORM\Column(name="titulo_trabajo", type="string", nullable=true, options={"comment" = "titulo del trabajo de investigacion"})
-     */
-    private $tituloTrabajo;
-
+    protected $idActividadDocente;
+   
     
     /** @ORM\Column(type="datetime", nullable=false, options={"comment" = "Fecha de creación de la solicitud"})
     
@@ -162,122 +84,7 @@ class Adscripcion
      * })
      */
     protected $idEstatus;
-    
-       
-    
-    
-
-    public function getTrabajo()
-    {
-        return $this->trabajo;
-    }
-
-    public function setTrabajo($trabajo)
-    {
-        $this->trabajo = $trabajo;
-
-        return $this;
-    }
-    
-    public function getPregrado()
-    {
-        return $this->pregrado;
-    }
-
-    public function setPregrado($pregrado)
-    {
-        $this->pregrado = $pregrado;
-
-        return $this;
-    }
-    
-    public function getPostgrado()
-    {
-        return $this->postgrado;
-    }
-
-    public function setPostgrado($postgrado)
-    {
-        $this->postgrado = $postgrado;
-
-        return $this;
-    }
-
-    public function getAsistente()
-    {
-        return $this->asistente;
-    }
-
-    public function setAsistente($asistente)
-    {
-        $this->asistente = $asistente;
-
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getOposicion()
-    {
-        return $this->oposicion;
-    }
-
-    /**
-     * @param mixed $oposicion
-     */
-    public function setOposicion($oposicion)
-    {
-        $this->oposicion = $oposicion;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getAsociado()
-    {
-        return $this->asociado;
-    }
-
-    /**
-     * @param mixed $asociado
-     */
-    public function setAsociado($asociado)
-    {
-        $this->asociado = $asociado;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getAgreado()
-    {
-        return $this->agreado;
-    }
-
-    /**
-     * @param mixed $agreado
-     */
-    public function setAgreado($agreado)
-    {
-        $this->agreado = $agreado;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getTitular()
-    {
-        return $this->titular;
-    }
-
-    /**
-     * @param mixed $titular
-     */
-    public function setTitular($titular)
-    {
-        $this->titular = $titular;
-    }
+ 
 
     /**
      * Get id
@@ -313,30 +120,7 @@ class Adscripcion
         return $this->idRolInstitucion;
     }
 
-
-
-    /**
-     * Set idLineaInvestigacion
-     *
-     * @param \AppBundle\Entity\LineasInvestigacion $idLineaInvestigacion
-     * @return LineasInvestigacion
-     */
-    public function setIdLineaInvestigacion(\AppBundle\Entity\LineasInvestigacion $idLineaInvestigacion = null)
-    {
-        $this->idLineaInvestigacion = $idLineaInvestigacion;
-
-        return $this;
-    }
-
-    /**
-     * Get idLineaIvestigacion
-     *
-     * @return \AppBundle\Entity\LineasInvestigacion
-     */
-    public function getIdLineaInvestigacion()
-    {
-        return $this->idLineaInvestigacion;
-    }
+ 
     
     
     
@@ -390,47 +174,59 @@ class Adscripcion
     }
 
 
-
     /**
-     * @return mixed
+     * Get fecha_ultima_actualizacion
+     *
+     * @return \DateTime 
      */
-    public function getTituloTrabajo()
+    public function getFechaUltimaActualizacion()
     {
-        return $this->tituloTrabajo;
+        return $this->fecha_ultima_actualizacion;
     }
 
+    /**
+     * Set idPlanHistoricoNacionalEstrategico
+     *
+     * @param \AppBundle\Entity\PlanHistoricoNacionalEstrategico $idPlanHistoricoNacionalEstrategico
+     * @return AdscripcionPida
+     */
+    public function setIdPlanHistoricoNacionalEstrategico(\AppBundle\Entity\PlanHistoricoNacionalEstrategico $idPlanHistoricoNacionalEstrategico = null)
+    {
+        $this->idPlanHistoricoNacionalEstrategico = $idPlanHistoricoNacionalEstrategico;
+
+        return $this;
+    }
 
     /**
-     * @param mixed $tituloTrabajo
+     * Get idPlanHistoricoNacionalEstrategico
+     *
+     * @return \AppBundle\Entity\PlanHistoricoNacionalEstrategico 
      */
-        public function setTituloTrabajo($tituloTrabajo)
-        {
-            $this->tituloTrabajo = $tituloTrabajo;
-        }
-    
-    
-        /**
-        * Set fecha_escala
-        *
-        * @param \DateTime $fecha_escala
-        * @return Comment
-        */
-       public function setFechaIngreso($fecha_ingreso)
-       {
-           $this->fecha_ingreso = $fecha_ingreso;
+    public function getIdPlanHistoricoNacionalEstrategico()
+    {
+        return $this->idPlanHistoricoNacionalEstrategico;
+    }
 
-           return $this;
-       }
+    /**
+     * Set idActividadDocente
+     *
+     * @param \AppBundle\Entity\ActividadDocente $idActividadDocente
+     * @return AdscripcionPida
+     */
+    public function setIdActividadDocente(\AppBundle\Entity\ActividadDocente $idActividadDocente = null)
+    {
+        $this->idActividadDocente = $idActividadDocente;
 
-       /**
-        * Get fecha_escala
-        *
-        * @return \DateTime
-        */
-       public function getFechaIngreso()
-       {
-           return $this->fecha_ingreso;
-       }
+        return $this;
+    }
 
-
+    /**
+     * Get idActividadDocente
+     *
+     * @return \AppBundle\Entity\ActividadDocente 
+     */
+    public function getIdActividadDocente()
+    {
+        return $this->idActividadDocente;
+    }
 }
