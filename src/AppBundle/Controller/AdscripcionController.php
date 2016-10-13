@@ -244,6 +244,7 @@ class AdscripcionController extends Controller
             return $this->redirect($this->generateUrl('cea_index'));
         }
         
+        $form = $this->createForm('AppBundle\Form\PidaType');
         
         return $this->render(
             'solicitudes/pida.html.twig',

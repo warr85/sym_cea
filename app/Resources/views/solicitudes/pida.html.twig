@@ -2,12 +2,10 @@
 
 {% block stylesheets %}
     {{ parent() }}
-     
-    <style>
-        .esc_oposicion, .esc_asistente, .esc_agregado, .esc_asociado, .esc_titular{
-            display: none;
-        }
-        
+    <link rel="stylesheet" href="{{ asset('assets/vendor/select2/dist/css/select2.min.css') }}"> 
+    
+    
+    <style>               
         h1, h4{
             margin:0;
         }
@@ -50,75 +48,9 @@
 
 {% block javascripts  %}
     {{ parent() }}
+    <script type="text/javascript" src="{{ asset('assets/vendor/select2/dist/js/select2.full.min.js') }}"></script>
     <script type="text/javascript">
-        $('#user_oposicion').click(function() {
-            $('.esc_oposicion')[this.checked ? "show" : "hide"]();
-            $("#user_escala").prop('required', $(this).prop("checked"));
-            $("#user_fecha_oposicion_day").prop('required', $(this).prop("checked"));
-            $("#user_fecha_oposicion_month").prop('required', $(this).prop("checked"));
-            $("#user_fecha_oposicion_year").prop('required', $(this).prop("checked"));
-            $("#user_documento_oposicion").prop('required', $(this).prop("checked"));
-            $("#user_lineas_investigacion").prop('required', $(this).prop("checked"));
-            $("#user_titulo_trabajo").prop('required', $(this).prop("checked"));
-        });
-
-        $('#user_ascenso').click(function() {
-        		
-        	if($("#user_escala").val() == 1)
-           		$('.esc_asistente')[this.checked ? "show" : "hide"]();
-          	if($("#user_escala").val() == 2)
-           		$('.esc_asociado')[this.checked ? "show" : "hide"]();
-                if($("#user_escala").val() == 3)
-                    $('.esc_agregado')[this.checked ? "show" : "hide"]();
-                if($("#user_escala").val() == 4)
-                    $('.esc_titular')[this.checked ? "show" : "hide"]();
-
-        });
         
-        
-        
-        
-        
-        $("#user_fecha_oposicion_year").change(function(){
-            if ($("#user_fecha_oposicion_year").val() < $("#user_fecha_ingreso_year").val()){
-                alert('la fecha de concurso debe ser mayor a la fecha de ingreso');
-                $("#user_fecha_oposicion_year").val("");
-                
-            }
-        });
-        
-        $("#user_fecha_ascenso_asistente_year").change(function(){
-            if ($("#user_fecha_ascenso_asistente_year").val() < $("#user_fecha_oposicion_year").val()){
-                alert('la fecha de ascenso debe ser mayor a la del Concurso de oposición');
-                $("#user_fecha_asistente_year").val("");
-                
-            }
-        });
-        
-        
-        
-        
-        $('#user_ascenso2').click(function() {                
-            	$('.esc_asociado')[this.checked ? "show" : "hide"]();
-
-        });
-
-        $('#user_ascenso3').click(function() {
-
-                $('.esc_agregado')[this.checked ? "show" : "hide"]();
-
-        });
-
-        $('#user_ascenso4').click(function() {
-
-                $('.esc_titular')[this.checked ? "show" : "hide"]();
-        });
-
-
-        $('#user_escala').change(function(){            
-            if ($('#user_escala').val() >= 1) $('#user_oposicion').attr('disabled',true);
-            else $('#user_oposicion').attr('disabled',false);
-        });
-        
+        $('select').select2();
     </script>
 {% endblock %}
