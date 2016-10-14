@@ -27,6 +27,14 @@ class AdscripcionPida
     private $id;
     
     
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="objetivo_especifico", type="text", nullable=false, options={"comment" = "objetivo especifico a desarrollar dentro enmarcado en el plan patria"})
+     */
+    private $objetivoEspecifico;
+    
+    
     
 	/**
      * @var \AppBundle\Entity\RolInstitucion
@@ -60,6 +68,20 @@ class AdscripcionPida
      * })
      */
     protected $idActividadDocente;
+    
+    
+     /** @ORM\Column(type="datetime", nullable=false, options={"comment" = "Fecha de inicio de la activdad PIDA"})
+    
+    */
+    
+    private $fecha_inicio;
+    
+    
+     /** @ORM\Column(type="datetime", nullable=false, options={"comment" = "Fecha de fin de la actividad"})
+    
+    */
+    
+    private $fecha_final;
    
     
     /** @ORM\Column(type="datetime", nullable=false, options={"comment" = "Fecha de creación de la solicitud"})
@@ -228,5 +250,74 @@ class AdscripcionPida
     public function getIdActividadDocente()
     {
         return $this->idActividadDocente;
+    }
+
+    /**
+     * Set fecha_inicio
+     *
+     * @param \DateTime $fechaInicio
+     * @return AdscripcionPida
+     */
+    public function setFechaInicio($fechaInicio)
+    {
+        $this->fecha_inicio = $fechaInicio;
+
+        return $this;
+    }
+
+    /**
+     * Get fecha_inicio
+     *
+     * @return \DateTime 
+     */
+    public function getFechaInicio()
+    {
+        return $this->fecha_inicio;
+    }
+
+    /**
+     * Set fecha_final
+     *
+     * @param \DateTime $fechaFinal
+     * @return AdscripcionPida
+     */
+    public function setFechaFinal($fechaFinal)
+    {
+        $this->fecha_final = $fechaFinal;
+
+        return $this;
+    }
+
+    /**
+     * Get fecha_final
+     *
+     * @return \DateTime 
+     */
+    public function getFechaFinal()
+    {
+        return $this->fecha_final;
+    }
+
+    /**
+     * Set objetivoEspecifico
+     *
+     * @param string $objetivoEspecifico
+     * @return AdscripcionPida
+     */
+    public function setObjetivoEspecifico($objetivoEspecifico)
+    {
+        $this->objetivoEspecifico = $objetivoEspecifico;
+
+        return $this;
+    }
+
+    /**
+     * Get objetivoEspecifico
+     *
+     * @return string 
+     */
+    public function getObjetivoEspecifico()
+    {
+        return $this->objetivoEspecifico;
     }
 }
