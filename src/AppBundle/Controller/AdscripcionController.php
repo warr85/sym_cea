@@ -253,11 +253,21 @@ class AdscripcionController extends Controller
         
         if ($form->isSubmitted() && $form->isValid()) {
             
+            //Crear la solicitud de Servicio
+            $servicios = new DocenteServicio();
+
+            $servicios->setIdRolInstitucion($this->getUser()->getIdRolInstitucion());
+            $servicios->setIdServicioCe($this->getDoctrine()->getRepository('AppBundle:ServiciosCe')->findOneById(4));
+            $servicios->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:estatus')->findOneById(2));
+
+            
+            
             $pida->setIdRolInstitucion($this->getUser()->getIdRolInstitucion());
             $pida->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(2));
             
             $em = $this->getDoctrine()->getManager();
             $em->persist($pida);
+            $em->persist($servicios);
             $em->flush();
             
             return $this->redirectToRoute('cea_index');
@@ -372,28 +382,37 @@ class AdscripcionController extends Controller
     {
         
        //$adscripciones = $this->getDoctrine()->getRepository('AppBundle:Adscripcion')->findOneById($adscripcion->getId());
-       $servicios = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->findOneBy(array(
+       $serviciosAdscripcion = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->findOneBy(array(
            'idRolInstitucion'   => $adscripcion->getIdRolInstitucion(),
            'idServicioCe'       => 2
+       ));
+       
+       
+       $serviciosPida = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->findOneBy(array(
+           'idRolInstitucion'   => $adscripcion->getIdRolInstitucion(),
+           'idServicioCe'       => 4
        ));
        
        $pida = $this->getDoctrine()->getRepository('AppBundle:AdscripcionPida')->findOneByIdRolInstitucion($adscripcion->getIdRolInstitucion());
        
        if($estatus == "true") {
-           $servicios->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(1));
+           $serviciosAdscripcion->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(1));
+           $serviciosPida->setIdEstatus($serviciosAdscripcion->getIdEstatus());
            $user = $this->getDoctrine()->getRepository('AppBundle:Usuarios')->findOneByIdRolInstitucion($adscripcion->getIdRolInstitucion());
            $user->addRol($this->getDoctrine()->getRepository('AppBundle:Role')->findOneByName("ROLE_ADSCRITO"));
-           $pida->setIdEstatus($servicios->getIdEstatus());
+           $pida->setIdEstatus($serviciosAdscripcion->getIdEstatus());
                                             
        }else{
-           $servicios->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(3));
+           $serviciosAdscripcion->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(3));
+           $serviciosPida->setIdEstatus($serviciosAdscripcion->getIdEstatus());
            $user = $this->getDoctrine()->getRepository('AppBundle:Usuarios')->findOneByIdRolInstitucion($adscripcion->getIdRolInstitucion());
            $user->removeRol($this->getDoctrine()->getRepository('AppBundle:Role')->findOneByName("ROLE_ADSCRITO"));
-           $pida->setIdEstatus($servicios->getIdEstatus());
+           $pida->setIdEstatus($serviciosAdscripcion->getIdEstatus());
        }
            
        $em = $this->getDoctrine()->getManager();
-       $em->persist($servicios);
+       $em->persist($serviciosAdscripcion);
+       $em->persist($serviciosPida);
        $em->persist($user);
        $em->persist($pida);
        $em->flush();
@@ -408,7 +427,7 @@ class AdscripcionController extends Controller
                             array(
                                 'nombres'   => $user->getIdRolInstitucion()->getIdRol()->getIdPersona()->getPrimerNombre(),
                                 'apellidos'   => $user->getIdRolInstitucion()->getIdRol()->getIdPersona()->getPrimerApellido(),
-                                'estatus'   => $servicios->getIdEstatus()
+                                'estatus'   => $serviciosAdscripcion->getIdEstatus()
                             )
                         ),
                         'text/html'
@@ -423,7 +442,7 @@ class AdscripcionController extends Controller
         ));
        
         return $this->render('cea/solicitudes_mostar.html.twig', array(
-            'servicio'      => $servicios,
+            'servicio'      => $serviciosAdscripcion,
             'adscripcion'   => $adscripcion, 
             'escalas'       => $escala,
             'pida'          => $pida
