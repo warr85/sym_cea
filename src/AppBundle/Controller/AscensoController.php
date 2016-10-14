@@ -32,7 +32,15 @@ class AscensoController extends Controller
     {
         
 	
-	$escala = $this->getDoctrine()->getRepository('AppBundle:DocenteEscala')->findOneBy(
+	$solicitud = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->findOneBy(
+                array('idRolInstitucion'  => $this->getUser()->getIdRolInstitucion(), 'idServicioCe' => 5)                
+        );
+        
+        if($solicitud){
+            return $this->redirect($this->generateUrl('servicios_index'));	
+        }
+        
+        $escala = $this->getDoctrine()->getRepository('AppBundle:DocenteEscala')->findOneBy(
                 array('idRolInstitucion'  => $this->getUser()->getIdRolInstitucion()),
                 array('id' => 'DESC')
         );
@@ -163,7 +171,11 @@ class AscensoController extends Controller
 
         return $this->render(
             'solicitudes/ascenso.html.twig',
-            array('form' => $form->createView())
+            array(
+                'form' => $form->createView(),
+                'ultima_escala' => $escala,
+                'nueva_escala'  => $nueva_escala
+            )
         );
     }
     

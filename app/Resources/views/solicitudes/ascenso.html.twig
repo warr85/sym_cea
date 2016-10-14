@@ -27,6 +27,10 @@
             <strong>{{app.user.idRolInstitucion.idRol.idPersona.primerNombre}}
                 {{app.user.idRolInstitucion.idRol.idPersona.primerApellido}}</strong>,
             En este apartado usted podrá solicitar el ascenso al siguiente escalafón.
+            <ul>
+                <li>Escalafón Actual: {{ ultima_escala.idEscala.nombre }}</li>
+                <li>Escalafón Solicitud: {{ nueva_escala.nombre }}</li>
+            </ul>
             
         </h4>
     </div>
