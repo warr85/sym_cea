@@ -360,13 +360,18 @@ class AdscripcionController extends Controller
         
         $adscripcion = $this->getDoctrine()->getRepository('AppBundle:Adscripcion')->findOneByIdRolInstitucion($servicio->getIdRolInstitucion());
         $pida = $this->getDoctrine()->getRepository('AppBundle:AdscripcionPida')->findOneByIdRolInstitucion($servicio->getIdRolInstitucion());
+        $ascenso = $this->getDoctrine()->getRepository('AppBundle:Ascenso')->findOneBy(array(
+                'idRolInstitucion' => $servicio->getIdRolInstitucion(),                 
+                
+        ));
 
         return $this->render('cea/solicitudes_mostar.html.twig', array(
             'adscripcion' => $adscripcion, 
             'servicio'  => $servicio,
             'escalas' => $escala,
             'servicio' => $servicio,
-            'pida'      => $pida
+            'pida'      => $pida,
+            'ascenso'   => $ascenso
         ));
     }
     

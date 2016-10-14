@@ -32,11 +32,7 @@
 
             </div>
             <div class="row">
-                {% if adscripcion.oposicion is  null %}     
-                             <div class="form-group">
-                                 <h4 class="alert alert-warning">El Docente al momento de la solicitud informa no haber realizado Concurso de oposición</h4>
-                            </div>
-                         {% endif %}
+                
                 <div class="col-md-6">
 
                     <div class="col-md-4">
@@ -67,8 +63,18 @@
                                     </tr>                                                                                                    
                             {%endfor %}
                             </table>                            
+                            {% if adscripcion.oposicion is  null %}     
+                                <div class="form-group">
+                                    <h6 class="alert alert-warning">El Docente al momento de la solicitud informa no haber realizado Concurso de oposición</h6>
+                               </div>
+                                <button class="btn btn-success btn-sm">Añadir Concurso de Oposición</button>                               
+                            {% endif %}                
+                            {% if ascenso is not  null %}
+                                <button class="alert alert-info ">Debido a que tiene una solicitud activa de ascenso, ud puede</button>
+                                <button class="btn btn-success btn-sm">Añadir Ascenso {{ ascenso.idEscalafones.nombre }} </button>  
+                            {% endif %}
                             
-                        </div>
+                         </div>
                         {% endif %}    
                             
                             

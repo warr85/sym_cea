@@ -229,6 +229,7 @@ class AscensoController extends Controller
            'idServicioCe'       => 5
        ));
        
+       
               
        $user = $this->getDoctrine()->getRepository('AppBundle:Usuarios')->findOneByIdRolInstitucion($ascenso->getIdRolInstitucion());
        if($estatus == "true") {
@@ -237,9 +238,12 @@ class AscensoController extends Controller
        }else{
            $serviciosAscenso->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(3));           
        }
+       
+       $ascenso->setIdEstatus($serviciosAscenso->getIdEstatus());
            
        $em = $this->getDoctrine()->getManager();
        $em->persist($serviciosAscenso);       
+       $em->persist($ascenso);
        $em->flush();
        
        $message = \Swift_Message::newInstance()
