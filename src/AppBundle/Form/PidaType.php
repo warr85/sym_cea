@@ -22,7 +22,7 @@ class PidaType extends AbstractType
     {
         $builder
                 
-                ->add('plan_historico_nacional_estrategico', EntityType::class, array(
+                ->add('id_plan_historico_nacional_estrategico', EntityType::class, array(
                     'label'         => false,
                     'attr' => array(
                                 'class' =>  'select2'
@@ -34,7 +34,7 @@ class PidaType extends AbstractType
                     'group_by'      => 'getIdPlanHistoricoNacional'
                 ))
 
-                ->add('actividad_docente', EntityType::class, array(
+                ->add('id_actividad_docente', EntityType::class, array(
                     'label'         => false,
                     'attr' => array(
                                 'class' =>  'select2'

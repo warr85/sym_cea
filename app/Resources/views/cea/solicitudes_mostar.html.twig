@@ -45,7 +45,7 @@
 
                     <div class="col-md-8">      
                         
-                    <form action="{{ path('login') }}" method="post" role="form" >
+                    
                         
                         <div class="form-group">
                             <label for="username">Fecha de Ingreso UBV:</label>
@@ -89,12 +89,7 @@
                              <input type="text" class="form-control" value="{{adscripcion.tituloTrabajo}}" />
                         </div>
                         {% endif %} 
-                                                 
 
-                        <a class="btn btn-success btn-sm" href="{{ path('cea_solicitudes_actualizar', { 'id': adscripcion.id, 'estatus' : 'true' }) }}"  ><span class="fa fa-check"></span>&nbsp;Aprobar</a>
-                        <a class="btn btn-danger btn-sm" href="{{ path('cea_solicitudes_actualizar', { 'id': adscripcion.id, 'estatus' : 'false' }) }}" ><span class="fa fa-close"></span>&nbsp;Rechazar</a>
-                    </form>
-                    <hr />
                         </div>
                 </div>
                              
@@ -178,9 +173,30 @@
 
                     </div>
                 </div>
+                        
+                        
 
             </div>
+                         <!-- MOSTRAR ACTIVIDAD PIDA DEL DOCENTE  -->
+                        {% if not pida %}
+                            <p class="alert alert-warning">El Docente no ha registrado todavía su actividad PIDA</p>
+                        {% else %}                            
+                             <div class="form-group">
+                            <label for="pida">PIDA:</label>
+                            <ul>
+                                <li>Objetivo Estratégico: {{pida.idPlanHistoricoNacionalEstrategico.nombre}}</li>
+                                <li>Ámbito: {{ pida.idActividadDocente.nombre }}</li>
+                                <li>Objetivo Específico: {{ pida.ObjetivoEspecifico }}</li>
+                                <li>Fecha inicio: {{ pida.fechaInicio | date('d-m-Y') }} </li>
+                                <li>Fecha final: {{ pida.fechaFinal | date('d-m-Y') }} </li>
+                                
+                            </ul>                            
+                        </div>  
+                        {% endif %}
+                        <a class="btn btn-success btn-sm" href="{{ path('cea_solicitudes_actualizar', { 'id': adscripcion.id, 'estatus' : 'true' }) }}"  ><span class="fa fa-check"></span>&nbsp;Aprobar</a>
+                        <a class="btn btn-danger btn-sm" href="{{ path('cea_solicitudes_actualizar', { 'id': adscripcion.id, 'estatus' : 'false' }) }}" ><span class="fa fa-close"></span>&nbsp;Rechazar</a>
         </div>
+        
     </div>
     
 {% endblock %}

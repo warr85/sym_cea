@@ -45,10 +45,9 @@ class AppController extends Controller {
        //si no ha solicitado adscripción regresa a la pagina de adscripcion
         if(!$adscripcion){ return $this->redirect($this->generateUrl('solicitud_adscripcion')); }
         
-        $pida = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->
+        $pida = $this->getDoctrine()->getRepository('AppBundle:AdscripcionPida')->
                 findOneBy(array(
-                    'idRolInstitucion'  =>  $this->getUser()->getIdRolInstitucion()->getId(),
-                    'idServicioCe'      =>  4
+                    'idRolInstitucion'  =>  $this->getUser()->getIdRolInstitucion()->getId()                    
         ));
         
         if(!$pida){ return $this->redirect($this->generateUrl('solicitud_pida')); }

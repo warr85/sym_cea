@@ -17,6 +17,7 @@ use AppBundle\Entity\Adscripcion;
 use AppBundle\Entity\DocenteEscala;
 use AppBundle\Entity\Memorando;
 use AppBundle\Entity\DocenteServicio;
+use AppBundle\Entity\AdscripcionPida;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -226,6 +227,7 @@ class AdscripcionController extends Controller
      * Solicita información al docente sobre su PIDA
      * 
      * @Route("/solicitud/pida", name="solicitud_pida")
+     * @Method({"GET", "POST"})
      */
     public function pidaAction(Request $request)
     {
@@ -244,7 +246,24 @@ class AdscripcionController extends Controller
             return $this->redirect($this->generateUrl('cea_index'));
         }
         
-        $form = $this->createForm('AppBundle\Form\PidaType');
+        $pida = new AdscripcionPida();
+        $form = $this->createForm('AppBundle\Form\PidaType', $pida);
+        $form->handleRequest($request);
+        
+        
+        if ($form->isSubmitted() && $form->isValid()) {
+            
+            $pida->setIdRolInstitucion($this->getUser()->getIdRolInstitucion());
+            $pida->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(2));
+            
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($pida);
+            $em->flush();
+            
+            return $this->redirectToRoute('cea_index');
+        
+        }
+        
         
         return $this->render(
             'solicitudes/pida.html.twig',
@@ -330,12 +349,14 @@ class AdscripcionController extends Controller
         ));
         
         $adscripcion = $this->getDoctrine()->getRepository('AppBundle:Adscripcion')->findOneByIdRolInstitucion($servicio->getIdRolInstitucion());
+        $pida = $this->getDoctrine()->getRepository('AppBundle:AdscripcionPida')->findOneByIdRolInstitucion($servicio->getIdRolInstitucion());
 
         return $this->render('cea/solicitudes_mostar.html.twig', array(
             'adscripcion' => $adscripcion, 
             'servicio'  => $servicio,
             'escalas' => $escala,
-            'servicio' => $servicio
+            'servicio' => $servicio,
+            'pida'      => $pida
         ));
     }
     
@@ -355,20 +376,26 @@ class AdscripcionController extends Controller
            'idRolInstitucion'   => $adscripcion->getIdRolInstitucion(),
            'idServicioCe'       => 2
        ));
+       
+       $pida = $this->getDoctrine()->getRepository('AppBundle:AdscripcionPida')->findOneByIdRolInstitucion($adscripcion->getIdRolInstitucion());
+       
        if($estatus == "true") {
            $servicios->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(1));
            $user = $this->getDoctrine()->getRepository('AppBundle:Usuarios')->findOneByIdRolInstitucion($adscripcion->getIdRolInstitucion());
            $user->addRol($this->getDoctrine()->getRepository('AppBundle:Role')->findOneByName("ROLE_ADSCRITO"));
+           $pida->setIdEstatus($servicios->getIdEstatus());
                                             
        }else{
            $servicios->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(3));
            $user = $this->getDoctrine()->getRepository('AppBundle:Usuarios')->findOneByIdRolInstitucion($adscripcion->getIdRolInstitucion());
            $user->removeRol($this->getDoctrine()->getRepository('AppBundle:Role')->findOneByName("ROLE_ADSCRITO"));
+           $pida->setIdEstatus($servicios->getIdEstatus());
        }
            
        $em = $this->getDoctrine()->getManager();
        $em->persist($servicios);
        $em->persist($user);
+       $em->persist($pida);
        $em->flush();
        
        $message = \Swift_Message::newInstance()
@@ -398,7 +425,8 @@ class AdscripcionController extends Controller
         return $this->render('cea/solicitudes_mostar.html.twig', array(
             'servicio'      => $servicios,
             'adscripcion'   => $adscripcion, 
-            'escalas'       => $escala
+            'escalas'       => $escala,
+            'pida'          => $pida
         ));
        
     }
