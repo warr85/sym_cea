@@ -1,0 +1,60 @@
+{% extends 'base_app.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+     
+    <style>
+        .esc_oposicion, .esc_asistente, .esc_agregado, .esc_asociado, .esc_titular{
+            display: none;
+        }
+        
+        h1, h4{
+            margin:0;
+        }
+        
+        .container{
+            margin-bottom: 0;
+        }
+    </style>
+{% endblock %}
+
+
+
+{% block body %}
+    <div class="container">
+        <h4 class="alert alert-info"><i class="fa fa-info-circle"></i>
+            Estimado (a) Docente 
+            <strong>{{app.user.idRolInstitucion.idRol.idPersona.primerNombre}}
+                {{app.user.idRolInstitucion.idRol.idPersona.primerApellido}}</strong>,
+            En este apartado usted podrá solicitar el ascenso al siguiente escalafón.
+            
+        </h4>
+    </div>
+    <div class="account-container register">        
+        <div class="content clearfix">            
+            <h1>Solicitud de Ascenso</h1>
+            {% form_theme form 'bootstrap_3_layout.html.twig' %}        
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            {{ form_end(form) }}
+        </div>
+        
+    </div>
+
+
+{% endblock %}
+
+
+
+
+{% block javascripts  %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $('#ascenso_tipoTrabajoInvestigacion').click(function() {
+            
+            $('.esc_oposicion')[this.checked ? "show" : "hide"]();
+            
+        });        
+        
+    </script>
+{% endblock %}
