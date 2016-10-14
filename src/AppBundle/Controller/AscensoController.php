@@ -31,15 +31,17 @@ class AscensoController extends Controller
     public function ascensoAction(Request $request)
     {
         
-	
+	//si ya tiene una solicitud en espera, enviarlo a la pagina de los  servicios
 	$solicitud = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->findOneBy(
-                array('idRolInstitucion'  => $this->getUser()->getIdRolInstitucion(), 'idServicioCe' => 5)                
+                array('idRolInstitucion'  => $this->getUser()->getIdRolInstitucion(), 'idServicioCe' => 5, 'idEstatus' => 2)                
         );
         
         if($solicitud){
             return $this->redirect($this->generateUrl('servicios_index'));	
         }
         
+        
+        //obtener su ultimo escalafon
         $escala = $this->getDoctrine()->getRepository('AppBundle:DocenteEscala')->findOneBy(
                 array('idRolInstitucion'  => $this->getUser()->getIdRolInstitucion()),
                 array('id' => 'DESC')
@@ -118,7 +120,7 @@ class AscensoController extends Controller
                 	$this->container->getParameter('ascenso_directory'),
                 	$nombreInvestigacion
             	);
-                thumbnail($nombreInvestigacion, $this->container->getParameter('ascenso_directory'), $this->container->getParameter('ascenso_thumb_directory'));
+                    thumbnail($nombreInvestigacion, $this->container->getParameter('ascenso_directory'), $this->container->getParameter('ascenso_thumb_directory'));
                 $ascenso->setInvestigacion($nombreInvestigacion);
             }
             $em = $this->getDoctrine()->getManager();
@@ -178,6 +180,110 @@ class AscensoController extends Controller
             )
         );
     }
+    
+    
+    
+     /**
+     * Encuentra y muestra una entidad de tipo Adscripción.
+     *
+     * @Route("/ascenso/{id}", name="cea_ascenso_show")
+     * @Method("GET")
+     * @Security("has_role('ROLE_COORDINADOR_REGIONAL')")
+     */
+    public function solicitudesAscensoShowAction(DocenteServicio $servicio)
+    {        
+        $escala = $this->getDoctrine()->getRepository('AppBundle:DocenteEscala')->findBy(array(
+            'idRolInstitucion' => $servicio->getIdRolInstitucion()->getId()
+        ));
+        
+        $ascenso = $this->getDoctrine()->getRepository('AppBundle:Ascenso')->findOneByIdRolInstitucion($servicio->getIdRolInstitucion());
+        $pida = $this->getDoctrine()->getRepository('AppBundle:AdscripcionPida')->findOneByIdRolInstitucion($servicio->getIdRolInstitucion());
+        $antiguedad = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->findOneBy(array(
+            'idRolInstitucion' => $this->getUser()->getIdRolInstitucion(),
+            'idServicioCe'  => 1            
+        ));
+
+        return $this->render('cea/ascenso_mostar.html.twig', array(
+            'ascenso' => $ascenso, 
+            'servicio'  => $servicio,
+            'escalas' => $escala,            
+            'pida'      => $pida,
+            'antiguedad' => $antiguedad
+        ));
+    }
+    
+    
+    /**
+     * Encuentra y muestra una entidad de tipo Adscripción.
+     *
+     * @Route("/solicitudes/ascenso/{id}/{estatus}", name="cea_ascenso_actualizar")
+     * @Method({"GET", "POST"})
+     * @Security("has_role('ROLE_COORDINADOR_REGIONAL')")
+     */
+    public function solicitudesAscensoEditAction(Ascenso $ascenso, $estatus)
+    {
+        
+       //$adscripciones = $this->getDoctrine()->getRepository('AppBundle:Adscripcion')->findOneById($adscripcion->getId());
+       $serviciosAscenso = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->findOneBy(array(
+           'idRolInstitucion'   => $ascenso->getIdRolInstitucion(),
+           'idServicioCe'       => 5
+       ));
+       
+              
+       $user = $this->getDoctrine()->getRepository('AppBundle:Usuarios')->findOneByIdRolInstitucion($ascenso->getIdRolInstitucion());
+       if($estatus == "true") {
+           $serviciosAscenso->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(1));                      
+                                            
+       }else{
+           $serviciosAscenso->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(3));           
+       }
+           
+       $em = $this->getDoctrine()->getManager();
+       $em->persist($serviciosAscenso);       
+       $em->flush();
+       
+       $message = \Swift_Message::newInstance()
+                    ->setSubject('Resultado Ascenso CEA@UBV')
+                    ->setFrom('wilmer.ramones@gmail.com')
+                    ->setTo($user->getEmail())
+                    ->setBody(
+                        $this->renderView(
+                            'correos/actualizar_ascenso.html.twig',
+                            array(
+                                'nombres'   => $user->getIdRolInstitucion()->getIdRol()->getIdPersona()->getPrimerNombre(),
+                                'apellidos'   => $user->getIdRolInstitucion()->getIdRol()->getIdPersona()->getPrimerApellido(),
+                                'estatus'   => $serviciosAscenso->getIdEstatus()
+                            )
+                        ),
+                        'text/html'
+                    )                    
+                ;
+                $this->get('mailer')->send($message);
+       
+       $this->addFlash('notice', 'Solicitud Actualizada Correctamente, hemos enviado un correo al docente notificandole los cambios.');
+       
+       $escala = $this->getDoctrine()->getRepository('AppBundle:DocenteEscala')->findBy(array(
+            'idRolInstitucion' => $ascenso->getIdRolInstitucion()->getId()
+        ));
+       
+       $antiguedad = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->findOneBy(array(
+            'idRolInstitucion' => $this->getUser()->getIdRolInstitucion(),
+            'idServicioCe'  => 1            
+        ));
+       
+       $pida = $this->getDoctrine()->getRepository('AppBundle:AdscripcionPida')->findOneByIdRolInstitucion($serviciosAscenso->getIdRolInstitucion());
+       
+        return $this->render('cea/ascenso_mostar.html.twig', array(
+            'ascenso'   => $ascenso,
+            'servicio'      => $serviciosAscenso,            
+            'escalas'       => $escala,
+            'pida'          => $pida,
+            'antiguedad' => $antiguedad
+        ));
+       
+    }
+    
+    
     
     
      
