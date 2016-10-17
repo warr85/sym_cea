@@ -36,7 +36,7 @@ class AscensoController extends Controller
                 array('idRolInstitucion'  => $this->getUser()->getIdRolInstitucion(), 'idServicioCe' => 5)                
         );
         if($solicitud){
-            if($solicitud->getIdEstatus()->getId() != 5 ){
+            if($solicitud->getIdEstatus()->getId() != 4 ){
                 return $this->redirect($this->generateUrl('servicios_index'));	
             }
         }
@@ -203,7 +203,7 @@ class AscensoController extends Controller
                 array('idRolInstitucion'  => $this->getUser()->getIdRolInstitucion(), 'idServicioCe' => 6)                
         );
         if($solicitud){
-            if($solicitud->getIdEstatus()->getId() != 5 ){
+            if($solicitud->getIdEstatus()->getId() != 4 ){
                 return $this->redirect($this->generateUrl('servicios_index'));	
             }
         }
@@ -476,8 +476,19 @@ class AscensoController extends Controller
             
             
             
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getDoctrine()->getManager();            
             $em->persist($escala_docente);
+            
+            if ($this->get('request')->request->get('tipo') == 2 ){
+                $ascenso = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->findOneBy(array(
+                    'idRolInstitucion'  => $this->getUser()->getIdRolInstitucion(),
+                    'idServicioCe'      => 5,
+                    'idEstatus'         => 1
+                ));
+                
+                $ascenso->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(4));
+                $em->persist($ascenso);
+            }
             
             $servicio->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(4));
             $em->persist($servicio);
