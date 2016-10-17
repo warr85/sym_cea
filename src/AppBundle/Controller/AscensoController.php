@@ -480,13 +480,22 @@ class AscensoController extends Controller
             $em->persist($escala_docente);
             
             if ($this->get('request')->request->get('tipo') == 2 ){
-                $ascenso = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->findOneBy(array(
+                $ServicioAscenso = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->findOneBy(array(
                     'idRolInstitucion'  => $this->getUser()->getIdRolInstitucion(),
                     'idServicioCe'      => 5,
                     'idEstatus'         => 1
                 ));
                 
+                
+                $ascenso = $this->getDoctrine()->getRepository('AppBundle:Ascenso')->findOneBy(array(
+                    'idRolInstitucion'  => $this->getUser()->getIdRolInstitucion(),
+                    'idEstatus'         => 1
+                ));
+                
+                
+                $ServicioAscenso->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(4));
                 $ascenso->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(4));
+                $em->persist($ServicioAscenso);
                 $em->persist($ascenso);
             }
             
