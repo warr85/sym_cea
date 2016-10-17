@@ -189,6 +189,127 @@ class AscensoController extends Controller
     
     
     
+    
+    
+    /**
+     * @Route("/solicitud/reconocimiento/escala", name="cea_solicitud_recocimiento_escala")
+     */
+    public function reconocimientoEscalaAction(Request $request)
+    {
+        
+
+        //si ya tiene una solicitud en espera, enviarlo a la pagina de los  servicios
+	$solicitud = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->findOneBy(
+                array('idRolInstitucion'  => $this->getUser()->getIdRolInstitucion(), 'idServicioCe' => 6)                
+        );
+        if($solicitud){
+            if($solicitud->getIdEstatus()->getId() != 5 ){
+                return $this->redirect($this->generateUrl('servicios_index'));	
+            }
+        }
+        
+         $concurso = $this->getDoctrine()->getRepository('AppBundle:Adscripcion')->findOneBy(
+             array('idRolInstitucion'  => $this->getUser()->getIdRolInstitucion())                
+         );
+         
+         
+         $solicitudAscenso = $this->getDoctrine()->getRepository('AppBundle:Ascenso')->findOneBy(
+                array(
+                    'idRolInstitucion'  => $this->getUser()->getIdRolInstitucion(),
+                    'idEstatus'         => 1
+                )                
+        );
+	
+        $form = $this->createForm('AppBundle\Form\ReconocimientoEscalaType');
+        $form->handleRequest($request);
+        
+        if ($form->isSubmitted() && $form->isValid()) {       
+            
+            $adscripcion = $this->getDoctrine()->getRepository('AppBundle:Adscripcion')->findOneByIdRolInstitucion($this->getUser()->getIdRolInstitucion());
+            $constanciaAscenso = $form->get('reconocimiento')->getData();
+            
+            $nombreAscenso = md5(uniqid()).'.'.$constanciaAscenso->guessExtension();
+
+            // Guardar el archivo y crear la miniatura de cada uno
+            $constanciaAscenso->move(
+                $this->container->getParameter('ascenso_directory'),
+                $nombreAscenso
+            );             
+            thumbnail($nombreAscenso, $this->container->getParameter('ascenso_directory'), $this->container->getParameter('ascenso_thumb_directory'));
+            if (!$concurso->getOposicion()){
+                $adscripcion->setOposicion($nombreAscenso);
+            }else{
+                switch ($solicitudAscenso->getIdEscalafones()->getId()){
+                    case 2: $adscripcion->setAsistente($nombreAscenso);
+                        break;
+                    case 3: $adscripcion->setAsociado($nombreAscenso);
+                        break;
+                    case 4: $adscripcion->setAgregado($nombreAscenso);
+                        break;
+                    case 5: $adscripcion->setTitular($nombreAscenso);
+                        break;
+                    default:
+                        break;
+                }
+                
+            }
+            
+            
+            
+            //Crear la solicitud de Servicio
+            $servicios = new DocenteServicio();
+
+            $servicios->setIdRolInstitucion($this->getUser()->getIdRolInstitucion());
+            $servicios->setIdServicioCe($this->getDoctrine()->getRepository('AppBundle:ServiciosCe')->findOneById(6));
+            $servicios->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:estatus')->findOneById(2));
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($servicios);
+            $em->persist($adscripcion);
+            
+            $em->flush();
+            return $this->redirect($this->generateUrl('cea_index'));		
+        }
+       
+               
+         if(!$concurso->getOposicion()){
+              return $this->render(
+                'solicitudes/reconocimientoEscala.html.twig',
+                array(
+                    'form' => $form->createView(), 
+                    'tipo'  => 'Concurso de Oposición'
+                )
+            );
+         } 
+            
+        
+        
+        if(!$solicitudAscenso){
+            $this->addFlash('danger', 'Estimado Docente, No posee ninguna solicitud de Ascenso Activa.');
+                return $this->redirect($this->generateUrl('cea_index'));            
+        }
+        
+        
+         
+        
+        
+        
+        return $this->render(
+                'solicitudes/reconocimientoEscala.html.twig',
+                array(
+                    'form' => $form->createView(), 
+                    'tipo'  => 'Ascenso ' . $solicitudAscenso->getIdEscalafones()->getNombre()
+                )
+            );
+        
+        
+
+       
+
+       
+    }
+    
+    
+    
      /**
      * Encuentra y muestra una entidad de tipo Adscripción.
      *
@@ -215,6 +336,46 @@ class AscensoController extends Controller
             'escalas' => $escala,            
             'pida'      => $pida,
             'antiguedad' => $antiguedad
+        ));
+    }
+    
+    
+    
+    
+    /**
+     * Encuentra y muestra una entidad de tipo Adscripción.
+     *
+     * @Route("/reconocimientoEscala/{id}", name="cea_reconocimientoEscala_show")
+     * @Method("GET")
+     * @Security("has_role('ROLE_COORDINADOR_REGIONAL')")
+     */
+    public function reconocimientoEscalaShowAction(DocenteServicio $servicio)
+    {        
+        $escala = $this->getDoctrine()->getRepository('AppBundle:DocenteEscala')->findBy(array(
+            'idRolInstitucion' => $servicio->getIdRolInstitucion()->getId()
+        ));
+        
+        
+        $adscripcion = $this->getDoctrine()->getRepository('AppBundle:Adscripcion')->findOneByIdRolInstitucion($servicio->getIdRolInstitucion());
+        $ascenso = $this->getDoctrine()->getRepository('AppBundle:Ascenso')->findOneByIdRolInstitucion($servicio->getIdRolInstitucion());
+        $pida = $this->getDoctrine()->getRepository('AppBundle:AdscripcionPida')->findOneByIdRolInstitucion($servicio->getIdRolInstitucion());
+        
+        if($ascenso == NULL){
+            $escalafones = $this->getDoctrine()->getRepository('AppBundle:Escalafones')->findAll();
+        }else{
+            $escalafones = $this->getDoctrine()->getRepository('AppBundle:Escalafones')->findOneById($ascenso->getIdEscalafones()->getId());
+        }
+        
+        
+        
+        return $this->render('cea/reconocimiento_escala_mostrar.html.twig', array(
+            'ascenso' => $ascenso, 
+            'adscripcion' => $adscripcion,
+            'servicio'  => $servicio,
+            'escalas' => $escala,            
+            'pida'      => $pida,
+            'escalafones' => $escalafones
+            
         ));
     }
     
@@ -290,6 +451,43 @@ class AscensoController extends Controller
             'pida'          => $pida,
             'antiguedad' => $antiguedad
         ));
+       
+    }
+    
+    
+    
+    
+    
+    /**
+     * Encuentra y muestra una entidad de tipo Adscripción.
+     *
+     * @Route("/reconocimiento/escala/{id}/{escala}/{estatus}", name="cea_escala_actualizar")
+     * @Method({"GET", "POST"})
+     * @Security("has_role('ROLE_COORDINADOR_REGIONAL')")
+     */
+    public function actualizarEscalaAction(DocenteServicio $servicio, $escala, $estatus, Request $request)
+    {
+       $escala_docente = new DocenteEscala();
+       if ($request->getMethod() == 'POST') {                      
+            $escala_docente->setIdRolInstitucion($servicio->getIdRolInstitucion());
+            $escala_docente->setidEscala($this->getDoctrine()->getRepository('AppBundle:Escalafones')->findOneById($this->get('request')->request->get('escala')));
+            $escala_docente->setFechaEscala(new \DateTime($this->get('request')->request->get('fecha_escala')));
+            $escala_docente->setIdTipoEscala($this->getDoctrine()->getRepository('AppBundle:TipoAscenso')->findOneById($this->get('request')->request->get('tipo')));
+            
+            
+            
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($escala_docente);
+            
+            $servicio->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(4));
+            $em->persist($servicio);
+            
+            $em->flush();
+       }
+       
+       
+       $this->addFlash('success', 'Escala Agregada Satisfactoriamente');
+       return $this->redirect($this->generateUrl('cea_index'));  
        
     }
     

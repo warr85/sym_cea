@@ -1,0 +1,141 @@
+{% extends 'base_app.html.twig' %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('assets/vendor/lightbox2/dist/css/lightbox.css') }}" rel="stylesheet">
+{% endblock %}
+
+{%block body %} 
+    
+     <div class="content-wrapper">
+        <div class="container">
+            {% for message in app.session.flashBag.get('notice') %}
+         <h4 class="alert alert-success">{{ message }}</h4>
+    
+    {%endfor %}
+            <div class="row">
+                <div class="col-md-9">
+                    <h4 class="page-head-line">Solicitud de Reconocimiento Escala <code>{{servicio.id}}</code>: 
+                        {{ servicio.idRolInstitucion.idRol.idPersona.primerNombre }}, 
+                        {{ servicio.idRolInstitucion.idRol.idPersona.primerApellido }}                         
+                    </h4>                       
+                </div>
+                <div class="col-md-3">
+                    {% if servicio.idEstatus.id == 1 %}
+                        <h4 class="alert alert-success">Estatus <strong>{{servicio.idEstatus}}</strong>
+                    {% elseif servicio.idEstatus.id == 3 %}
+                        <h4 class="alert alert-danger">Estatus <strong>{{servicio.idEstatus}}</strong> 
+                    {% else %}
+                        <h4 class="alert alert-warning">Estatus <strong>{{servicio.idEstatus}}</strong> 
+                     {% endif %}
+                    </h4>                       
+                </div>
+
+            </div>
+            <div class="row">
+                
+                <div class="col-md-6">
+
+                    <div class="col-md-4">
+                        <img src="{{ asset('bundles/framework/images/portal/logo_ubv.png') }}" />
+                    </div>
+
+                    <div class="col-md-8">      
+                        
+                    
+                        
+                        
+                        {% if escalas is not null %}
+                        <div class="form-group">
+                            <label for="Escalafones">Escalafones Obtenidos:</label>
+                             <table class="table table-striped table-bordered">
+                                    <th>Escalafón</th>
+                                    <th>Fecha</th>
+                                    <th>Tipo</th>
+                            {% for escala in escalas %}
+                               
+                                    <tr>
+                                        <td>{{escala.idEscala }}</td>
+                                        <td>{{escala.fechaEscala | date('d-m-Y') }}</td>
+                                        <td>{{escala.idTipoEscala }}</td>
+                                    </tr>                                                                                                    
+                            {%endfor %}
+                            </table>                            
+                            <p><strong>Tipo de Reconocimiento:</strong>{% if not ascenso %} Concurso de oposición {% else %} Ascenso {% endif %}  </p>
+                        </div>
+                        {% endif %} 
+                        
+                              <form name="input" action="{{ path('cea_escala_actualizar', { 'id': servicio.id, 'escala': 'escalafones', 'estatus' : 'true' }) }}" method="post">
+       {%  if not ascenso %}           
+            <select name="escala" required>
+                <option value="">Escalafón al cual aprobó Concurso</option>
+           {% for esc in escalafones %}              
+                   <option value="{{ esc.id }}">{{ esc.nombre }}</option>                                        
+           {% endfor %}
+           <input type="hidden" name="tipo" value="1" />
+           </select>                     
+       {% else %}
+           <input type="hidden" name="tipo" value="2" />
+           <input type="text" value="{{ escalafones }}" readonly />
+           <input type="hidden" name="escala" value="{{ escalafones.id }}" />
+       {% endif %}
+       <br><label for="fecha_escala"> Fecha de Escalafón: </label>   <input type="date" name="fecha_escala" />
+       <br><button type="submit" class="btn btn-success btn-sm" ><span class="fa fa-check"></span>&nbsp;Aprobar</button>
+       </form>                   
+                       
+                        </div>
+                        
+                </div>
+                             
+                <div class="col-md-5">    
+                     <h3>Documentos Consignados</h3>    
+                     <div class="widget-content">
+                                             
+                         
+                         {% if not ascenso %}
+                         <div class="col-xs-4">
+                            <div class="thumbnail">
+                                <a href="{{asset('uploads/ascenso/'~ adscripcion.oposicion)}}" data-lightbox="adscripcion">
+                                    <img src="{{ asset('uploads/ascenso/thumb/'~ adscripcion.oposicion) }}" />
+                                </a>
+                              <div class="caption">                                
+                                <p>Constancia de Aprobación de Concurso.</p>                              
+                              </div>
+                          </div>
+                        </div>
+                         {% else %}
+                             
+                             
+                             <div class="col-xs-4">
+                            <div class="thumbnail">
+                                <a href="{{asset('uploads/ascenso/'~ adscripcion.oposicion)}}" data-lightbox="adscripcion">
+                                    <img src="{{ asset('uploads/ascenso/thumb/'~ adscripcion.oposicion) }}" />
+                                </a>
+                              <div class="caption">                                
+                                <p>Constancia de Aprobación de Ascenso.</p>                              
+                              </div>
+                          </div>
+                        </div>
+                                
+                                
+                                
+                         {% endif %}
+
+                    </div>
+                         
+                </div>
+                        
+                        
+
+            </div>
+      
+        </div>
+        
+    </div>
+    
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('assets/vendor/lightbox2/dist/js/lightbox.min.js') }}"></script>
+    {% endblock %}
