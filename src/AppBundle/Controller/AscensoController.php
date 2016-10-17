@@ -35,9 +35,10 @@ class AscensoController extends Controller
 	$solicitud = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->findOneBy(
                 array('idRolInstitucion'  => $this->getUser()->getIdRolInstitucion(), 'idServicioCe' => 5)                
         );
-        
-        if($solicitud->getIdEstatus()->getId() != 5 ){
-            return $this->redirect($this->generateUrl('servicios_index'));	
+        if($solicitud){
+            if($solicitud->getIdEstatus()->getId() != 5 ){
+                return $this->redirect($this->generateUrl('servicios_index'));	
+            }
         }
         
         
@@ -46,6 +47,11 @@ class AscensoController extends Controller
                 array('idRolInstitucion'  => $this->getUser()->getIdRolInstitucion()),
                 array('id' => 'DESC')
         );
+        
+        if(!$escala){
+            $this->addFlash('danger', 'Estimado Docente, todavia no ha concursado, debe concursar primero para poder realizar una solicitud de ascenso.');
+                return $this->redirect($this->generateUrl('cea_index'));            
+        }
         
         $siguiente = $escala->getIdEscala()->getId() + 1;
         $ascenso = new Ascenso();
