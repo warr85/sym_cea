@@ -71,6 +71,10 @@
                                 El Docente ya ha formalizado su Antiguedad ante la UBV
                             {% endif %}
                         {% endif %}
+                        
+                        {% if ascenso is not  null %}                                
+                                <button class="btn btn-success btn-sm">Añadir Ascenso {{ ascenso.idEscalafones.nombre }} </button>  
+                            {% endif %}
                             
                             
                        
