@@ -59,8 +59,10 @@
                                         <td>{{escala.idTipoEscala }}</td>
                                     </tr>                                                                                                    
                             {%endfor %}
-                            </table>                            
+                            </table>   
+                            
                             <p><strong>Escalafón Solicita:</strong> {{ ascenso.idEscalafones.nombre }} </p>
+                            
                         </div>
                         {% endif %} 
                         
@@ -71,15 +73,7 @@
                                 El Docente ya ha formalizado su Antiguedad ante la UBV
                             {% endif %}
                         {% endif %}
-                        
-                        {% if ascenso is not  null %}                                
-                                <button class="btn btn-success btn-sm">Añadir Ascenso {{ ascenso.idEscalafones.nombre }} </button>  
-                            {% endif %}
-                            
-                            
-                       
-                         
-                         
+   
                          {% if ascenso.tituloTrabajo is not null %}
                         <div class="form-group">
                              <label for="titulo">Título del Trabajo:</label>

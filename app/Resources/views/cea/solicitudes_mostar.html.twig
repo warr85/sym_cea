@@ -155,8 +155,21 @@
                          {% if adscripcion.asistente is not null %}         
                         <div class="col-xs-4">
                             <div class="thumbnail">
-                                <a href="{{asset('uploads/adscripcion/'~ adscripcion.asistente)}}" data-lightbox="adscripcion">
-                                    <img src="{{ asset('uploads/adscripcion/thumb/'~ adscripcion.asistente) }}" />
+                                <a href="{{asset('uploads/ascenso/'~ adscripcion.asistente)}}" data-lightbox="adscripcion">
+                                    <img src="{{ asset('uploads/ascenso/thumb/'~ adscripcion.asistente) }}" />
+                                </a>
+                              <div class="caption">                                
+                                <p>Ascenso Asistente</p>                              
+                              </div>
+                          </div>
+                        </div>
+                        {% endif %}
+                        
+                        {% if adscripcion.agreado is not null %}         
+                        <div class="col-xs-4">
+                            <div class="thumbnail">
+                                <a href="{{asset('uploads/ascenso/'~ adscripcion.agreado)}}" data-lightbox="adscripcion">
+                                    <img src="{{ asset('uploads/ascenso/thumb/'~ adscripcion.agreado) }}" />
                                 </a>
                               <div class="caption">                                
                                 <p>Ascenso Asistente</p>                              

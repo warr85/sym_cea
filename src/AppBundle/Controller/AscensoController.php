@@ -96,27 +96,27 @@ class AscensoController extends Controller
                 $this->container->getParameter('ascenso_directory'),
                 $nombreTrabajo
             );             
-            thumbnail($nombreTrabajo, $this->container->getParameter('ascenso_directory'), $this->container->getParameter('ascenso_thumb_directory'));
+            thumbnail2($nombreTrabajo, $this->container->getParameter('ascenso_directory'), $this->container->getParameter('ascenso_thumb_directory'));
              
             
              $constanciaExpediente->move(
                 $this->container->getParameter('ascenso_directory'),
                 $nombreExpediente
             );
-            thumbnail($nombreExpediente, $this->container->getParameter('ascenso_directory'), $this->container->getParameter('ascenso_thumb_directory'));
+            thumbnail2($nombreExpediente, $this->container->getParameter('ascenso_directory'), $this->container->getParameter('ascenso_thumb_directory'));
             
             $constanciaPida->move(
                 $this->container->getParameter('ascenso_directory'),
                 $nombrePida
             );
-            thumbnail($nombrePida, $this->container->getParameter('ascenso_directory'), $this->container->getParameter('ascenso_thumb_directory'));
+            thumbnail2($nombrePida, $this->container->getParameter('ascenso_directory'), $this->container->getParameter('ascenso_thumb_directory'));
             
             
             $constanciaNai->move(
                 $this->container->getParameter('ascenso_directory'),
                 $nombreNai
             );
-            thumbnail($nombreNai, $this->container->getParameter('ascenso_directory'), $this->container->getParameter('ascenso_thumb_directory'));
+            thumbnail2($nombreNai, $this->container->getParameter('ascenso_directory'), $this->container->getParameter('ascenso_thumb_directory'));
             
             if($form->get('investigacion')->getData()) {
                 /** @var UploadedFile $constanciaPostgrado */
@@ -126,7 +126,7 @@ class AscensoController extends Controller
                 	$this->container->getParameter('ascenso_directory'),
                 	$nombreInvestigacion
             	);
-                    thumbnail($nombreInvestigacion, $this->container->getParameter('ascenso_directory'), $this->container->getParameter('ascenso_thumb_directory'));
+                    thumbnail2($nombreInvestigacion, $this->container->getParameter('ascenso_directory'), $this->container->getParameter('ascenso_thumb_directory'));
                 $ascenso->setInvestigacion($nombreInvestigacion);
             }
             $em = $this->getDoctrine()->getManager();
@@ -150,7 +150,7 @@ class AscensoController extends Controller
                     $this->container->getParameter('ascenso_directory'),
                     $nombrePertinencia
                 );
-                thumbnail($nombrePertinencia, $this->container->getParameter('ascenso_directory'), $this->container->getParameter('ascenso_thumb_directory'));
+                thumbnail2($nombrePertinencia, $this->container->getParameter('ascenso_directory'), $this->container->getParameter('ascenso_thumb_directory'));
                 $ascenso->setPertinencia($nombrePertinencia);
                 $ascenso->setIdLineaInvestigacion($form->get('lineas_investigacion')->getData());                                
 
@@ -225,6 +225,7 @@ class AscensoController extends Controller
         
         if ($form->isSubmitted() && $form->isValid()) {       
             
+            
             $adscripcion = $this->getDoctrine()->getRepository('AppBundle:Adscripcion')->findOneByIdRolInstitucion($this->getUser()->getIdRolInstitucion());
             $constanciaAscenso = $form->get('reconocimiento')->getData();
             
@@ -235,16 +236,16 @@ class AscensoController extends Controller
                 $this->container->getParameter('ascenso_directory'),
                 $nombreAscenso
             );             
-            thumbnail($nombreAscenso, $this->container->getParameter('ascenso_directory'), $this->container->getParameter('ascenso_thumb_directory'));
+            thumbnail2($nombreAscenso, $this->container->getParameter('ascenso_directory'), $this->container->getParameter('ascenso_thumb_directory'));
             if (!$concurso->getOposicion()){
                 $adscripcion->setOposicion($nombreAscenso);
             }else{
                 switch ($solicitudAscenso->getIdEscalafones()->getId()){
                     case 2: $adscripcion->setAsistente($nombreAscenso);
                         break;
-                    case 3: $adscripcion->setAsociado($nombreAscenso);
+                    case 3: $adscripcion->setAgreado($nombreAscenso);
                         break;
-                    case 4: $adscripcion->setAgregado($nombreAscenso);
+                    case 4: $adscripcion->setAsociado($nombreAscenso);
                         break;
                     case 5: $adscripcion->setTitular($nombreAscenso);
                         break;
@@ -323,7 +324,11 @@ class AscensoController extends Controller
             'idRolInstitucion' => $servicio->getIdRolInstitucion()->getId()
         ));
         
-        $ascenso = $this->getDoctrine()->getRepository('AppBundle:Ascenso')->findOneByIdRolInstitucion($servicio->getIdRolInstitucion());
+        $ascenso = $this->getDoctrine()->getRepository('AppBundle:Ascenso')->findOneBy(array(
+            'idRolInstitucion' => $servicio->getIdRolInstitucion(),
+            'idEstatus'         => 2
+        ));
+                
         $pida = $this->getDoctrine()->getRepository('AppBundle:AdscripcionPida')->findOneByIdRolInstitucion($servicio->getIdRolInstitucion());
         $antiguedad = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->findOneBy(array(
             'idRolInstitucion' => $this->getUser()->getIdRolInstitucion(),
@@ -357,7 +362,12 @@ class AscensoController extends Controller
         
         
         $adscripcion = $this->getDoctrine()->getRepository('AppBundle:Adscripcion')->findOneByIdRolInstitucion($servicio->getIdRolInstitucion());
-        $ascenso = $this->getDoctrine()->getRepository('AppBundle:Ascenso')->findOneByIdRolInstitucion($servicio->getIdRolInstitucion());
+        
+        $ascenso = $this->getDoctrine()->getRepository('AppBundle:Ascenso')->findOneBy(array(
+           'idRolInstitucion'   =>  $servicio->getIdRolInstitucion(),
+            'idEstatus'         =>  1  
+        ));
+                
         $pida = $this->getDoctrine()->getRepository('AppBundle:AdscripcionPida')->findOneByIdRolInstitucion($servicio->getIdRolInstitucion());
         
         if($ascenso == NULL){
@@ -517,5 +527,31 @@ class AscensoController extends Controller
     
     
      
+}
+
+/*funcion para crear miniaturas de las imagenes y carga más rapido la página */
+
+function thumbnail2 ($filename, $fuente, $destino){   
+     if(preg_match('/[.](jpeg)$/', $filename)) {
+        $im = imagecreatefromjpeg($fuente . "/" . $filename);
+    } else if (preg_match('/[.](jpg)$/', $filename)) {
+        $im = imagecreatefromjpeg($fuente . "/" . $filename);
+    }else if (preg_match('/[.](gif)$/', $filename)) {
+        $im = imagecreatefromgif($fuente . "/" . $filename);
+    } else if (preg_match('/[.](png)$/', $filename)) {
+        $im = imagecreatefrompng($fuente . "/" . $filename);
+    }
+
+    $ox = imagesx($im);
+    $oy = imagesy($im);
+
+    $nx = 80;
+    $ny = 80;
+
+    $nm = imagecreatetruecolor($nx, $ny);
+
+    imagecopyresized($nm, $im, 0,0,0,0,$nx,$ny,$ox,$oy);
+
+    imagejpeg($nm, $destino . "/" . $filename);
 }
 
