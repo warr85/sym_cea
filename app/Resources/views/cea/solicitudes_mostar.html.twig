@@ -197,7 +197,36 @@
                         </div>  
                         {% endif %}
                         <a class="btn btn-success btn-sm" href="{{ path('cea_solicitudes_actualizar', { 'id': adscripcion.id, 'estatus' : 'true' }) }}"  ><span class="fa fa-check"></span>&nbsp;Aprobar</a>
-                        <a class="btn btn-danger btn-sm" href="{{ path('cea_solicitudes_actualizar', { 'id': adscripcion.id, 'estatus' : 'false' }) }}" ><span class="fa fa-close"></span>&nbsp;Rechazar</a>
+                        <a class="btn btn-danger btn-sm" data-toggle="modal" data-target="#motivo_rechazo"  ><span class="fa fa-close"></span>&nbsp;Rechazar</a>
+                        
+                        
+                         <!-- Modal -->
+<div class="modal fade" id="motivo_rechazo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+      <form action="{{ path('cea_solicitudes_actualizar', { 'id': adscripcion.id, 'estatus' : 'false' }) }}" method="POST" name="rechazar">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Rechazo de Solicitud</h4>
+      </div>
+        
+      <div class="modal-body">
+          
+          
+          <div class="form-group">
+            <label for="message-text" class="control-label">Mensaje:</label>
+            <textarea class="form-control" id="message-text" name="message-text"></textarea>
+          </div>
+       
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Enviar Correo</button>
+      </div>
+    </div>
+     </form>
+  </div>
+</div>
         </div>
         
     </div>

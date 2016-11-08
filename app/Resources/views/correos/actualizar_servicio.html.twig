@@ -1,6 +1,10 @@
 <h2>Estimado(a) Docente {{ nombres  }} {{ apellidos }}, su solicitud de Servicio: {{ servicio.idServicioCe.nombre}}</h2>
-<h4>Ha Cambiado de Estatus y tu solicitud se encuentra ahora: {{ servicio.idEstatus.nombre}}</h4>
+<p>Ha Cambiado de Estatus y tu solicitud se encuentra ahora: {{ servicio.idEstatus.nombre}}</p>
+{% if servicio.idEstatus.nombre == "Rechazada" %}
+    <h3><strong>Motivo del Rechazo:</strong></h3>
+    <h4>{{ mensaje }}</h4>
+{% endif %}
 
 
-Para hacer login dirigete simplemente a la página de ingreso del Portal del Centro de Estudios Ambientales
-: <a href="{{ url('login') }}">Login CEA@UBV</a>.
+<p>Para hacer login dirigete simplemente a la página de ingreso del Portal del Centro de Estudios Ambientales:</p> 
+<a href="{{ url('login') }}">Login CEA@UBV</a>.

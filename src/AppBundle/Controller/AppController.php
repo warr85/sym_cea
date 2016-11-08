@@ -175,10 +175,10 @@ class AppController extends Controller {
      * @Route("/servicios/actualizar/{id}/{estatus}", name="cea_servicios_actualizar")
      * @Method({"GET", "POST"})
      */
-    public function serviciosEditAction(DocenteServicio $servicios, $estatus)
-    {
-               
+    public function serviciosEditAction(DocenteServicio $servicios, $estatus, Request $request)
+    {              
        $em = $this->getDoctrine()->getManager();
+       $mensaje = "";              
        if($estatus == "true") {
            $servicios->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(1));           
            
@@ -190,6 +190,7 @@ class AppController extends Controller {
            
                                             
        }else{
+           $mensaje = $request->request->get('message-text');
            $servicios->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(3));           
            if($servicios->getIdServicioCe()->getId() == '3'){
                 $user = $this->getDoctrine()->getRepository('AppBundle:Usuarios')->findOneByIdRolInstitucion($servicios->getIdRolInstitucion());
@@ -213,7 +214,8 @@ class AppController extends Controller {
                             array(    
                                 'nombres'   => $user->getIdRolInstitucion()->getIdRol()->getIdPersona()->getPrimerNombre(),
                                 'apellidos' => $user->getIdRolInstitucion()->getIdRol()->getIdPersona()->getPrimerApellido(),
-                                'servicio'  => $servicios
+                                'servicio'  => $servicios,
+                                'mensaje'   => $mensaje,
                             )
                         ),
                         'text/html'

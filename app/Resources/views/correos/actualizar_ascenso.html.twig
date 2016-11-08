@@ -3,6 +3,11 @@
     
     <p>El estatus de tu solicitud de Ascenso de Escalafon ha cambiado de estatus y ahora se encuentra:
         <strong> {{ estatus }} </strong></p>
+    
+    {% if estatus == "Rechazada" %}
+    <h3><strong>Motivo del Rechazo:</strong></h3>
+    <h4>{{ mensaje }}</h4>
+{% endif %}
 
 
 Para hacer login dirigete simplemente a la página de ingreso del Portal del Centro de Estudios Ambientales

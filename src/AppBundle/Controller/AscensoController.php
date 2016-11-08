@@ -387,9 +387,9 @@ class AscensoController extends Controller
      * @Method({"GET", "POST"})
      * @Security("has_role('ROLE_COORDINADOR_REGIONAL')")
      */
-    public function solicitudesAscensoEditAction(Ascenso $ascenso, $estatus)
+    public function solicitudesAscensoEditAction(Ascenso $ascenso, $estatus, Request $request)
     {
-        
+        $mensaje = "";
        //$adscripciones = $this->getDoctrine()->getRepository('AppBundle:Adscripcion')->findOneById($adscripcion->getId());
        $serviciosAscenso = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->findOneBy(array(
            'idRolInstitucion'   => $ascenso->getIdRolInstitucion(),
@@ -403,6 +403,7 @@ class AscensoController extends Controller
            $serviciosAscenso->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(1));                      
                                             
        }else{
+           $mensaje = $request->request->get('message-text');
            $serviciosAscenso->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(3));           
        }
        
@@ -423,7 +424,8 @@ class AscensoController extends Controller
                             array(
                                 'nombres'   => $user->getIdRolInstitucion()->getIdRol()->getIdPersona()->getPrimerNombre(),
                                 'apellidos'   => $user->getIdRolInstitucion()->getIdRol()->getIdPersona()->getPrimerApellido(),
-                                'estatus'   => $serviciosAscenso->getIdEstatus()
+                                'estatus'   => $serviciosAscenso->getIdEstatus(),
+                                'mensaje'   => $mensaje
                             )
                         ),
                         'text/html'

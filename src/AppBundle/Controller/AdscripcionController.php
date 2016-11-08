@@ -383,9 +383,9 @@ class AdscripcionController extends Controller
      * @Method({"GET", "POST"})
      * @Security("has_role('ROLE_COORDINADOR_REGIONAL')")
      */
-    public function solicitudesAdscripcionEditAction(Adscripcion $adscripcion, $estatus)
+    public function solicitudesAdscripcionEditAction(Adscripcion $adscripcion, $estatus, Request $request)
     {
-        
+        $mensaje = "";
        //$adscripciones = $this->getDoctrine()->getRepository('AppBundle:Adscripcion')->findOneById($adscripcion->getId());
        $serviciosAdscripcion = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->findOneBy(array(
            'idRolInstitucion'   => $adscripcion->getIdRolInstitucion(),
@@ -408,6 +408,7 @@ class AdscripcionController extends Controller
            $pida->setIdEstatus($serviciosAdscripcion->getIdEstatus());
                                             
        }else{
+           $mensaje = $request->request->get('message-text');
            $serviciosAdscripcion->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(3));
            $serviciosPida->setIdEstatus($serviciosAdscripcion->getIdEstatus());
            $user = $this->getDoctrine()->getRepository('AppBundle:Usuarios')->findOneByIdRolInstitucion($adscripcion->getIdRolInstitucion());
@@ -431,8 +432,9 @@ class AdscripcionController extends Controller
                             'correos/actualizar_adscripcion.html.twig',
                             array(
                                 'nombres'   => $user->getIdRolInstitucion()->getIdRol()->getIdPersona()->getPrimerNombre(),
-                                'apellidos'   => $user->getIdRolInstitucion()->getIdRol()->getIdPersona()->getPrimerApellido(),
-                                'estatus'   => $serviciosAdscripcion->getIdEstatus()
+                                'apellidos' => $user->getIdRolInstitucion()->getIdRol()->getIdPersona()->getPrimerApellido(),
+                                'estatus'   => $serviciosAdscripcion->getIdEstatus(),
+                                'mensaje'   => $mensaje
                             )
                         ),
                         'text/html'
