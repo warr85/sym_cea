@@ -200,13 +200,11 @@ class AscensoController extends Controller
 
         //si ya tiene una solicitud en espera, enviarlo a la pagina de los  servicios
 	$solicitud = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->findOneBy(
-                array('idRolInstitucion'  => $this->getUser()->getIdRolInstitucion(), 'idServicioCe' => 6)                
+                array('idRolInstitucion'  => $this->getUser()->getIdRolInstitucion(), 'idServicioCe' => 5, 'idEstatus' => 1)                
         );
-        if($solicitud){
-            if($solicitud->getIdEstatus()->getId() != 4 ){
-                return $this->redirect($this->generateUrl('servicios_index'));	
-            }
-        }
+        
+        
+       
         
          $concurso = $this->getDoctrine()->getRepository('AppBundle:Adscripcion')->findOneBy(
              array('idRolInstitucion'  => $this->getUser()->getIdRolInstitucion())                
@@ -219,6 +217,8 @@ class AscensoController extends Controller
                     'idEstatus'         => 1
                 )                
         );
+         
+         
 	
         $form = $this->createForm('AppBundle\Form\ReconocimientoEscalaType');
         $form->handleRequest($request);
@@ -328,6 +328,7 @@ class AscensoController extends Controller
             'idRolInstitucion' => $servicio->getIdRolInstitucion(),
             'idEstatus'         => 2
         ));
+                
                 
         $pida = $this->getDoctrine()->getRepository('AppBundle:AdscripcionPida')->findOneByIdRolInstitucion($servicio->getIdRolInstitucion());
         $antiguedad = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->findOneBy(array(
@@ -494,8 +495,8 @@ class AscensoController extends Controller
             if ($this->get('request')->request->get('tipo') == 2 ){
                 $ServicioAscenso = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->findOneBy(array(
                     'idRolInstitucion'  => $this->getUser()->getIdRolInstitucion(),
-                    'idServicioCe'      => 5,
-                    'idEstatus'         => 1
+                    'idServicioCe'      => 6,
+                    'idEstatus'         => 2
                 ));
                 
                 

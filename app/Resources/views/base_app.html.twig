@@ -110,7 +110,7 @@
                     
                                      
                   <li class="dropdown"><a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown"> 
-                          <i class="fa fa-group"></i><span>Solicitudes</span> <b class="caret"></b></a>
+                          <i class="fa fa-group"><span class="badge" id="contador_solicitudes"></span></i><span>Solicitudes</span> <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li> <a data-toggle="modal" data-target="#buscarServicios">Buscar Servicios</a></li> 
                       <li><a href="{{ path('cea_servicios', {'tipo' : 'antiguedad'})}}">En espera de Aprobación</a></li>
@@ -141,6 +141,55 @@
         {% block javascripts %}
             <script type="text/javascript" src="{{ asset('assets/vendor/jquery/dist/jquery.min.js') }}"></script>
             <script type="text/javascript" src="{{ asset('assets/vendor/bootstrap/dist/js/bootstrap.min.js') }}" ></script>
+            
+            <script>
+
+   function waitForMsg() {
+
+
+
+       $.ajax({
+           method: "GET",
+           url: "{{ url('ajax_contador_solicitudes') }}",
+           async: true,
+           cache: false,
+           timeout: 50000,
+           success: function (data) {
+                    
+                   var posts = JSON.parse(data.posts);
+                   console.log(posts);
+                   /*if(posts.length > 0)
+                    {
+                        var html = "";
+                        for(d in posts)
+                        {
+                            html += "<p>" + JSON.stringify(posts[d]) + "</p>";
+                        }
+                        $("#contador_solicitudes").append(html);
+                    }*/
+                   $("#contador_solicitudes").html(posts);
+                    setTimeout(waitForMsg, 10000);
+            },
+           error: function (XMLHttpRequest, textStatus, errorThrown) { 
+                 console.log(errorThrown);
+                 setTimeout(waitForMsg, 15000);
+
+           }
+
+       });
+
+   };
+
+
+
+   $(document).ready(function () {
+
+       waitForMsg();
+
+   });
+
+</script>
+            
         {% endblock %}
         
         
