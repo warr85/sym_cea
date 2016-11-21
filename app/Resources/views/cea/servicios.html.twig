@@ -2,94 +2,97 @@
 
 {%block body %} 
     <div class="container">
-     <div class="widget widget-table action-table">
+        <div class="widget widget-table action-table">
             <div class="widget-header"> <i class="icon-th-list"></i>
-              <h3>Solicitudes al CEA con Estatus {{ estatus_servicio }}</h3>
+                <h3>Solicitudes al CEA con Estatus {{ estatus_servicio }}</h3>
             </div>
             <!-- /widget-header -->
             <div class="widget-content">
-              <table class="table table-striped table-bordered">
-                <thead>
-                  <tr>
-                    <th> Id </th>
-                    <th> Datos del Docente </th>
-                    <th> Tipo de Solicitud</th>
-                    <th> Area / PfG Docente</th>
-                    <th> Eje del Docente</th>                    
-                    <th> Estado del Eje</th>                    
-                    <th> Acciones</th> 
-                  </tr>
-                </thead>
-                <tbody>
-                    {%for servicio in servicios %}
-                        {% if not is_granted('ROLE_COORDINADOR_NACIONAL') %}
-                            {% if servicio.idRolInstitucion.idInstitucion.idEjeParroquia.idEje == app.user.idRolInstitucion.idInstitucion.idEjeParroquia.idEje %}
-                  <tr>
-                      <td>{{servicio.id}}</td>
-                    <td>                         
-                        {{servicio.idRolInstitucion.idRol.idPersona.PrimerNombre}}
-                        {{servicio.idRolInstitucion.idRol.idPersona.PrimerApellido}}
-                        ( {{servicio.idRolInstitucion}} )
-                        
-                         
-                    </td>
-                    <td>{{servicio.idRolInstitucion}}</td>
-                    <td>
-                        {{servicio.idRolInstitucion.IdRol.IdAreaInstitucion.nombre}}
-                    </td>
-                    <td>
-                        {{servicio.idRolInstitucion.idInstitucion.idEjeParroquia.IdEje}}                         
-                    </td>                    
-                    <td>{{servicio.idRolInstitucion.idInstitucion.idEjeParroquia.idParroquia.idMunicipio.idEstado}} </td>
-                    <td>
-                        <a href="{{ path('cea_servicio_show', { 'id': servicio.id }) }}"  class="btn btn-xs btn-info"><i class="fa fa-eye"> </i></a>
-                        
-                    </td>
-                       
-                  </tr>
-                            {%endif%}
-                            {%else%}
-                                
+                <table class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th> Id </th>
+                            <th> Datos del Docente </th>
+                            <th> Tipo de Solicitud</th>
+                            <th> Area / PfG Docente</th>
+                            <th> Eje del Docente</th>                    
+                            <th> Estado del Eje</th>                    
+                            <th> Acciones</th> 
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {%for servicio in servicios %}
+                            {% if not is_granted('ROLE_DIRECTOR_NACIONAL') %}
+                                {% if servicio.idRolInstitucion.idInstitucion.idEjeParroquia.idEje == app.user.idRolInstitucion.idInstitucion.idEjeParroquia.idEje %}
+                                    <tr>
+                                        <td>{{servicio.id}}</td>
+                                        <td>                         
+                                            {{servicio.idRolInstitucion.idRol.idPersona.PrimerNombre}}
+                                            {{servicio.idRolInstitucion.idRol.idPersona.PrimerApellido}}
+                                            ( {{servicio.idRolInstitucion}} )                                                
+                                        </td>
+                                        <td>{{servicio.idServicioCe.nombre}}</td>
+                                        <td>
+                                            {{servicio.idRolInstitucion.IdRol.IdAreaInstitucion.nombre}}
+                                        </td>
+                                        <td>
+                                            {{servicio.idRolInstitucion.idInstitucion.idEjeParroquia.IdEje}}                         
+                                        </td>                    
+                                        <td>{{servicio.idRolInstitucion.idInstitucion.idEjeParroquia.idParroquia.idMunicipio.idEstado}} </td>
+                                        <td>                        
+                                            {% if servicio.idServicioCe.id == 1 %}
+                                                <a href="{{ path('cea_servicio_show', { 'id': servicio.id }) }}"  class="btn btn-xs btn-info"><i class="fa fa-eye"> </i></a>                        
+                                            {% elseif servicio.idServicioCe.id == 2 %}
+                                                <a href="{{ path('cea_adscripcion_show', { 'id': servicio.id }) }}"  class="btn btn-xs btn-info"><i class="fa fa-eye"> </i></a>
+                                            {% elseif servicio.idServicioCe.id == 3 %}
+                                                <a href="{{ path('cea_estado_academico_show', { 'id': servicio.id }) }}"  class="btn btn-xs btn-info"><i class="fa fa-eye"> </i></a>                            
+                                            {% elseif servicio.idServicioCe.id == 5 %}
+                                                <a href="{{ path('cea_ascenso_show', { 'id': servicio.id }) }}"  class="btn btn-xs btn-info"><i class="fa fa-eye"> </i></a>
+                                            {% elseif servicio.idServicioCe.id == 6 %}
+                                                <a href="{{ path('cea_reconocimientoEscala_show', { 'id': servicio.id }) }}"  class="btn btn-xs btn-info"><i class="fa fa-eye"> </i></a>
+                                            {% endif %}
+                                        </td>                       
+                                    </tr>
+                                {% endif %}
+                            {%else%}                                
                                 <tr>
-                      <td>{{servicio.id}}</td>
-                    <td>                         
-                        {{servicio.idRolInstitucion.idRol.idPersona.PrimerNombre}}
-                        {{servicio.idRolInstitucion.idRol.idPersona.PrimerApellido}}
-                        ( {{servicio.idRolInstitucion}} )
-                        
-                         
-                    </td>
-                    <td>{{servicio.idServicioCe.nombre}}</td>
-                    <td>
-                        {{servicio.idRolInstitucion.IdRol.IdAreaInstitucion.nombre}}
-                    </td>
-                    <td>
-                        {{servicio.idRolInstitucion.idInstitucion.idEjeParroquia.IdEje}}                         
-                    </td>                    
-                    <td>{{servicio.idRolInstitucion.idInstitucion.idEjeParroquia.idParroquia.idMunicipio.idEstado}} </td>
-                    <td>                        
-                        {% if servicio.idServicioCe.id == 1 %}
-                            <a href="{{ path('cea_servicio_show', { 'id': servicio.id }) }}"  class="btn btn-xs btn-info"><i class="fa fa-eye"> </i></a>                        
-                        {% elseif servicio.idServicioCe.id == 2 %}
-                            <a href="{{ path('cea_adscripcion_show', { 'id': servicio.id }) }}"  class="btn btn-xs btn-info"><i class="fa fa-eye"> </i></a>
-                        {% elseif servicio.idServicioCe.id == 3 %}
-                            <a href="{{ path('cea_estado_academico_show', { 'id': servicio.id }) }}"  class="btn btn-xs btn-info"><i class="fa fa-eye"> </i></a>                            
-                        {% elseif servicio.idServicioCe.id == 5 %}
-                            <a href="{{ path('cea_ascenso_show', { 'id': servicio.id }) }}"  class="btn btn-xs btn-info"><i class="fa fa-eye"> </i></a>
-                        {% elseif servicio.idServicioCe.id == 6 %}
-                            <a href="{{ path('cea_reconocimientoEscala_show', { 'id': servicio.id }) }}"  class="btn btn-xs btn-info"><i class="fa fa-eye"> </i></a>
-                         {% endif %}
-                    </td>
-                  </tr>
-                              {%endif%}
-                  {% endfor %}                  
-                
-                </tbody>
-              </table>
+                                    <td>{{servicio.id}}</td>
+                                    <td>                         
+                                        {{servicio.idRolInstitucion.idRol.idPersona.PrimerNombre}}
+                                        {{servicio.idRolInstitucion.idRol.idPersona.PrimerApellido}}
+                                        ( {{servicio.idRolInstitucion}} )                                                 
+                                    </td>
+                                    <td>{{servicio.idServicioCe.nombre}}</td>
+                                    <td>
+                                        {{servicio.idRolInstitucion.IdRol.IdAreaInstitucion.nombre}}
+                                    </td>
+                                    <td>
+                                        {{servicio.idRolInstitucion.idInstitucion.idEjeParroquia.IdEje}}                         
+                                    </td>                    
+                                    <td>{{servicio.idRolInstitucion.idInstitucion.idEjeParroquia.idParroquia.idMunicipio.idEstado}} </td>
+                                    <td>                        
+                                        {% if servicio.idServicioCe.id == 1 %}
+                                            <a href="{{ path('cea_servicio_show', { 'id': servicio.id }) }}"  class="btn btn-xs btn-info"><i class="fa fa-eye"> </i></a>                        
+                                        {% elseif servicio.idServicioCe.id == 2 %}
+                                            <a href="{{ path('cea_adscripcion_show', { 'id': servicio.id }) }}"  class="btn btn-xs btn-info"><i class="fa fa-eye"> </i></a>
+                                        {% elseif servicio.idServicioCe.id == 3 %}
+                                            <a href="{{ path('cea_estado_academico_show', { 'id': servicio.id }) }}"  class="btn btn-xs btn-info"><i class="fa fa-eye"> </i></a>                            
+                                        {% elseif servicio.idServicioCe.id == 5 %}
+                                            <a href="{{ path('cea_ascenso_show', { 'id': servicio.id }) }}"  class="btn btn-xs btn-info"><i class="fa fa-eye"> </i></a>
+                                        {% elseif servicio.idServicioCe.id == 6 %}
+                                            <a href="{{ path('cea_reconocimientoEscala_show', { 'id': servicio.id }) }}"  class="btn btn-xs btn-info"><i class="fa fa-eye"> </i></a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {%endif%}
+                        {% endfor %}                  
+
+                    </tbody>
+                </table>
             </div>
             <!-- /widget-content --> 
-          </div>
-          <!-- /widget --> 
-         </div>
+        </div>
+        <!-- /widget --> 
+    </div>
     <!-- /container --> 
 {% endblock %}

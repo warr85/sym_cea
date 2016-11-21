@@ -104,7 +104,21 @@
                         </div>
                          {% else %}
                              
+                             {% if escalafones == "ASISTENTE" %}
+                             <div class="col-xs-4">
+                            <div class="thumbnail">
+                                <a href="{{asset('uploads/ascenso/'~ adscripcion.asistente)}}" data-lightbox="adscripcion">
+                                    <img src="{{ asset('uploads/ascenso/thumb/'~ adscripcion.asistente) }}" />
+                                </a>
+                              <div class="caption">                                
+                                <p>Constancia de Aprobación de Ascenso.</p>                              
+                              </div>
+                          </div>
+                        </div>
+                             {% endif %}
                              
+                             
+                             {% if escalafones == "AGREGADO" %}
                              <div class="col-xs-4">
                             <div class="thumbnail">
                                 <a href="{{asset('uploads/ascenso/'~ adscripcion.agreado)}}" data-lightbox="adscripcion">
@@ -115,6 +129,35 @@
                               </div>
                           </div>
                         </div>
+                             {% endif %}
+                             
+                             
+                             {% if escalafones == "ASOCIADO" %}
+                             <div class="col-xs-4">
+                            <div class="thumbnail">
+                                <a href="{{asset('uploads/ascenso/'~ adscripcion.asociado)}}" data-lightbox="adscripcion">
+                                    <img src="{{ asset('uploads/ascenso/thumb/'~ adscripcion.asociado) }}" />
+                                </a>
+                              <div class="caption">                                
+                                <p>Constancia de Aprobación de Ascenso.</p>                              
+                              </div>
+                          </div>
+                        </div>
+                             {% endif %}
+                             
+                             
+                             {% if escalafones == "TITULAR" %}
+                             <div class="col-xs-4">
+                            <div class="thumbnail">
+                                <a href="{{asset('uploads/ascenso/'~ adscripcion.titular)}}" data-lightbox="adscripcion">
+                                    <img src="{{ asset('uploads/ascenso/thumb/'~ adscripcion.titular) }}" />
+                                </a>
+                              <div class="caption">                                
+                                <p>Constancia de Aprobación de Ascenso.</p>                              
+                              </div>
+                          </div>
+                        </div>
+                             {% endif %}
                                 
                                 
                                 

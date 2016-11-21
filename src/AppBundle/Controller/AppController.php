@@ -78,7 +78,7 @@ class AppController extends Controller {
          if ($request->getMethod() != 'POST') {
             $servicios = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->findBy(array(
                                 'idEstatus'     => $estatus,
-                    ));
+            ));
             switch ($estatus){
                 case 1: 
                     $mensaje = "activas";

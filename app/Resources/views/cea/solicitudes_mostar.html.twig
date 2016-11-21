@@ -172,7 +172,34 @@
                                     <img src="{{ asset('uploads/ascenso/thumb/'~ adscripcion.agreado) }}" />
                                 </a>
                               <div class="caption">                                
-                                <p>Ascenso Asistente</p>                              
+                                <p>Ascenso Agregado</p>                              
+                              </div>
+                          </div>
+                        </div>
+                        {% endif %}
+                        
+                        
+                        {% if adscripcion.asociado is not null %}         
+                        <div class="col-xs-4">
+                            <div class="thumbnail">
+                                <a href="{{asset('uploads/ascenso/'~ adscripcion.asociado)}}" data-lightbox="adscripcion">
+                                    <img src="{{ asset('uploads/ascenso/thumb/'~ adscripcion.asociado) }}" />
+                                </a>
+                              <div class="caption">                                
+                                <p>Ascenso Asociado</p>                              
+                              </div>
+                          </div>
+                        </div>
+                        {% endif %}
+                        
+                        {% if adscripcion.titular is not null %}         
+                        <div class="col-xs-4">
+                            <div class="thumbnail">
+                                <a href="{{asset('uploads/ascenso/'~ adscripcion.titular)}}" data-lightbox="adscripcion">
+                                    <img src="{{ asset('uploads/ascenso/thumb/'~ adscripcion.titular) }}" />
+                                </a>
+                              <div class="caption">                                
+                                <p>Ascenso Titular</p>                              
                               </div>
                           </div>
                         </div>
