@@ -234,11 +234,19 @@ class AscensoController extends Controller
             $nombreAscenso = md5(uniqid()).'.'.$constanciaAscenso->guessExtension();
 
             // Guardar el archivo y crear la miniatura de cada uno
+            if (!$concurso->getOposicion()){
             $constanciaAscenso->move(
+                $this->container->getParameter('adscripcion_directory'),
+                $nombreAscenso
+            );             
+            thumbnail2($nombreAscenso, $this->container->getParameter('adscripcion_directory'), $this->container->getParameter('ascenso_thumb_directory'));
+            }else{
+                $constanciaAscenso->move(
                 $this->container->getParameter('ascenso_directory'),
                 $nombreAscenso
             );             
             thumbnail2($nombreAscenso, $this->container->getParameter('ascenso_directory'), $this->container->getParameter('ascenso_thumb_directory'));
+            }
             if (!$concurso->getOposicion()){
                 $adscripcion->setOposicion($nombreAscenso);
             }else{
@@ -497,14 +505,14 @@ class AscensoController extends Controller
             
             if ($this->get('request')->request->get('tipo') == 2 ){
                 $ServicioAscenso = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->findOneBy(array(
-                    'idRolInstitucion'  => $this->getUser()->getIdRolInstitucion(),
+                    'idRolInstitucion'  => $servicio->getIdRolInstitucion(),
                     'idServicioCe'      => 5,
                     'idEstatus'         => 1
                 ));
                 
                 
                 $ascenso = $this->getDoctrine()->getRepository('AppBundle:Ascenso')->findOneBy(array(
-                    'idRolInstitucion'  => $this->getUser()->getIdRolInstitucion(),
+                    'idRolInstitucion'  => $servicio->getIdRolInstitucion(),
                     'idEstatus'         => 1
                 ));
                 
