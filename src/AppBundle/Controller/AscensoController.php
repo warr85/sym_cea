@@ -37,6 +37,7 @@ class AscensoController extends Controller
         );
         if($solicitud){
             if($solicitud->getIdEstatus()->getId() != 4 ){
+                $this->addFlash('warning', 'Ya usted posee una solicitud de Ascenso en espera.  Puede consultar su estatus en el botón de "Mis servicios" ');
                 return $this->redirect($this->generateUrl('servicios_index'));	
             }
         }
@@ -175,7 +176,7 @@ class AscensoController extends Controller
             
 
             
-
+            $this->addFlash('success', 'Solicitud de Ascenso Registrada Satisfactoriamente');
             return $this->redirect($this->generateUrl('cea_index'));	
         }
 
