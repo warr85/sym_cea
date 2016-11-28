@@ -346,7 +346,7 @@ class AscensoController extends Controller
                 
         $pida = $this->getDoctrine()->getRepository('AppBundle:AdscripcionPida')->findOneByIdRolInstitucion($servicio->getIdRolInstitucion());
         $antiguedad = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->findOneBy(array(
-            'idRolInstitucion' => $this->getUser()->getIdRolInstitucion(),
+            'idRolInstitucion' => $servicio->getIdRolInstitucion(),
             'idServicioCe'  => 1            
         ));
 
