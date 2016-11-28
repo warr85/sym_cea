@@ -128,7 +128,7 @@ class AscensoType extends AbstractType
                 
                 
             ->add('tipoTrabajoInvestigacion', CheckboxType::class, array(
-                'label'         => 'Si su trabajo de investigación es TESIS, responda ¿Fue dentro de la UBV?',
+                'label'         => 'Si su trabajo de investigación es TESIS, responda ¿Fue realizado fuera de la UBV?',
                 'required' => false,
             ))
    
