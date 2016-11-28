@@ -9,9 +9,8 @@
      <div class="content-wrapper">
         <div class="container">
             {% for message in app.session.flashBag.get('notice') %}
-         <h4 class="alert alert-success">{{ message }}</h4>
-    
-    {%endfor %}
+                <h4 class="alert alert-success">{{ message }}</h4>    
+            {%endfor %}
             <div class="row">
                 <div class="col-md-9">
                     <h4 class="page-head-line">Solicitud de Ascenso número <code>{{ascenso.id}}</code>: 
@@ -154,8 +153,8 @@
                         {% if ascenso.pertinencia is not null %}         
                         <div class="col-xs-4">
                             <div class="thumbnail">
-                                <a href="{{asset('uploads/adscripcion/'~ adscripcion.pertinencia)}}" data-lightbox="adscripcion">
-                                    <img src="{{ asset('uploads/adscripcion/thumb/'~ adscripcion.pertinencia) }}" />
+                                <a href="{{asset('uploads/ascenso/'~ ascenso.pertinencia)}}" data-lightbox="adscripcion">
+                                    <img src="{{ asset('uploads/ascenso/thumb/'~ ascenso.pertinencia) }}" />
                                 </a>
                               <div class="caption">                                
                                 <p>Informe de Pertinencia de la Tesis</p>                              
