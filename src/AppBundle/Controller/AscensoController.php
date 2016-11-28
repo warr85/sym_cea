@@ -221,8 +221,12 @@ class AscensoController extends Controller
         );
          
          
-	
-        $form = $this->createForm('AppBundle\Form\ReconocimientoEscalaType');
+	if (!$concurso->getOposicion()){
+            $form = $this->createForm('AppBundle\Form\ReconocimientoConcursoType');
+        }else{
+            $form = $this->createForm('AppBundle\Form\ReconocimientoEscalaType');
+        }
+        
         $form->handleRequest($request);
         
         if ($form->isSubmitted() && $form->isValid()) {       
@@ -234,22 +238,21 @@ class AscensoController extends Controller
             $nombreAscenso = md5(uniqid()).'.'.$constanciaAscenso->guessExtension();
 
             // Guardar el archivo y crear la miniatura de cada uno
-            if (!$concurso->getOposicion()){
-            $constanciaAscenso->move(
-                $this->container->getParameter('adscripcion_directory'),
-                $nombreAscenso
-            );             
-            thumbnail2($nombreAscenso, $this->container->getParameter('adscripcion_directory'), $this->container->getParameter('ascenso_thumb_directory'));
+            if (!$concurso->getOposicion()){                
+                $adscripcion->setOposicion($nombreAscenso);
+                $adscripcion->setIdLineaInvestigacion($form['lineas_investigacion']->getData());
+                $adscripcion->setTituloTrabajo($form['titulo_trabajo']->getData());
+                $constanciaAscenso->move(
+                    $this->container->getParameter('adscripcion_directory'),
+                    $nombreAscenso
+                );             
+                thumbnail2($nombreAscenso, $this->container->getParameter('adscripcion_directory'), $this->container->getParameter('ascenso_thumb_directory'));
             }else{
                 $constanciaAscenso->move(
-                $this->container->getParameter('ascenso_directory'),
-                $nombreAscenso
-            );             
-            thumbnail2($nombreAscenso, $this->container->getParameter('ascenso_directory'), $this->container->getParameter('ascenso_thumb_directory'));
-            }
-            if (!$concurso->getOposicion()){
-                $adscripcion->setOposicion($nombreAscenso);
-            }else{
+                    $this->container->getParameter('ascenso_directory'),
+                    $nombreAscenso
+                );             
+                thumbnail2($nombreAscenso, $this->container->getParameter('ascenso_directory'), $this->container->getParameter('ascenso_thumb_directory'));
                 switch ($solicitudAscenso->getIdEscalafones()->getId()){
                     case 2: $adscripcion->setAsistente($nombreAscenso);
                         break;
@@ -262,9 +265,8 @@ class AscensoController extends Controller
                     default:
                         break;
                 }
-                
             }
-            
+                      
             
             
             //Crear la solicitud de Servicio
@@ -278,6 +280,7 @@ class AscensoController extends Controller
             $em->persist($adscripcion);
             
             $em->flush();
+            $this->addFlash('success', 'Solicitud de Reconocimiento de escala Registrada Satisfactoriamente');
             return $this->redirect($this->generateUrl('cea_index'));		
         }
        
