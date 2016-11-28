@@ -128,10 +128,10 @@ class AdscripcionController extends Controller
                     $constanciaAsistente = $form->get('documento_asistente')->getData();
                     $nombreAsistente = md5(uniqid()).'.'.$constanciaAsistente->guessExtension();
                     $constanciaAsistente->move(
-                        $this->container->getParameter('adscripcion_directory'),
+                        $this->container->getParameter('ascenso_directory'),
                         $nombreAsistente
                     );
-                    thumbnail($nombreAsistente, $this->container->getParameter('adscripcion_directory'), $this->container->getParameter('adscripcion_thumb_directory'));
+                    thumbnail($nombreAsistente, $this->container->getParameter('ascenso_directory'), $this->container->getParameter('adscripcion_thumb_directory'));
                     $adscripcion->setAsistente($nombreAsistente);
 
 
@@ -149,10 +149,10 @@ class AdscripcionController extends Controller
                    $constanciaAsociado = $form->get('documento_asociado')->getData();
                    $nombreAsociado = md5(uniqid()).'.'.$constanciaAsociado->guessExtension();
                    $constanciaAsociado->move(
-                       $this->container->getParameter('adscripcion_directory'),
+                       $this->container->getParameter('ascenso_directory'),
                        $nombreAsociado
                    );
-                   thumbnail($nombreAsociado, $this->container->getParameter('adscripcion_directory'), $this->container->getParameter('adscripcion_thumb_directory'));
+                   thumbnail($nombreAsociado, $this->container->getParameter('ascenso_directory'), $this->container->getParameter('adscripcion_thumb_directory'));
                    $adscripcion->setAsociado($nombreAsociado);
                 }
 
@@ -169,10 +169,10 @@ class AdscripcionController extends Controller
                     $constanciaAgregado = $form->get('documento_agregado')->getData();
                     $nombreAgregado = md5(uniqid()).'.'.$constanciaAgregado->guessExtension();
                     $constanciaAgregado->move(
-                        $this->container->getParameter('adscripcion_directory'),
+                        $this->container->getParameter('ascenso_directory'),
                         $nombreAgregado
                     );
-                    thumbnail($nombreAgregado, $this->container->getParameter('adscripcion_directory'), $this->container->getParameter('adscripcion_thumb_directory'));
+                    thumbnail($nombreAgregado, $this->container->getParameter('ascenso_directory'), $this->container->getParameter('adscripcion_thumb_directory'));
                     $adscripcion->setAgreado($nombreAgregado);
                 }
 
@@ -189,10 +189,10 @@ class AdscripcionController extends Controller
                     $constanciaTitular = $form->get('documento_titular')->getData();
                     $nombreTitular = md5(uniqid()).'.'.$constanciaTitular->guessExtension();
                     $constanciaTitular->move(
-                        $this->container->getParameter('adscripcion_directory'),
+                        $this->container->getParameter('ascenso_directory'),
                         $nombreTitular
                     );
-                    thumbnail($nombreTitular, $this->container->getParameter('adscripcion_directory'), $this->container->getParameter('adscripcion_thumb_directory'));
+                    thumbnail($nombreTitular, $this->container->getParameter('ascenso_directory'), $this->container->getParameter('adscripcion_thumb_directory'));
                     $adscripcion->setTitular($nombreTitular);
                 }
 
