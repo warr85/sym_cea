@@ -59,6 +59,7 @@ class AscensoController extends Controller
         if($siguiente < 6){
             $nueva_escala = $this->getDoctrine()->getRepository('AppBundle:Escalafones')->findOneById($siguiente);
         }else{
+            $this->addFlash('notice', 'Ya usted posee el máximo escalfón docente disponible. no puede solicitar este servicio.');
             return $this->redirect($this->generateUrl('servicios_index'));
         }
         
