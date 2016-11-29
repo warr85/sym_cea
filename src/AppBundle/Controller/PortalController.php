@@ -24,10 +24,8 @@ class PortalController extends Controller
                               ->findOneByCedulaPasaporte($form->get('cedula')->getData());
             
              if (!$persona) {
-                $this->addFlash('danger', 'Docente no Registrado en la Base de Datos del Centro de Estudios.  Por Favor');
-                return $this->redirect(
-                    sprintf('%s#%s', '/', 'adscripcion')
-                );
+                $this->addFlash('danger', 'Docente no Registrado en la Base de Datos del Centro de Estudios.  Por Favor consulta con el Coordinador Regional del CEA');
+                return $this->redirect($this->generateUrl('homepage').'#adscripcion');
             }
             
             //1. obtener el rol-institucion-persona
@@ -38,10 +36,8 @@ class PortalController extends Controller
 
             //si no existe el rol del docente, enviar correo al encargado de la región para verificar.
             if (!$rol) {
-                $this->addFlash('danger', 'Docente no Registrado en la Base de Datos del Centro de Estudios.  Por Favor');
-                return $this->redirect(
-                    sprintf('%s#%s', '/', 'adscripcion')
-                );
+                $this->addFlash('danger', 'Hay un problema con el docente, no tiene ningún rol asignado en la UBV');
+                return $this->redirect($this->generateUrl('homepage').'#adscripcion');	
             }
 
             //si el docente existe, crea el nombre de usuario.
@@ -110,9 +106,7 @@ class PortalController extends Controller
                
             }
            
-           return $this->redirect(
-                    sprintf('%s#%s', '', 'adscripcion')
-                );
+           return $this->redirect($this->generateUrl('homepage').'#adscripcion');
             //$request->getSession()->getFlashBag()->add('success', 'Your email has been sent! Thanks!');
         }
 
