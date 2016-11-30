@@ -54,6 +54,53 @@ class AscensoController extends Controller
                 return $this->redirect($this->generateUrl('cea_index'));            
         }
         
+        $escalafones = $this->getDoctrine()->getRepository("AppBundle:Escalafones")->findOneById($escala->getIdEscala()->getId() + 1); //tiempo para el proximo escalafon        
+        $tiempoProxEscalafon = $escala->getFechaEscala()->diff(new \DateTime("now")); 
+        
+        //si no cumple el tiempo para solicitar ascenso
+        if($tiempoProxEscalafon->y < $escalafones->getTiempo()){
+            //preguntar si tiene activa una solicitud de antiguedad
+            $servicioAntiguedad = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->findOneBy(array(
+                'idRolInstitucion' => $escala->getIdRolInstitucion(),
+                'idServicioCe'  => 1
+            ));
+            
+            //si tiene solicitud vamos a decirle al usuario que vamos a utlizarla para ver si le alcanza
+            if($servicioAntiguedad){
+                //obtenemos la fecha de concurso de oposición
+                $oposicion = $this->getDoctrine()->getRepository("AppBundle:DocenteEscala")->findOneBy(array(
+                    'idTipoEscala' => 1,
+                    'idRolInstitucion' => $escala->getIdRolInstitucion()
+                ));
+                //obtenemos su fecha de ingreso
+                $adscripcion = $this->getDoctrine()->getRepository("AppBundle:Adscripcion")->findOneByIdRolInstitucion($escala->getIdRolInstitucion());
+                //calculamos su antiguedad
+                $tiempoAntiguedad = $adscripcion->getFechaIngreso()->diff($oposicion->getFechaEscala());
+                
+                //calculamos el nuevo tiempo que tiene con el tiempo en años mas lo que se le debe
+                $y = new \DateTime();
+                $f = clone $y;
+                $y->add($tiempoProxEscalafon);
+                $y->add($tiempoAntiguedad);
+                //tenemos el total de tiempo que tiene el docente
+                $nuevoTiempo = $f->diff($y);
+                
+                //si todavía no cumple el tiempo
+                if($nuevoTiempo->y < $escalafones->getTiempo()){
+                    $this->addFlash('danger', 'Estimado Docente, Incluyendo la antiguedad que se le adeuda, Todavía no cumple el tiempo para solicitar el ascenso.');
+                    return $this->redirect($this->generateUrl('cea_index'));   
+                }else{
+                    $formalizarTiempo = true;
+                }
+                    
+                
+             //si no tiene antiguedad   
+            }else{
+                 $this->addFlash('danger', 'Estimado Docente, Todavía no cumple el tiempo para solicitar el ascenso.');
+                 return $this->redirect($this->generateUrl('cea_index'));   
+            }
+        }
+        
         $siguiente = $escala->getIdEscala()->getId() + 1;
         $ascenso = new Ascenso();
         if($siguiente < 6){
@@ -172,6 +219,12 @@ class AscensoController extends Controller
 
             $em->persist($servicios);
             $em->persist($ascenso);
+            
+            if($formalizarTiempo){
+                $servicioAntiguedad->setIdEstatus(4);
+                $em->persist($servicioAntiguedad);
+                $this->addFlash('warning', 'Para Registrar la solicitud, fue necesaria la formalización de su Solicitud de Antiguedad');
+            }
 
             $em->flush(); //guarda en la base de datos
             
