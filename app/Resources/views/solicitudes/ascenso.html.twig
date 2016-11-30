@@ -22,21 +22,22 @@
 
 {% block body %}
     <div class="container">
-        <h4 class="alert alert-info"><i class="fa fa-info-circle"></i>
-            Estimado (a) Docente 
-            <strong>{{app.user.idRolInstitucion.idRol.idPersona.primerNombre}}
-                {{app.user.idRolInstitucion.idRol.idPersona.primerApellido}}</strong>,
-            En este apartado usted podrá solicitar el ascenso al siguiente escalafón.
-            <ul>
-                <li>Escalafón Actual: {{ ultima_escala.idEscala.nombre }}</li>
-                <li>Escalafón Solicitud: {{ nueva_escala.nombre }}</li>
-            </ul>
+        
+        
+            {% if antiguedad %}
+         <h4 class="alert alert-info"><i class="fa fa-info-circle"></i> 
+             <strong>Importante: </strong> Para acceder a este escalafón se le
+             está tomando en cuenta la <strong>solicitud de antiguedad</strong> que tiene activa
+             para poder cumplir con el requisito del tiempo.  Al continuar con esta
+             solicitud, su antiguedad quedará saldada por lo que no la podrá volver 
+             a utilizar.
+         </h4>
+        {% endif %}
             
-        </h4>
     </div>
     <div class="account-container register">        
         <div class="content clearfix">            
-            <h1>Solicitud de Ascenso</h1>
+            <h2>Requisitos solicitud ascenso {{ nueva_escala.nombre }}</h2>
             {% form_theme form 'bootstrap_3_layout.html.twig' %}        
             {{ form_start(form) }}
             {{ form_widget(form) }}

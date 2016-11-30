@@ -30,7 +30,7 @@ class AscensoController extends Controller
      */
     public function ascensoAction(Request $request)
     {
-        
+        $formalizarTiempo = false;
 	//si ya tiene una solicitud en espera, enviarlo a la pagina de los  servicios
 	$solicitud = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->findOneBy(
                 array('idRolInstitucion'  => $this->getUser()->getIdRolInstitucion(), 'idServicioCe' => 5)                
@@ -62,7 +62,8 @@ class AscensoController extends Controller
             //preguntar si tiene activa una solicitud de antiguedad
             $servicioAntiguedad = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->findOneBy(array(
                 'idRolInstitucion' => $escala->getIdRolInstitucion(),
-                'idServicioCe'  => 1
+                'idServicioCe'  => 1,
+                'idEstatus'     => 1
             ));
             
             //si tiene solicitud vamos a decirle al usuario que vamos a utlizarla para ver si le alcanza
@@ -221,9 +222,9 @@ class AscensoController extends Controller
             $em->persist($ascenso);
             
             if($formalizarTiempo){
-                $servicioAntiguedad->setIdEstatus(4);
+                $servicioAntiguedad->setIdEstatus($this->getDoctrine()->getRepository("AppBundle:Estatus")->findOneById(4));
                 $em->persist($servicioAntiguedad);
-                $this->addFlash('warning', 'Para Registrar la solicitud, fue necesaria la formalización de su Solicitud de Antiguedad');
+                $this->addFlash('warning', 'Su solicitud de Antiguedad ha quedado formalizada');
             }
 
             $em->flush(); //guarda en la base de datos
@@ -239,7 +240,8 @@ class AscensoController extends Controller
             array(
                 'form' => $form->createView(),
                 'ultima_escala' => $escala,
-                'nueva_escala'  => $nueva_escala
+                'nueva_escala'  => $nueva_escala,
+                'antiguedad'    => $formalizarTiempo
             )
         );
     }
