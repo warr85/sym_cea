@@ -220,7 +220,7 @@ class AscensoController extends Controller
 
             $em->persist($servicios);
             $em->persist($ascenso);
-            
+            //si realizó la solicitud usando la antiguedad, esta se formaliza
             if($formalizarTiempo){
                 $servicioAntiguedad->setIdEstatus($this->getDoctrine()->getRepository("AppBundle:Estatus")->findOneById(4));
                 $em->persist($servicioAntiguedad);
