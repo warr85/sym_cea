@@ -36,19 +36,14 @@ class Escalafones
     private $id;
     
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Adscripcion", inversedBy="escala")
-     * @ORM\JoinColumn(name="adscripcion_id", referencedColumnName="id")
+     * @var integer
+     *
+     * @ORM\Column(name="tiempo", type="integer", nullable=false, options={"comment" = "Tiempo necesario para obtener la escala"})
      */
-    protected $docente;
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->docente = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
+    private $tiempo;
+    
+   
+    
 
 
     /**
@@ -94,40 +89,6 @@ class Escalafones
         return $this->nombre;
     }
     
-    
-    
-    /**
-     * Add docente
-     *
-     * @param \AppBundle\Entity\Adscripcion $docente
-     * @return Adscripcion
-     */
-    public function addDocente(\AppBundle\Entity\Adscripcion $docente)
-    {
-        $this->docente[] = $docente;
-
-        return $this;
-    }
-
-    /**
-     * Remove docente
-     *
-     * @param \AppBundle\Entity\Adscripcion $docente
-     */
-    public function removeDocente(\AppBundle\Entity\Adscripcion $docente)
-    {
-        $this->docente->removeElement($docente);
-    }
-
-    /**
-     * Get docente
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getDocente()
-    {
-        return $this->docente;
-    }
 
 
 

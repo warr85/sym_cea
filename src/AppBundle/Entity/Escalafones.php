@@ -35,6 +35,13 @@ class Escalafones
      */
     private $id;
     
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="tiempo", type="integer", nullable=false, options={"comment" = "Tiempo necesario para obtener la escala"})
+     */
+    private $tiempo;
+    
    
     
 
@@ -83,6 +90,26 @@ class Escalafones
     }
     
 
+    /**
+     * Set tiempo
+     *
+     * @param integer $tiempo
+     * @return Escalafones
+     */
+    public function setTiempo($tiempo)
+    {
+        $this->tiempo = $tiempo;
 
+        return $this;
+    }
 
+    /**
+     * Get tiempo
+     *
+     * @return integer 
+     */
+    public function getTiempo()
+    {
+        return $this->tiempo;
+    }
 }
