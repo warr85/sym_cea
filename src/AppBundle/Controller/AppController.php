@@ -49,8 +49,26 @@ class AppController extends Controller {
                 findOneBy(array(
                     'idRolInstitucion'  =>  $this->getUser()->getIdRolInstitucion()->getId()                    
         ));
+               
         
         if(!$pida){ return $this->redirect($this->generateUrl('solicitud_pida')); }
+        
+         $escalafon = $this->getDoctrine()->getRepository('AppBundle:DocenteEscala')->findOneBy(
+                array('idRolInstitucion'  => $this->getUser()->getIdRolInstitucion()),
+                array('id' => 'DESC')
+        );
+         
+         if ($escalafon){
+             $escalafones = $this->getDoctrine()->getRepository("AppBundle:Escalafones")->findOneById($escalafon->getIdEscala()->getId() + 1); //tiempo para el proximo escalafon
+             if($escalafones){
+                 //tiempo para el prox escalafon
+                 $tiempoProxEscalafon = $escalafon->getFechaEscala()->modify('+4 years');
+                 $tiempoTranscurrido = $tiempoProxEscalafon->diff(new \DateTime("now")); 
+                 var_dump($tiempoTranscurrido); exit;
+             }
+         }
+        
+        
         
         
         //solicitud aprobada está en falso

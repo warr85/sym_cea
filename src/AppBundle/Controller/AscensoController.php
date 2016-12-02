@@ -53,8 +53,14 @@ class AscensoController extends Controller
             $this->addFlash('danger', 'Estimado Docente, todavia no ha concursado, debe concursar primero para poder realizar una solicitud de ascenso.');
                 return $this->redirect($this->generateUrl('cea_index'));            
         }
+        //busca la escala siguiente
+        $escalafones = $this->getDoctrine()->getRepository("AppBundle:Escalafones")->findOneById($escala->getIdEscala()->getId() + 1); //tiempo para el proximo escalafon
+        //si no hay escalas siguientes, es debido a que es titular
+        if(!$escalafones){
+            $this->addFlash('notice', 'Ya usted posee el máximo escalfón docente disponible. no puede solicitar este servicio.');
+            return $this->redirect($this->generateUrl('servicios_index'));
+        }
         
-        $escalafones = $this->getDoctrine()->getRepository("AppBundle:Escalafones")->findOneById($escala->getIdEscala()->getId() + 1); //tiempo para el proximo escalafon        
         $tiempoProxEscalafon = $escala->getFechaEscala()->diff(new \DateTime("now")); 
         
         //si no cumple el tiempo para solicitar ascenso
