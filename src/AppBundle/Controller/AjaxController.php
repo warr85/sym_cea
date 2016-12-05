@@ -35,16 +35,30 @@ class AjaxController extends Controller {
      * @Method({"GET"})
      */
     public function contadorAction(Request $request){
-        if($request->isXmlHttpRequest()){
+       if($request->isXmlHttpRequest()){
             $encoders = array(new JsonEncoder());
             $normalizers = array(new ObjectNormalizer());
  
             $serializer = new Serializer($normalizers, $encoders);
  
             $em = $this->getDoctrine()->getManager();
-            $posts =  $em->getRepository('AppBundle:DocenteServicio')->findBy(array(
-                'idEstatus'    => 2
-            ));            
+            if ($this->get('security.authorization_checker')->isGranted('ROLE_COORDINADOR_NACIONAL')){
+                $posts =  $em->getRepository('AppBundle:DocenteServicio')->findBy(array(
+                    'idEstatus'    => 2
+                )); 
+                //si no es coordinador nacional, entonces no cuente las solcitudes de antiguedad
+                //que son de tipo 1
+            }else{
+                $repository = $this->getDoctrine()
+                ->getRepository('AppBundle:DocenteServicio');
+                $query = $repository->createQueryBuilder('p')
+                ->where('p.idEstatus = :estatus')
+                ->andWhere('p.idServicioCe > :identificador')
+                ->setParameters(array('estatus'=> 2, 'identificador' => 2))                
+                ->getQuery();
+                
+                $posts = $query->getResult();
+            }
             $cuenta = count($posts);            
             $response = new JsonResponse();
             $response->setStatusCode(200);
@@ -53,7 +67,7 @@ class AjaxController extends Controller {
                 'posts' => $serializer->serialize($cuenta, 'json')
             ));
             return $response;
-        }
+       }
         
     }
     

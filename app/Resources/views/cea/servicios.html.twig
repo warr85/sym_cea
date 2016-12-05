@@ -22,37 +22,37 @@
                     </thead>
                     <tbody>
                         {%for servicio in servicios %}
-                            {% if not is_granted('ROLE_DIRECTOR_NACIONAL') %}
-                                {% if servicio.idRolInstitucion.idInstitucion.idEjeParroquia.idEje == app.user.idRolInstitucion.idInstitucion.idEjeParroquia.idEje %}
-                                    <tr>
-                                        <td>{{servicio.id}}</td>
-                                        <td>                         
-                                            {{servicio.idRolInstitucion.idRol.idPersona.PrimerNombre}}
-                                            {{servicio.idRolInstitucion.idRol.idPersona.PrimerApellido}}
-                                            ( {{servicio.idRolInstitucion}} )                                                
-                                        </td>
-                                        <td>{{servicio.idServicioCe.nombre}}</td>
-                                        <td>
-                                            {{servicio.idRolInstitucion.IdRol.IdAreaInstitucion.nombre}}
-                                        </td>
-                                        <td>
-                                            {{servicio.idRolInstitucion.idInstitucion.idEjeParroquia.IdEje}}                         
-                                        </td>                    
-                                        <td>{{servicio.idRolInstitucion.idInstitucion.idEjeParroquia.idParroquia.idMunicipio.idEstado}} </td>
-                                        <td>                        
-                                            {% if servicio.idServicioCe.id == 1 %}
-                                                <a href="{{ path('cea_servicio_show', { 'id': servicio.id }) }}"  class="btn btn-xs btn-info"><i class="fa fa-eye"> </i></a>                        
-                                            {% elseif servicio.idServicioCe.id == 2 %}
-                                                <a href="{{ path('cea_adscripcion_show', { 'id': servicio.id }) }}"  class="btn btn-xs btn-info"><i class="fa fa-eye"> </i></a>
-                                            {% elseif servicio.idServicioCe.id == 3 %}
-                                                <a href="{{ path('cea_estado_academico_show', { 'id': servicio.id }) }}"  class="btn btn-xs btn-info"><i class="fa fa-eye"> </i></a>                            
-                                            {% elseif servicio.idServicioCe.id == 5 %}
-                                                <a href="{{ path('cea_ascenso_show', { 'id': servicio.id }) }}"  class="btn btn-xs btn-info"><i class="fa fa-eye"> </i></a>
-                                            {% elseif servicio.idServicioCe.id == 6 %}
-                                                <a href="{{ path('cea_reconocimientoEscala_show', { 'id': servicio.id }) }}"  class="btn btn-xs btn-info"><i class="fa fa-eye"> </i></a>
-                                            {% endif %}
-                                        </td>                       
-                                    </tr>
+                            {% if not is_granted('ROLE_COORDINADOR_NACIONAL') %}
+                                {% if servicio.idServicioCe.id != 1 %}
+                                    {% if servicio.idRolInstitucion.idInstitucion.idEjeParroquia.idEje == app.user.idRolInstitucion.idInstitucion.idEjeParroquia.idEje %}
+                                        <tr>
+                                            <td>{{servicio.id}}</td>
+                                            <td>                         
+                                                {{servicio.idRolInstitucion.idRol.idPersona.PrimerNombre}}
+                                                {{servicio.idRolInstitucion.idRol.idPersona.PrimerApellido}}
+                                                ( {{servicio.idRolInstitucion}} )                                                
+                                            </td>
+                                            <td>{{servicio.idServicioCe.nombre}}</td>
+                                            <td>
+                                                {{servicio.idRolInstitucion.IdRol.IdAreaInstitucion.nombre}}
+                                            </td>
+                                            <td>
+                                                {{servicio.idRolInstitucion.idInstitucion.idEjeParroquia.IdEje}}                         
+                                            </td>                    
+                                            <td>{{servicio.idRolInstitucion.idInstitucion.idEjeParroquia.idParroquia.idMunicipio.idEstado}} </td>
+                                            <td>                                                                        
+                                                {% if servicio.idServicioCe.id == 2 %}
+                                                    <a href="{{ path('cea_adscripcion_show', { 'id': servicio.id }) }}"  class="btn btn-xs btn-info"><i class="fa fa-eye"> </i></a>
+                                                {% elseif servicio.idServicioCe.id == 3 %}
+                                                    <a href="{{ path('cea_estado_academico_show', { 'id': servicio.id }) }}"  class="btn btn-xs btn-info"><i class="fa fa-eye"> </i></a>                            
+                                                {% elseif servicio.idServicioCe.id == 5 %}
+                                                    <a href="{{ path('cea_ascenso_show', { 'id': servicio.id }) }}"  class="btn btn-xs btn-info"><i class="fa fa-eye"> </i></a>
+                                                {% elseif servicio.idServicioCe.id == 6 %}
+                                                    <a href="{{ path('cea_reconocimientoEscala_show', { 'id': servicio.id }) }}"  class="btn btn-xs btn-info"><i class="fa fa-eye"> </i></a>
+                                                {% endif %}
+                                            </td>                       
+                                        </tr>
+                                    {% endif %}
                                 {% endif %}
                             {%else%}                                
                                 <tr>
