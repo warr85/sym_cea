@@ -27,6 +27,21 @@
            </div>
        {%endif %}
       <div class="row">
+          {% if tiempoProxEscalafon %}                                    
+                {% if suffix == '' %}
+                    <h4 class="alert alert-info">
+                    Estimado docente, le recordamos que para solicitar ascenso aun le faltan: 
+                {% else %}
+                    <h4 class="alert alert-warning">
+                    Estimado docente ya tiene el tiempo para solicitar ascenso desde hace: 
+                {% endif %}
+                    <strong>
+                        {% if tiempoProxEscalafon.y > 0 %} {{ tiempoProxEscalafon.y }} año/s {% endif %}
+                        {% if tiempoProxEscalafon.m > 0 %} {{ tiempoProxEscalafon.m }} mes/es y {%  endif %}
+                        {% if tiempoProxEscalafon.d > 0 %} {{ tiempoProxEscalafon.d }} día/s {% endif %} 
+                    </strong>
+                </h4>
+            {% endif %}
         <div class="col-md-6">
           <div class="widget widget-nopad">
             <div class="widget-header"> <i class="fa fa-list-alt"></i>
@@ -38,7 +53,9 @@
                 <div class="widget-content">
                     
                     <h6 class="bigstats">                        
-                        Estimado Docente, le damos la más cordial bienvenida al Sistema del Centro de Estudios Ambientales (CEA) de la Universidad Bolivariana de Venezuela (UBV) CEA@UBV.
+                        Estimado Docente, le damos la más cordial bienvenida al Sistema del 
+                        Centro de Estudios Ambientales (CEA) de la Universidad Bolivariana 
+                        de Venezuela (UBV) CEA@UBV.                        
                         
                     </h6>                    
                   

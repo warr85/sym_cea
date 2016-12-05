@@ -62,9 +62,10 @@ class AppController extends Controller {
              $escalafones = $this->getDoctrine()->getRepository("AppBundle:Escalafones")->findOneById($escalafon->getIdEscala()->getId() + 1); //tiempo para el proximo escalafon
              if($escalafones){
                  //tiempo para el prox escalafon
-                 $tiempoProxEscalafon = $escalafon->getFechaEscala()->modify('+4 years');
-                 $tiempoTranscurrido = $tiempoProxEscalafon->diff(new \DateTime("now")); 
-                 var_dump($tiempoTranscurrido); exit;
+                 $tiempoProxEscalafon = $escalafon->getFechaEscala()->modify('+' . $escalafones->getTiempo() . 'years');                 
+                 $hoy = new \DateTime("now");
+                 $tiempoTranscurrido = $hoy->diff($tiempoProxEscalafon);
+                 $suffix = ( $tiempoTranscurrido->invert ? ' ago' : '' );                 
              }
          }
         
@@ -76,7 +77,9 @@ class AppController extends Controller {
         if($adscripcion->getIdEstatus()->getId() == 1) $adscrito = true;
         
         return $this->render('cea/index.html.twig', array (
-            'adscrito' => $adscrito
+            'adscrito' => $adscrito,
+            'tiempoProxEscalafon'   => $tiempoTranscurrido,
+            'suffix'                => $suffix
         ));
     }
     
