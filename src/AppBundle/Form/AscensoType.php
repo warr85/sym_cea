@@ -108,6 +108,13 @@ class AscensoType extends AbstractType
             ))
                 
                 
+            ->add('tutores_asignados', EntityType::class, array(
+                'placeholder' => 'Añadir Tutores...',
+                'class' => 'AppBundle:TutoresAscenso',  
+                'label' => false
+            ))
+                
+                
             ->add('investigacion', FileType::class, array(
                 'label' => 'Digital Trabajo de investigación / Tesis',
                 'required' => true, 

@@ -35,7 +35,7 @@ class TutoresAscenso
      *
      * @ORM\Column(name="cedula_pasaporte", type="string", length=15, nullable=false, options={"comment" = "Numero de cedula o pasaporte de la persona"})
      */
-    private $cedula_pasaporte;
+    private $cedulaPasaporte;
     
     
     /**
@@ -82,7 +82,7 @@ class TutoresAscenso
     
     
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ascenso", inversedBy="tutores_ascenso")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ascenso", inversedBy="tutoresAscenso")
      * @ORM\JoinColumn(name="ascenso_id", referencedColumnName="id")
      */
     private $ascenso;

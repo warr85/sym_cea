@@ -142,7 +142,7 @@ class Ascenso
     /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\TutoresAscenso", mappedBy="ascenso")
      */
-    private $tutores_asignados;
+    private $tutoresAscenso;
 
 
    /**
@@ -447,44 +447,45 @@ class Ascenso
     {
         return $this->idEscalafones;
     }
+    
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->tutores_asignados = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->tutoresAscenso = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
-     * Add tutores_asignados
+     * Add tutoresAscenso
      *
-     * @param \AppBundle\Entity\TutoresAscenso $tutoresAsignados
+     * @param \AppBundle\Entity\TutoresAscenso $tutoresAscenso
      * @return Ascenso
      */
-    public function addTutoresAsignado(\AppBundle\Entity\TutoresAscenso $tutoresAsignados)
+    public function addTutoresAscenso(\AppBundle\Entity\TutoresAscenso $tutoresAscenso)
     {
-        $this->tutores_asignados[] = $tutoresAsignados;
+        $this->tutoresAscenso[] = $tutoresAscenso;
 
         return $this;
     }
 
     /**
-     * Remove tutores_asignados
+     * Remove tutoresAscenso
      *
-     * @param \AppBundle\Entity\TutoresAscenso $tutoresAsignados
+     * @param \AppBundle\Entity\TutoresAscenso $tutoresAscenso
      */
-    public function removeTutoresAsignado(\AppBundle\Entity\TutoresAscenso $tutoresAsignados)
+    public function removeTutoresAscenso(\AppBundle\Entity\TutoresAscenso $tutoresAscenso)
     {
-        $this->tutores_asignados->removeElement($tutoresAsignados);
+        $this->tutoresAscenso->removeElement($tutoresAscenso);
     }
 
     /**
-     * Get tutores_asignados
+     * Get tutoresAscenso
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getTutoresAsignados()
+    public function getTutoresAscenso()
     {
-        return $this->tutores_asignados;
+        return $this->tutoresAscenso;
     }
 }

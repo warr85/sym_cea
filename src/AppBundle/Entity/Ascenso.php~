@@ -142,7 +142,7 @@ class Ascenso
     /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\TutoresAscenso", mappedBy="ascenso")
      */
-    private $tutores_asignados;
+    private $tutoresAscenso;
 
 
    /**
@@ -447,4 +447,5 @@ class Ascenso
     {
         return $this->idEscalafones;
     }
+    
 }
