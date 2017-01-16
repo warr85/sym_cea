@@ -12,3 +12,9 @@
 /bin/
 /composer.phar
 /nbproject/private/
+
+# Linux
+.*
+!.gitignore
+!.htaccess
+*~
