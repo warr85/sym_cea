@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
+use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -111,7 +111,20 @@ class AscensoType extends AbstractType
             ->add('tutores_asignados', EntityType::class, array(
                 'placeholder' => 'Añadir Tutores...',
                 'class' => 'AppBundle:TutoresAscenso',  
-                'label' => false
+                'label' => false,               
+                'multiple'  => true, 
+                'attr'  => array(
+                    'disabled' => 'true',                    
+                )
+            ))
+                
+            ->add('añadir_tutor', ButtonType::class, array(
+            'label' => 'Añadir Tutor',
+            'attr'  => array(
+                    'class' => 'btn btn-success btn-sm', 
+                    'data-toggle' => "modal",
+                    'data-target' => "#buscarTutores"
+                )
             ))
                 
                 
@@ -165,10 +178,10 @@ class AscensoType extends AbstractType
             
 
             
-		  ->add('send', SubmitType::class, array(
-                      'label' => 'Crear Solicitud de Ascenso',
-                      'attr'  => array('class' => 'btn btn-success btn-block')
-                      ))
+            ->add('send', SubmitType::class, array(
+                'label' => 'Crear Solicitud de Ascenso',
+                'attr'  => array('class' => 'btn btn-success btn-block')
+                ))
 
 
         ;

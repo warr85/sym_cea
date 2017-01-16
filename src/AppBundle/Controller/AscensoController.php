@@ -122,8 +122,9 @@ class AscensoController extends Controller
         
    
         $form = $this->createForm('AppBundle\Form\AscensoType');
+        $tutorForm = $this->createForm('AppBundle\Form\TutoresAscensoType');
 	$form->handleRequest($request);
-        
+                	        
 
         if ($form->isSubmitted() && $form->isValid()) {       
             
@@ -245,6 +246,7 @@ class AscensoController extends Controller
             'solicitudes/ascenso.html.twig',
             array(
                 'form' => $form->createView(),
+                'tutorForm' => $tutorForm->createView(),
                 'ultima_escala' => $escala,
                 'nueva_escala'  => $nueva_escala,
                 'antiguedad'    => $formalizarTiempo

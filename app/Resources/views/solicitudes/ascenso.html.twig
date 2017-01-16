@@ -45,9 +45,43 @@
         </div>
         
     </div>
+        
+        <!-- Ventanas Modales -->
+       
+       <!-- Ventana de buscar adscripcion -->
+        <div class="modal fade bs-example-modal-sm" id="buscarTutores" tabindex="-1" role="dialog">            
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">El tutor debe tener la escala de {{ nueva_escala.nombre }} o superior</h4>
+              </div>
+              <div class="modal-body">
+
+                    <h2>Introduzla la cedula y presione buscar</h2>
+                    {% form_theme tutorForm 'bootstrap_3_layout.html.twig' %}                         
+                    
+                    
+                    
+                    {{ form_start(tutorForm) }}
+                                         
+                    {{ form_widget(tutorForm) }}
+                    {{ form_end(tutorForm) }} 
+
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                <button class="btn btn-primary" type="submit">Buscar Adscripcion</button>
+              </div>
+            </div>
+          </div>
+        </div><!-- Fin de la ventanta modal buscar adscripcion -->
 
 
 {% endblock %}
+
+
+ 
 
 
 
@@ -59,7 +93,40 @@
             
             $('.esc_oposicion')[this.checked ? "show" : "hide"]();
             
-        });        
+        });     
+        
+       $( "#tutores_ascenso_buscarTutor" ).click(function() {
+           if($("#tutores_ascenso_cedulaPasaporte").val() == ""){
+               alert("cedula no puede estar vacia");
+               return false;
+           }
+            $.ajax({
+               method: "GET",
+               url: "{{ url('ajax_buscar_tutor') }}",
+               async: true,
+               cache: false,    
+               data: ({cedula: $("#tutores_ascenso_cedulaPasaporte").val(), documento: $("#tutores_ascenso_idDocumentoIdentidad").val()}),
+               success: function (data) {
+
+                       var posts = JSON.parse(data.posts);
+                       console.log(posts);
+                       if (posts == ""){
+                           $('.oculto').removeClass('hidden');
+                       }else{
+                            $('#ascenso_tutores_asignados').append($('<option>', {
+                                 value: 1,
+                                 text: 'My option'
+                             }));
+                        }
+
+                },
+               error: function (XMLHttpRequest, textStatus, errorThrown) { 
+                     console.log(errorThrown);                 
+
+               }
+
+           });
+       });
         
     </script>
 {% endblock %}

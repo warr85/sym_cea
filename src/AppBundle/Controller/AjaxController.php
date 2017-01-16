@@ -35,7 +35,7 @@ class AjaxController extends Controller {
      * @Method({"GET"})
      */
     public function contadorAction(Request $request){
-       if($request->isXmlHttpRequest()){
+       if($request->isXmlHttpRequest()){            
             $encoders = array(new JsonEncoder());
             $normalizers = array(new ObjectNormalizer());
  
@@ -65,6 +65,42 @@ class AjaxController extends Controller {
             $response->setData(array(
                 'response' => 'success',
                 'posts' => $serializer->serialize($cuenta, 'json')
+            ));
+            return $response;
+       }
+        
+    }
+    
+    
+    /**
+     * @Route("/ajax/buscar_tutor", name="ajax_buscar_tutor")
+     * @Method({"GET"})
+     */
+     public function buscarTutorAction(Request $request){
+       if($request->isXmlHttpRequest()){
+            $encoders = array(new JsonEncoder());
+            $normalizers = array(new ObjectNormalizer());
+ 
+            $serializer = new Serializer($normalizers, $encoders);
+            $cedula = filter_input(INPUT_GET, 'cedula', FILTER_SANITIZE_SPECIAL_CHARS);
+            $documento = filter_input(INPUT_GET, 'documento', FILTER_SANITIZE_SPECIAL_CHARS);
+ 
+
+            $repository = $this->getDoctrine()
+                ->getRepository('AppBundle:TutoresAscenso');
+            $query = $repository->createQueryBuilder('p')
+                ->where('p.cedulaPasaporte = :cedula')
+                ->andWhere('p.institucion = :documento')
+                ->setParameters(array('cedula'=> $cedula, 'documento' => $documento))                
+                ->getQuery();
+
+            $posts = $query->getResult();
+                               
+            $response = new JsonResponse();
+            $response->setStatusCode(200);
+            $response->setData(array(
+                'response' => 'success',
+                'posts' => $serializer->serialize($posts, 'json')
             ));
             return $response;
        }
