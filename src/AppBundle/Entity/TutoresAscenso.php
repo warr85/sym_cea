@@ -58,6 +58,14 @@ class TutoresAscenso
      * @ORM\Column(name="apellidos", type="string", length=255, nullable=false, options={"comment" = "Apellidos del Tutor"})
      */
     private $apellidos;
+    
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="institucion", type="string", length=255, nullable=true, options={"comment" = "Instituto educativo de donde viene es el tutor"})
+     */
+    private $institucion;
 
     /**
      * @var integer
@@ -269,5 +277,28 @@ class TutoresAscenso
     public function getAscenso()
     {
         return $this->ascenso;
+    }
+
+    /**
+     * Set institucion
+     *
+     * @param string $institucion
+     * @return TutoresAscenso
+     */
+    public function setInstitucion($institucion)
+    {
+        $this->institucion = $institucion;
+
+        return $this;
+    }
+
+    /**
+     * Get institucion
+     *
+     * @return string 
+     */
+    public function getInstitucion()
+    {
+        return $this->institucion;
     }
 }
