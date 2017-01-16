@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Ascenso
  *
- * @ORM\Table(name="solicitud_ascenso", uniqueConstraints={@ORM\UniqueConstraint(name="ascenso_id_rol_institucion_docente_escala", columns={"id_rol_institucion", "id_escala"})})
+ * @ORM\Table(name="solicitud_ascenso", uniqueConstraints={@ORM\UniqueConstraint(name="ascenso_id_rol_institucion_docente_escalafones", columns={"id_rol_institucion", "id_escalafones"})})
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks()
  */
@@ -40,11 +40,11 @@ class Ascenso
     
     
     /**
-     * @var \AppBundle\Entity\Escala
+     * @var \AppBundle\Entity\Escalafones
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Escalafones")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_escala", referencedColumnName="id", nullable=false)
+     *   @ORM\JoinColumn(name="id_escalafones", referencedColumnName="id", nullable=false)
      * })
      */
     protected $idEscalafones;
@@ -137,6 +137,12 @@ class Ascenso
      * })
      */
     protected $idEstatus;
+    
+    
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\TutoresAscenso", mappedBy="ascenso")
+     */
+    private $tutores_asignados;
 
 
    /**
@@ -418,4 +424,27 @@ class Ascenso
     
 
    
+
+    /**
+     * Set idEscalafones
+     *
+     * @param \AppBundle\Entity\Escalafones $idEscalafones
+     * @return Ascenso
+     */
+    public function setIdEscalafones(\AppBundle\Entity\Escalafones $idEscalafones)
+    {
+        $this->idEscalafones = $idEscalafones;
+
+        return $this;
+    }
+
+    /**
+     * Get idEscalafones
+     *
+     * @return \AppBundle\Entity\Escalafones 
+     */
+    public function getIdEscalafones()
+    {
+        return $this->idEscalafones;
+    }
 }
