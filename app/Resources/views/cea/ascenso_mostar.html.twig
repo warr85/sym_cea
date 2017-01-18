@@ -60,7 +60,15 @@
                             {%endfor %}
                             </table>   
                             
-                            <p><strong>Escalafón Solicita:</strong> {{ ascenso.idEscalafones.nombre }} </p>
+                            <p ><strong>Escalafón Solicita:</strong> {{ ascenso.idEscalafones.nombre }} </p>                                
+                                {% for tutor in ascenso.tutoresAscenso %}
+                                    <h4>Tutores propuestos</h4>
+                                    <p class="well">
+                                        <strong>{{ tutor.nombres }}  {{ tutor.apellidos }}:</strong>
+                                        {{ tutor.institucion }} -> {{ tutor.idEscala.nombre }}
+                                    </p>
+                                {% endfor %}
+                            
                             
                         </div>
                         {% endif %} 

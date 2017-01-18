@@ -140,9 +140,19 @@ class Ascenso
     
     
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\TutoresAscenso", mappedBy="ascenso")
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\TutoresAscenso", inversedBy="ascenso")
+     * @ORM\JoinTable(name="ascenso_tutor",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="ascenso_id", referencedColumnName="id", nullable=false)
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="tutor_id", referencedColumnName="id", nullable=false)
+     *   }
+     * )
      */
-    private $tutoresAscenso;
+    protected $tutoresAscenso;
 
 
    /**
@@ -448,6 +458,8 @@ class Ascenso
         return $this->idEscalafones;
     }
     
+  
+
     /**
      * Constructor
      */
@@ -487,5 +499,15 @@ class Ascenso
     public function getTutoresAscenso()
     {
         return $this->tutoresAscenso;
+    }
+    
+    /**
+     * 
+     * @return string
+     */
+    
+    public function __toString() 
+    {
+        return $this->getIdRolInstitucion()->getIdRol()->getIdPersona()->getPrimerNombre();
     }
 }

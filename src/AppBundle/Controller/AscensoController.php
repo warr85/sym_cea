@@ -18,6 +18,7 @@ use AppBundle\Entity\DocenteEscala;
 use AppBundle\Entity\Memorando;
 use AppBundle\Entity\DocenteServicio;
 use AppBundle\Entity\AdscripcionPida;
+use AppBundle\Entity\TutoresAscenso;
 
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -33,7 +34,8 @@ class AscensoController extends Controller
         $formalizarTiempo = false;
 	//si ya tiene una solicitud en espera, enviarlo a la pagina de los  servicios
 	$solicitud = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->findOneBy(
-                array('idRolInstitucion'  => $this->getUser()->getIdRolInstitucion(), 'idServicioCe' => 5)                
+                array('idRolInstitucion'  => $this->getUser()->getIdRolInstitucion(), 'idServicioCe' => 5),
+                array('id' => 'DESC')                
         );
         if($solicitud){
             if($solicitud->getIdEstatus()->getId() != 4 ){
@@ -120,9 +122,9 @@ class AscensoController extends Controller
         
         
         
-   
+        $tutoresAsignados = new TutoresAscenso();
         $form = $this->createForm('AppBundle\Form\AscensoType');
-        $tutorForm = $this->createForm('AppBundle\Form\TutoresAscensoType');
+        $tutorForm = $this->createForm('AppBundle\Form\TutoresAscensoType', $tutoresAsignados);
 	$form->handleRequest($request);
                 	        
 
@@ -199,8 +201,14 @@ class AscensoController extends Controller
             $ascenso->setTituloTrabajo($form->get('titulo_trabajo')->getData());
             $ascenso->setIdEscalafones($nueva_escala);
             $ascenso->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(2));
-
-
+            
+            
+            $tutores = $form->get('tutores_ascenso')->getData();
+            foreach ($tutores as $tutor){
+                $ascenso->addTutoresAscenso($tutor);
+            }
+            
+            
             if ($form->get('pertinencia')->getData()){
                 
                 $constanciaPertinencia = $form->get('pertinencia')->getData();

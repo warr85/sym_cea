@@ -19,6 +19,7 @@ use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Doctrine\ORM\EntityRepository;
@@ -108,14 +109,14 @@ class AscensoType extends AbstractType
             ))
                 
                 
-            ->add('tutores_asignados', EntityType::class, array(
-                'placeholder' => 'Añadir Tutores...',
-                'class' => 'AppBundle:TutoresAscenso',  
-                'label' => false,               
+            ->add('tutores_ascenso', EntityType::class, array(
+                'placeholder' => 'Añadir Tutores...',   
+                'class' => 'AppBundle:TutoresAscenso',
+                'label' => false,                 
                 'multiple'  => true, 
-                'attr'  => array(
+                /*'attr'  => array(
                     'disabled' => 'true',                    
-                )
+                )*/
             ))
                 
             ->add('añadir_tutor', ButtonType::class, array(

@@ -59,19 +59,65 @@
               <div class="modal-body">
 
                     <h2>Introduzla la cedula y presione buscar</h2>
-                    {% form_theme tutorForm 'bootstrap_3_layout.html.twig' %}                         
+                    {% form_theme tutorForm 'bootstrap_3_layout.html.twig' %} 
                     
-                    
-                    
-                    {{ form_start(tutorForm) }}
-                                         
-                    {{ form_widget(tutorForm) }}
-                    {{ form_end(tutorForm) }} 
+                    {{ form_start(tutorForm, {'attr': {'class': 'tutorForm', 'novalidate': 'novalidate'}}) }}
+                    <div class="row">
+                        <div class="col-lg-3">
+                            {{ form_label(tutorForm.idDocumentoIdentidad) }}
+                            {{ form_widget(tutorForm.idDocumentoIdentidad) }}
+                        </div>
+                        <div class="col-lg-4">
+                            {{ form_label(tutorForm.cedulaPasaporte) }}
+                            {{ form_widget(tutorForm.cedulaPasaporte) }}
+                        </div>
+                        <div class="col-lg-5">                            
+                            {{ form_widget(tutorForm.buscarTutor) }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        
+                        <div class="col-lg-6">
+                            {{ form_label(tutorForm.nombres) }}
+                            {{ form_widget(tutorForm.nombres) }}
+                        </div>
+                        <div class="col-lg-6">
+                            {{ form_label(tutorForm.apellidos) }}
+                            {{ form_widget(tutorForm.apellidos) }}
+                        </div>
+                        <div class="col-lg-6">
+                            {{ form_label(tutorForm.institucion) }}
+                            {{ form_widget(tutorForm.institucion) }}
+                        </div>
+                        
+                        <div class="col-lg-6">
+                            {{ form_label(tutorForm.idEstado) }}
+                            {{ form_widget(tutorForm.idEstado) }}
+                        </div>
+                        
+                        <div class="col-lg-6">
+                            {{ form_label(tutorForm.idEscala) }}
+                            {{ form_widget(tutorForm.idEscala) }}
+                        </div>
+                        
+                        <div class="col-lg-6">
+                            {{ form_label(tutorForm.correoElectronico) }}
+                            {{ form_widget(tutorForm.correoElectronico) }}
+                        </div>
+                    </div>
+                        <div class="row">
+                            <div class="col-lg-6 text-left">
+                                <br>
+                                {{ form_widget(tutorForm.registrar) }}
+                            </div>
+                        </div>
+                            
+                   {{ form_end(tutorForm) }}  
 
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                <button class="btn btn-primary" type="submit">Buscar Adscripcion</button>
+                
               </div>
             </div>
           </div>
@@ -93,7 +139,46 @@
             
             $('.esc_oposicion')[this.checked ? "show" : "hide"]();
             
-        });     
+        });   
+        
+       
+       $(".tutorForm").submit(function(e){
+           alert("funciona");
+           e.preventDefault();
+           
+           var formSerialize = $(this).serialize();
+           alert(formSerialize);
+            $.ajax({
+               method: "POST",
+               url: "{{ url('ajax_registrar_tutor') }}",    
+               data: formSerialize
+            })
+        .done(function (data) {
+            if (typeof data.message !== 'undefined') {
+                alert(data.message);
+            }
+        })
+        .fail(function (jqXHR, textStatus, errorThrown) {
+            if (typeof jqXHR.responseJSON !== 'undefined') {
+                if (jqXHR.responseJSON.hasOwnProperty('form')) {
+                    console.log(jqXHR.responseJSON.form);
+                }
+
+                console.log(jqXHR.responseJSON.message);
+
+            } else {
+                alert(errorThrown);
+            }
+
+        });
+    
+            
+            
+            
+                
+            
+            
+        });
         
        $( "#tutores_ascenso_buscarTutor" ).click(function() {
            if($("#tutores_ascenso_cedulaPasaporte").val() == ""){
@@ -107,16 +192,13 @@
                cache: false,    
                data: ({cedula: $("#tutores_ascenso_cedulaPasaporte").val(), documento: $("#tutores_ascenso_idDocumentoIdentidad").val()}),
                success: function (data) {
-
+                        console.log(data);
                        var posts = JSON.parse(data.posts);
                        console.log(posts);
-                       if (posts == ""){
+                       if (!posts){
                            $('.oculto').removeClass('hidden');
                        }else{
-                            $('#ascenso_tutores_asignados').append($('<option>', {
-                                 value: 1,
-                                 text: 'My option'
-                             }));
+                            $('#ascenso_tutores_ascenso option[value="' + posts.nombres + " " + posts.apellidos +'"]').prop("selected", true);
                         }
 
                 },

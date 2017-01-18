@@ -9,6 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 
 class TutoresAscensoType extends AbstractType
@@ -21,63 +22,89 @@ class TutoresAscensoType extends AbstractType
     {
         $builder
             ->add('idDocumentoIdentidad', EntityType::class, array(                
-                'label' => false,
-                'placeholder' => 'Tipo Documento...',
-                'class' => 'AppBundle:DocumentoIdentidad',                
-                'attr'  => array(                    
-                    'class' => 'col-lg-4',                     
-                )
+                'label' => 'Tipo Documento',
+                'placeholder' => 'Seleccione...',
+                'class' => 'AppBundle:DocumentoIdentidad',                                
             ))
             ->add('cedulaPasaporte', TextType::class, array(                
-                'label'         => false,                
+                'label'         => 'Cédula/Pasaporte',                
                 'attr'  => array(
-                    'placeholder' => 'introudzca la cédula',
+                    'placeholder' => 'Cédula Pasaporte ...',
                     'class' => 'col-lg-4 form-control',                     
                 )
             ))
                 
             ->add('buscarTutor', ButtonType::class, array(                
                 'label' => 'Añadir',
-                'attr'  => array('class' => 'btn btn-primary col-lg-4'),
+                'attr'  => array('class' => 'btn btn-primary btn-block'),
             ))
                 
-            ->add('etiqueta', TextType::class, array(                
-                'label'         => false,
-                'data'     => "Tutor no Encontrado, por favor Registre al nuevo Tutor",
-                'attr'  => array(
-                    'placeholder' => 'Nombres del tutor...',
-                    'class' => 'alert alert-warning col-lg-12 hidden oculto',                     
-                )
-            ))
+            
                 
                 
             ->add('nombres', TextType::class, array(                
-                'label'         => 'nombres',                
+                'label'         => 'Nombres Tutor',                
                 'label_attr' => array('class' => 'hidden oculto'),
-                'attr'  => array(                    
+                'attr'  => array(   
+                    'placeholder' => 'Nombres del Tutor...',
                     'class' => 'col-lg-6 form-control hidden oculto',                     
                 )
             ))
                 
-                ->add('apellidos', TextType::class, array(                
-                'label'         => false,                
+            ->add('apellidos', TextType::class, array(                
+                'label'         => 'Apellidos Tutor',
+                'label_attr' => array('class' => 'hidden oculto'),                
                 'attr'  => array(
                     'placeholder' => 'apellidos del tutor...',
                     'class' => 'col-lg-3 form-control hidden oculto',                     
                 )
             ))
-            /*->add('correoElectronico', EmailType::class, array(
-                'label'         => false,                
+                
+            ->add('institucion', TextType::class, array(                
+                'label'         => 'Institución',
+                'label_attr' => array('class' => 'hidden oculto'),                
                 'attr'  => array(
-                    'placeholder' => 'introudzca correo Electrónico del tutor',
-                    'class' => 'col-lg-6 form-group',                     
+                    'placeholder' => 'UBV, LUZ, UNEFM,',
+                    'class' => 'col-lg-3 form-control hidden oculto',                     
                 )
             ))
-            ->add('nombres')
+                
+            ->add('idEstado', EntityType::class, array(                
+                'label' => 'Estado',
+                'label_attr' => array('class' => 'hidden oculto'),
+                'placeholder' => 'Estado donde Labora...',
+                'class' => 'AppBundle:Estado',                
+                'attr'  => array(                    
+                    'class' => 'col-lg-3 form-control hidden oculto',                   
+                )
+            ))
+                
+            ->add('idEscala', EntityType::class, array(                
+                'label' => 'Escalafón',
+                'label_attr' => array('class' => 'hidden oculto'),                
+                'placeholder' => 'Escalafón actual...',
+                'class' => 'AppBundle:Escalafones',                
+                'attr'  => array(                    
+                    'class' => 'col-lg-3 form-control hidden oculto',                    
+                )
+            ))
+            ->add('correoElectronico', EmailType::class, array(
+                'label'         => 'Correo E.', 
+                'label_attr' => array('class' => 'hidden oculto'),                
+                'attr'  => array(
+                    'placeholder' => 'Dirección de Correo Tutor ...',
+                    'class' => 'col-lg-3 form-control hidden oculto',               
+                )
+            ))
+            ->add('registrar', SubmitType::class, array(
+                'label' => 'Registrar',
+                'attr'  => array('class' => 'btn btn-success hidden oculto'),
+            ))
+            /*->add('nombres')
             ->add('apellidos')
             ->add('institucion')            
             ->add('idEscala')*/
-            //->add('ascenso')
+            ->add('ascenso')
         ;
     }
     

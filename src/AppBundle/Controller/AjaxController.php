@@ -17,6 +17,7 @@ use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\HttpFoundation\Request;
+use AppBundle\Entity\TutoresAscenso;
 
 
 
@@ -77,7 +78,8 @@ class AjaxController extends Controller {
      * @Method({"GET"})
      */
      public function buscarTutorAction(Request $request){
-       if($request->isXmlHttpRequest()){
+         
+       //if($request->isXmlHttpRequest()){
             $encoders = array(new JsonEncoder());
             $normalizers = array(new ObjectNormalizer());
  
@@ -86,24 +88,57 @@ class AjaxController extends Controller {
             $documento = filter_input(INPUT_GET, 'documento', FILTER_SANITIZE_SPECIAL_CHARS);
  
 
-            $repository = $this->getDoctrine()
-                ->getRepository('AppBundle:TutoresAscenso');
-            $query = $repository->createQueryBuilder('p')
-                ->where('p.cedulaPasaporte = :cedula')
-                ->andWhere('p.institucion = :documento')
-                ->setParameters(array('cedula'=> $cedula, 'documento' => $documento))                
-                ->getQuery();
-
-            $posts = $query->getResult();
+            $repository = $this->getDoctrine()->getRepository('AppBundle:TutoresAscenso')->findOneBy(array(
+                'idDocumentoIdentidad' => $documento,
+                'cedulaPasaporte'   => $cedula
+            ));
+            
                                
             $response = new JsonResponse();
             $response->setStatusCode(200);
             $response->setData(array(
                 'response' => 'success',
-                'posts' => $serializer->serialize($posts, 'json')
+                'posts' => $serializer->serialize($repository, 'json')
             ));
             return $response;
-       }
+       //}
+        
+    }
+    
+    
+    /**
+     * @Route("/ajax/registrar_tutor", name="ajax_registrar_tutor")
+     * @Method({"POST"})
+     */
+     public function registrarTutorAction(Request $request){
+         
+       //if($request->isXmlHttpRequest()){
+            $encoders = array(new JsonEncoder());
+            $normalizers = array(new ObjectNormalizer());
+ 
+            $serializer = new Serializer($normalizers, $encoders);
+           
+            $nuevoTutor = new TutoresAscenso();
+            $form = $this->createForm('AppBundle\Form\TutoresAscensoType', $nuevoTutor);
+            $form->handleRequest($request);
+            
+            if ($form->isValid()) {
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($nuevoTutor);
+                $em->flush();
+ 
+                return new JsonResponse(array('message' => 'Success!'), 200);
+            }
+            echo $form;
+            
+            
+            $response = new JsonResponse(
+                    array(
+                'message' => $form,
+                ), 400);
+
+            return $response;
+       //}
         
     }
     

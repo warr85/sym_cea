@@ -27,7 +27,18 @@ class TutoresAscenso
      *   @ORM\JoinColumn(name="id_documento_identidad", referencedColumnName="id", nullable=false)
      * })
      */
-    private $idDocumentoentidad;
+    private $idDocumentoIdentidad;
+    
+    
+    /**
+     * @var \AppBundle\Entity\Estado
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Estado")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_estado", referencedColumnName="id", nullable=false)
+     * })
+     */
+    private $idEstado;
     
     
     /**
@@ -90,10 +101,12 @@ class TutoresAscenso
     
     
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ascenso", inversedBy="tutoresAscenso")
-     * @ORM\JoinColumn(name="ascenso_id", referencedColumnName="id")
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Ascenso", mappedBy="tutoresAscenso")
      */
-    private $ascenso;
+    protected $ascenso;
+   
 
     
 
@@ -213,12 +226,12 @@ class TutoresAscenso
     /**
      * Set idDocumentoentidad
      *
-     * @param \AppBundle\Entity\DocumentoIdentidad $idDocumentoentidad
+     * @param \AppBundle\Entity\DocumentoIdentidad $idDocumentoIdentidad
      * @return TutoresAscenso
      */
-    public function setIdDocumentoentidad(\AppBundle\Entity\DocumentoIdentidad $idDocumentoentidad)
+    public function setIdDocumentoIdentidad(\AppBundle\Entity\DocumentoIdentidad $idDocumentoIdentidad)
     {
-        $this->idDocumentoentidad = $idDocumentoentidad;
+        $this->idDocumentoIdentidad = $idDocumentoIdentidad;
 
         return $this;
     }
@@ -228,9 +241,9 @@ class TutoresAscenso
      *
      * @return \AppBundle\Entity\DocumentoIdentidad 
      */
-    public function getIdDocumentoentidad()
+    public function getIdDocumentoIdentidad()
     {
-        return $this->idDocumentoentidad;
+        return $this->idDocumentoIdentidad;
     }
 
     /**
@@ -256,28 +269,7 @@ class TutoresAscenso
         return $this->idEscala;
     }
 
-    /**
-     * Set ascenso
-     *
-     * @param \AppBundle\Entity\Ascenso $ascenso
-     * @return TutoresAscenso
-     */
-    public function setAscenso(\AppBundle\Entity\Ascenso $ascenso = null)
-    {
-        $this->ascenso = $ascenso;
-
-        return $this;
-    }
-
-    /**
-     * Get ascenso
-     *
-     * @return \AppBundle\Entity\Ascenso 
-     */
-    public function getAscenso()
-    {
-        return $this->ascenso;
-    }
+    
 
     /**
      * Set institucion
@@ -300,5 +292,69 @@ class TutoresAscenso
     public function getInstitucion()
     {
         return $this->institucion;
+    }
+
+    /**
+     * Set idEstado
+     *
+     * @param \AppBundle\Entity\Estado $idEstado
+     * @return TutoresAscenso
+     */
+    public function setIdEstado(\AppBundle\Entity\Estado $idEstado)
+    {
+        $this->idEstado = $idEstado;
+
+        return $this;
+    }
+
+    /**
+     * Get idEstado
+     *
+     * @return \AppBundle\Entity\Estado 
+     */
+    public function getIdEstado()
+    {
+        return $this->idEstado;
+    }
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->ascenso = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add ascenso
+     *
+     * @param \AppBundle\Entity\Ascenso $ascenso
+     * @return TutoresAscenso
+     */
+    public function addAscenso(\AppBundle\Entity\Ascenso $ascenso)
+    {
+        $this->ascenso[] = $ascenso;
+
+        return $this;
+    }
+
+    /**
+     * Remove ascenso
+     *
+     * @param \AppBundle\Entity\Ascenso $ascenso
+     */
+    public function removeAscenso(\AppBundle\Entity\Ascenso $ascenso)
+    {
+        $this->ascenso->removeElement($ascenso);
+    }
+
+    /**
+     * Get ascenso
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getAscenso()
+    {
+        return $this->ascenso;
     }
 }
