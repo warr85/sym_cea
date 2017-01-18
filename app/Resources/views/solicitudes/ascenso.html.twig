@@ -2,6 +2,7 @@
 
 {% block stylesheets %}
     {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('assets/vendor/chosen/chosen.min.css') }}">
      
     <style>
         .esc_oposicion, .esc_asistente, .esc_agregado, .esc_asociado, .esc_titular{
@@ -134,6 +135,7 @@
 
 {% block javascripts  %}
     {{ parent() }}
+    <script type="text/javascript" src="{{ asset('assets/vendor/chosen/chosen.jquery.min.js') }}"></script>
     <script type="text/javascript">
         $('#ascenso_tipoTrabajoInvestigacion').click(function() {
             
@@ -143,7 +145,7 @@
         
        
        $(".tutorForm").submit(function(e){
-           alert("funciona");
+          
            e.preventDefault();
            
            var formSerialize = $(this).serialize();
@@ -151,13 +153,23 @@
             $.ajax({
                method: "POST",
                url: "{{ url('ajax_registrar_tutor') }}",    
-               data: formSerialize
+               data: formSerialize,
+               
             })
         .done(function (data) {
-            if (typeof data.message !== 'undefined') {
-                alert(data.message);
+            if (typeof data.response !== 'undefined') {
+                alert(data.response);
+                console.log(data.posts);
+                var posts = JSON.parse(data.posts);
+                $("#ascenso_tutores_ascenso").find('optgroup[label="UBV"]').append($('<option>', {
+                    value: posts.id,
+                    text: posts.nombres + " " + posts.apellidos
+                }));
+                $("#ascenso_tutores_ascenso").trigger("chosen:updated");
+                
             }
         })
+        
         .fail(function (jqXHR, textStatus, errorThrown) {
             if (typeof jqXHR.responseJSON !== 'undefined') {
                 if (jqXHR.responseJSON.hasOwnProperty('form')) {
@@ -209,6 +221,8 @@
 
            });
        });
+       
+       $("#ascenso_tutores_ascenso").chosen({no_results_text: "<a data-toggle='modal' data-target='#buscarTutores' href='#'>Tutor no registrado, click aquí para registrar!</a>"});
         
     </script>
 {% endblock %}

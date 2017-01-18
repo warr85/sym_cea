@@ -111,22 +111,14 @@ class AscensoType extends AbstractType
                 
             ->add('tutores_ascenso', EntityType::class, array(
                 'placeholder' => 'Añadir Tutores...',   
-                'class' => 'AppBundle:TutoresAscenso',
-                'label' => false,                 
+                'class' => 'AppBundle:TutoresAscenso',                                
                 'multiple'  => true, 
+                'group_by'  => 'institucion',
                 /*'attr'  => array(
                     'disabled' => 'true',                    
                 )*/
             ))
-                
-            ->add('añadir_tutor', ButtonType::class, array(
-            'label' => 'Añadir Tutor',
-            'attr'  => array(
-                    'class' => 'btn btn-success btn-sm', 
-                    'data-toggle' => "modal",
-                    'data-target' => "#buscarTutores"
-                )
-            ))
+                            
                 
                 
             ->add('investigacion', FileType::class, array(

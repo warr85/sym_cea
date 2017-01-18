@@ -73,6 +73,41 @@ class AjaxController extends Controller {
     }
     
     
+    
+    /**
+     * @Route("/ajax/buscar_tutor_select", name="ajax_buscar_tutor_select")
+     * @Method({"GET"})
+     */
+    public function buscarTutorSelectAction(Request $request){
+       //if($request->isXmlHttpRequest()){            
+            $encoders = array(new JsonEncoder());
+            $normalizers = array(new ObjectNormalizer());
+ 
+            $serializer = new Serializer($normalizers, $encoders);
+             
+            $term = filter_input(INPUT_GET, 'term', FILTER_SANITIZE_SPECIAL_CHARS);
+            $repository = $this->getDoctrine()
+            ->getRepository('AppBundle:TutoresAscenso');
+            $query = $repository->createQueryBuilder('p')
+            ->where('p.nombres LIKE :term')
+            ->orWhere('p.apellidos LIKE :term')
+            ->setParameter('term', '%'.$term.'%')     
+            ->getQuery();
+
+            $posts = $query->getResult();
+            
+                       
+            $response = new JsonResponse();
+            $response->setStatusCode(200);
+            $response->setData(array(                
+                'items' => $serializer->serialize($posts, 'json')
+            ));
+            return $response;
+       //}
+        
+    }
+    
+    
     /**
      * @Route("/ajax/buscar_tutor", name="ajax_buscar_tutor")
      * @Method({"GET"})
@@ -127,9 +162,15 @@ class AjaxController extends Controller {
                 $em->persist($nuevoTutor);
                 $em->flush();
  
-                return new JsonResponse(array('message' => 'Success!'), 200);
+                 $response = new JsonResponse();
+            $response->setStatusCode(200);
+            $response->setData(array(
+                'response' => 'success',
+                'posts' => $serializer->serialize($nuevoTutor, 'json')
+            ));
+            return $response;
             }
-            echo $form;
+            
             
             
             $response = new JsonResponse(
