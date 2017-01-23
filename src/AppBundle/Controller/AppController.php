@@ -42,6 +42,14 @@ class AppController extends Controller {
                     'idRolInstitucion'  =>  $this->getUser()->getIdRolInstitucion()->getId(),
                     'idServicioCe'      =>  2
         ));
+       
+       $ascenso = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->
+                findOneBy(array(
+                    'idRolInstitucion'  =>  $this->getUser()->getIdRolInstitucion()->getId(),
+                    'idServicioCe'      =>  5),
+                    array('id' => 'DESC') 
+        );
+       
        //si no ha solicitado adscripción regresa a la pagina de adscripcion
         if(!$adscripcion){ return $this->redirect($this->generateUrl('solicitud_adscripcion')); }
         
@@ -78,6 +86,7 @@ class AppController extends Controller {
         
         return $this->render('cea/index.html.twig', array (
             'adscrito' => $adscrito,
+            'ascenso'   => $ascenso,
             'tiempoProxEscalafon'   => $tiempoTranscurrido,
             'suffix'                => $suffix
         ));
