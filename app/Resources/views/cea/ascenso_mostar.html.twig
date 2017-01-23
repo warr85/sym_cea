@@ -67,6 +67,8 @@
                                     <p class="well">
                                         <strong>{{ tutor.nombres }}  {{ tutor.apellidos }}:</strong>
                                         {{ tutor.institucion }} -> {{ tutor.idEscala.nombre }}
+                                        <input type="button" class="btn btn-warning btn-xs" value="act" id="actualizar_tutor">
+                                         <input type="button" class="btn btn-danger btn-xs" value="cam" id="cambiar_tutor">
                                     </p>
                                 {% endfor %}
                             
@@ -246,4 +248,13 @@
 {% block javascripts %}
     {{ parent() }}
     <script type="text/javascript" src="{{ asset('assets/vendor/lightbox2/dist/js/lightbox.min.js') }}"></script>
+    
+    <script>
+        $("#actualizar_tutor").click(function(){
+             alert("click");
+        });
+           
+        
+    </script>
+    
     {% endblock %}
