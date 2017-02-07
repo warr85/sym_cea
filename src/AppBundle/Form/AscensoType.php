@@ -107,19 +107,7 @@ class AscensoType extends AbstractType
                 'required' => true,
                
             ))
-                
-                
-            ->add('tutores_ascenso', EntityType::class, array(
-                'placeholder' => 'Añadir Tutores...',   
-                'class' => 'AppBundle:TutoresAscenso',                                
-                'multiple'  => true, 
-                'group_by'  => 'institucion',
-                /*'attr'  => array(
-                    'disabled' => 'true',                    
-                )*/
-            ))
-                            
-                
+                                                                                       
                 
             ->add('investigacion', FileType::class, array(
                 'label' => 'Digital Trabajo de investigación / Tesis',
@@ -143,6 +131,20 @@ class AscensoType extends AbstractType
             ->add('tipoTrabajoInvestigacion', CheckboxType::class, array(
                 'label'         => 'Si su trabajo de investigación es TESIS, responda ¿Fue realizado fuera de la UBV?',
                 'required' => false,
+            ))
+                
+          ->add('tutores_ascenso', EntityType::class, array(
+                'placeholder' => 'Añadir Posibles Jurados...',   
+                'class' => 'AppBundle:TutoresAscenso',
+                'required' => false,
+                'label' => 'Asigne Posibles Jurados',
+                'label_attr'    => array( 'class' => 'esc_oposicion'),
+                'multiple'  => true, 
+                'group_by'  => 'institucion',
+                
+                /*'attr'  => array(
+                    'disabled' => 'true',                    
+                )*/
             ))
    
             ->add('pertinencia', FileType::class, array(

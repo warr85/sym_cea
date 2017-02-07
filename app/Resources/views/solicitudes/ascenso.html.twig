@@ -141,6 +141,13 @@
         $('#ascenso_tipoTrabajoInvestigacion').click(function() {
             
             $('.esc_oposicion')[this.checked ? "show" : "hide"]();
+                        
+            if($('#ascenso_tipoTrabajoInvestigacion').prop('checked') == true){
+            
+                $("#ascenso_tutores_ascenso_chosen").show();
+            }else{
+               $("#ascenso_tutores_ascenso_chosen").hide(); 
+            }
             
         });   
         
@@ -222,6 +229,12 @@
 
            });
        });
+       
+       $("#ascenso_tutores_ascenso").on("chosen:ready", function() {
+            $("#ascenso_tutores_ascenso_chosen").hide();
+            alert("hidden");
+        });
+       
        
        $("#ascenso_tutores_ascenso").chosen({
             no_results_text: "<a data-toggle='modal' data-target='#buscarTutores' href='#'>Tutor no registrado, click aquí para registrar!</a>",
