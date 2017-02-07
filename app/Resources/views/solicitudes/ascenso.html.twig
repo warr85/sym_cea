@@ -137,6 +137,7 @@
     {{ parent() }}
     <script type="text/javascript" src="{{ asset('assets/vendor/chosen/chosen.jquery.min.js') }}"></script>
     <script type="text/javascript">
+
         $('#ascenso_tipoTrabajoInvestigacion').click(function() {
             
             $('.esc_oposicion')[this.checked ? "show" : "hide"]();
@@ -222,7 +223,11 @@
            });
        });
        
-       $("#ascenso_tutores_ascenso").chosen({no_results_text: "<a data-toggle='modal' data-target='#buscarTutores' href='#'>Tutor no registrado, click aquí para registrar!</a>"});
+       $("#ascenso_tutores_ascenso").chosen({
+            no_results_text: "<a data-toggle='modal' data-target='#buscarTutores' href='#'>Tutor no registrado, click aquí para registrar!</a>",
+            max_selected_options: 6
+            
+        });
         
     </script>
 {% endblock %}
