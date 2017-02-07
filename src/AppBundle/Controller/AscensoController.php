@@ -398,7 +398,7 @@ class AscensoController extends Controller
     
     
      /**
-     * Encuentra y muestra una entidad de tipo Adscripción.
+     * Encuentra y muestra una entidad de tipo Ascenso.
      *
      * @Route("/ascenso/{id}", name="cea_ascenso_show")
      * @Method("GET")
@@ -421,13 +421,16 @@ class AscensoController extends Controller
             'idRolInstitucion' => $servicio->getIdRolInstitucion(),
             'idServicioCe'  => 1            
         ));
+        
+         $form = $this->createForm('AppBundle\Form\AddTutorType');
 
         return $this->render('cea/ascenso_mostar.html.twig', array(
             'ascenso' => $ascenso, 
             'servicio'  => $servicio,
             'escalas' => $escala,            
             'pida'      => $pida,
-            'antiguedad' => $antiguedad
+            'antiguedad' => $antiguedad,
+            'form' => $form->createView(), 
         ));
     }
     

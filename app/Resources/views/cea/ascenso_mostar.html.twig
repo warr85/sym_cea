@@ -2,10 +2,11 @@
 {% block stylesheets %}
     {{ parent() }}
     <link href="{{ asset('assets/vendor/lightbox2/dist/css/lightbox.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('assets/vendor/chosen/chosen.min.css') }}">
 {% endblock %}
 
 {%block body %} 
-    
+    {% set cantidadJurado = 6 %}
      <div class="content-wrapper">
         <div class="container">
             {% for message in app.session.flashBag.get('notice') %}
@@ -25,10 +26,9 @@
                         <h4 class="alert alert-danger">Estatus <strong>{{servicio.idEstatus}}</strong> 
                     {% else %}
                         <h4 class="alert alert-warning">Estatus <strong>{{servicio.idEstatus}}</strong> 
-                     {% endif %}
-                    </h4>                       
+                    {% endif %}
+                        </h4>                       
                 </div>
-
             </div>
             <div class="row">
                 
@@ -45,7 +45,7 @@
                         
                         {% if escalas is not null %}
                         <div class="form-group">
-                            <label for="Escalafones">Escalafones Obtenidos:</label>
+                            <label for="Escalafones">{{ cantidadJurado }}Escalafones Obtenidos:</label>
                              <table class="table table-striped table-bordered">
                                     <th>Escalafón</th>
                                     <th>Fecha</th>
@@ -60,17 +60,36 @@
                             {%endfor %}
                             </table>   
                             
-                            <p ><strong>Escalafón Solicita:</strong> {{ ascenso.idEscalafones.nombre }} </p>                                
+                            <p><strong>Escalafón Solicita:</strong> {{ ascenso.idEscalafones.nombre }} </p>                                
                                 
                                     <h4>Jurados propuestos por el Docente</h4>
+                                    {% set añadirJurado = true  %}
+                                    {% set cantidadJurado = 6 %}
                                     {% for tutor in ascenso.tutoresAscenso %}
+                                        {% if loop.length >= 5 %} 
+                                            {% set añadirJurado = false %}
+                                        {% else %}
+                                            {% set cantidadJurado = cantidadJurado - loop.index %}
+                                        {% endif %}
                                     <p class="well">
+                                        
                                         <strong>{{ tutor.nombres }}  {{ tutor.apellidos }}:</strong>
                                         {{ tutor.institucion }} -> {{ tutor.idEscala.nombre }}
                                         <input type="button" class="btn btn-warning btn-xs" value="act" id="actualizar_tutor">
-                                         <input type="button" class="btn btn-danger btn-xs" value="cam" id="cambiar_tutor">
+                                        <input type="button" class="btn btn-danger btn-xs" value="cam" id="cambiar_tutor">
                                     </p>
                                 {% endfor %}
+                                {% if añadirJurado %}
+                                    {{ dump(cantidadJurado) }}
+                                    <p id="falta" class="label label-danger" data-faltaid = '{{cantidadJurado}}'>
+                                        El docente no tiene o le faltó completar posibles jurados
+                                    </p>
+                                    {% form_theme form 'bootstrap_3_layout.html.twig' %}        
+                                    {{ form_start(form) }}
+                                    {{ form_widget(form) }}
+                                    {{ form_end(form) }}
+                                    <button class="btn btn-primary btn-sm" id="añadirJurados">Añadir Jurados</button>
+                                {% endif %}
                             
                             
                         </div>
@@ -247,12 +266,28 @@
 
 {% block javascripts %}
     {{ parent() }}
+    <script type="text/javascript" src="{{ asset('assets/vendor/chosen/chosen.jquery.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('assets/vendor/lightbox2/dist/js/lightbox.min.js') }}"></script>
     
     <script>
+        var cantidad = $("#falta").data('faltaid');
+        alert(cantidad);
         $("#actualizar_tutor").click(function(){
              alert("click");
         });
+        
+        $("#aadd_tutor_tutores_ascenso").on("chosen:ready", function() {
+            $("#add_tutor_tutores_ascenso").chosen('destroy').chosen({ max_selected_options: 2 });
+        });
+        
+        
+        $("#add_tutor_tutores_ascenso").chosen({
+            no_results_text: "<a data-toggle='modal' data-target='#buscarTutores' href='#'>Tutor no registrado, click aquí para registrar!</a>",
+            max_selected_options: cantidad
+            
+        });
+        
+        
            
         
     </script>
