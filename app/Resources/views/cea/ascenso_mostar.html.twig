@@ -283,6 +283,8 @@
                success: function (data) {
                         console.log(data);
                         $("#well_" + $(".eliminar_jurado").attr('id')).remove();
+                        cantidad = cantidad + 1;
+                        $("#add_tutor_tutores_ascenso").chosen('destroy').chosen({ max_selected_options: cantidad });
 
                 },
                error: function (XMLHttpRequest, textStatus, errorThrown) { 
