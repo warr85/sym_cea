@@ -104,7 +104,7 @@ class TutoresAscensoType extends AbstractType
             ->add('apellidos')
             ->add('institucion')            
             ->add('idEscala')*/
-            ->add('ascenso')
+            //->add('ascenso')
         ;
     }
     
