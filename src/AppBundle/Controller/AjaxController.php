@@ -230,4 +230,49 @@ class AjaxController extends Controller {
         
     }
     
+    
+    /**
+     * @Route("/ajax/eliminar_tutor", name="ajax_eliminar_tutor")
+     * @Method({"POST"})
+     */
+     public function eliminarTutorAction(Request $request){
+         
+       if($request->isXmlHttpRequest()){
+            $encoders = array(new JsonEncoder());
+            $normalizers = array(new ObjectNormalizer());
+ 
+            $serializer = new Serializer($normalizers, $encoders);
+           
+            $eliminar = filter_input(INPUT_POST, 'eliminar', FILTER_SANITIZE_SPECIAL_CHARS);
+            $ascensoId = filter_input(INPUT_POST, 'ascensoId', FILTER_SANITIZE_SPECIAL_CHARS);
+            
+            
+            $ascenso = $this->getDoctrine()->getRepository("AppBundle:Ascenso")->findOneById($ascensoId);
+            
+            
+                $quitarJurado = $this->getDoctrine()->getRepository("AppBundle:TutoresAscenso")->findOneById($eliminar);
+                $ascenso->removeTutoresAscenso($quitarJurado);
+            
+            
+            
+            
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($ascenso);
+            $em->flush();
+            
+            $response = new JsonResponse();
+            $response->setStatusCode(200);
+            $response->setData(array(
+                'response' => 'success',
+                'jurados' => $quitarJurado,
+                'ascenso'  => $ascensoId
+            ));
+            
+            return $response;
+            
+            
+       }
+        
+    }
+    
 }

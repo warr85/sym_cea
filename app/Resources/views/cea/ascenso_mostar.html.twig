@@ -72,12 +72,12 @@
                                         {% else %}
                                             {% set cantidadJurado = cantidadJurado - 1 %}
                                         {% endif %}
-                                    <p class="well">
+                                    <p class="well" id="well_{{tutor.id}}">
                                         
                                         <strong>{{ tutor.nombres }}  {{ tutor.apellidos }}:</strong>
                                         {{ tutor.institucion }} -> {{ tutor.idEscala.nombre }}
                                         <input type="button" class="btn btn-warning btn-xs" value="act" id="actualizar_tutor">
-                                        <input type="button" class="btn btn-danger btn-xs" value="cam" id="cambiar_tutor">
+                                        <input type="button" class="btn btn-danger btn-xs eliminar_jurado" value="X" id="{{ tutor.id }}">
                                     </p>
                                 {% endfor %}
                                 {% if añadirJurado %}
@@ -273,8 +273,24 @@
     <script>
         var cantidad = $("#falta").data('faltaid');
         alert(cantidad);
-        $("#actualizar_tutor").click(function(){
-             alert("click");
+        $(".eliminar_jurado").click(function(){
+             $.ajax({
+               method: "POST",
+               url: "{{ url('ajax_eliminar_tutor') }}",
+               async: true,
+               cache: false,    
+               data: ({ eliminar: $(".eliminar_jurado").attr('id'), ascensoId: {{ ascenso.id }} }),
+               success: function (data) {
+                        console.log(data);
+                        $("#well_" + $(".eliminar_jurado").attr('id')).remove();
+
+                },
+               error: function (XMLHttpRequest, textStatus, errorThrown) { 
+                     console.log(errorThrown);                 
+
+               }
+
+           });
         });
         
         $("#aadd_tutor_tutores_ascenso").on("chosen:ready", function() {
