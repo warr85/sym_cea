@@ -66,10 +66,11 @@
                                     {% set añadirJurado = true  %}
                                     {% set cantidadJurado = 6 %}
                                     {% for tutor in ascenso.tutoresAscenso %}
-                                        {% if loop.length >= 5 %} 
+                                        {{ loop.length }}
+                                        {% if loop.length == 6 %} 
                                             {% set añadirJurado = false %}
                                         {% else %}
-                                            {% set cantidadJurado = cantidadJurado - loop.index %}
+                                            {% set cantidadJurado = cantidadJurado - 1 %}
                                         {% endif %}
                                     <p class="well">
                                         
