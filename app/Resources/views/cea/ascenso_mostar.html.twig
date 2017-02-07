@@ -288,6 +288,27 @@
         });
         
         
+        
+        $( "#añadirJurados" ).click(function() {
+           alert('hola');
+            $.ajax({
+               method: "POST",
+               url: "{{ url('ajax_adicionar_tutor') }}",
+               async: true,
+               cache: false,    
+               data: ({ jurados: $("#add_tutor_tutores_ascenso").val(), ascensoId: {{ ascenso.id }} }),
+               success: function (data) {
+                        console.log(data);
+                       
+
+                },
+               error: function (XMLHttpRequest, textStatus, errorThrown) { 
+                     console.log(errorThrown);                 
+
+               }
+
+           });
+       });
            
         
     </script>

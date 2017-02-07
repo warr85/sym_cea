@@ -18,6 +18,7 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\TutoresAscenso;
+use AppBundle\Entity\Ascenso;
 
 
 
@@ -180,6 +181,52 @@ class AjaxController extends Controller {
 
             return $response;
        //}
+        
+    }
+    
+    
+    
+    /**
+     * @Route("/ajax/adicionar_tutor", name="ajax_adicionar_tutor")
+     * @Method({"POST"})
+     */
+     public function adicionarTutorAction(Request $request){
+         
+       if($request->isXmlHttpRequest()){
+            $encoders = array(new JsonEncoder());
+            $normalizers = array(new ObjectNormalizer());
+ 
+            $serializer = new Serializer($normalizers, $encoders);
+           
+            $jurados = filter_input(INPUT_POST, 'jurados', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+            $ascensoId = filter_input(INPUT_POST, 'ascensoId', FILTER_SANITIZE_SPECIAL_CHARS);
+            
+            
+            $ascenso = $this->getDoctrine()->getRepository("AppBundle:Ascenso")->findOneById($ascensoId);
+            
+            foreach ($jurados as $jurado){
+                $adicionar = $this->getDoctrine()->getRepository("AppBundle:TutoresAscenso")->findOneById($jurado);
+                $ascenso->addTutoresAscenso($adicionar);
+            }
+            
+            
+            
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($ascenso);
+            $em->flush();
+            
+            $response = new JsonResponse();
+            $response->setStatusCode(200);
+            $response->setData(array(
+                'response' => 'success',
+                'jurados' => $jurados,
+                'ascenso'  => $ascensoId
+            ));
+            
+            return $response;
+            
+            
+       }
         
     }
     
