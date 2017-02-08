@@ -65,6 +65,7 @@
                                     <h4>Jurados propuestos por el Docente</h4>
                                     {% set añadirJurado = true  %}
                                     {% set cantidadJurado = 6 %}
+                                     <div id="seccion_jurados">
                                     {% for tutor in ascenso.tutoresAscenso %}
                                         {{ loop.length }}
                                         {% if loop.length == 6 %} 
@@ -72,6 +73,7 @@
                                         {% else %}
                                             {% set cantidadJurado = cantidadJurado - 1 %}
                                         {% endif %}
+                                       
                                     <p class="well" id="well_{{tutor.id}}">
                                         
                                         <strong>{{ tutor.nombres }}  {{ tutor.apellidos }}:</strong>
@@ -79,7 +81,9 @@
                                         <input type="button" class="btn btn-warning btn-xs" value="act" id="actualizar_tutor">
                                         <input type="button" class="btn btn-danger btn-xs eliminar_jurado" value="X" id="{{ tutor.id }}">
                                     </p>
+                                    
                                 {% endfor %}
+                                </div>
                                 {% if añadirJurado %}
                                     {{ dump(cantidadJurado) }}
                                     <p id="falta" class="label label-danger" data-faltaid = '{{cantidadJurado}}'>
@@ -271,9 +275,8 @@
     <script type="text/javascript" src="{{ asset('assets/vendor/lightbox2/dist/js/lightbox.min.js') }}"></script>
     
     <script>
-        var cantidad = $("#falta").data('faltaid');
-        alert(cantidad);
-        $(".eliminar_jurado").click(function(){
+        var cantidad = $("#falta").data('faltaid');        
+        $(".eliminar_jurado").click(function(){            
              $.ajax({
                method: "POST",
                url: "{{ url('ajax_eliminar_tutor') }}",
@@ -308,8 +311,7 @@
         
         
         
-        $( "#añadirJurados" ).click(function() {
-           alert('hola');
+        $( "#añadirJurados" ).click(function() {           
             $.ajax({
                method: "POST",
                url: "{{ url('ajax_adicionar_tutor') }}",
@@ -318,7 +320,10 @@
                data: ({ jurados: $("#add_tutor_tutores_ascenso").val(), ascensoId: {{ ascenso.id }} }),
                success: function (data) {
                         console.log(data);
-                       
+                        for (var i = 0; i < data.adicionar_nombres.length; i ++){
+                            $("#seccion_jurados").append( "<p class='well' id='well_" + data.jurados[i] +  "'><strong>" +  data.adicionar_nombres[i] + ":</strong>" +  data.adicionar_institucion[i]  + "<input type='button' class='btn btn-danger btn-xs' value='X' id='" + data.adicionar_id[i] + "'/></p>"  );
+                            $("#" + data.jurados[i] ).addClass("eliminar_jurado")
+                        }
 
                 },
                error: function (XMLHttpRequest, textStatus, errorThrown) { 

@@ -207,6 +207,9 @@ class AjaxController extends Controller {
             foreach ($jurados as $jurado){
                 $adicionar = $this->getDoctrine()->getRepository("AppBundle:TutoresAscenso")->findOneById($jurado);
                 $ascenso->addTutoresAscenso($adicionar);
+                $nuevos_nombres[] = $adicionar->getNombres() . " " . $adicionar->getApellidos(); 
+                $nuevos_institucion[] = $adicionar->getInstitucion() . " -> " . $adicionar->getIdEscala()->getNombre();
+                $nuevos_id[] = $adicionar->getId();
             }
             
             
@@ -220,6 +223,9 @@ class AjaxController extends Controller {
             $response->setData(array(
                 'response' => 'success',
                 'jurados' => $jurados,
+                'adicionar_nombres' => $nuevos_nombres,
+                'adicionar_institucion' => $nuevos_institucion,
+                'adicionar_id'          => $nuevos_id,
                 'ascenso'  => $ascensoId
             ));
             
