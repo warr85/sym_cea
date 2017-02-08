@@ -94,6 +94,10 @@
                                     {{ form_widget(form) }}
                                     {{ form_end(form) }}
                                     <button class="btn btn-primary btn-sm" id="añadirJurados">Añadir Jurados</button>
+                                {% else %}
+                                    <p id="falta" class="label label-success" data-faltaid = '0'>
+                                        El docente completó los 6 Jurados Propuestos
+                                    </p>
                                 {% endif %}
                             
                             
@@ -276,14 +280,15 @@
     
     <script>
         var cantidad = $("#falta").data('faltaid');        
-        $(".eliminar_jurado").click(function(){            
+        $("#seccion_jurados").on("click", ".eliminar_jurado", function(){                 
              $.ajax({
                method: "POST",
                url: "{{ url('ajax_eliminar_tutor') }}",
                async: true,
                cache: false,    
-               data: ({ eliminar: $(".eliminar_jurado").attr('id'), ascensoId: {{ ascenso.id }} }),
+               data: ({ eliminar: $(this).attr('id'), ascensoId: {{ ascenso.id }} }),
                success: function (data) {
+                        alert(cantidad);                        
                         console.log(data);
                         $("#well_" + $(".eliminar_jurado").attr('id')).remove();
                         cantidad = cantidad + 1;
@@ -322,8 +327,10 @@
                         console.log(data);
                         for (var i = 0; i < data.adicionar_nombres.length; i ++){
                             $("#seccion_jurados").append( "<p class='well' id='well_" + data.jurados[i] +  "'><strong>" +  data.adicionar_nombres[i] + ":</strong>" +  data.adicionar_institucion[i]  + "<input type='button' class='btn btn-danger btn-xs' value='X' id='" + data.adicionar_id[i] + "'/></p>"  );
-                            $("#" + data.jurados[i] ).addClass("eliminar_jurado")
+                            $("#" + data.jurados[i] ).addClass("eliminar_jurado");
+                            cantidad = cantidad - 1;
                         }
+                        $("#add_tutor_tutores_ascenso").val("");
 
                 },
                error: function (XMLHttpRequest, textStatus, errorThrown) { 
