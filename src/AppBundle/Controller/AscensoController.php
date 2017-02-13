@@ -615,6 +615,82 @@ class AscensoController extends Controller
     }
     
     
+    /**
+     * Muestra la página donde explica brevemente el reconocimiento de Antiguedad
+     * y permite realizar la solicitud
+     *
+     * @Route("/mis_servicios/ascenso/resumen/{id}", name="ascenso_resumen")
+     * @Method({"GET", "POST"})
+     */
+    public function resumenAscensoImprimirAction(DocenteServicio $servicio){
+        
+       
+       
+       if($servicio->getIdEstatus()->getId() == 1){         
+            
+            $correlativo = $this->getDoctrine()->getRepository('AppBundle:Memorando')->findOneByIdDocenteServicio($servicio->getId());
+            $ascenso = $this->getDoctrine()->getRepository('AppBundle:Ascenso')->findOneBy(
+                array('idRolInstitucion'  => $servicio->getIdRolInstitucion()),
+                array('id' => 'DESC')
+            );
+            $adscripcion = $this->getDoctrine()->getRepository('AppBundle:Adscripcion')->findOneByIdRolInstitucion($servicio->getIdRolInstitucion());
+            $oposcion = $this->getDoctrine()->getRepository('AppBundle:DocenteEscala')->findOneByIdRolInstitucion($servicio->getIdRolInstitucion());
+            $ultimaEscala = $this->getDoctrine()->getRepository('AppBundle:DocenteEscala')->findOneBy(
+                array('idRolInstitucion'  => $servicio->getIdRolInstitucion()),
+                array('id' => 'DESC')
+            );
+            if(!$correlativo){
+                    $correlativo = $this->getDoctrine()->getRepository('AppBundle:Memorando')->findOneBy(
+                         array('ano'=> date("Y")), 
+                        array('id' => 'DESC')
+                    );
+                    $numero = 1;
+                    if ($correlativo) $numero = $correlativo->getCorrelativo() + 1;
+
+                    $memo = new Memorando();
+                    $memo->setCorrelativo($numero);
+                    $memo->setIdDocenteServicio($servicio);
+                    $memo->setAno(date("Y"));
+                    $memo->setIdEstatus($this->getDoctrine()->getRepository("AppBundle:Estatus")->findOneById(1));
+
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($memo);
+                    $em->flush();
+                    $memorando = $memo->getCorrelativo() . "-" . $memo->getAno();
+            }else{
+                $memorando = $correlativo->getCorrelativo() . "-" . $correlativo->getAno();
+            }
+     
+            return $this->render('memorando/ascenso.html.twig', array(
+                'ascenso'       =>  $ascenso,  
+                'correlativo'   => $memorando,
+                'adscripcion'   => $adscripcion,
+                'oposicion'     => $oposcion,
+                'ultimaEscala'  => $ultimaEscala,
+                'servicio'     => $servicio
+            ));
+        
+        
+       }else{
+           
+           $this->addFlash('danger', 'No Puede Imprimir el el resumen de solicitud de ascenso hasta no haber estado aprobada dicha solicitud.');
+       
+        $servicios = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->findByIdRolInstitucion($this->getUser()->getIdRolInstitucion());
+        $adscripcion = $this->getDoctrine()->getRepository('AppBundle:Adscripcion')->findByIdRolInstitucion($this->getUser()->getIdRolInstitucion());
+        
+        
+        return $this->render('solicitudes/index.html.twig', array(
+            'servicios' => $servicios,
+            'adscripcion' => $adscripcion
+        ));
+           
+       }
+        
+        
+        
+    }
+    
+    
     
     
      

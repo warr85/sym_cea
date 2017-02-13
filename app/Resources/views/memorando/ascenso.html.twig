@@ -1,0 +1,199 @@
+{% extends 'base_memo.html.twig' %}
+
+{% block para %} 
+    {{ascenso.idRolInstitucion.idRol.idPersona.primerNombre}} 
+    {{ascenso.idRolInstitucion.idRol.idPersona.segundoNombre}} 
+    {{ascenso.idRolInstitucion.idRol.idPersona.primerApellido}}
+    {{ascenso.idRolInstitucion.idRol.idPersona.segundoApellido}}
+    ({{ascenso.idRolInstitucion.idRol.idPersona.cedulaPasaporte}})
+    <br>Trabajador Académico adscrito al Centro de Estudios Ambientales
+{%endblock %}
+
+{% block numero %}{{ correlativo }}{% endblock %}
+
+{% block coordinador %} 
+    Prof. Alexis Lozada
+    <br>Director (E) Del Centro de Estudios  Ambientales.    
+{% endblock %}
+
+
+{% block asunto %}
+    Cuadro resumen solicitud de Ascenso
+{%endblock%} 
+
+{% block fecha %}
+    {{ "now"|date("d/m/Y") }}
+{%endblock%}
+
+ {% block cuerpo %}
+     <style>
+         
+         
+         
+         @media print {
+            footer {page-break-after: always;}
+        }
+        
+        
+
+        
+     </style>
+     
+     <p class="text-justify cuerpo-memo">
+         Reciba un cordial saludo bolivariano y revolucionario de parte del equipo 
+        de trabajo de este Centro de Estudios Ambientales.  La presente es para 
+        informar que este Centro reconoce su solicitud de Ascenso de Escalafón
+        de {{ ultimaEscala.idEscala }} a {{ ascenso.idEscalafones }} a través
+        del siguiente Cuadro Resumen.<br><br><br><br><br><br><br><br><br><br><br>
+        <br><br><br><br><br><br><br><br><br><br>
+        
+        <footer>
+                    <div class="row ">                   
+                       
+                        <div class="col-xs-10 text-right">
+                          <p>Av. Leonardo Da Vinci</p>
+                                <p>Edif. Universidad Bolivariana de Venezuela</p>
+                                <p>Piso 8. Los Chaguaramos</p>
+                                <p>Telf. 0212- 606.3449</p> 
+                                <p>RIF. G - 20003773-3</p>
+                                <p>www.ubv.edu.ve - @ubv</p>
+                                <p class="text-center">"Sembramos Saberes Cosechamos Patria"</p>
+                        </div>
+                        <div class="col-xs-2 push-left">
+                            <img width="80%" src="{{ asset('bundles/framework/images/memorando/logoJuventud.jpg')}}" />
+                            </div>
+                        
+                        
+                        </div>
+                  
+                       
+                    </footer>  
+     
+     <header>
+                    <table>
+                        <tr>
+                            <td>
+                                <div >
+                                    <img width="50%" src="{{ asset('bundles/framework/images/portal/logo_ubv.png')}}" />
+                                </div>
+                            </td>
+                            <td>
+                                <div>
+                                <p>República Bolivariana de Venezuela</p>
+                                <p>Universidad Bolivariana de Venezuela</p>
+                                <p>Rectorado</p>
+                                <p>Dirección General de Apoyo Socio Administrativo</p>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>                   
+                </header>
+                                
+                                <div class="row">
+                <div class="text-right">
+                    <p><strong>CEA@UBV-N°-00{{ correlativo }}</strong></p>
+                </div>
+            </div>
+                                
+                                <div class="row">
+                <div class="text-center">
+                    <p><strong>M E M O R A N D O</strong></p>
+                </div>
+            </div>
+                <br><br>
+        
+        
+                            
+<table id="resumen" class="table table-bordered table-condensed" style="height: 116px; margin-left: auto; margin-right: auto;"  width="552">
+    <tbody>
+        <tr>
+            <td colspan="5">
+                <p class="western" lang="es-ES" align="center">
+                    <span style="font-size: medium;">
+                        <strong>Jurado Principal y Suplente para Trabajo de Ascenso</strong>
+                    </span>
+                </p>
+            </td>
+        </tr>
+        <tr >
+            <td colspan="2">Ascenso Solicitado:</td>
+            <td colspan="3">{{ ascenso.idEscalafones }}</td>
+        </tr>
+        <tr>
+            <td colspan="2">Área Académica:</td>
+            <td colspan="3">{{ adscripcion.idLineaInvestigacion.idAreaInvestigacion }}</td>
+        </tr>
+        <tr>
+            <td colspan="2">Eje Geopolítico:</td>
+            <td colspan="3">{{ ascenso.idRolInstitucion.idInstitucion.idEjeParroquia.idEje }}</td>
+        </tr>
+        <tr>
+            <td colspan="2">Fecha primera Contratación UBV:</td>
+            <td colspan="3">{{ adscripcion.fechaIngreso | date('d-m-Y') }}</td>
+        </tr>        
+        <tr>            
+            <td colspan="2">Fecha y Categoría Académica Concurso de Oposición:</td>
+            <td colspan="3">
+                {{ oposicion.fechaEscala | date('d-m-Y') }}
+                {{ oposicion.idEscala }}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">Fecha y Categoría Académica úlitmo ascenso:</td>
+            <td colspan="3">
+                {{ ultimaEscala.fechaEscala | date('d-m-Y') }}:
+                {{ ultimaEscala.idEscala }}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">Fecha y consignación documentos y trabajo ascenso:</td>
+            <td colspan="3">{{ servicio.fechaSolicitud | date('m-d-Y')  }}</td>
+        </tr>
+        <th>Nombres, Apellidos y Categoría Académica</th>        
+        <th class="col-md-2">Trabajo de Ascenso</th>
+        <th colspan="2">Jurado Principal</th>
+        <th>Jurado Suplente</th>
+        <tr>
+            <td>
+                {{ ascenso.idRolInstitucion.idRol.idPersona.idNacionalidad.abreviacion }}
+                {{ ascenso.idRolInstitucion.idRol.idPersona.cedulaPasaporte }}
+                {{ ascenso.idRolInstitucion.idRol.idPersona }}
+                {{ ultimaEscala.idEscala }}
+            </td>            
+            <td class="col-md-2">{{ ascenso.tituloTrabajo }}</td>
+            <td colspan="2" class="col-md-2">
+                {% set break = false %}
+                <ul>
+                {% for tutores in ascenso.tutoresAscenso if not break %}                   
+                    {% if loop.index == 4 %} {% set break = true %} {% endif %}
+                    <li>{{ tutores }}</li>
+                {% endfor %}
+                </ul>
+            </td>
+             <td>
+                <ul>
+                {% for tutores in ascenso.tutoresAscenso %} 
+                    {% if loop.index > 4 %}
+                    <li>{{ tutores }}</li>
+                    {% endif %}
+                {% endfor %}
+                </ul>
+            </td>
+        </tr>
+        
+</tbody>
+</table>
+                
+        
+ {% endblock %}
+ 
+ {%block javascripts %} 
+     {{ parent() }}
+     <script type="text/javascript">
+         
+     window.onload = function () {
+            window.print(); //invoca la impresora tan pronto se carga el documento
+            setTimeout(function () { window.close(); }, 100); //cierra la venta si cierra el dialog de imprimir
+     }
+</script>
+ {% endblock %}
