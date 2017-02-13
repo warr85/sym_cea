@@ -280,17 +280,18 @@
     
     <script>
         var cantidad = $("#falta").data('faltaid');        
-        $("#seccion_jurados").on("click", ".eliminar_jurado", function(){                 
+        $("#seccion_jurados").on("click", ".eliminar_jurado", function(){ 
+            var eliminado = $(this).attr('id');
              $.ajax({
                method: "POST",
                url: "{{ url('ajax_eliminar_tutor') }}",
                async: true,
                cache: false,    
-               data: ({ eliminar: $(this).attr('id'), ascensoId: {{ ascenso.id }} }),
+               data: ({ eliminar: eliminado, ascensoId: {{ ascenso.id }} }),
                success: function (data) {
                         alert(cantidad);                        
-                        console.log(data);
-                        $("#well_" + $(".eliminar_jurado").attr('id')).remove();
+                        console.log("esto es id: " + eliminado);
+                        $("#well_" + eliminado).remove();
                         cantidad = cantidad + 1;
                         $("#add_tutor_tutores_ascenso").chosen('destroy').chosen({ max_selected_options: cantidad });
 
