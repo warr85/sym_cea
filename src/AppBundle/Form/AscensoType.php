@@ -104,8 +104,8 @@ class AscensoType extends AbstractType
              ->add('tipoTrabajoInvestigacion', ChoiceType::class, array(
                     'placeholder' => 'Seleccione el Tipo de Trabajo de Investigación',
                     'choices'  => array(                        
-                        'Tesis (Trabajo de 4to nivel)' => true,
-                        'Trabajo de Investigacion' => false,
+                        'Tesis (Trabajo de 4to nivel)' => 'tesis',
+                        'Trabajo de Investigacion' => 'investigacion',
                     ),
                     // *this line is important*
                     'choices_as_values' => true,

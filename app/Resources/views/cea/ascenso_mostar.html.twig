@@ -215,6 +215,21 @@
                           </div>
                         </div>
                         {% endif %}
+                        
+                        
+                        
+                        {% if ascenso.curriculo is not null %}         
+                        <div class="col-xs-4">
+                            <div class="thumbnail">
+                                <a href="{{asset('uploads/ascenso/'~ ascenso.curriculo)}}" data-lightbox="adscripcion">
+                                    <img src="{{ asset('uploads/ascenso/thumb/'~ ascenso.curriculo) }}" />
+                                </a>
+                              <div class="caption">                                
+                                <p>Síntesis Curricular de los posibles Jurados</p>                              
+                              </div>
+                          </div>
+                        </div>
+                        {% endif %}
                                 
                        
                          

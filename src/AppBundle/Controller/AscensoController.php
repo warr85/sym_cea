@@ -199,6 +199,8 @@ class AscensoController extends Controller
             $ascenso->setNai($nombreNai);
             $ascenso->setInvestigacion($nombreInvestigacion);
             $ascenso->setTituloTrabajo($form->get('titulo_trabajo')->getData());
+            $ascenso->setTipoTrabajoInvestigacion($form->get('tipoTrabajoInvestigacion')->getData());
+            $ascenso->setTesisUbv($form->get('tesisUbv')->getData());
             $ascenso->setNombreNucelo($form->get('nombreNucleo')->getData());
             $ascenso->setIdEscalafones($nueva_escala);
             $ascenso->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(2));
@@ -729,7 +731,8 @@ class AscensoController extends Controller
 
 /*funcion para crear miniaturas de las imagenes y carga más rapido la página */
 
-function thumbnail2 ($filename, $fuente, $destino){   
+function thumbnail2 ($filename, $fuente, $destino){
+    $im = false;
      if(preg_match('/[.](jpeg)$/', $filename)) {
         $im = imagecreatefromjpeg($fuente . "/" . $filename);
     } else if (preg_match('/[.](jpg)$/', $filename)) {
@@ -739,17 +742,18 @@ function thumbnail2 ($filename, $fuente, $destino){
     } else if (preg_match('/[.](png)$/', $filename)) {
         $im = imagecreatefrompng($fuente . "/" . $filename);
     }
+    if($im){
+        $ox = imagesx($im);
+        $oy = imagesy($im);
 
-    $ox = imagesx($im);
-    $oy = imagesy($im);
+        $nx = 80;
+        $ny = 80;
 
-    $nx = 80;
-    $ny = 80;
+        $nm = imagecreatetruecolor($nx, $ny);
 
-    $nm = imagecreatetruecolor($nx, $ny);
+        imagecopyresized($nm, $im, 0,0,0,0,$nx,$ny,$ox,$oy);
 
-    imagecopyresized($nm, $im, 0,0,0,0,$nx,$ny,$ox,$oy);
-
-    imagejpeg($nm, $destino . "/" . $filename);
+        imagejpeg($nm, $destino . "/" . $filename);
+    }
 }
 

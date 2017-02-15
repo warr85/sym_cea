@@ -126,6 +126,21 @@ class Ascenso
      * @Assert\NotBlank(message="El nombre del núcleo de investigación es obligatorio.")
      */
     private $nombreNucelo;
+    
+    
+    
+    /**
+     * @ORM\Column(name="tipo_trabajo_investigacion", type="string", nullable=true, options={"comment" = "tipo de trabajo: tesis/investigacion"})
+     * @Assert\NotBlank(message="El nombre del núcleo de investigación es obligatorio.")
+     */
+    private $tipoTrabajoInvestigacion;
+    
+    
+    /**
+     * @ORM\Column(name="tesis_ubv", type="boolean", nullable=true, options={"comment" = "si el trabajo es una tesis, ¿esta hecha dentro de la UBV?"})
+     * 
+     */
+    private $tesisUbv;
 
     
     /**
@@ -604,5 +619,51 @@ class Ascenso
     public function getCurriculo()
     {
         return $this->curriculo;
+    }
+
+    /**
+     * Set tipoTrabajoInvestigacion
+     *
+     * @param string $tipoTrabajoInvestigacion
+     * @return Ascenso
+     */
+    public function setTipoTrabajoInvestigacion($tipoTrabajoInvestigacion)
+    {
+        $this->tipoTrabajoInvestigacion = $tipoTrabajoInvestigacion;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoTrabajoInvestigacion
+     *
+     * @return string 
+     */
+    public function getTipoTrabajoInvestigacion()
+    {
+        return $this->tipoTrabajoInvestigacion;
+    }
+
+    /**
+     * Set tesisUbv
+     *
+     * @param boolean $tesisUbv
+     * @return Ascenso
+     */
+    public function setTesisUbv($tesisUbv)
+    {
+        $this->tesisUbv = $tesisUbv;
+
+        return $this;
+    }
+
+    /**
+     * Get tesisUbv
+     *
+     * @return boolean 
+     */
+    public function getTesisUbv()
+    {
+        return $this->tesisUbv;
     }
 }

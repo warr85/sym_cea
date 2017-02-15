@@ -142,10 +142,9 @@
 
         $('#ascenso_tipoTrabajoInvestigacion').click(function() {
             alert("click");
-            
-            $('.esc_oposicion')[this.checked ? "show" : "hide"]();
                         
-            if($('#ascenso_tipoTrabajoInvestigacion').val() == false){
+                        
+            if($('#ascenso_tipoTrabajoInvestigacion').val() === 'investigacion'){
                     $('.esc_investigacion').show(); 
                     $('.esc_tesis').hide();
                     $("#ascenso_tutores_ascenso_chosen").show();
