@@ -450,6 +450,13 @@ class AscensoController extends Controller
             'idRolInstitucion' => $servicio->getIdRolInstitucion(),
             'idEstatus'         => 2
         ));
+        
+        if(!$ascenso){
+            $ascenso = $this->getDoctrine()->getRepository('AppBundle:Ascenso')->findOneBy(array(
+                'idRolInstitucion' => $servicio->getIdRolInstitucion()),            
+                array('id' => 'DESC')
+            );
+        }
                 
                 
         $pida = $this->getDoctrine()->getRepository('AppBundle:AdscripcionPida')->findOneByIdRolInstitucion($servicio->getIdRolInstitucion());
