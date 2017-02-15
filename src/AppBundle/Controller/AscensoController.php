@@ -754,6 +754,8 @@ function thumbnail2 ($filename, $fuente, $destino){
         imagecopyresized($nm, $im, 0,0,0,0,$nx,$ny,$ox,$oy);
 
         imagejpeg($nm, $destino . "/" . $filename);
+    }else{
+        move_uploaded_file($fuente . "/" . $filename, $destino);
     }
 }
 

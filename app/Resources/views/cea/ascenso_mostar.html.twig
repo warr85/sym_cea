@@ -61,6 +61,7 @@
                             </table>   
                             
                             <p><strong>Escalafón Solicita:</strong> {{ ascenso.idEscalafones.nombre }} </p>                                
+                                                            
                                 
                                     <h4>Jurados propuestos por el Docente</h4>
                                     {% set añadirJurado = true  %}
@@ -84,8 +85,7 @@
                                     
                                 {% endfor %}
                                 </div>
-                                {% if añadirJurado %}
-                                    {{ dump(cantidadJurado) }}
+                                {% if añadirJurado %}                                   
                                     <p id="falta" class="label label-danger" data-faltaid = '{{cantidadJurado}}'>
                                         El docente no tiene o le faltó completar posibles jurados
                                     </p>
@@ -116,6 +116,16 @@
                         <div class="form-group">
                              <label for="titulo">Título del Trabajo:</label>
                              <input type="text" class="form-control" value="{{ascenso.tituloTrabajo}}" />
+                             <p><strong>Tipo de Trabajo de Ascneso:</strong> {{ ascenso.tipoTrabajoInvestigacion }} </p> 
+                             {% if ascenso.tipoTrabajoInvestigacion == 'tesis' %}
+                                {% if ascenso.tesisUbv %}
+                                    <p>Debe tener informe de pertinencia debido a que
+                                    es una tesis fuera de UBV</p>
+                                    {% else %}
+                                    <p>La Tesis fue hecha dentro de UBV</p>
+                                    
+                                    {% endif %}
+                             {% endif %}
                         </div>
                         {% endif %} 
 
