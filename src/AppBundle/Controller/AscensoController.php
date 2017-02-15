@@ -250,9 +250,12 @@ class AscensoController extends Controller
                     $this->container->getParameter('ascenso_directory'),
                     $nombreCurriculo
                 );
-                thumbnail2($nombreCurriculo, $this->container->getParameter('ascenso_directory'), $this->container->getParameter('ascenso_thumb_directory'));
-                $ascenso->setCurriculo($nombreCurriculo);
-                //$ascenso->setIdLineaInvestigacion($form->get('lineas_investigacion')->getData());                                
+                $constanciaCurriculo->move(
+                    $this->container->getParameter('ascenso_thumb_directory'),
+                    $nombreCurriculo
+                );
+                //thumbnail2($nombreCurriculo, $this->container->getParameter('ascenso_directory'), $this->container->getParameter('ascenso_thumb_directory'));
+                $ascenso->setCurriculo($nombreCurriculo);                
 
             }
 
@@ -755,7 +758,7 @@ function thumbnail2 ($filename, $fuente, $destino){
 
         imagejpeg($nm, $destino . "/" . $filename);
     }else{
-        move_uploaded_file($fuente . "/" . $filename, $destino);
+        move_uploaded_file($filename, $destino);
     }
 }
 
