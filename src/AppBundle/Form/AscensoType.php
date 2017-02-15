@@ -102,7 +102,7 @@ class AscensoType extends AbstractType
               ))
                 
             ->add('titulo_trabajo', TextType::class, array(
-                'label' => 'Título del Trabajo de Investigación',
+                'label' => 'Título del Trabajo de Ascenso',
                
                 'required' => true,
                
