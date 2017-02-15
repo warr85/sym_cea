@@ -121,7 +121,7 @@
         </tr>
         <tr>
             <td colspan="2">Área Académica:</td>
-            <td colspan="3">{{ adscripcion.idLineaInvestigacion.idAreaInvestigacion }}</td>
+            <td colspan="3"><p style="font-size:9px;" >{{ adscripcion.idLineaInvestigacion.idAreaInvestigacion }}</p></td>
         </tr>
         <tr>
             <td colspan="2">Eje Geopolítico:</td>
@@ -160,15 +160,19 @@
                 {{ ascenso.idRolInstitucion.idRol.idPersona }}
                 {{ ultimaEscala.idEscala }}
             </td>            
-            <td class="col-md-2">{{ ascenso.tituloTrabajo }}</td>
+            <td class="col-md-2">
+                <strong>Trabajo tipo {{ ascenso.tipoTrabajoInvestigacion }}:</strong><br>
+                {{ ascenso.tituloTrabajo }}
+                {% if ascenso.pertinencia %}
+                    <br><br> Se anexa informe de pertinencia
+                {% endif %}
+            </td>
             <td colspan="2" class="col-md-2">
-                {% set break = false %}
-                <ul>
+                {% set break = false %}                
                 {% for tutores in ascenso.tutoresAscenso if not break %}                   
                     {% if loop.index == 4 %} {% set break = true %} {% endif %}
-                    <li>{{ tutores }}</li>
-                {% endfor %}
-                </ul>
+                    <p style="font-size:9px;">{{ tutores }}</p><br>
+                {% endfor %}               
             </td>
              <td>
                 <ul>
