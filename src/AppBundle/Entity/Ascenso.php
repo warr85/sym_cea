@@ -100,6 +100,32 @@ class Ascenso
      * @Assert\File(mimeTypes={ "application/pdf" })
      */
     private $pertinencia;
+    
+    
+    /**
+     * @ORM\Column(type="string", nullable=true, options={"comment" = "ubicación del digital del informe de pertinencia en caso de ser tesis fuera de ubv"})
+     *
+     *
+     * @Assert\File(mimeTypes={ "application/pdf" })
+     */
+    private $aprobacion;
+    
+    
+    /**
+     * @ORM\Column(type="string", nullable=true, options={"comment" = "ubicación del digital del curriculo de los posibles jurados"})
+     *
+     *
+     * @Assert\File(mimeTypes={ "application/pdf" })
+     */
+    private $curriculo;
+    
+    
+    
+    /**
+     * @ORM\Column(name="nombre_nucleo", type="string", nullable=true, options={"comment" = "Nombre del núcleo de investigación"})
+     * @Assert\NotBlank(message="El nombre del núcleo de investigación es obligatorio.")
+     */
+    private $nombreNucelo;
 
     
     /**
@@ -509,5 +535,74 @@ class Ascenso
     public function __toString() 
     {
         return $this->getIdRolInstitucion()->getIdRol()->getIdPersona()->getPrimerNombre();
+    }
+
+    /**
+     * Set aprobacion
+     *
+     * @param string $aprobacion
+     * @return Ascenso
+     */
+    public function setAprobacion($aprobacion)
+    {
+        $this->aprobacion = $aprobacion;
+
+        return $this;
+    }
+
+    /**
+     * Get aprobacion
+     *
+     * @return string 
+     */
+    public function getAprobacion()
+    {
+        return $this->aprobacion;
+    }
+
+    /**
+     * Set nombreNucelo
+     *
+     * @param string $nombreNucelo
+     * @return Ascenso
+     */
+    public function setNombreNucelo($nombreNucelo)
+    {
+        $this->nombreNucelo = $nombreNucelo;
+
+        return $this;
+    }
+
+    /**
+     * Get nombreNucelo
+     *
+     * @return string 
+     */
+    public function getNombreNucelo()
+    {
+        return $this->nombreNucelo;
+    }
+
+    /**
+     * Set curriculo
+     *
+     * @param string $curriculo
+     * @return Ascenso
+     */
+    public function setCurriculo($curriculo)
+    {
+        $this->curriculo = $curriculo;
+
+        return $this;
+    }
+
+    /**
+     * Get curriculo
+     *
+     * @return string 
+     */
+    public function getCurriculo()
+    {
+        return $this->curriculo;
     }
 }

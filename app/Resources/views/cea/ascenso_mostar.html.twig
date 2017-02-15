@@ -201,6 +201,20 @@
                           </div>
                         </div>
                         {% endif %}
+                        
+                        
+                        {% if ascenso.aprobacion is not null %}         
+                        <div class="col-xs-4">
+                            <div class="thumbnail">
+                                <a href="{{asset('uploads/ascenso/'~ ascenso.aprobacion)}}" data-lightbox="adscripcion">
+                                    <img src="{{ asset('uploads/ascenso/thumb/'~ ascenso.aprobacion) }}" />
+                                </a>
+                              <div class="caption">                                
+                                <p>Acta de aprobación de la tesis</p>                              
+                              </div>
+                          </div>
+                        </div>
+                        {% endif %}
                                 
                        
                          

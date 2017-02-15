@@ -1,11 +1,12 @@
 {% extends 'base_app.html.twig' %}
+{% use 'form_div_layout.html.twig' with form_widget_simple as base_form_widget_simple %}
 
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('assets/vendor/chosen/chosen.min.css') }}">
      
     <style>
-        .esc_oposicion, .esc_asistente, .esc_agregado, .esc_asociado, .esc_titular{
+        .esc_investigacion, .esc_pertinencia, .esc_tesis .esc_asistente, .esc_agregado, .esc_asociado, .esc_titular{
             display: none;
         }
         
@@ -137,19 +138,39 @@
     {{ parent() }}
     <script type="text/javascript" src="{{ asset('assets/vendor/chosen/chosen.jquery.min.js') }}"></script>
     <script type="text/javascript">
+        
 
         $('#ascenso_tipoTrabajoInvestigacion').click(function() {
+            alert("click");
             
             $('.esc_oposicion')[this.checked ? "show" : "hide"]();
                         
-            if($('#ascenso_tipoTrabajoInvestigacion').prop('checked') == true){
-            
-                $("#ascenso_tutores_ascenso_chosen").show();
+            if($('#ascenso_tipoTrabajoInvestigacion').val() == false){
+                    $('.esc_investigacion').show(); 
+                    $('.esc_tesis').hide();
+                    $("#ascenso_tutores_ascenso_chosen").show();
             }else{
-               $("#ascenso_tutores_ascenso_chosen").hide(); 
+               $('.esc_investigacion').hide(); 
+               $('.esc_tesis').show();
+               $("#ascenso_tutores_ascenso_chosen").hide();
             }
             
-        });   
+        });  
+        
+        
+        
+        $('#ascenso_tesisUbv').click(function() {               
+            $('.esc_pertinencia')[this.checked ? "show" : "hide"]();            
+            if(this.checked){
+                $('.esc_investigacion').show();                    
+                    $("#ascenso_tutores_ascenso_chosen").show();
+            }else{
+                 $('.esc_investigacion').hide(); 
+               $('.esc_tesis').show();
+               $("#ascenso_tutores_ascenso_chosen").hide();
+            }
+            
+        });  
         
        
        $(".tutorForm").submit(function(e){

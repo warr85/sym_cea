@@ -199,6 +199,7 @@ class AscensoController extends Controller
             $ascenso->setNai($nombreNai);
             $ascenso->setInvestigacion($nombreInvestigacion);
             $ascenso->setTituloTrabajo($form->get('titulo_trabajo')->getData());
+            $ascenso->setNombreNucelo($form->get('nombreNucleo')->getData());
             $ascenso->setIdEscalafones($nueva_escala);
             $ascenso->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(2));
             
@@ -219,6 +220,36 @@ class AscensoController extends Controller
                 );
                 thumbnail2($nombrePertinencia, $this->container->getParameter('ascenso_directory'), $this->container->getParameter('ascenso_thumb_directory'));
                 $ascenso->setPertinencia($nombrePertinencia);
+                //$ascenso->setIdLineaInvestigacion($form->get('lineas_investigacion')->getData());                                
+
+            }
+            
+            
+            if ($form->get('aprobacion')->getData()){
+                
+                $constanciaAprobacion = $form->get('aprobacion')->getData();
+                $nombreAprobacion = md5(uniqid()).'.'.$constanciaAprobacion->guessExtension();
+                $constanciaAprobacion->move(
+                    $this->container->getParameter('ascenso_directory'),
+                    $nombreAprobacion
+                );
+                thumbnail2($nombreAprobacion, $this->container->getParameter('ascenso_directory'), $this->container->getParameter('ascenso_thumb_directory'));
+                $ascenso->setAprobacion($nombreAprobacion);
+                //$ascenso->setIdLineaInvestigacion($form->get('lineas_investigacion')->getData());                                
+
+            }
+            
+            
+            if ($form->get('curriculo')->getData()){
+                
+                $constanciaCurriculo = $form->get('curriculo')->getData();
+                $nombreCurriculo = md5(uniqid()).'.'.$constanciaCurriculo->guessExtension();
+                $constanciaCurriculo->move(
+                    $this->container->getParameter('ascenso_directory'),
+                    $nombreCurriculo
+                );
+                thumbnail2($nombreCurriculo, $this->container->getParameter('ascenso_directory'), $this->container->getParameter('ascenso_thumb_directory'));
+                $ascenso->setCurriculo($nombreCurriculo);
                 //$ascenso->setIdLineaInvestigacion($form->get('lineas_investigacion')->getData());                                
 
             }

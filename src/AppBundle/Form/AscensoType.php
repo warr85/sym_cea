@@ -101,11 +101,56 @@ class AscensoType extends AbstractType
                 )
               ))
                 
+             ->add('tipoTrabajoInvestigacion', ChoiceType::class, array(
+                    'placeholder' => 'Seleccione el Tipo de Trabajo de Investigación',
+                    'choices'  => array(                        
+                        'Tesis (Trabajo de 4to nivel)' => true,
+                        'Trabajo de Investigacion' => false,
+                    ),
+                    // *this line is important*
+                    'choices_as_values' => true,
+                ))
+                
+             
+            ->add('tesisUbv', CheckboxType::class, array(
+                'label'         => '¿La tesis fue realizada FUERA de la UBV?',
+                'label_attr'    => array( 'class' => 'esc_tesis', 'style' => 'display:none;'),
+                'required' => false,
+                'attr' => array(
+                    'style' => 'display:none;',
+                    'class' =>  'esc_tesis'
+                )
+            ))
+                
+                
+                
             ->add('titulo_trabajo', TextType::class, array(
-                'label' => 'Título del Trabajo de Ascenso',
-               
-                'required' => true,
-               
+                'label' => 'Título del Trabajo de Ascenso',                
+                'required' => true,               
+            ))
+                
+                
+           ->add('aprobacion', FileType::class, array(
+                'label' => 'Acta de Aprobación de la Tesis',
+                'label_attr'    => array( 'class' => 'esc_tesis', 'style' => 'display:none;'),
+                'required' => false,
+                'attr' => array(
+                    'style' => 'display:none;',
+                    'class' =>  'esc_tesis'
+                ),
+                'constraints' => array(
+                   new File(array(
+                       'maxSize'    => '1024K',
+                       'mimeTypes' => [
+                           'application/pdf',
+                           'application/x-pdf',
+                           'image/png',
+                           'image/jpg',
+                           'image/jpeg'
+                        ],
+                       'mimeTypesMessage' => 'Sólo se permiten extensiones png, jpeg y pdf'
+                   )) 
+                )
             ))
                                                                                        
                 
@@ -128,17 +173,14 @@ class AscensoType extends AbstractType
               ))
                 
                 
-            ->add('tipoTrabajoInvestigacion', CheckboxType::class, array(
-                'label'         => 'Si su trabajo de investigación es TESIS, responda ¿Fue realizado fuera de la UBV?',
-                'required' => false,
-            ))
+            
                 
           ->add('tutores_ascenso', EntityType::class, array(
                 'placeholder' => 'Añadir Posibles Jurados...',   
                 'class' => 'AppBundle:TutoresAscenso',
                 'required' => false,
                 'label' => 'Asigne Posibles Jurados',
-                'label_attr'    => array( 'class' => 'esc_oposicion'),
+                'label_attr'    => array( 'class' => 'esc_investigacion'),
                 'multiple'  => true, 
                 'group_by'  => 'institucion',
                 
@@ -146,14 +188,36 @@ class AscensoType extends AbstractType
                     'disabled' => 'true',                    
                 )*/
             ))
+                
+                
+           ->add('curriculo', FileType::class, array(
+                'label' => 'Digital de la síntesis curricular de los jurados',
+                'label_attr'    => array( 'class' => 'esc_investigacion', 'style' => 'display:none;'),
+                'required' => false,
+                'attr' => array(                    
+                    'style' => 'display:none;',
+                    'class' =>  'esc_investigacion'
+                ),
+                'constraints' => array(
+                   new File(array(
+                       'maxSize'    => '1024K',
+                       'mimeTypes' => [
+                           'application/pdf',
+                           'application/x-pdf',                           
+                        ],
+                       'mimeTypesMessage' => 'Sólo se permiten extensiones pdf'
+                   )) 
+                )
+            ))
+                
    
             ->add('pertinencia', FileType::class, array(
                 'label' => 'Informe de Pertinencia',
-                'label_attr'    => array( 'class' => 'esc_oposicion'),
+                'label_attr'    => array( 'class' => 'esc_pertinencia'),
                 'required' => false,
                 'attr' => array(
                     'style' => 'display:none;',
-                    'class' =>  'esc_oposicion'
+                    'class' =>  'esc_pertinencia'
                 ),
                 'constraints' => array(
                    new File(array(
@@ -168,6 +232,14 @@ class AscensoType extends AbstractType
                        'mimeTypesMessage' => 'Sólo se permiten extensiones png, jpeg y pdf'
                    )) 
                 )
+            ))
+                
+                
+            ->add('nombreNucleo', TextType::class, array(
+                'label' => 'Nombre del Núcleo al cual pertenece',
+               
+                'required' => true,
+               
             ))
 
             
