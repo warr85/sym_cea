@@ -368,7 +368,7 @@
                success: function (data) {
                         console.log(data);
                         for (var i = 0; i < data.adicionar_nombres.length; i ++){
-                            $("#seccion_jurados").append( "<p class='well' id='well_" + data.jurados[i] +  "'><strong>" +  data.adicionar_nombres[i] + ":</strong>" +  data.adicionar_institucion[i]  + "<input type='button' class='btn btn-danger btn-xs' value='X' id='" + data.adicionar_id[i] + "'/></p>"  );
+                            $("#seccion_jurados").append( "<li id='well_" + data.jurados[i] +  "'><strong>" +  data.adicionar_nombres[i] + ":</strong>" +  data.adicionar_institucion[i]  + "<input type='button' class='btn btn-danger btn-xs' value='X' id='" + data.adicionar_id[i] + "'/></li>"  );
                             $("#" + data.jurados[i] ).addClass("eliminar_jurado");
                             cantidad = cantidad - 1;
                         }
