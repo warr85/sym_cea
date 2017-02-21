@@ -14,7 +14,7 @@
     {%endfor %}
             <div class="row">
                 <div class="col-md-9">
-                    <h4 class="page-head-line">Solicitud de Adscripción número <code>{{adscripcion.id}}</code>: 
+                    <h4 class="page-head-line">Solicitud de Adscripción número <code>CEA-{{adscripcion.idRolInstitucion.idInstitucion.idEjeParroquia.IdEje.abreviacion}}-{{ adscripcion.anoAdscripcion }}-{{adscripcion.correlativoAdscripcion}}</code>: 
                         {{ adscripcion.idRolInstitucion.idRol.idPersona.primerNombre }}, 
                         {{ adscripcion.idRolInstitucion.idRol.idPersona.primerApellido }}                         
                     </h4>                       
@@ -67,7 +67,7 @@
                                 <div class="form-group">
                                     <h6 class="alert alert-warning">El Docente al momento de la solicitud informa no haber realizado Concurso de oposición</h6>
                                </div>
-                                <button class="btn btn-success btn-sm">Añadir Concurso de Oposición</button>                               
+                                <!-- <button class="btn btn-success btn-sm">Añadir Concurso de Oposición</button>                               -->
                             {% endif %}                
                             
                             

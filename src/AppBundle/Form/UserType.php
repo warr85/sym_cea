@@ -86,6 +86,25 @@ class UserType extends AbstractType
                    )) 
                 )
               ))
+                
+                
+            ->add('lineas_investigacion', EntityType::class, array(
+            'label'         => false,            
+            'placeholder' => 'Seleccione Área y Línea de Investigación',
+            'required' => true,
+            'class' => 'AppBundle:LineasInvestigacion',
+
+            'choice_label' => 'getNombre',
+            'group_by'      => 'getIdAreaInvestigacion'
+            ))
+
+            ->add('titulo_trabajo', TextType::class, array(
+                'label' => 'Título del Trabajo de Investigación',                
+                'required' => true,                
+            ))
+                
+                
+                
             ->add('oposicion', CheckboxType::class, array(
                 'label'         => '¿Tiene Concurso de Oposición?',
                 'required' => false,
@@ -132,27 +151,7 @@ class UserType extends AbstractType
                 )
             ))
 
-            ->add('lineas_investigacion', EntityType::class, array(
-                'label'         => false,
-                'attr' => array(
-                    'class' =>  'esc_oposicion'
-                ),
-                'placeholder' => 'Seleccione Área y Línea de Investigación',
-                'required' => false,
-                'class' => 'AppBundle:LineasInvestigacion',
-
-                'choice_label' => 'getNombre',
-                'group_by'      => 'getIdAreaInvestigacion'
-            ))
-
-            ->add('titulo_trabajo', TextType::class, array(
-                'label' => 'Título del Trabajo de Investigación',
-                'label_attr'    => array( 'class' => 'esc_oposicion'),
-                'required' => false,
-                'attr' => array(
-                    'class' =>  'esc_oposicion'
-                )
-            ))
+            
 
             ->add('ascenso', CheckboxType::class, array(
                 'label'    => '¿Ha tenido Ascenso luego del Concurso?',

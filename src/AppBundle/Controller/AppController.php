@@ -37,11 +37,12 @@ class AppController extends Controller {
     public function indexAction()
     {
         //verificar en las solicitudes la adscripcion del docente
-       $adscripcion = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->
+       $servicioAdscripcion = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->
                 findOneBy(array(
                     'idRolInstitucion'  =>  $this->getUser()->getIdRolInstitucion()->getId(),
                     'idServicioCe'      =>  2
         ));
+              
        
        $ascenso = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->
                 findOneBy(array(
@@ -51,7 +52,9 @@ class AppController extends Controller {
         );
        
        //si no ha solicitado adscripción regresa a la pagina de adscripcion
-        if(!$adscripcion){ return $this->redirect($this->generateUrl('solicitud_adscripcion')); }
+        if(!$servicioAdscripcion){ return $this->redirect($this->generateUrl('solicitud_adscripcion')); }
+        
+        
         
         $pida = $this->getDoctrine()->getRepository('AppBundle:AdscripcionPida')->
                 findOneBy(array(
@@ -65,7 +68,8 @@ class AppController extends Controller {
                 array('idRolInstitucion'  => $this->getUser()->getIdRolInstitucion()),
                 array('id' => 'DESC')
         );
-         
+         $tiempoTranscurrido = -1;
+         $suffix = "";
          if ($escalafon){
              $escalafones = $this->getDoctrine()->getRepository("AppBundle:Escalafones")->findOneById($escalafon->getIdEscala()->getId() + 1); //tiempo para el proximo escalafon
              if($escalafones){
@@ -79,13 +83,14 @@ class AppController extends Controller {
         
         
         
-        
+        $adscripcion = $this->getDoctrine()->getRepository("AppBundle:Adscripcion")->findOneByIdRolInstitucion($this->getUser()->getIdRolInstitucion()->getId());
         //solicitud aprobada está en falso
         $adscrito = false;
-        if($adscripcion->getIdEstatus()->getId() == 1) $adscrito = true;
+        if($servicioAdscripcion->getIdEstatus()->getId() == 1){ $adscrito = true; }
         
         return $this->render('cea/index.html.twig', array (
             'adscrito' => $adscrito,
+            'adscripcion'   => $adscripcion,
             'ascenso'   => $ascenso,
             'tiempoProxEscalafon'   => $tiempoTranscurrido,
             'suffix'                => $suffix

@@ -330,11 +330,7 @@ class AscensoController extends Controller
         );
          
          
-	if (!$concurso->getOposicion()){
-            $form = $this->createForm('AppBundle\Form\ReconocimientoConcursoType');
-        }else{
-            $form = $this->createForm('AppBundle\Form\ReconocimientoEscalaType');
-        }
+	$form = $this->createForm('AppBundle\Form\ReconocimientoEscalaType');
         
         $form->handleRequest($request);
         
@@ -348,9 +344,7 @@ class AscensoController extends Controller
 
             // Guardar el archivo y crear la miniatura de cada uno
             if (!$concurso->getOposicion()){                
-                $adscripcion->setOposicion($nombreAscenso);
-                $adscripcion->setIdLineaInvestigacion($form['lineas_investigacion']->getData());
-                $adscripcion->setTituloTrabajo($form['titulo_trabajo']->getData());
+                $adscripcion->setOposicion($nombreAscenso);                
                 $constanciaAscenso->move(
                     $this->container->getParameter('adscripcion_directory'),
                     $nombreAscenso

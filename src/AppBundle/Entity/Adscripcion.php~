@@ -22,7 +22,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 class Adscripcion
 {
 
-	/**
+    /**
      * @var integer
      *
      * @ORM\Column(name="id", type="integer", nullable=false, options={"comment" = "Identificador de la Adscripcion"})
@@ -43,6 +43,23 @@ class Adscripcion
      * })
      */
     protected $idRolInstitucion;
+    
+    /** @ORM\Column(type="date", nullable=false, options={"comment" = "Fecha de de Ingreso a la Institucion"})  
+     /**
+     * @Assert\Date()
+     */      
+    private $fecha_ingreso;
+
+
+    /**
+     * @var \AppBundle\Entity\LineasInvestigacion
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\LineasInvestigacion")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_linea_investigacion", referencedColumnName="id", nullable=true)
+     * })
+     */
+    protected $idLineaInvestigacion;
 
     
     /**
@@ -70,8 +87,71 @@ class Adscripcion
      * @Assert\File(mimeTypes={ "application/pdf" })
      */
     private $postgrado;
+
+    /**
+     * @ORM\Column(type="string", nullable=true, options={"comment" = "digital del documento de aprobación del concurso de oposicion"})
+     *
+     *
+     * @Assert\File(mimeTypes={ "application/pdf" })
+     */
+    private $oposicion;
+
+    /**
+     * @ORM\Column(type="string", nullable=true, options={"comment" = "digital del documento de ascenso de Asistente"})
+     *
+     *
+     * @Assert\File(mimeTypes={ "application/pdf" })
+     */
+    private $asistente;
+
+    /**
+     * @ORM\Column(type="string", nullable=true, options={"comment" = "digital del documento de ascenso de Asociado"})
+     *
+     *
+     * @Assert\File(mimeTypes={ "application/pdf" })
+     */
+    private $asociado;
+
+
+
+
+    /**
+     * @ORM\Column(type="string", nullable=true, options={"comment" = "digital del documento de ascenso de agregado"})
+     *
+     *
+     * @Assert\File(mimeTypes={ "application/pdf" })
+     */
+    private $agreado;
+
+
+    /**
+     * @ORM\Column(type="string", nullable=true, options={"comment" = "digital del documento de ascenso de titular"})
+     *
+     *
+     * @Assert\File(mimeTypes={ "application/pdf" })
+     */
+    private $titular;
+
+
+
+    /**
+     * @ORM\Column(name="titulo_trabajo", type="string", nullable=true, options={"comment" = "titulo del trabajo de investigacion"})
+     */
+    private $tituloTrabajo;
     
     
+    /**
+     * @ORM\Column(name="ano_adscripcion", type="string", nullable=true, options={"comment" = "El número de profesor nos permitirá saber la cantidad de profesores adscritos al CEA por eje geopolítico y desde cuando"})
+     */
+    private $anoAdscripcion;
+    
+    
+    /**
+     * @ORM\Column(name="correlativo_adscripcion", type="integer", nullable=true, options={"comment" = "El número de profesor nos permitirá saber la cantidad de profesores adscritos al CEA por eje geopolítico y desde cuando"})
+     */
+    private $correlativoAdscripcion;
+    
+
     
     /** @ORM\Column(type="datetime", nullable=false, options={"comment" = "Fecha de creación de la solicitud"})
     
@@ -86,20 +166,17 @@ class Adscripcion
     
     private $fecha_ultima_actualizacion;
     
-    
-     
-    /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\DocenteEscala", mappedBy="docente")
+     /**
+     * @var \AppBundle\Entity\Estatus
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Estatus")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_estatus", referencedColumnName="id", nullable=false)
+     * })
      */
-    private $escala;
-    // ...
-
-    public function __construct() {
-        $this->escala = new ArrayCollection();
-    }
+    protected $idEstatus;
     
-    
-        
+       
     
     
 
@@ -139,7 +216,81 @@ class Adscripcion
         return $this;
     }
 
-    
+    public function getAsistente()
+    {
+        return $this->asistente;
+    }
+
+    public function setAsistente($asistente)
+    {
+        $this->asistente = $asistente;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOposicion()
+    {
+        return $this->oposicion;
+    }
+
+    /**
+     * @param mixed $oposicion
+     */
+    public function setOposicion($oposicion)
+    {
+        $this->oposicion = $oposicion;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAsociado()
+    {
+        return $this->asociado;
+    }
+
+    /**
+     * @param mixed $asociado
+     */
+    public function setAsociado($asociado)
+    {
+        $this->asociado = $asociado;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAgreado()
+    {
+        return $this->agreado;
+    }
+
+    /**
+     * @param mixed $agreado
+     */
+    public function setAgreado($agreado)
+    {
+        $this->agreado = $agreado;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTitular()
+    {
+        return $this->titular;
+    }
+
+    /**
+     * @param mixed $titular
+     */
+    public function setTitular($titular)
+    {
+        $this->titular = $titular;
+    }
 
     /**
      * Get id
@@ -151,16 +302,7 @@ class Adscripcion
         return $this->id;
     }
 
-    /**
-     * Get nombre
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->trabajo;
-    }
-    
+
      /**
      * Set idRolInstitucion
      *
@@ -183,7 +325,59 @@ class Adscripcion
     {
         return $this->idRolInstitucion;
     }
+
+
+
+    /**
+     * Set idLineaInvestigacion
+     *
+     * @param \AppBundle\Entity\LineasInvestigacion $idLineaInvestigacion
+     * @return LineasInvestigacion
+     */
+    public function setIdLineaInvestigacion(\AppBundle\Entity\LineasInvestigacion $idLineaInvestigacion = null)
+    {
+        $this->idLineaInvestigacion = $idLineaInvestigacion;
+
+        return $this;
+    }
+
+    /**
+     * Get idLineaIvestigacion
+     *
+     * @return \AppBundle\Entity\LineasInvestigacion
+     */
+    public function getIdLineaInvestigacion()
+    {
+        return $this->idLineaInvestigacion;
+    }
     
+    
+    
+    /**
+     * Set idEstatus
+     *
+     * @param \AppBundle\Entity\Estatus $idEstatus
+     * @return Estatus
+     */
+    public function setIdEstatus(\AppBundle\Entity\Estatus $idEstatus = null)
+    {
+        $this->idEstatus = $idEstatus;
+
+        return $this;
+    }
+
+    /**
+     * Get idEstatus
+     *
+     * @return \AppBundle\Entity\Estatus
+     */
+    public function getIdEstatus()
+    {
+        return $this->idEstatus;
+    }
+
+
+
    /**
    * @ORM\PrePersist
    */
@@ -192,6 +386,13 @@ class Adscripcion
 	    $this->fecha_creacion = new \DateTime();
 	    $this->fecha_ultima_actualizacion = new \DateTime();
     }
+    
+     public function getFechaCreacion()
+    {
+	   return $this->fecha_creacion;
+	   
+    }
+    
 
     /**
     * @ORM\PreUpdate
@@ -200,50 +401,61 @@ class Adscripcion
     {
         $this->fecha_utlima_actualizacion = new \DateTime();
     }
-    
-    
-    
-    /**
-     * Add escala
-     *
-     * @param \AppBundle\Entity\DocenteEscala $escala
-     * @return DocenteEscala
-     */
-    public function addEscala(\AppBundle\Entity\DocenteEscala $escala)
-    {
-        $this->escala[] = $escala;
 
-        return $this;
-    }
+
 
     /**
-     * Remove escala
-     *
-     * @param \AppBundle\Entity\DocenteEscala $escala
+     * @return mixed
      */
-    public function removeEscala(\AppBundle\Entity\DocenteEscala $escala)
+    public function getTituloTrabajo()
     {
-        $this->escala->removeElement($escala);
+        return $this->tituloTrabajo;
     }
+
 
     /**
-     * Get Escala
-     *
-     * @return \Doctrine\Common\Collections\Collection
+     * @param mixed $tituloTrabajo
      */
-    public function getEscala()
+        public function setTituloTrabajo($tituloTrabajo)
+        {
+            $this->tituloTrabajo = $tituloTrabajo;
+        }
+    
+    
+        /**
+        * Set fecha_escala
+        *
+        * @param \DateTime $fecha_escala
+        * @return Comment
+        */
+       public function setFechaIngreso($fecha_ingreso)
+       {
+           $this->fecha_ingreso = $fecha_ingreso;
+
+           return $this;
+       }
+
+       /**
+        * Get fecha_escala
+        *
+        * @return \DateTime
+        */
+       public function getFechaIngreso()
+       {
+           return $this->fecha_ingreso;
+       }
+
+
+
+    
+
+    /**
+     * Get fecha_ultima_actualizacion
+     *
+     * @return \DateTime 
+     */
+    public function getFechaUltimaActualizacion()
     {
-        return $this->escala;
+        return $this->fecha_ultima_actualizacion;
     }
-
-
-    public function getEscalafones()
-    {
-        return $this->escala->toArray();  /*IMPORTANTE: el mecanismo de seguridad de Sf2 requiere ésto como un array*/
-    }
-    
-    
-    
-
-
 }

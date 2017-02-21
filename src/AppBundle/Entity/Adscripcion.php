@@ -138,6 +138,19 @@ class Adscripcion
      * @ORM\Column(name="titulo_trabajo", type="string", nullable=true, options={"comment" = "titulo del trabajo de investigacion"})
      */
     private $tituloTrabajo;
+    
+    
+    /**
+     * @ORM\Column(name="ano_adscripcion", type="integer", nullable=true, options={"comment" = "El número de profesor nos permitirá saber la cantidad de profesores adscritos al CEA por eje geopolítico y desde cuando"})
+     */
+    private $anoAdscripcion;
+    
+    
+    /**
+     * @ORM\Column(name="correlativo_adscripcion", type="integer", nullable=true, options={"comment" = "El número de profesor nos permitirá saber la cantidad de profesores adscritos al CEA por eje geopolítico y desde cuando"})
+     */
+    private $correlativoAdscripcion;
+    
 
     
     /** @ORM\Column(type="datetime", nullable=false, options={"comment" = "Fecha de creación de la solicitud"})
@@ -433,4 +446,62 @@ class Adscripcion
        }
 
 
+
+    
+
+    /**
+     * Get fecha_ultima_actualizacion
+     *
+     * @return \DateTime 
+     */
+    public function getFechaUltimaActualizacion()
+    {
+        return $this->fecha_ultima_actualizacion;
+    }
+
+    /**
+     * Set anoAdscripcion
+     *
+     * @param string $anoAdscripcion
+     * @return Adscripcion
+     */
+    public function setAnoAdscripcion($anoAdscripcion)
+    {
+        $this->anoAdscripcion = $anoAdscripcion;
+
+        return $this;
+    }
+
+    /**
+     * Get anoAdscripcion
+     *
+     * @return string 
+     */
+    public function getAnoAdscripcion()
+    {
+        return $this->anoAdscripcion;
+    }
+
+    /**
+     * Set correlativoAdscripcion
+     *
+     * @param integer $correlativoAdscripcion
+     * @return Adscripcion
+     */
+    public function setCorrelativoAdscripcion($correlativoAdscripcion)
+    {
+        $this->correlativoAdscripcion = $correlativoAdscripcion;
+
+        return $this;
+    }
+
+    /**
+     * Get correlativoAdscripcion
+     *
+     * @return integer 
+     */
+    public function getCorrelativoAdscripcion()
+    {
+        return $this->correlativoAdscripcion;
+    }
 }

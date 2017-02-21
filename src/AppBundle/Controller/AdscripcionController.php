@@ -53,7 +53,6 @@ class AdscripcionController extends Controller
             /** @var UploadedFile $constanciaPregrado */
             $constanciaPregrado = $form->get('pregrado')->getData();
             
-            
 
             // Generate a unique name for the file before saving it
             $nombreTrabajo = md5(uniqid()).'.'.$constanciaTrabajo->guessExtension();
@@ -91,7 +90,21 @@ class AdscripcionController extends Controller
             $adscripcion->setIdRolInstitucion($this->getUser()->getIdRolInstitucion());
             $adscripcion->setFechaIngreso($form->get('fecha_ingreso')->getData());
             $adscripcion->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(2));
-
+            $adscripcion->setIdLineaInvestigacion($form->get('lineas_investigacion')->getData());
+            $adscripcion->setTituloTrabajo($form->get('titulo_trabajo')->getData());
+            
+            $correlativo = $this->getDoctrine()->getRepository('AppBundle:Adscripcion')->findOneBy(
+                   array(), 
+                   array('correlativoAdscripcion' => 'DESC')
+            );
+            $numero = 1;
+            $ano = date("Y");
+            if ($correlativo){
+                $numero = $correlativo->getCorrelativoAdscripcion() + 1;                                      
+            }
+            $adscripcion->setAnoAdscripcion($ano);
+            $adscripcion->setCorrelativoAdscripcion($numero);
+               
 
             if ($form->get('escala')->getData()){
                 $escala->setIdRolInstitucion($this->getUser()->getIdRolInstitucion());
@@ -108,9 +121,7 @@ class AdscripcionController extends Controller
                         $nombreOposicion
                     );
                     thumbnail($nombreOposicion, $this->container->getParameter('adscripcion_directory'), $this->container->getParameter('adscripcion_thumb_directory'));
-                    $adscripcion->setOposicion($nombreOposicion);
-                    $adscripcion->setIdLineaInvestigacion($form->get('lineas_investigacion')->getData());
-                    $adscripcion->setTituloTrabajo($form->get('titulo_trabajo')->getData());
+                    $adscripcion->setOposicion($nombreOposicion);                    
                 }
 
 
@@ -491,12 +502,13 @@ class AdscripcionController extends Controller
             }else{
                $memorando = $correlativo->getCorrelativo() . "-" . $correlativo->getAno();
             }
-            
-            
+                        
             $adscripcion = $this->getDoctrine()->getRepository('AppBundle:Adscripcion')->findOneByIdRolInstitucion($servicio->getIdRolInstitucion());
+            $eje = $adscripcion->getIdRolInstitucion()->getIdInstitucion()->getIdEjeParroquia()->getIdEje()->getAbreviacion();
             return $this->render('memorando/adscripcion.html.twig', array(                
                 'adscripcion'   =>  $adscripcion,                                
-                'correlativo'   =>  $memorando
+                'correlativo'   =>  $memorando,
+                'eje'           =>  $eje
             ));
    
     }else{

@@ -30,14 +30,14 @@
      <p class="text-justify cuerpo-memo">
          Reciba un cordial saludo bolivariano y revolucionario de parte del equipo 
         de trabajo de este Centro de Estudios Ambientales.  La presente es para 
-        informar que este Centro reconoce, 
+        informar que este Centro de estudios reconoce, 
         {% if adscripcion.idLineaInvestigacion %} 
             basado en su interés en el área de 
         <i>{{adscripcion.idLineaInvestigacion.idAreaInvestigacion |capitalize }}</i>
         bajo la línea <i>{{adscripcion.idLineaInvestigacion}}</i>
         con su trabajo de investigación titulado <i>{{adscripcion.tituloTrabajo}}</i>
         {% endif %}
-        para así dar
+        su adscripción bajo el correlativo <strong>CEA-{{eje}}-{{adscripcion.anoAdscripcion}}-{{adscripcion.correlativoAdscripcion}} </strong>para así dar
         cumplimiento al artículo N° 91 de Reglamento General de la Universidad Bolivariana de
         Venezuela, que estable en su segundo párrafo <i>"Estarán adscritos a cada Centro de Estudios
         , los trabajadores académicos, según el interés, formación y experiencia desarrollada en su

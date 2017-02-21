@@ -28,27 +28,31 @@
        {%endif %}
       <div class="row">
           <!-- Si no tiene una solicitud de ascenso activa -->
-          {% if ascenso.idEstatus.id > 2  %}
-            {% if tiempoProxEscalafon %}                                    
-                  {% if suffix == '' %}
-                      <h4 class="alert alert-info">
-                      Estimado docente, le recordamos que para solicitar ascenso aun le faltan: 
-                  {% else %}                    
-                      <h4 class="alert alert-warning">
-                      Estimado docente ya tiene el tiempo para solicitar ascenso desde hace: 
-                  {% endif %}
-                      <strong>
-                          {% if tiempoProxEscalafon.y > 0 %} {{ tiempoProxEscalafon.y }} año/s {% endif %}
-                          {% if tiempoProxEscalafon.m > 0 %} {{ tiempoProxEscalafon.m }} mes/es y {%  endif %}
-                          {% if tiempoProxEscalafon.d > 0 %} {{ tiempoProxEscalafon.d }} día/s {% endif %} 
-                      </strong>
-                  </h4>
-              {% endif %}                                                      
+          {% if ascenso %}
+            {% if ascenso.idEstatus.id > 2  %}
+              {% if tiempoProxEscalafon %}                                    
+                    {% if suffix == '' %}
+                        <h4 class="alert alert-info">
+                        Estimado docente, le recordamos que para solicitar ascenso aun le faltan: 
+                    {% else %}                    
+                        <h4 class="alert alert-warning">
+                        Estimado docente ya tiene el tiempo para solicitar ascenso desde hace: 
+                    {% endif %}
+                        <strong>
+                            {% if tiempoProxEscalafon.y > 0 %} {{ tiempoProxEscalafon.y }} año/s {% endif %}
+                            {% if tiempoProxEscalafon.m > 0 %} {{ tiempoProxEscalafon.m }} mes/es y {%  endif %}
+                            {% if tiempoProxEscalafon.d > 0 %} {{ tiempoProxEscalafon.d }} día/s {% endif %} 
+                        </strong>
+                    </h4>
+                {% endif %}                                                      
+              {% endif %}
+            {% else %}
+                
             {% endif %}
         <div class="col-md-6">
           <div class="widget widget-nopad">
             <div class="widget-header"> <i class="fa fa-list-alt"></i>
-              <h3> CEA@UBV</h3>
+                <h3>CEA@UBV{% if adscrito %}: CEA-{{adscripcion.idRolInstitucion.idInstitucion.idEjeParroquia.IdEje.abreviacion}}-{{ adscripcion.anoAdscripcion }}-{{adscripcion.correlativoAdscripcion}}{% endif %}</h3>
             </div>
             <!-- /widget-header -->
             <div class="widget-content">
