@@ -20,7 +20,7 @@
                     </h4>                       
                 </div>
                 <div class="col-md-3">
-                    {% if servicio.idEstatus.id == 1 %}
+                    {% if servicio.idEstatus.id == 4 %}
                         <h4 class="alert alert-success">Estatus <strong>{{servicio.idEstatus}}</strong>
                     {% elseif servicio.idEstatus.id == 3 %}
                         <h4 class="alert alert-danger">Estatus <strong>{{servicio.idEstatus}}</strong> 
@@ -64,8 +64,10 @@
                         </div>
                         {% endif %} 
                         
-                              <form name="input" action="{{ path('cea_escala_actualizar', { 'id': servicio.id, 'escala': 'escalafones', 'estatus' : 'true' }) }}" method="post">
-       {%  if not ascenso %}           
+       {% if servicio.idEstatus.id == 2 %}
+           <form name="input" action="{{ path('cea_escala_actualizar', { 'id': servicio.id, 'escala': 'escalafones', 'estatus' : 'true' }) }}" method="post">
+       {%  if not ascenso %}
+            
             <select name="escala" required>
                 <option value="">Escalafón al cual aprobó Concurso</option>
            {% for esc in escalafones %}              
@@ -80,7 +82,9 @@
        {% endif %}
        <br><label for="fecha_escala"> Fecha de Escalafón: </label>   <input type="date" name="fecha_escala" />
        <br><button type="submit" class="btn btn-success btn-sm" ><span class="fa fa-check"></span>&nbsp;Aprobar</button>
-       </form>                   
+       
+       </form> 
+       {% endif %}
                        
                         </div>
                         
