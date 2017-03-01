@@ -163,7 +163,7 @@ class AdscripcionController extends Controller
                        $this->container->getParameter('ascenso_directory'),
                        $nombreAsociado
                    );
-                   thumbnail($nombreAsociado, $this->container->getParameter('ascenso_directory'), $this->container->getParameter('adscripcion_thumb_directory'));
+                   thumbnail($nombreAsociado, $this->container->getParameter('ascenso_directory'), $this->container->getParameter('ascenso_thumb_directory'));
                    $adscripcion->setAsociado($nombreAsociado);
                 }
 
@@ -183,7 +183,7 @@ class AdscripcionController extends Controller
                         $this->container->getParameter('ascenso_directory'),
                         $nombreAgregado
                     );
-                    thumbnail($nombreAgregado, $this->container->getParameter('ascenso_directory'), $this->container->getParameter('adscripcion_thumb_directory'));
+                    thumbnail($nombreAgregado, $this->container->getParameter('ascenso_directory'), $this->container->getParameter('ascenso_thumb_directory'));
                     $adscripcion->setAgreado($nombreAgregado);
                 }
 
@@ -203,7 +203,7 @@ class AdscripcionController extends Controller
                         $this->container->getParameter('ascenso_directory'),
                         $nombreTitular
                     );
-                    thumbnail($nombreTitular, $this->container->getParameter('ascenso_directory'), $this->container->getParameter('adscripcion_thumb_directory'));
+                    thumbnail($nombreTitular, $this->container->getParameter('ascenso_directory'), $this->container->getParameter('ascenso_thumb_directory'));
                     $adscripcion->setTitular($nombreTitular);
                 }
 
