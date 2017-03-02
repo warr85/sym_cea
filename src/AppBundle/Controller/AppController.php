@@ -170,7 +170,9 @@ class AppController extends Controller {
      * @Method("GET")
      */
     public function serviciosShowAction(DocenteServicio $servicio)
-    {        
+    {
+        $em = $this->getDoctrine()->getManager();
+        $docente = $em->getRepository("AppBundle:RolInstitucion")->findOneById($servicio->getIdRolInstitucion()->getId());
         $adscripcion = $this->getDoctrine()->getRepository('AppBundle:Adscripcion')->findOneByIdRolInstitucion($servicio->getIdRolInstitucion());
         $escala = $this->getDoctrine()->getRepository('AppBundle:DocenteEscala')->findOneBy(array(
                 'idRolInstitucion' => $servicio->getIdRolInstitucion(),
@@ -179,7 +181,8 @@ class AppController extends Controller {
         return $this->render('cea/servicios_mostar.html.twig', array(
             'servicio' => $servicio,
             'oposicion' => $escala,
-            'adscripcion' => $adscripcion
+            'adscripcion' => $adscripcion,
+            'docente'   => $docente
         ));
     }
     
