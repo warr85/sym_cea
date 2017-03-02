@@ -128,9 +128,20 @@ class AscensoController extends Controller
 	$form->handleRequest($request);
                 	        
 
-        if ($form->isSubmitted() && $form->isValid()) {       
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            //Crear la solicitud de Servicio
+            $servicios = new DocenteServicio();
+
+            $servicios->setIdRolInstitucion($this->getUser()->getIdRolInstitucion());
+            $servicios->setIdServicioCe($this->getDoctrine()->getRepository('AppBundle:ServiciosCe')->findOneById(5));
+            $servicios->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:estatus')->findOneById(2));
+
+            $em->persist($servicios);
+            $em->flush();
+
             
-            $ascenso = new Ascenso();
+
             // $file stores the uploaded PDF file
             /** @var UploadedFile $constanciaTrabajo */
             $constanciaTrabajo = $form->get('trabajo')->getData();
@@ -150,7 +161,6 @@ class AscensoController extends Controller
             $nombreExpediente = md5(uniqid()).'.'.$constanciaExpediente->guessExtension();
             $nombrePida = md5(uniqid()).'.'.$constanciaPida->guessExtension();
             $nombreNai = md5(uniqid()).'.'.$constanciaNai->guessExtension();
-            $nombreInvestigacion = md5(uniqid()).'.'.$constanciaInvestigacion->guessExtension();
 
             // Guardar el archivo y crear la miniatura de cada uno
             $constanciaTrabajo->move(
@@ -188,22 +198,27 @@ class AscensoController extends Controller
                 	$nombreInvestigacion
             	);
                     thumbnail2($nombreInvestigacion, $this->container->getParameter('ascenso_directory'), $this->container->getParameter('ascenso_thumb_directory'));
-                $ascenso->setInvestigacion($nombreInvestigacion);
+                verificar_documentos2($this->getUser()->getIdRolInstitucion(),15,2,$em,$nombreInvestigacion, $servicios);
             }
-            $em = $this->getDoctrine()->getManager();
 
-            $ascenso->setTrabajo($nombreTrabajo);
-            $ascenso->setExpediente($nombreExpediente);            
+
+
+            verificar_documentos2($this->getUser()->getIdRolInstitucion(),1,2,$em,$nombreTrabajo, $servicios);
+            verificar_documentos2($this->getUser()->getIdRolInstitucion(),11,2,$em,$nombreExpediente, $servicios);
+            verificar_documentos2($this->getUser()->getIdRolInstitucion(),9,2,$em,$nombrePida, $servicios);
+            verificar_documentos2($this->getUser()->getIdRolInstitucion(),12,2,$em,$nombreNai, $servicios);
+
+            $ascenso = new Ascenso();
             $ascenso->setIdRolInstitucion($this->getUser()->getIdRolInstitucion());
-            $ascenso->setPida($nombrePida);
-            $ascenso->setNai($nombreNai);
-            $ascenso->setInvestigacion($nombreInvestigacion);
+
             $ascenso->setTituloTrabajo($form->get('titulo_trabajo')->getData());
             $ascenso->setTipoTrabajoInvestigacion($form->get('tipoTrabajoInvestigacion')->getData());
             $ascenso->setTesisUbv($form->get('tesisUbv')->getData());
             $ascenso->setNombreNucelo($form->get('nombreNucleo')->getData());
             $ascenso->setIdEscalafones($nueva_escala);
             $ascenso->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(2));
+            $em->persist($ascenso);
+            $em->flush();
             
             
             $tutores = $form->get('tutores_ascenso')->getData();
@@ -221,7 +236,7 @@ class AscensoController extends Controller
                     $nombrePertinencia
                 );
                 thumbnail2($nombrePertinencia, $this->container->getParameter('ascenso_directory'), $this->container->getParameter('ascenso_thumb_directory'));
-                $ascenso->setPertinencia($nombrePertinencia);
+                verificar_documentos2($this->getUser()->getIdRolInstitucion(),14,2,$em,$nombrePertinencia, $servicios);
                 //$ascenso->setIdLineaInvestigacion($form->get('lineas_investigacion')->getData());                                
 
             }
@@ -236,7 +251,7 @@ class AscensoController extends Controller
                     $nombreAprobacion
                 );
                 thumbnail2($nombreAprobacion, $this->container->getParameter('ascenso_directory'), $this->container->getParameter('ascenso_thumb_directory'));
-                $ascenso->setAprobacion($nombreAprobacion);
+                verificar_documentos2($this->getUser()->getIdRolInstitucion(),13,2,$em,$nombreAprobacion, $servicios);
                 //$ascenso->setIdLineaInvestigacion($form->get('lineas_investigacion')->getData());                                
 
             }
@@ -255,22 +270,15 @@ class AscensoController extends Controller
                     $nombreCurriculo
                 );
                 //thumbnail2($nombreCurriculo, $this->container->getParameter('ascenso_directory'), $this->container->getParameter('ascenso_thumb_directory'));
-                $ascenso->setCurriculo($nombreCurriculo);                
+                verificar_documentos2($this->getUser()->getIdRolInstitucion(),16,2,$em,$nombreCurriculo, $servicios);
 
             }
 
 
                 
             
-            //Crear la solicitud de Servicio
-            $servicios = new DocenteServicio();
 
-            $servicios->setIdRolInstitucion($this->getUser()->getIdRolInstitucion());
-            $servicios->setIdServicioCe($this->getDoctrine()->getRepository('AppBundle:ServiciosCe')->findOneById(5));
-            $servicios->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:estatus')->findOneById(2));
 
-            $em->persist($servicios);
-            $em->persist($ascenso);
             //si realizó la solicitud usando la antiguedad, esta se formaliza
             if($formalizarTiempo){
                 $servicioAntiguedad->setIdEstatus($this->getDoctrine()->getRepository("AppBundle:Estatus")->findOneById(4));
@@ -438,7 +446,10 @@ class AscensoController extends Controller
      * @Security("has_role('ROLE_COORDINADOR_REGIONAL')")
      */
     public function solicitudesAscensoShowAction(DocenteServicio $servicio)
-    {        
+    {
+
+
+        $docente = $this->getDoctrine()->getRepository("AppBundle:RolInstitucion")->findOneById($servicio->getIdRolInstitucion()->getId());
         $escala = $this->getDoctrine()->getRepository('AppBundle:DocenteEscala')->findBy(array(
             'idRolInstitucion' => $servicio->getIdRolInstitucion()->getId()
         ));
@@ -470,7 +481,8 @@ class AscensoController extends Controller
             'escalas' => $escala,            
             'pida'      => $pida,
             'antiguedad' => $antiguedad,
-            'form' => $form->createView(), 
+            'form' => $form->createView(),
+            'docente' => $docente
         ));
     }
     
