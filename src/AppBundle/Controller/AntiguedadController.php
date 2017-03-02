@@ -43,9 +43,12 @@ class AntiguedadController extends Controller {
      */
     public function serviciosAntiguedadIndexAction(){
         
-        $adscripcion = $this->getDoctrine()->getRepository("AppBundle:Adscripcion")->findOneByIdRolInstitucion($this->getUser()->getIdRolInstitucion());
+        $oposicion = $this->getDoctrine()->getRepository("AppBundle:DocumentosVerificados")->findOneBy(array(
+            'idRolInstitucion' => $this->getUser()->getIdRolInstitucion(),
+            'idTipoDocumentos' => 4
+        ));
         
-        if (!$adscripcion->getOposicion() ){
+        if (!$oposicion ){
             $this->addFlash('danger', 'Estimado docente el CEA le informa que para gozar de este servicio, debe haber aprobado concurso de oposición.');
             return $this->redirect($this->generateUrl('cea_index'));   
         }
