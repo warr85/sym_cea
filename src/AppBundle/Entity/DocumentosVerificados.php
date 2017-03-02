@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * DocumentosVerificados
@@ -87,7 +88,13 @@ class DocumentosVerificados
     protected $modified;
 
 
-
+    /**
+     * @ORM\Column(type="string", nullable=false, options={"comment" = "ubicacion del documento"})
+     *
+     * @Assert\NotBlank(message="Debe cargar su digital de constancia.")
+     * @Assert\File(mimeTypes={ "application/pdf" })
+     */
+    private $ubicacion;
 
 
 
@@ -263,5 +270,23 @@ class DocumentosVerificados
     public function getIdServicio()
     {
         return $this->idServicio;
+    }
+
+
+
+    /**
+     * @return mixed
+     */
+    public function getUbicacion()
+    {
+        return $this->ubicacion;
+    }
+
+    /**
+     * @param mixed $ubicacion
+     */
+    public function setUbicacion($ubicacion)
+    {
+        $this->ubicacion = $ubicacion;
     }
 }

@@ -62,78 +62,6 @@ class Adscripcion
      */
     protected $idLineaInvestigacion;
 
-    
-    /**
-     * @ORM\Column(type="string", nullable=false, options={"comment" = "ubicacion de la constancia de trabajo"})
-     *
-     * @Assert\NotBlank(message="Debe cargar su constancia de Trabajo, es obligatoria.")
-     * @Assert\File(mimeTypes={ "application/pdf" })
-     */
-    private $trabajo;
-    
-    
-    /**
-     * @ORM\Column(type="string", nullable=false, options={"comment" = "ubicacion del titulo de pregrado"})
-     *
-     * @Assert\NotBlank(message="debe cargar su título de pregrado en digital, es obligatorio.")
-     * @Assert\File(mimeTypes={ "application/pdf" })
-     */
-    private $pregrado;
-    
-    
-    /**
-     * @ORM\Column(type="string", nullable=true, options={"comment" = "ubicacion del titulo de postgrado en caso de tenerlo"})
-     *
-     *
-     * @Assert\File(mimeTypes={ "application/pdf" })
-     */
-    private $postgrado;
-
-    /**
-     * @ORM\Column(type="string", nullable=true, options={"comment" = "digital del documento de aprobación del concurso de oposicion"})
-     *
-     *
-     * @Assert\File(mimeTypes={ "application/pdf" })
-     */
-    private $oposicion;
-
-    /**
-     * @ORM\Column(type="string", nullable=true, options={"comment" = "digital del documento de ascenso de Asistente"})
-     *
-     *
-     * @Assert\File(mimeTypes={ "application/pdf" })
-     */
-    private $asistente;
-
-    /**
-     * @ORM\Column(type="string", nullable=true, options={"comment" = "digital del documento de ascenso de Asociado"})
-     *
-     *
-     * @Assert\File(mimeTypes={ "application/pdf" })
-     */
-    private $asociado;
-
-
-
-
-    /**
-     * @ORM\Column(type="string", nullable=true, options={"comment" = "digital del documento de ascenso de agregado"})
-     *
-     *
-     * @Assert\File(mimeTypes={ "application/pdf" })
-     */
-    private $agreado;
-
-
-    /**
-     * @ORM\Column(type="string", nullable=true, options={"comment" = "digital del documento de ascenso de titular"})
-     *
-     *
-     * @Assert\File(mimeTypes={ "application/pdf" })
-     */
-    private $titular;
-
-
 
     /**
      * @ORM\Column(name="titulo_trabajo", type="string", nullable=true, options={"comment" = "titulo del trabajo de investigacion"})
@@ -181,117 +109,7 @@ class Adscripcion
     
     
 
-    public function getTrabajo()
-    {
-        return $this->trabajo;
-    }
 
-    public function setTrabajo($trabajo)
-    {
-        $this->trabajo = $trabajo;
-
-        return $this;
-    }
-    
-    public function getPregrado()
-    {
-        return $this->pregrado;
-    }
-
-    public function setPregrado($pregrado)
-    {
-        $this->pregrado = $pregrado;
-
-        return $this;
-    }
-    
-    public function getPostgrado()
-    {
-        return $this->postgrado;
-    }
-
-    public function setPostgrado($postgrado)
-    {
-        $this->postgrado = $postgrado;
-
-        return $this;
-    }
-
-    public function getAsistente()
-    {
-        return $this->asistente;
-    }
-
-    public function setAsistente($asistente)
-    {
-        $this->asistente = $asistente;
-
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getOposicion()
-    {
-        return $this->oposicion;
-    }
-
-    /**
-     * @param mixed $oposicion
-     */
-    public function setOposicion($oposicion)
-    {
-        $this->oposicion = $oposicion;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getAsociado()
-    {
-        return $this->asociado;
-    }
-
-    /**
-     * @param mixed $asociado
-     */
-    public function setAsociado($asociado)
-    {
-        $this->asociado = $asociado;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getAgreado()
-    {
-        return $this->agreado;
-    }
-
-    /**
-     * @param mixed $agreado
-     */
-    public function setAgreado($agreado)
-    {
-        $this->agreado = $agreado;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getTitular()
-    {
-        return $this->titular;
-    }
-
-    /**
-     * @param mixed $titular
-     */
-    public function setTitular($titular)
-    {
-        $this->titular = $titular;
-    }
 
     /**
      * Get id
@@ -302,9 +120,6 @@ class Adscripcion
     {
         return $this->id;
     }
-
-
-
 
 
 

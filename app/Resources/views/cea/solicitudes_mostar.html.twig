@@ -108,8 +108,7 @@
             <div class="row">
                 <div class="col-md-9">
                     <h4 class="page-head-line">Solicitud de Adscripción número
-                        <code>CEA-{{ todo.idInstitucion.idEjeParroquia.IdEje.abreviacion }}
-                            -{{ todo.adscripcion.anoAdscripcion }}-{{ todo.adscripcion.correlativoAdscripcion }}</code>:
+                        <code>CEA-{{ todo.idInstitucion.idEjeParroquia.IdEje.abreviacion }}-{{ todo.adscripcion.anoAdscripcion }}-{{ todo.adscripcion.correlativoAdscripcion }}</code>:
                         {{ todo }}
                     </h4>
                 </div>
@@ -159,7 +158,8 @@
                                             </tr>
                                         {% endfor %}
                                     </table>
-                                    {% if todo.adscripcion.oposicion is  null %}
+
+                                    {% if todo.escalafones is empty %}
                                         <div class="form-group">
                                             <h6 class="alert alert-warning">El Docente al momento de la solicitud
                                                 informa no
@@ -200,31 +200,28 @@
                         <div class="widget-content">
 
                             {% for verificado in todo.documentosVerificados %}
-                                {{ dump(verificado.idTipoDocumentos.identificador)}}
+
                                 <div class="col-xs-4">
                                     <div class="thumbnail">
-                                        <a href="{{ asset('uploads/adscripcion/'~ todo.adscripcion.trabajo) }}"
+                                        <a href="{{ asset('uploads/adscripcion/'~ verificado.ubicacion) }}"
                                            data-lightbox="adscripcion">
-                                            <img src="{{ asset('uploads/adscripcion/thumb/'~ todo.adscripcion.trabajo) }}"/>
+                                            <img src="{{ asset('uploads/adscripcion/thumb/'~ verificado.ubicacion) }}"/>
                                         </a>
                                         <div class="caption">
-                                            <p>Constancia de Trabajo</p>
+                                            <p>{{ verificado.idTipoDocumentos.nombre }}</p>
                                             <div class="wrapper">
-                                                <label for="yes_radio" class="yes-lbl"><i class="fa fa-check"></i>
-                                                </label><input type="radio" value="1" name="trabajo" class="yes_radio"
-                                                               id="yes_radio">
-                                                <label for="maybe_radio" class="maybe-lbl"><i
-                                                            class="fa fa-question"></i></label><input type="radio" value=""
-                                                                                                      name="trabajo"
-                                                                                                      class="maybe_radio"
-                                                                                                      id="maybe_radio"
-                                                                                                      checked="checked"
-                                                                                                      disabled>
-                                                <label for="no_radio" class="no-lbl"><i
+                                                <label for="yes_radio{{ loop.index }}" class="yes-lbl"><i class="fa fa-check"></i>
+                                                </label>
+                                                <input type="radio" value="1" name="{{ verificado.idTipoDocumentos.identificador }}" class="yes_radio" id="yes_radio{{ loop.index }}" {% if verificado.idEstatus.id == 1 %} checked="checked" {% endif %}>
+                                                <label for="maybe_radio{{ loop.index }}" class="maybe-lbl">
+                                                    <i class="fa fa-question"></i>
+                                                </label>
+                                                <input type="radio" value="" name="{{ verificado.idTipoDocumentos.identificador }}" class="maybe_radio" id="maybe_radio{{ loop.index }}" {% if verificado.idEstatus.id == 2 %} checked="checked" {% endif %} disabled>
+                                                <label for="no_radio{{ loop.index }}" class="no-lbl"><i
                                                             class="fa fa-close"></i></label><input type="radio" value="3"
-                                                                                                   name="trabajo"
+                                                                                                   name="{{ verificado.idTipoDocumentos.identificador }}"
                                                                                                    class="no_radio"
-                                                                                                   id="no_radio">
+                                                                                                   id="no_radio{{ loop.index }}" {% if verificado.idEstatus.id == 3 %} checked="checked" {% endif %}>
 
                                                 <div class="toggle"></div>
                                             </div>
@@ -232,277 +229,10 @@
                                     </div>
                                 </div>
                             {% endfor %}
-                            <div class="col-xs-4">
-                                <div class="thumbnail">
-                                    <a href="{{ asset('uploads/adscripcion/'~ todo.adscripcion.trabajo) }}"
-                                       data-lightbox="adscripcion">
-                                        <img src="{{ asset('uploads/adscripcion/thumb/'~ todo.adscripcion.trabajo) }}"/>
-                                    </a>
-                                    <div class="caption">
-                                        <p>Constancia de Trabajo</p>
-                                        <div class="wrapper">
-                                            <label for="yes_radio" class="yes-lbl"><i class="fa fa-check"></i>
-                                            </label><input type="radio" value="1" name="trabajo" class="yes_radio"
-                                                           id="yes_radio">
-                                            <label for="maybe_radio" class="maybe-lbl"><i
-                                                        class="fa fa-question"></i></label><input type="radio" value=""
-                                                                                                  name="trabajo"
-                                                                                                  class="maybe_radio"
-                                                                                                  id="maybe_radio"
-                                                                                                  checked="checked"
-                                                                                                  disabled>
-                                            <label for="no_radio" class="no-lbl"><i
-                                                        class="fa fa-close"></i></label><input type="radio" value="3"
-                                                                                               name="trabajo"
-                                                                                               class="no_radio"
-                                                                                               id="no_radio">
-
-                                            <div class="toggle"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-xs-4">
-                                <div class="thumbnail">
-                                    <a href="{{ asset('uploads/adscripcion/'~ todo.adscripcion.pregrado) }}"
-                                       data-lightbox="adscripcion">
-                                        <img src="{{ asset('uploads/adscripcion/thumb/'~ todo.adscripcion.pregrado) }}"/>
-                                    </a>
-                                    <div class="caption">
-                                        <p>Título de Pregrado</p>
-                                        <div class="wrapper">
-                                            <label for="yes_radio1" class="yes-lbl"><i class="fa fa-check"></i> </label><input
-                                                    type="radio" value="1" name="pregrado" class="yes_radio"
-                                                    id="yes_radio1">
-                                            <label for="maybe_radio1" class="maybe-lbl"><i
-                                                        class="fa fa-question"></i></label><input type="radio" value=""
-                                                                                                  name="pregrado"
-                                                                                                  class="maybe_radio"
-                                                                                                  id="maybe_radio1"
-                                                                                                  checked="checked"
-                                                                                                  disabled>
-                                            <label for="no_radio1" class="no-lbl"><i
-                                                        class="fa fa-close"></i></label><input type="radio" value="3"
-                                                                                               name="pregrado"
-                                                                                               class="no_radio"
-                                                                                               id="no_radio1">
-
-                                            <div class="toggle"></div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-
-                            {% if todo.adscripcion.postgrado is not null %}
-                                <div class="col-xs-4">
-                                    <div class="thumbnail">
-                                        <a href="{{ asset('uploads/adscripcion/'~ todo.adscripcion.postgrado) }}"
-                                           data-lightbox="adscripcion">
-                                            <img src="{{ asset('uploads/adscripcion/thumb/'~ todo.adscripcion.postgrado) }}"/>
-                                        </a>
-                                        <div class="caption">
-                                            <p>Título de Postgrado</p>
-                                            <div class="wrapper">
-                                                <label for="yes_radio2" class="yes-lbl"><i class="fa fa-check"></i>
-                                                </label><input type="radio" value="1" name="postgrado" class="yes_radio"
-                                                               id="yes_radio2">
-                                                <label for="maybe_radio2" class="maybe-lbl"><i
-                                                            class="fa fa-question"></i></label><input type="radio"
-                                                                                                      value=""
-                                                                                                      name="postgrado"
-                                                                                                      class="maybe_radio"
-                                                                                                      id="maybe_radio2"
-                                                                                                      checked="checked"
-                                                                                                      disabled>
-                                                <label for="no_radio2" class="no-lbl"><i
-                                                            class="fa fa-close"></i></label><input type="radio"
-                                                                                                   value="3"
-                                                                                                   name="postgrado"
-                                                                                                   class="no_radio"
-                                                                                                   id="no_radio2">
-
-                                                <div class="toggle"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            {% endif %}
-
-                            {% if todo.adscripcion.oposicion is not null %}
-                                <div class="col-xs-4">
-                                    <div class="thumbnail">
-                                        <a href="{{ asset('uploads/adscripcion/'~ todo.adscripcion.oposicion) }}"
-                                           data-lightbox="adscripcion">
-                                            <img src="{{ asset('uploads/adscripcion/thumb/'~ todo.adscripcion.oposicion) }}"/>
-                                        </a>
-                                        <div class="caption">
-                                            <p>Concurso de Oposición</p>
-                                            <div class="wrapper">
-                                                <label for="yes_radio3" class="yes-lbl"><i class="fa fa-check"></i>
-                                                </label><input type="radio" value="1" name="oposicion" class="yes_radio"
-                                                               id="yes_radio3">
-                                                <label for="maybe_radio3" class="maybe-lbl">
-                                                    <i class="fa fa-question"></i>
-                                                </label>
-                                                <input type="radio" value="" name="oposicion" class="maybe_radio" id="maybe_radio3" checked="checked" disabled>
-                                                <label for="no_radio3" class="no-lbl"><i
-                                                            class="fa fa-close"></i></label><input type="radio"
-                                                                                                   value="3"
-                                                                                                   name="oposicion"
-                                                                                                   class="no_radio"
-                                                                                                   id="no_radio3">
-
-                                                <div class="toggle"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            {% endif %}
 
 
 
-                            {% if todo.adscripcion.asistente is not null %}
-                                <div class="col-xs-4">
-                                    <div class="thumbnail">
-                                        <a href="{{ asset('uploads/ascenso/'~ todo.adscripcion.asistente) }}"
-                                           data-lightbox="adscripcion">
-                                            <img src="{{ asset('uploads/ascenso/thumb/'~ todo.adscripcion.asistente) }}"/>
-                                        </a>
-                                        <div class="caption">
-                                            <p>Ascenso Asistente</p>
-                                            <div class="wrapper">
-                                                <label for="yes_radio4" class="yes-lbl"><i class="fa fa-check"></i>
-                                                </label><input type="radio" value="1" name="asistente" class="yes_radio"
-                                                               id="yes_radio4">
-                                                <label for="maybe_radio4" class="maybe-lbl"><i
-                                                            class="fa fa-question"></i></label><input type="radio"
-                                                                                                      value=""
-                                                                                                      name="asistente"
-                                                                                                      class="maybe_radio"
-                                                                                                      id="maybe_radio4"
-                                                                                                      checked="checked"
-                                                                                                      disabled>
-                                                <label for="no_radio4" class="no-lbl"><i
-                                                            class="fa fa-close"></i></label><input type="radio"
-                                                                                                   value="3"
-                                                                                                   name="asistente"
-                                                                                                   class="no_radio"
-                                                                                                   id="no_radio4">
 
-                                                <div class="toggle"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            {% endif %}
-
-                            {% if todo.adscripcion.agreado is not null %}
-                                <div class="col-xs-4">
-                                    <div class="thumbnail">
-                                        <a href="{{ asset('uploads/ascenso/'~ todo.adscripcion.agreado) }}"
-                                           data-lightbox="adscripcion">
-                                            <img src="{{ asset('uploads/ascenso/thumb/'~ todo.adscripcion.agreado) }}"/>
-                                        </a>
-                                        <div class="caption">
-                                            <p>Ascenso Agregado</p>
-                                            <div class="wrapper">
-                                                <label for="yes_radio5" class="yes-lbl"><i class="fa fa-check"></i>
-                                                </label><input type="radio" value="1" name="agregado" class="yes_radio"
-                                                               id="yes_radio5">
-                                                <label for="maybe_radio5" class="maybe-lbl"><i
-                                                            class="fa fa-question"></i></label><input type="radio"
-                                                                                                      value=""
-                                                                                                      name="agregado"
-                                                                                                      class="maybe_radio"
-                                                                                                      id="maybe_radio5"
-                                                                                                      checked="checked"
-                                                                                                      disabled>
-                                                <label for="no_radio5" class="no-lbl"><i
-                                                            class="fa fa-close"></i></label><input type="radio"
-                                                                                                   value="3"
-                                                                                                   name="agregado"
-                                                                                                   class="no_radio"
-                                                                                                   id="no_radio5">
-
-                                                <div class="toggle"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            {% endif %}
-
-
-                            {% if todo.adscripcion.asociado is not null %}
-                                <div class="col-xs-4">
-                                    <div class="thumbnail">
-                                        <a href="{{ asset('uploads/ascenso/'~ todo.adscripcion.asociado) }}"
-                                           data-lightbox="adscripcion">
-                                            <img src="{{ asset('uploads/ascenso/thumb/'~ todo.adscripcion.asociado) }}"/>
-                                        </a>
-                                        <div class="caption">
-                                            <p>Ascenso Asociado</p>
-                                            <div class="wrapper">
-                                                <label for="yes_radio6" class="yes-lbl"><i class="fa fa-check"></i>
-                                                </label><input type="radio" value="1" name="asociado" class="yes_radio"
-                                                               id="yes_radio6">
-                                                <label for="maybe_radio6" class="maybe-lbl"><i
-                                                            class="fa fa-question"></i></label><input type="radio"
-                                                                                                      value=""
-                                                                                                      name="asociado"
-                                                                                                      class="maybe_radio"
-                                                                                                      id="maybe_radio6"
-                                                                                                      checked="checked"
-                                                                                                      disabled>
-                                                <label for="no_radio6" class="no-lbl"><i
-                                                            class="fa fa-close"></i></label><input type="radio"
-                                                                                                   value="3"
-                                                                                                   name="asociado"
-                                                                                                   class="no_radio"
-                                                                                                   id="no_radio6">
-
-                                                <div class="toggle"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            {% endif %}
-
-                            {% if todo.adscripcion.titular is not null %}
-                                <div class="col-xs-4">
-                                    <div class="thumbnail">
-                                        <a href="{{ asset('uploads/ascenso/'~ todo.adscripcion.titular) }}"
-                                           data-lightbox="adscripcion">
-                                            <img src="{{ asset('uploads/ascenso/thumb/'~ todo.adscripcion.titular) }}"/>
-                                        </a>
-                                        <div class="caption">
-                                            <p>Ascenso Titular</p>
-                                            <div class="wrapper">
-                                                <label for="yes_radio7" class="yes-lbl"><i class="fa fa-check"></i>
-                                                </label><input type="radio" value="1" name="titular" class="yes_radio"
-                                                               id="yes_radio7">
-                                                <label for="maybe_radio7" class="maybe-lbl"><i
-                                                            class="fa fa-question"></i></label><input type="radio"
-                                                                                                      value=""
-                                                                                                      name="titular"
-                                                                                                      class="maybe_radio"
-                                                                                                      id="maybe_radio7"
-                                                                                                      checked="checked"
-                                                                                                      disabled>
-                                                <label for="no_radio7" class="no-lbl"><i
-                                                            class="fa fa-close"></i></label><input type="radio"
-                                                                                                   value="3"
-                                                                                                   name="titular"
-                                                                                                   class="no_radio"
-                                                                                                   id="no_radio7">
-
-                                                <div class="toggle"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            {% endif %}
 
 
                         </div>
