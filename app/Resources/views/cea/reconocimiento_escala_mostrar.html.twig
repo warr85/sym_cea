@@ -113,16 +113,17 @@
                 </div>
                 <div class="col-md-3">
                     {% if servicio.idEstatus.id == 4 %}
-                        <h4 class="alert alert-success">Estatus <strong>{{servicio.idEstatus}}</strong>
+                        <h4 class="alert alert-success">Estatus <strong>{{servicio.idEstatus}}</strong></h4>
                     {% elseif servicio.idEstatus.id == 3 %}
-                        <h4 class="alert alert-danger">Estatus <strong>{{servicio.idEstatus}}</strong> 
+                        <h4 class="alert alert-danger">Estatus <strong>{{servicio.idEstatus}}</strong></h4>
                     {% else %}
-                        <h4 class="alert alert-warning">Estatus <strong>{{servicio.idEstatus}}</strong> 
-                     {% endif %}
-                    </h4>                       
+                        <h4 class="alert alert-warning">Estatus <strong>{{servicio.idEstatus}}</strong> </h4>
+                    {% endif %}
+
                 </div>
 
             </div>
+            <form name="input" action="{{ path('cea_escala_actualizar', { 'id': servicio.id, 'escala': 'escalafones', 'estatus' : 'true' }) }}" method="post">
             <div class="row">
                 
                 <div class="col-md-6">
@@ -155,7 +156,7 @@
                             <p><strong>Tipo de Reconocimiento:</strong>{% if not ascenso %} Concurso de oposición {% else %} Ascenso {% endif %}  </p>
                         </div>
                         {% endif %}
-                        <form name="input" action="{{ path('cea_escala_actualizar', { 'id': servicio.id, 'escala': 'escalafones', 'estatus' : 'true' }) }}" method="post">
+
        {% if servicio.idEstatus.id == 2 %}
 
        {%  if not ascenso %}
@@ -217,7 +218,7 @@
 
                          {% endif %}
                          {% endfor %}
-                         </form>
+
                      </div>
                          
                 </div>
@@ -225,7 +226,7 @@
                         
 
             </div>
-      
+            </form>
         </div>
         
     </div>
