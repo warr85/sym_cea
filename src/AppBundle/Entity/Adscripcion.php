@@ -31,18 +31,19 @@ class Adscripcion
      * @ORM\SequenceGenerator(sequenceName="adscripcion_id_seq", allocationSize=1, initialValue=1)
      */
     private $id;
-    
-    
+
     
 	/**
      * @var \AppBundle\Entity\RolInstitucion
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\RolInstitucion")
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\RolInstitucion", inversedBy="adscripcion")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_rol_institucion", referencedColumnName="id", nullable=false)
      * })
      */
     protected $idRolInstitucion;
+
+
     
     /** @ORM\Column(type="date", nullable=false, options={"comment" = "Fecha de de Ingreso a la Institucion"})  
      /**
@@ -303,28 +304,7 @@ class Adscripcion
     }
 
 
-     /**
-     * Set idRolInstitucion
-     *
-     * @param \AppBundle\Entity\RolInstitucion $idRolInstitucion
-     * @return Usuarios
-     */
-    public function setIdRolInstitucion(\AppBundle\Entity\RolInstitucion $idRolInstitucion = null)
-    {
-        $this->idRolInstitucion = $idRolInstitucion;
 
-        return $this;
-    }
-
-    /**
-     * Get idRolInstitucion
-     *
-     * @return \AppBundle\Entity\RolInstitucion
-     */
-    public function getIdRolInstitucion()
-    {
-        return $this->idRolInstitucion;
-    }
 
 
 
@@ -503,5 +483,28 @@ class Adscripcion
     public function getCorrelativoAdscripcion()
     {
         return $this->correlativoAdscripcion;
+    }
+
+    /**
+     * Set idRolInstitucion
+     *
+     * @param \AppBundle\Entity\RolInstitucion $idRolInstitucion
+     * @return Adscripcion
+     */
+    public function setIdRolInstitucion(\AppBundle\Entity\RolInstitucion $idRolInstitucion)
+    {
+        $this->idRolInstitucion = $idRolInstitucion;
+
+        return $this;
+    }
+
+    /**
+     * Get idRolInstitucion
+     *
+     * @return \AppBundle\Entity\RolInstitucion 
+     */
+    public function getIdRolInstitucion()
+    {
+        return $this->idRolInstitucion;
     }
 }

@@ -30,7 +30,7 @@ class Ascenso
     /**
      * @var \AppBundle\Entity\RolInstitucion
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\RolInstitucion")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\RolInstitucion", inversedBy="ascensos")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_rol_institucion", referencedColumnName="id", nullable=false)
      * })

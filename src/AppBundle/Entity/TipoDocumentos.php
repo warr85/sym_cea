@@ -25,6 +25,14 @@ class TipoDocumentos
      */
     private $nombre;
 
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="identificador", type="string", length=255, nullable=false, options={"comment" = "Nombre para identificar la ruta del documento en la vista"})
+     */
+    private $identificador;
+
     /**
      * @var integer
      *
@@ -81,4 +89,27 @@ class TipoDocumentos
     }
 
 
+
+    /**
+     * Set identificador
+     *
+     * @param string $identificador
+     * @return TipoDocumentos
+     */
+    public function setIdentificador($identificador)
+    {
+        $this->identificador = $identificador;
+
+        return $this;
+    }
+
+    /**
+     * Get identificador
+     *
+     * @return string 
+     */
+    public function getIdentificador()
+    {
+        return $this->identificador;
+    }
 }

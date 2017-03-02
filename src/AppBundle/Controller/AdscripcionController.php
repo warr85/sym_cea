@@ -8,7 +8,7 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Form\UserType;
+use AppBundle\Entity\DocumentosVerificados;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -38,6 +38,7 @@ class AdscripcionController extends Controller
 	    $adscripcion = new Adscripcion();
 	    $escala = new DocenteEscala();
 
+
         /** @var TYPE_NAME $form */
         $form = $this->createForm('AppBundle\Form\UserType');
 	    $form->handleRequest($request);
@@ -45,8 +46,9 @@ class AdscripcionController extends Controller
         $form->get('escala')->getData();
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
         	  //var_dump($form->get('lineas_investigacion')->getData()); exit;
-
+            verificar_documentos($this->getUser()->getIdRolInstitucion()->getId(), 1, 2, $em);
 		 // $file stores the uploaded PDF file
             /** @var UploadedFile $constanciaTrabajo */
             $constanciaTrabajo = $form->get('trabajo')->getData();
@@ -71,7 +73,7 @@ class AdscripcionController extends Controller
                 $nombrePregrado
             );
             thumbnail($nombrePregrado, $this->container->getParameter('adscripcion_directory'), $this->container->getParameter('adscripcion_thumb_directory'));
-            
+            verificar_documentos($this->getUser()->getIdRolInstitucion()->getId(), 2, 2, $em);
             if($form->get('postgrado')->getData()) {
                 /** @var UploadedFile $constanciaPostgrado */
             	$constanciaPostgrado = $form->get('postgrado')->getData();
@@ -82,11 +84,12 @@ class AdscripcionController extends Controller
             	);
                 thumbnail($nombrePostgrado, $this->container->getParameter('adscripcion_directory'), $this->container->getParameter('adscripcion_thumb_directory'));
                 $adscripcion->setPostgrado($nombrePostgrado);
+                verificar_documentos($this->getUser()->getIdRolInstitucion()->getId(), 3, 2, $em);
             }
-            $em = $this->getDoctrine()->getManager();
+
 
             $adscripcion->setTrabajo($nombreTrabajo);
-            $adscripcion->setPregrado($nombrePregrado);            
+            $adscripcion->setPregrado($nombrePregrado);
             $adscripcion->setIdRolInstitucion($this->getUser()->getIdRolInstitucion());
             $adscripcion->setFechaIngreso($form->get('fecha_ingreso')->getData());
             $adscripcion->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(2));
@@ -121,7 +124,8 @@ class AdscripcionController extends Controller
                         $nombreOposicion
                     );
                     thumbnail($nombreOposicion, $this->container->getParameter('adscripcion_directory'), $this->container->getParameter('adscripcion_thumb_directory'));
-                    $adscripcion->setOposicion($nombreOposicion);                    
+                    $adscripcion->setOposicion($nombreOposicion);
+                    verificar_documentos($this->getUser()->getIdRolInstitucion()->getId(), 4, 2, $em);
                 }
 
 
@@ -135,6 +139,7 @@ class AdscripcionController extends Controller
                     $escala2->setIdEscala($asistente);
                     $escala2->setIdTipoEscala($this->getDoctrine()->getRepository('AppBundle:TipoAscenso')->findOneById(2));
                     $em->persist($escala2);
+                    verificar_documentos($this->getUser()->getIdRolInstitucion()->getId(), 5, 2, $em);
 
                     $constanciaAsistente = $form->get('documento_asistente')->getData();
                     $nombreAsistente = md5(uniqid()).'.'.$constanciaAsistente->guessExtension();
@@ -156,6 +161,7 @@ class AdscripcionController extends Controller
                     $escala3->setIdEscala($asociado);
                     $escala3->setIdTipoEscala($this->getDoctrine()->getRepository('AppBundle:TipoAscenso')->findOneById(2));
                     $em->persist($escala3);
+                   verificar_documentos($this->getUser()->getIdRolInstitucion()->getId(), 6, 2, $em);
 
                    $constanciaAsociado = $form->get('documento_asociado')->getData();
                    $nombreAsociado = md5(uniqid()).'.'.$constanciaAsociado->guessExtension();
@@ -176,6 +182,7 @@ class AdscripcionController extends Controller
                     $escala4->setIdEscala($agregado);
                     $escala4->setIdTipoEscala($this->getDoctrine()->getRepository('AppBundle:TipoAscenso')->findOneById(2));
                     $em->persist($escala4);
+                    verificar_documentos($this->getUser()->getIdRolInstitucion()->getId(), 7, 2, $em);
 
                     $constanciaAgregado = $form->get('documento_agregado')->getData();
                     $nombreAgregado = md5(uniqid()).'.'.$constanciaAgregado->guessExtension();
@@ -196,6 +203,7 @@ class AdscripcionController extends Controller
                     $escala5->setIdEscala($titular);
                     $escala5->setIdTipoEscala($this->getDoctrine()->getRepository('AppBundle:TipoAscenso')->findOneById(2));
                     $em->persist($escala5);
+                    verificar_documentos($this->getUser()->getIdRolInstitucion()->getId(), 8, 2, $em);
 
                     $constanciaTitular = $form->get('documento_titular')->getData();
                     $nombreTitular = md5(uniqid()).'.'.$constanciaTitular->guessExtension();
@@ -365,24 +373,15 @@ class AdscripcionController extends Controller
      */
     public function solicitudesAdscripcionShowAction(DocenteServicio $servicio)
     {        
-        $escala = $this->getDoctrine()->getRepository('AppBundle:DocenteEscala')->findBy(array(
-            'idRolInstitucion' => $servicio->getIdRolInstitucion()->getId()
-        ));
-        
-        $adscripcion = $this->getDoctrine()->getRepository('AppBundle:Adscripcion')->findOneByIdRolInstitucion($servicio->getIdRolInstitucion());
-        $pida = $this->getDoctrine()->getRepository('AppBundle:AdscripcionPida')->findOneByIdRolInstitucion($servicio->getIdRolInstitucion());
-        $ascenso = $this->getDoctrine()->getRepository('AppBundle:Ascenso')->findOneBy(array(
-                'idRolInstitucion' => $servicio->getIdRolInstitucion(),                 
-                
-        ));
+        $em = $this->getDoctrine()->getManager();
+        $todo = $em->getRepository("AppBundle:RolInstitucion")->findOneById($servicio->getIdRolInstitucion());
+
+
 
         return $this->render('cea/solicitudes_mostar.html.twig', array(
-            'adscripcion' => $adscripcion, 
             'servicio'  => $servicio,
-            'escalas' => $escala,
             'servicio' => $servicio,
-            'pida'      => $pida,
-            'ascenso'   => $ascenso
+            'todo'      => $todo
         ));
     }
     
@@ -390,19 +389,41 @@ class AdscripcionController extends Controller
     /**
      * Encuentra y muestra una entidad de tipo Adscripción.
      *
-     * @Route("/solicitudes/actualizar/{id}/{estatus}", name="cea_solicitudes_actualizar")
+     * @Route("/solicitudes/actualizar/{id}", name="cea_solicitudes_actualizar")
      * @Method({"GET", "POST"})
      * @Security("has_role('ROLE_COORDINADOR_REGIONAL')")
      */
-    public function solicitudesAdscripcionEditAction(Adscripcion $adscripcion, $estatus, Request $request)
+    public function solicitudesAdscripcionEditAction(Adscripcion $adscripcion, Request $request)
     {
+        $em = $this->getDoctrine()->getManager();
         $mensaje = "";
-       //$adscripciones = $this->getDoctrine()->getRepository('AppBundle:Adscripcion')->findOneById($adscripcion->getId());
-       $serviciosAdscripcion = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->findOneBy(array(
+       $serviciosAdscripcion = $em->getRepository('AppBundle:DocenteServicio')->findOneBy(array(
            'idRolInstitucion'   => $adscripcion->getIdRolInstitucion(),
            'idServicioCe'       => 2
        ));
-       
+       $parametros = $request->request->all();
+
+        //Guardar el resultado de la verificación de Documentos
+        foreach ($parametros as $key => $value){
+            if($key === 'trabajo') {
+                verificar_documentos($adscripcion, 1, $value, $em);
+            }else if($key === 'pregrado') {
+                verificar_documentos($adscripcion, 2, $value, $em);
+            }else if($key === 'postgrado') {
+                verificar_documentos($adscripcion, 3, $value, $em);
+            }else if($key === 'oposicion') {
+                verificar_documentos($adscripcion, 4, $value, $em);
+            }else if($key === 'asistente') {
+                verificar_documentos($adscripcion, 5, $value, $em);
+            }else if($key === 'agregado') {
+                verificar_documentos($adscripcion, 6, $value, $em);
+            }else if($key === 'asociado') {
+                verificar_documentos($adscripcion, 7, $value, $em);
+            }else if($key === 'titular') {
+                verificar_documentos($adscripcion, 8, $value, $em);
+            }
+        }
+
        
        $serviciosPida = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->findOneBy(array(
            'idRolInstitucion'   => $adscripcion->getIdRolInstitucion(),
@@ -410,7 +431,11 @@ class AdscripcionController extends Controller
        ));
        
        $pida = $this->getDoctrine()->getRepository('AppBundle:AdscripcionPida')->findOneByIdRolInstitucion($adscripcion->getIdRolInstitucion());
-       
+       if(isset($parametros['aprobar'])) {
+           $estatus = true;
+       }else{
+           $estatus = false;
+       }
        if($estatus == "true") {
            $serviciosAdscripcion->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(1));
            $serviciosPida->setIdEstatus($serviciosAdscripcion->getIdEstatus());
@@ -458,13 +483,8 @@ class AdscripcionController extends Controller
        $escala = $this->getDoctrine()->getRepository('AppBundle:DocenteEscala')->findBy(array(
             'idRolInstitucion' => $adscripcion->getIdRolInstitucion()->getId()
         ));
-       
-        return $this->render('cea/solicitudes_mostar.html.twig', array(
-            'servicio'      => $serviciosAdscripcion,
-            'adscripcion'   => $adscripcion, 
-            'escalas'       => $escala,
-            'pida'          => $pida
-        ));
+
+        return $this->redirect($this->generateUrl('cea_adscripcion_show', array('id' => $serviciosAdscripcion->getId())));
        
     }
     
@@ -552,4 +572,26 @@ function thumbnail ($filename, $fuente, $destino){
     imagecopyresized($nm, $im, 0,0,0,0,$nx,$ny,$ox,$oy);
 
     imagejpeg($nm, $destino . "/" . $filename);
+}
+
+function verificar_documentos($adscripcion, $tipo, $estatus, $em, $servicio = 2){
+    $existe = $em->getRepository("AppBundle:DocumentosVerificados")->findOneBy(array(
+        'idRolInstitucion' => $adscripcion,
+        'idTipoDocumentos'  => $tipo
+    ));
+
+    if(!$existe) {
+        $verificacion = new DocumentosVerificados();
+        $verificacion->setIdEstatus($em->getRepository("AppBundle:Estatus")->findOneById($estatus));
+        $verificacion->setIdRolInstitucion($em->getRepository("AppBundle:RolInstitucion")->findOneById($adscripcion));
+        $verificacion->setIdServicio($em->getRepository("AppBundle:ServiciosCe")->findOneById($servicio));
+        $verificacion->setIdTipoDocumentos($em->getRepository("AppBundle:TipoDocumentos")->findOneById($tipo));
+        $em->persist($verificacion);
+        $em->flush();
+    }else{
+        $existe->setIdEstatus($em->getRepository("AppBundle:Estatus")->findOneById($estatus));
+        $em->persist($existe);
+        $em->flush();
+    }
+
 }
