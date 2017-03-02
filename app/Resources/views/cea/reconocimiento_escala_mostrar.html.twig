@@ -2,6 +2,99 @@
 {% block stylesheets %}
     {{ parent() }}
     <link href="{{ asset('assets/vendor/lightbox2/dist/css/lightbox.css') }}" rel="stylesheet">
+    <style>
+        .wrapper {
+            width: 6.9rem;
+            height: 2rem;
+            position: relative;
+            margin: 0rem auto;
+            border-radius: 2rem;
+            background: gray;
+        }
+
+        .wrapper .toggle {
+            width: 1.8rem;
+            height: 1.8rem;
+            position: absolute;
+            left: 2.5rem;
+            top: 0.1rem;
+            border-radius: 50%;
+            box-sizing: border-box;
+            border: 0.1rem solid #ff6c00;
+            background: #ff8933;
+            box-shadow: 0 0 0.2rem 0.1rem #ff6c00 inset, 0 0 0.2rem 0.1rem #ff6c00;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .wrapper label {
+            cursor: pointer;
+            width: 2rem;
+            height: 2rem;
+            position: absolute;
+            margin: 0;
+            padding: 0;
+            z-index: 1;
+            display: inline-block;
+            text-align: center;
+            line-height: 2rem;
+            text-transform: uppercase;
+            font-family: FontAwesome;
+            font-style: normal;
+            font-weight: normal;
+            color: white;
+
+        }
+
+        .wrapper input {
+            position: absolute;
+            left: 0;
+            margin: 0;
+            padding: 0;
+            opacity: 0;
+        }
+
+        .yes_radio:checked ~ .toggle {
+            border: 0.1rem solid #008000;
+            background: #00b300;
+            box-shadow: 0 0 0.2rem 0.1rem #008000 inset, 0 0 0.2rem 0.1rem #008000;
+            left: 0.1rem;
+        }
+
+        .no_radio:checked {
+            background: red;
+        }
+
+        .no_radio:checked ~ .toggle {
+            border: 0.1rem solid #ff0000;
+            background: #ff3333;
+            box-shadow: 0 0 0.2rem 0.1rem #ff0000 inset, 0 0 0.2rem 0.1rem #ff0000;
+            left: 4.97rem;
+        }
+
+        .maybe_radio, .maybe-lbl {
+            left: 33.33333%;
+        }
+
+        .no_radio, .no-lbl {
+            left: 66.66667%;
+        }
+
+        .maybe-lbl {
+            -webkit-animation-delay: 2s;
+            -o-animation-delay: 2s;
+            -moz-animation-delay: 2s;
+            animation-delay: 2s;
+        }
+
+        .no-lbl {
+            -webkit-animation-delay: 4s;
+            -o-animation-delay: 4s;
+            -moz-animation-delay: 4s;
+            animation-delay: 4s;
+        }
+
+
+    </style>
 {% endblock %}
 
 {%block body %} 
@@ -15,8 +108,7 @@
             <div class="row">
                 <div class="col-md-9">
                     <h4 class="page-head-line">Solicitud de Reconocimiento Escala <code>{{servicio.id}}</code>: 
-                        {{ servicio.idRolInstitucion.idRol.idPersona.primerNombre }}, 
-                        {{ servicio.idRolInstitucion.idRol.idPersona.primerApellido }}                         
+                        {{ docente }}
                     </h4>                       
                 </div>
                 <div class="col-md-3">
@@ -44,14 +136,14 @@
                     
                         
                         
-                        {% if escalas is not null %}
+                        {% if docente.escalafones is not empty %}
                         <div class="form-group">
                             <label for="Escalafones">Escalafones Obtenidos:</label>
                              <table class="table table-striped table-bordered">
                                     <th>Escalafón</th>
                                     <th>Fecha</th>
                                     <th>Tipo</th>
-                            {% for escala in escalas %}
+                            {% for escala in docente.escalafones %}
                                
                                     <tr>
                                         <td>{{escala.idEscala }}</td>
@@ -62,10 +154,10 @@
                             </table>                            
                             <p><strong>Tipo de Reconocimiento:</strong>{% if not ascenso %} Concurso de oposición {% else %} Ascenso {% endif %}  </p>
                         </div>
-                        {% endif %} 
-                        
+                        {% endif %}
+                        <form name="input" action="{{ path('cea_escala_actualizar', { 'id': servicio.id, 'escala': 'escalafones', 'estatus' : 'true' }) }}" method="post">
        {% if servicio.idEstatus.id == 2 %}
-           <form name="input" action="{{ path('cea_escala_actualizar', { 'id': servicio.id, 'escala': 'escalafones', 'estatus' : 'true' }) }}" method="post">
+
        {%  if not ascenso %}
             
             <select name="escala" required>
@@ -83,7 +175,7 @@
        <br><label for="fecha_escala"> Fecha de Escalafón: </label>   <input type="date" name="fecha_escala" />
        <br><button type="submit" class="btn btn-success btn-sm" ><span class="fa fa-check"></span>&nbsp;Aprobar</button>
        
-       </form> 
+
        {% endif %}
                        
                         </div>
@@ -94,80 +186,39 @@
                      <h3>Documentos Consignados</h3>    
                      <div class="widget-content">
                                              
-                         
-                         {% if not ascenso %}
+                         {% for documento in docente.documentosVerificados %}
+                         {% if documento.idServicio.id == 5 and documento.idEstatus.id == 2 %}
                          <div class="col-xs-4">
                             <div class="thumbnail">
-                                <a href="{{asset('uploads/ascenso/'~ adscripcion.oposicion)}}" data-lightbox="adscripcion">
-                                    <img src="{{ asset('uploads/ascenso/thumb/'~ adscripcion.oposicion) }}" />
+                                <a href="{{asset('uploads/adscripcion/'~ documento.ubicacion)}}" data-lightbox="adscripcion">
+                                    <img src="{{ asset('uploads/adscripcion/thumb/'~ documento.ubicacion) }}" />
                                 </a>
                               <div class="caption">                                
-                                <p>Constancia de Aprobación de Concurso.</p>                              
-                              </div>
-                          </div>
-                        </div>
-                         {% else %}
-                             
-                             {% if escalafones == "ASISTENTE" %}
-                             <div class="col-xs-4">
-                            <div class="thumbnail">
-                                <a href="{{asset('uploads/ascenso/'~ adscripcion.asistente)}}" data-lightbox="adscripcion">
-                                    <img src="{{ asset('uploads/ascenso/thumb/'~ adscripcion.asistente) }}" />
-                                </a>
-                              <div class="caption">                                
-                                <p>Constancia de Aprobación de Ascenso.</p>                              
-                              </div>
-                          </div>
-                        </div>
-                             {% endif %}
-                             
-                             
-                             {% if escalafones == "AGREGADO" %}
-                             <div class="col-xs-4">
-                            <div class="thumbnail">
-                                <a href="{{asset('uploads/ascenso/'~ adscripcion.agreado)}}" data-lightbox="adscripcion">
-                                    <img src="{{ asset('uploads/ascenso/thumb/'~ adscripcion.agreado) }}" />
-                                </a>
-                              <div class="caption">                                
-                                <p>Constancia de Aprobación de Ascenso.</p>                              
-                              </div>
-                          </div>
-                        </div>
-                             {% endif %}
-                             
-                             
-                             {% if escalafones == "ASOCIADO" %}
-                             <div class="col-xs-4">
-                            <div class="thumbnail">
-                                <a href="{{asset('uploads/ascenso/'~ adscripcion.asociado)}}" data-lightbox="adscripcion">
-                                    <img src="{{ asset('uploads/ascenso/thumb/'~ adscripcion.asociado) }}" />
-                                </a>
-                              <div class="caption">                                
-                                <p>Constancia de Aprobación de Ascenso.</p>                              
-                              </div>
-                          </div>
-                        </div>
-                             {% endif %}
-                             
-                             
-                             {% if escalafones == "TITULAR" %}
-                             <div class="col-xs-4">
-                            <div class="thumbnail">
-                                <a href="{{asset('uploads/ascenso/'~ adscripcion.titular)}}" data-lightbox="adscripcion">
-                                    <img src="{{ asset('uploads/ascenso/thumb/'~ adscripcion.titular) }}" />
-                                </a>
-                              <div class="caption">                                
-                                <p>Constancia de Aprobación de Ascenso.</p>                              
-                              </div>
-                          </div>
-                        </div>
-                             {% endif %}
-                                
-                                
-                                
-                         {% endif %}
+                                <p>{{ documento.idTipoDocumentos.nombre }}</p>
+                                  <div class="wrapper">
+                                      <label for="yes_radio" class="yes-lbl"><i class="fa fa-check"></i>
+                                      </label>
+                                      <input type="radio" value="1" name="{{ documento.idTipoDocumentos.identificador }}" class="yes_radio" id="yes_radio" {% if documento.idEstatus.id == 1 %} checked="checked" {% endif %}>
+                                      <label for="maybe_radio" class="maybe-lbl">
+                                          <i class="fa fa-question"></i>
+                                      </label>
+                                      <input type="radio" value="" name="{{ documento.idTipoDocumentos.identificador }}" class="maybe_radio" id="maybe_radio" {% if documento.idEstatus.id == 2 %} checked="checked" {% endif %} disabled>
+                                      <label for="no_radio" class="no-lbl"><i
+                                                  class="fa fa-close"></i></label><input type="radio" value="3"
+                                                                                         name="{{ documento.idTipoDocumentos.identificador }}"
+                                                                                         class="no_radio"
+                                                                                         id="no_radio" {% if documento.idEstatus.id == 3 %} checked="checked" {% endif %}>
 
-                    </div>
+                                      <div class="toggle"></div>
+                                  </div>
+                              </div>
+                          </div>
+                        </div>
+
+                         {% endif %}
+                         {% endfor %}
+                         </form>
+                     </div>
                          
                 </div>
                         

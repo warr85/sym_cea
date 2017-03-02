@@ -9,6 +9,7 @@
 namespace AppBundle\Controller;
 
 
+use AppBundle\Entity\DocumentosVerificados;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -17,7 +18,6 @@ use AppBundle\Entity\Ascenso;
 use AppBundle\Entity\DocenteEscala;
 use AppBundle\Entity\Memorando;
 use AppBundle\Entity\DocenteServicio;
-use AppBundle\Entity\AdscripcionPida;
 use AppBundle\Entity\TutoresAscenso;
 
 
@@ -317,9 +317,10 @@ class AscensoController extends Controller
         
        
         
-         $concurso = $this->getDoctrine()->getRepository('AppBundle:Adscripcion')->findOneBy(
-             array('idRolInstitucion'  => $this->getUser()->getIdRolInstitucion())                
-         );
+         $concurso = $this->getDoctrine()->getRepository('AppBundle:DocumentosVerificados')->findOneBy(array(
+             'idRolInstitucion'  => $this->getUser()->getIdRolInstitucion(),
+             'idTipoDocumentos' => 4
+         ));
          
          
          $solicitudAscenso = $this->getDoctrine()->getRepository('AppBundle:Ascenso')->findOneBy(
@@ -333,7 +334,7 @@ class AscensoController extends Controller
 	$form = $this->createForm('AppBundle\Form\ReconocimientoEscalaType');
         
         $form->handleRequest($request);
-        
+        $em = $this->getDoctrine()->getManager();
         if ($form->isSubmitted() && $form->isValid()) {       
             
             
@@ -343,13 +344,14 @@ class AscensoController extends Controller
             $nombreAscenso = md5(uniqid()).'.'.$constanciaAscenso->guessExtension();
 
             // Guardar el archivo y crear la miniatura de cada uno
-            if (!$concurso->getOposicion()){                
-                $adscripcion->setOposicion($nombreAscenso);                
+            if (!$concurso){
                 $constanciaAscenso->move(
                     $this->container->getParameter('adscripcion_directory'),
                     $nombreAscenso
                 );             
-                thumbnail2($nombreAscenso, $this->container->getParameter('adscripcion_directory'), $this->container->getParameter('ascenso_thumb_directory'));
+                thumbnail2($nombreAscenso, $this->container->getParameter('adscripcion_directory'), $this->container->getParameter('adscripcion_thumb_directory'));
+
+                verificar_documentos2($adscripcion->getIdRolInstitucion(),4,2,$em,$nombreAscenso, 5);
             }else{
                 $constanciaAscenso->move(
                     $this->container->getParameter('ascenso_directory'),
@@ -357,13 +359,13 @@ class AscensoController extends Controller
                 );             
                 thumbnail2($nombreAscenso, $this->container->getParameter('ascenso_directory'), $this->container->getParameter('ascenso_thumb_directory'));
                 switch ($solicitudAscenso->getIdEscalafones()->getId()){
-                    case 2: $adscripcion->setAsistente($nombreAscenso);
+                    case 2: verificar_documentos2($adscripcion->getIdRolInstitucion(),5,2,$em,$nombreAscenso, 5);
                         break;
-                    case 3: $adscripcion->setAgreado($nombreAscenso);
+                    case 3: verificar_documentos2($adscripcion->getIdRolInstitucion(),6,2,$em,$nombreAscenso, 5);
                         break;
-                    case 4: $adscripcion->setAsociado($nombreAscenso);
+                    case 4: verificar_documentos2($adscripcion->getIdRolInstitucion(),7,2,$em,$nombreAscenso, 5);
                         break;
-                    case 5: $adscripcion->setTitular($nombreAscenso);
+                    case 5: verificar_documentos2($adscripcion->getIdRolInstitucion(),8,2,$em,$nombreAscenso, 5);
                         break;
                     default:
                         break;
@@ -378,7 +380,6 @@ class AscensoController extends Controller
             $servicios->setIdRolInstitucion($this->getUser()->getIdRolInstitucion());
             $servicios->setIdServicioCe($this->getDoctrine()->getRepository('AppBundle:ServiciosCe')->findOneById(6));
             $servicios->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:estatus')->findOneById(2));
-            $em = $this->getDoctrine()->getManager();
             $em->persist($servicios);
             $em->persist($adscripcion);
             
@@ -388,7 +389,7 @@ class AscensoController extends Controller
         }
        
                
-         if(!$concurso->getOposicion()){
+         if(!$concurso){
               return $this->render(
                 'solicitudes/reconocimientoEscala.html.twig',
                 array(
@@ -482,7 +483,10 @@ class AscensoController extends Controller
      * @Security("has_role('ROLE_COORDINADOR_REGIONAL')")
      */
     public function reconocimientoEscalaShowAction(DocenteServicio $servicio)
-    {        
+    {
+        $em = $this->getDoctrine()->getManager();
+        $docente = $em->getRepository("AppBundle:RolInstitucion")->findOneById($servicio->getIdRolInstitucion()->getId());
+
         $escala = $this->getDoctrine()->getRepository('AppBundle:DocenteEscala')->findBy(array(
             'idRolInstitucion' => $servicio->getIdRolInstitucion()->getId()
         ));
@@ -511,7 +515,8 @@ class AscensoController extends Controller
             'servicio'  => $servicio,
             'escalas' => $escala,            
             'pida'      => $pida,
-            'escalafones' => $escalafones
+            'escalafones' => $escalafones,
+            'docente'       => $docente
             
         ));
     }
@@ -613,9 +618,8 @@ class AscensoController extends Controller
             $escala_docente->setidEscala($this->getDoctrine()->getRepository('AppBundle:Escalafones')->findOneById($this->get('request')->request->get('escala')));
             $escala_docente->setFechaEscala(new \DateTime($this->get('request')->request->get('fecha_escala')));
             $escala_docente->setIdTipoEscala($this->getDoctrine()->getRepository('AppBundle:TipoAscenso')->findOneById($this->get('request')->request->get('tipo')));
-            
-            
-            
+
+
             $em = $this->getDoctrine()->getManager();            
             $em->persist($escala_docente);
             
@@ -638,9 +642,18 @@ class AscensoController extends Controller
                 $em->persist($ServicioAscenso);
                 $em->persist($ascenso);
             }
+
+           $documento = $em->getRepository("AppBundle:DocumentosVerificados")->findOneBy(array(
+               'idRolInstitucion'  => $servicio->getIdRolInstitucion(),
+               'idServicio'  => 5,
+               'idEstatus'  => 2
+           ));
+
+           $documento->setIdEstatus($em->getRepository("AppBundle:Estatus")->findOneById($this->get('request')->request->get('oposicion')));
             
             $servicio->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(4));
             $em->persist($servicio);
+           $em->persist($documento);
             
             $em->flush();
        }
@@ -763,3 +776,26 @@ function thumbnail2 ($filename, $fuente, $destino){
     }
 }
 
+
+function verificar_documentos2($idRolInstitucion, $tipo, $estatus, $em, $ubicacion="", $servicio = 2){
+    $existe = $em->getRepository("AppBundle:DocumentosVerificados")->findOneBy(array(
+        'idRolInstitucion' => $idRolInstitucion,
+        'idTipoDocumentos'  => $tipo
+    ));
+
+    if(!$existe) {
+        $verificacion = new DocumentosVerificados();
+        $verificacion->setIdEstatus($em->getRepository("AppBundle:Estatus")->findOneById($estatus));
+        $verificacion->setIdRolInstitucion($idRolInstitucion);
+        $verificacion->setIdServicio($em->getRepository("AppBundle:ServiciosCe")->findOneById($servicio));
+        $verificacion->setIdTipoDocumentos($em->getRepository("AppBundle:TipoDocumentos")->findOneById($tipo));
+        $verificacion->setUbicacion($ubicacion);
+        $em->persist($verificacion);
+        $em->flush();
+    }else{
+        $existe->setIdEstatus($em->getRepository("AppBundle:Estatus")->findOneById($estatus));
+        $em->persist($existe);
+        $em->flush();
+    }
+
+}

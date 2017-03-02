@@ -45,7 +45,8 @@ class AntiguedadController extends Controller {
         
         $oposicion = $this->getDoctrine()->getRepository("AppBundle:DocumentosVerificados")->findOneBy(array(
             'idRolInstitucion' => $this->getUser()->getIdRolInstitucion(),
-            'idTipoDocumentos' => 4
+            'idTipoDocumentos' => 4,
+            'idEstatus'         => 1
         ));
         
         if (!$oposicion ){
