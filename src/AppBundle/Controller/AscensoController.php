@@ -335,7 +335,15 @@ class AscensoController extends Controller
         
         $form->handleRequest($request);
         $em = $this->getDoctrine()->getManager();
-        if ($form->isSubmitted() && $form->isValid()) {       
+        if ($form->isSubmitted() && $form->isValid()) {
+            //Crear la solicitud de Servicio
+            $servicios = new DocenteServicio();
+
+            $servicios->setIdRolInstitucion($this->getUser()->getIdRolInstitucion());
+            $servicios->setIdServicioCe($this->getDoctrine()->getRepository('AppBundle:ServiciosCe')->findOneById(6));
+            $servicios->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:estatus')->findOneById(2));
+            $em->persist($servicios);
+            $em->flush();
             
             
             $adscripcion = $this->getDoctrine()->getRepository('AppBundle:Adscripcion')->findOneByIdRolInstitucion($this->getUser()->getIdRolInstitucion());
@@ -351,7 +359,7 @@ class AscensoController extends Controller
                 );             
                 thumbnail2($nombreAscenso, $this->container->getParameter('adscripcion_directory'), $this->container->getParameter('adscripcion_thumb_directory'));
 
-                verificar_documentos2($adscripcion->getIdRolInstitucion(),4,2,$em,$nombreAscenso, 5);
+                verificar_documentos2($adscripcion->getIdRolInstitucion(),4,2,$em,$nombreAscenso, $servicios);
             }else{
                 $constanciaAscenso->move(
                     $this->container->getParameter('ascenso_directory'),
@@ -359,13 +367,13 @@ class AscensoController extends Controller
                 );             
                 thumbnail2($nombreAscenso, $this->container->getParameter('ascenso_directory'), $this->container->getParameter('ascenso_thumb_directory'));
                 switch ($solicitudAscenso->getIdEscalafones()->getId()){
-                    case 2: verificar_documentos2($adscripcion->getIdRolInstitucion(),5,2,$em,$nombreAscenso, 5);
+                    case 2: verificar_documentos2($adscripcion->getIdRolInstitucion(),5,2,$em,$nombreAscenso, $servicios);
                         break;
-                    case 3: verificar_documentos2($adscripcion->getIdRolInstitucion(),6,2,$em,$nombreAscenso, 5);
+                    case 3: verificar_documentos2($adscripcion->getIdRolInstitucion(),6,2,$em,$nombreAscenso, $servicios);
                         break;
-                    case 4: verificar_documentos2($adscripcion->getIdRolInstitucion(),7,2,$em,$nombreAscenso, 5);
+                    case 4: verificar_documentos2($adscripcion->getIdRolInstitucion(),7,2,$em,$nombreAscenso, $servicios);
                         break;
-                    case 5: verificar_documentos2($adscripcion->getIdRolInstitucion(),8,2,$em,$nombreAscenso, 5);
+                    case 5: verificar_documentos2($adscripcion->getIdRolInstitucion(),8,2,$em,$nombreAscenso, $servicios);
                         break;
                     default:
                         break;
@@ -374,13 +382,7 @@ class AscensoController extends Controller
                       
             
             
-            //Crear la solicitud de Servicio
-            $servicios = new DocenteServicio();
 
-            $servicios->setIdRolInstitucion($this->getUser()->getIdRolInstitucion());
-            $servicios->setIdServicioCe($this->getDoctrine()->getRepository('AppBundle:ServiciosCe')->findOneById(6));
-            $servicios->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:estatus')->findOneById(2));
-            $em->persist($servicios);
             $em->persist($adscripcion);
             
             $em->flush();
@@ -645,7 +647,7 @@ class AscensoController extends Controller
 
            $documento = $em->getRepository("AppBundle:DocumentosVerificados")->findOneBy(array(
                'idRolInstitucion'  => $servicio->getIdRolInstitucion(),
-               'idServicio'  => 5,
+               'idServicio'  => $servicio->getId(),
                'idEstatus'  => 2
            ));
 
@@ -787,7 +789,7 @@ function verificar_documentos2($idRolInstitucion, $tipo, $estatus, $em, $ubicaci
         $verificacion = new DocumentosVerificados();
         $verificacion->setIdEstatus($em->getRepository("AppBundle:Estatus")->findOneById($estatus));
         $verificacion->setIdRolInstitucion($idRolInstitucion);
-        $verificacion->setIdServicio($em->getRepository("AppBundle:ServiciosCe")->findOneById($servicio));
+        $verificacion->setIdServicio($servicio);
         $verificacion->setIdTipoDocumentos($em->getRepository("AppBundle:TipoDocumentos")->findOneById($tipo));
         $verificacion->setUbicacion($ubicacion);
         $em->persist($verificacion);

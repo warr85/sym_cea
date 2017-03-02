@@ -61,9 +61,9 @@ class DocumentosVerificados
 
 
     /**
-     * @var \AppBundle\Entity\ServiciosCe
+     * @var \AppBundle\Entity\DocenteServicio
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ServiciosCe")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\DocenteServicio")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_servicio", referencedColumnName="id", nullable=false)
      * })
@@ -249,28 +249,7 @@ class DocumentosVerificados
         return $this->idTipoDocumentos;
     }
 
-    /**
-     * Set idServicio
-     *
-     * @param \AppBundle\Entity\ServiciosCe $idServicio
-     * @return DocumentosVerificados
-     */
-    public function setIdServicio(\AppBundle\Entity\ServiciosCe $idServicio)
-    {
-        $this->idServicio = $idServicio;
 
-        return $this;
-    }
-
-    /**
-     * Get idServicio
-     *
-     * @return \AppBundle\Entity\ServiciosCe 
-     */
-    public function getIdServicio()
-    {
-        return $this->idServicio;
-    }
 
 
 
@@ -288,5 +267,28 @@ class DocumentosVerificados
     public function setUbicacion($ubicacion)
     {
         $this->ubicacion = $ubicacion;
+    }
+
+    /**
+     * Set idServicio
+     *
+     * @param \AppBundle\Entity\DocenteServicio $idServicio
+     * @return DocumentosVerificados
+     */
+    public function setIdServicio(\AppBundle\Entity\DocenteServicio $idServicio)
+    {
+        $this->idServicio = $idServicio;
+
+        return $this;
+    }
+
+    /**
+     * Get idServicio
+     *
+     * @return \AppBundle\Entity\DocenteServicio 
+     */
+    public function getIdServicio()
+    {
+        return $this->idServicio;
     }
 }

@@ -34,7 +34,7 @@ class AdscripcionController extends Controller
             return $this->redirect($this->generateUrl('cea_index'));
         }
 
-
+        $em = $this->getDoctrine()->getManager();
 	    $adscripcion = new Adscripcion();
 	    $escala = new DocenteEscala();
 
@@ -46,7 +46,19 @@ class AdscripcionController extends Controller
         $form->get('escala')->getData();
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+
+            //Crear la solicitud de Servicio
+            $servicios = new DocenteServicio();
+
+            $servicios->setIdRolInstitucion($this->getUser()->getIdRolInstitucion());
+            $servicios->setIdServicioCe($this->getDoctrine()->getRepository('AppBundle:ServiciosCe')->findOneById(2));
+            $servicios->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:estatus')->findOneById(2));
+
+            $em->persist($servicios);
+
+
+            $em->flush(); //guarda en la base de datos
+
         	  //var_dump($form->get('lineas_investigacion')->getData()); exit;
 
 		 // $file stores the uploaded PDF file
@@ -82,7 +94,7 @@ class AdscripcionController extends Controller
                 	$nombrePostgrado
             	);
                 thumbnail($nombrePostgrado, $this->container->getParameter('adscripcion_directory'), $this->container->getParameter('adscripcion_thumb_directory'));
-                verificar_documentos($this->getUser()->getIdRolInstitucion(), 3, 2, $em, $nombrePostgrado);
+                verificar_documentos($this->getUser()->getIdRolInstitucion(), 3, 2, $em, $nombrePostgrado, $servicios);
             }
 
 
@@ -92,8 +104,8 @@ class AdscripcionController extends Controller
             $adscripcion->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(2));
             $adscripcion->setIdLineaInvestigacion($form->get('lineas_investigacion')->getData());
             $adscripcion->setTituloTrabajo($form->get('titulo_trabajo')->getData());
-            verificar_documentos($this->getUser()->getIdRolInstitucion(), 1, 2, $em, $nombreTrabajo);
-            verificar_documentos($this->getUser()->getIdRolInstitucion(), 2, 2, $em, $nombrePregrado);
+            verificar_documentos($this->getUser()->getIdRolInstitucion(), 1, 2, $em, $nombreTrabajo, $servicios);
+            verificar_documentos($this->getUser()->getIdRolInstitucion(), 2, 2, $em, $nombrePregrado, $servicios);
             
             $correlativo = $this->getDoctrine()->getRepository('AppBundle:Adscripcion')->findOneBy(
                    array(), 
@@ -123,7 +135,7 @@ class AdscripcionController extends Controller
                         $nombreOposicion
                     );
                     thumbnail($nombreOposicion, $this->container->getParameter('adscripcion_directory'), $this->container->getParameter('adscripcion_thumb_directory'));
-                    verificar_documentos($this->getUser()->getIdRolInstitucion(), 4, 2, $em, $nombreOposicion);
+                    verificar_documentos($this->getUser()->getIdRolInstitucion(), 4, 2, $em, $nombreOposicion, $servicios);
                 }
 
 
@@ -137,7 +149,7 @@ class AdscripcionController extends Controller
                     $escala2->setIdEscala($asistente);
                     $escala2->setIdTipoEscala($this->getDoctrine()->getRepository('AppBundle:TipoAscenso')->findOneById(2));
                     $em->persist($escala2);
-                    verificar_documentos($this->getUser()->getIdRolInstitucion()->getId(), 5, 2, $em);
+                    verificar_documentos($this->getUser()->getIdRolInstitucion()->getId(), 5, 2, $em, $servicios);
 
                     $constanciaAsistente = $form->get('documento_asistente')->getData();
                     $nombreAsistente = md5(uniqid()).'.'.$constanciaAsistente->guessExtension();
@@ -146,7 +158,7 @@ class AdscripcionController extends Controller
                         $nombreAsistente
                     );
                     thumbnail($nombreAsistente, $this->container->getParameter('ascenso_directory'), $this->container->getParameter('ascenso_thumb_directory'));
-                    verificar_documentos($this->getUser()->getIdRolInstitucion(), 5, 2, $em, $nombreAsistente);
+                    verificar_documentos($this->getUser()->getIdRolInstitucion(), 5, 2, $em, $nombreAsistente, $servicios);
 
 
                 }
@@ -168,7 +180,7 @@ class AdscripcionController extends Controller
                        $nombreAsociado
                    );
                    thumbnail($nombreAsociado, $this->container->getParameter('ascenso_directory'), $this->container->getParameter('ascenso_thumb_directory'));
-                   verificar_documentos($this->getUser()->getIdRolInstitucion(), 6, 2, $em, $nombreAsociado);
+                   verificar_documentos($this->getUser()->getIdRolInstitucion(), 6, 2, $em, $nombreAsociado, $servicios);
                 }
 
 
@@ -180,7 +192,7 @@ class AdscripcionController extends Controller
                     $escala4->setIdEscala($agregado);
                     $escala4->setIdTipoEscala($this->getDoctrine()->getRepository('AppBundle:TipoAscenso')->findOneById(2));
                     $em->persist($escala4);
-                    verificar_documentos($this->getUser()->getIdRolInstitucion()->getId(), 7, 2, $em);
+                    verificar_documentos($this->getUser()->getIdRolInstitucion()->getId(), 7, 2, $em, $servicios);
 
                     $constanciaAgregado = $form->get('documento_agregado')->getData();
                     $nombreAgregado = md5(uniqid()).'.'.$constanciaAgregado->guessExtension();
@@ -189,7 +201,7 @@ class AdscripcionController extends Controller
                         $nombreAgregado
                     );
                     thumbnail($nombreAgregado, $this->container->getParameter('ascenso_directory'), $this->container->getParameter('ascenso_thumb_directory'));
-                    verificar_documentos($this->getUser()->getIdRolInstitucion(), 7, 2, $em, $nombreAgregado);
+                    verificar_documentos($this->getUser()->getIdRolInstitucion(), 7, 2, $em, $nombreAgregado, $servicios);
                 }
 
 
@@ -201,7 +213,7 @@ class AdscripcionController extends Controller
                     $escala5->setIdEscala($titular);
                     $escala5->setIdTipoEscala($this->getDoctrine()->getRepository('AppBundle:TipoAscenso')->findOneById(2));
                     $em->persist($escala5);
-                    verificar_documentos($this->getUser()->getIdRolInstitucion()->getId(), 8, 2, $em);
+                    verificar_documentos($this->getUser()->getIdRolInstitucion()->getId(), 8, 2, $em, $servicios);
 
                     $constanciaTitular = $form->get('documento_titular')->getData();
                     $nombreTitular = md5(uniqid()).'.'.$constanciaTitular->guessExtension();
@@ -210,26 +222,17 @@ class AdscripcionController extends Controller
                         $nombreTitular
                     );
                     thumbnail($nombreTitular, $this->container->getParameter('ascenso_directory'), $this->container->getParameter('ascenso_thumb_directory'));
-                    verificar_documentos($this->getUser()->getIdRolInstitucion(), 8, 2, $em, $nombreTitular);
+                    verificar_documentos($this->getUser()->getIdRolInstitucion(), 8, 2, $em, $nombreTitular, $servicios);
                 }
 
             }
-            
-            //Crear la solicitud de Servicio
-            $servicios = new DocenteServicio();
 
-            $servicios->setIdRolInstitucion($this->getUser()->getIdRolInstitucion());
-            $servicios->setIdServicioCe($this->getDoctrine()->getRepository('AppBundle:ServiciosCe')->findOneById(2));
-            $servicios->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:estatus')->findOneById(2));
 
-            $em->persist($servicios);
+
+
+
             $em->persist($adscripcion);
-
-            $em->flush(); //guarda en la base de datos
-            
-
-            
-
+            $em->flush();
             return $this->redirect($this->generateUrl('cea_index'));	
         }
 
@@ -404,21 +407,21 @@ class AdscripcionController extends Controller
         //Guardar el resultado de la verificación de Documentos
         foreach ($parametros as $key => $value){
             if($key === 'trabajo') {
-                verificar_documentos($adscripcion->getIdRolInstitucion(), 1, $value, $em);
+                verificar_documentos($adscripcion->getIdRolInstitucion(), 1, $value, $em, "", $serviciosAdscripcion);
             }else if($key === 'pregrado') {
-                verificar_documentos($adscripcion->getIdRolInstitucion(), 2, $value, $em);
+                verificar_documentos($adscripcion->getIdRolInstitucion(), 2, $value, $em, "", $serviciosAdscripcion);
             }else if($key === 'postgrado') {
-                verificar_documentos($adscripcion->getIdRolInstitucion(), 3, $value, $em);
+                verificar_documentos($adscripcion->getIdRolInstitucion(), 3, $value, $em, "",  $serviciosAdscripcion);
             }else if($key === 'oposicion') {
-                verificar_documentos($adscripcion->getIdRolInstitucion(), 4, $value, $em);
+                verificar_documentos($adscripcion->getIdRolInstitucion(), 4, $value, $em, "", $serviciosAdscripcion);
             }else if($key === 'asistente') {
-                verificar_documentos($adscripcion->getIdRolInstitucion(), 5, $value, $em);
+                verificar_documentos($adscripcion->getIdRolInstitucion(), 5, $value, $em, "", $serviciosAdscripcion);
             }else if($key === 'agregado') {
-                verificar_documentos($adscripcion->getIdRolInstitucion(), 6, $value, $em);
+                verificar_documentos($adscripcion->getIdRolInstitucion(), 6, $value, $em, "", $serviciosAdscripcion);
             }else if($key === 'asociado') {
-                verificar_documentos($adscripcion->getIdRolInstitucion(), 7, $value, $em);
+                verificar_documentos($adscripcion->getIdRolInstitucion(), 7, $value, $em, "", $serviciosAdscripcion);
             }else if($key === 'titular') {
-                verificar_documentos($adscripcion->getIdRolInstitucion(), 8, $value, $em);
+                verificar_documentos($adscripcion->getIdRolInstitucion(), 8, $value, $em, "", $serviciosAdscripcion);
             }
         }
 
@@ -572,7 +575,7 @@ function thumbnail ($filename, $fuente, $destino){
     imagejpeg($nm, $destino . "/" . $filename);
 }
 
-function verificar_documentos($idRolInstitucion, $tipo, $estatus, $em, $ubicacion="", $servicio = 2){
+function verificar_documentos($idRolInstitucion, $tipo, $estatus, $em, $ubicacion="", $servicio){
     $existe = $em->getRepository("AppBundle:DocumentosVerificados")->findOneBy(array(
         'idRolInstitucion' => $idRolInstitucion,
         'idTipoDocumentos'  => $tipo
@@ -582,7 +585,7 @@ function verificar_documentos($idRolInstitucion, $tipo, $estatus, $em, $ubicacio
         $verificacion = new DocumentosVerificados();
         $verificacion->setIdEstatus($em->getRepository("AppBundle:Estatus")->findOneById($estatus));
         $verificacion->setIdRolInstitucion($idRolInstitucion);
-        $verificacion->setIdServicio($em->getRepository("AppBundle:ServiciosCe")->findOneById($servicio));
+        $verificacion->setIdServicio($servicio);
         $verificacion->setIdTipoDocumentos($em->getRepository("AppBundle:TipoDocumentos")->findOneById($tipo));
         $verificacion->setUbicacion($ubicacion);
         $em->persist($verificacion);
