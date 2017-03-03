@@ -19,5 +19,8 @@
 !.htaccess
 *~
 *.*~
+#phpstorm
 .idea/*
 .idea*
+.idea/sym_cea.iml
+.idea/workspace.xml
