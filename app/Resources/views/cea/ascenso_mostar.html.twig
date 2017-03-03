@@ -233,11 +233,17 @@
                          
                          {% for documento in docente.documentosVerificados %}
                              {% if documento.idServicio.id == servicio.id %}
-                         <div class="col-xs-6">
+                                 {% set extension = documento.ubicacion | split('.') | last %}
+                         <div {% if extension != "pdf" %}class="col-xs-6"{% else %}class="col-xs-12"{% endif %}>
                             <div class="thumbnail">
+
+                                {% if extension != "pdf" %}
                                 <a href="{{asset('uploads/ascenso/'~ documento.ubicacion)}}" data-lightbox="trabajo">
                                     <img src="{{ asset('uploads/ascenso/thumb/'~ documento.ubicacion) }}" />
                                 </a>
+                                {% else %}
+                                    <object type="application/pdf" data="{{asset('uploads/ascenso/'~ documento.ubicacion)}}" width="100%" height="300px"></object>
+                                {% endif %}
                               <div class="caption">                                
                                 <p>{{ documento.idTipoDocumentos.nombre }}</p>
                                   <div class="wrapper">
