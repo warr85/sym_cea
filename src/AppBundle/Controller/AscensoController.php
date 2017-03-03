@@ -686,7 +686,7 @@ class AscensoController extends Controller
                'idEstatus'  => 2
            ));
 
-           $documento->setIdEstatus($em->getRepository("AppBundle:Estatus")->findOneById($this->get('request')->request->get('oposicion')));
+           $documento->setIdEstatus($em->getRepository("AppBundle:Estatus")->findOneById($this->get('request')->request->get('reconocimiento')));
             
             $servicio->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(4));
             $em->persist($servicio);

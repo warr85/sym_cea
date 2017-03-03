@@ -189,24 +189,25 @@
                                              
                          {% for documento in docente.documentosVerificados %}
                          {% if documento.idServicio.id == servicio.id %}
+                         {% if not ascenso %} {% set u = "adscripcion" %} {% else %} {% set u = "ascenso" %} {% endif %}
                          <div class="col-xs-4">
                             <div class="thumbnail">
-                                <a href="{{asset('uploads/adscripcion/'~ documento.ubicacion)}}" data-lightbox="adscripcion">
-                                    <img src="{{ asset('uploads/adscripcion/thumb/'~ documento.ubicacion) }}" />
+                                <a href="{{asset('uploads/'~u~'/'~ documento.ubicacion)}}" data-lightbox="adscripcion">
+                                    <img src="{{ asset('uploads/'~u~'/thumb/'~ documento.ubicacion) }}" />
                                 </a>
                               <div class="caption">                                
                                 <p>{{ documento.idTipoDocumentos.nombre }}</p>
                                   <div class="wrapper">
                                       <label for="yes_radio" class="yes-lbl"><i class="fa fa-check"></i>
                                       </label>
-                                      <input type="radio" value="1" name="{{ documento.idTipoDocumentos.identificador }}" class="yes_radio" id="yes_radio" {% if documento.idEstatus.id == 1 %} checked="checked" {% endif %}>
+                                      <input type="radio" value="1" name="reconocimiento" class="yes_radio" id="yes_radio" {% if documento.idEstatus.id == 1 %} checked="checked" {% endif %}>
                                       <label for="maybe_radio" class="maybe-lbl">
                                           <i class="fa fa-question"></i>
                                       </label>
-                                      <input type="radio" value="" name="{{ documento.idTipoDocumentos.identificador }}" class="maybe_radio" id="maybe_radio" {% if documento.idEstatus.id == 2 %} checked="checked" {% endif %} disabled>
+                                      <input type="radio" value="" name="reconocimiento" class="maybe_radio" id="maybe_radio" {% if documento.idEstatus.id == 2 %} checked="checked" {% endif %} disabled>
                                       <label for="no_radio" class="no-lbl"><i
                                                   class="fa fa-close"></i></label><input type="radio" value="3"
-                                                                                         name="{{ documento.idTipoDocumentos.identificador }}"
+                                                                                         name="reconocimiento"
                                                                                          class="no_radio"
                                                                                          id="no_radio" {% if documento.idEstatus.id == 3 %} checked="checked" {% endif %}>
 
