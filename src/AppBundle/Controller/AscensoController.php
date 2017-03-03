@@ -265,10 +265,7 @@ class AscensoController extends Controller
                     $this->container->getParameter('ascenso_directory'),
                     $nombreCurriculo
                 );
-                $constanciaCurriculo->move(
-                    $this->container->getParameter('ascenso_thumb_directory'),
-                    $nombreCurriculo
-                );
+
                 //thumbnail2($nombreCurriculo, $this->container->getParameter('ascenso_directory'), $this->container->getParameter('ascenso_thumb_directory'));
                 verificar_documentos2($this->getUser()->getIdRolInstitucion(),16,2,$em,$nombreCurriculo, $servicios);
 
@@ -794,7 +791,8 @@ function thumbnail2 ($filename, $fuente, $destino){
 function verificar_documentos2($idRolInstitucion, $tipo, $estatus, $em, $ubicacion="", $servicio = 2){
     $existe = $em->getRepository("AppBundle:DocumentosVerificados")->findOneBy(array(
         'idRolInstitucion' => $idRolInstitucion,
-        'idTipoDocumentos'  => $tipo
+        'idTipoDocumentos'  => $tipo,
+        'idServicio'        => $servicio
     ));
 
     if(!$existe) {
