@@ -536,11 +536,11 @@ class AscensoController extends Controller
     /**
      * Encuentra y muestra una entidad de tipo Adscripción.
      *
-     * @Route("/solicitudes/ascenso/{id}/{estatus}", name="cea_ascenso_actualizar")
+     * @Route("/solicitudes/ascenso/{id}", name="cea_ascenso_actualizar")
      * @Method({"GET", "POST"})
      * @Security("has_role('ROLE_COORDINADOR_REGIONAL')")
      */
-    public function solicitudesAscensoEditAction(Ascenso $ascenso, $estatus, Request $request)
+    public function solicitudesAscensoEditAction(Ascenso $ascenso, Request $request)
     {
         $mensaje = "";
        //$adscripciones = $this->getDoctrine()->getRepository('AppBundle:Adscripcion')->findOneById($adscripcion->getId());
@@ -549,19 +549,44 @@ class AscensoController extends Controller
            'idServicioCe'       => 5,
            'idEstatus'          => 2
        ));
-       
-       
-              
-       $user = $this->getDoctrine()->getRepository('AppBundle:Usuarios')->findOneByIdRolInstitucion($ascenso->getIdRolInstitucion());
-       if($estatus == "true") {
-           $serviciosAscenso->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(1));                      
-                                            
+
+        $parametros = $request->request->all();
+        $user = $this->getDoctrine()->getRepository('AppBundle:Usuarios')->findOneByIdRolInstitucion($ascenso->getIdRolInstitucion());
+
+        if(isset($parametros['aprobado'])) {
+           $serviciosAscenso->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(1));
+
        }else{
            $mensaje = $request->request->get('message-text');
            $serviciosAscenso->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(3));           
        }
        
        $ascenso->setIdEstatus($serviciosAscenso->getIdEstatus());
+        $em = $this->getDoctrine()->getManager();
+
+
+        //Guardar el resultado de la verificación de Documentos
+        foreach ($parametros as $key => $value){
+            if($key === 'trabajo') {
+                verificar_documentos2($user->getIdRolInstitucion(), 1, $value, $em, "", $serviciosAscenso);
+            }else if($key === 'pida') {
+                verificar_documentos2($user->getIdRolInstitucion(), 9, $value, $em, "", $serviciosAscenso);
+            }else if($key === 'nai') {
+                verificar_documentos2($user->getIdRolInstitucion(), 12, $value, $em, "",  $serviciosAscenso);
+            }else if($key === 'tesis') {
+                verificar_documentos2($user->getIdRolInstitucion(), 13, $value, $em, "", $serviciosAscenso);
+            }else if($key === 'actividades') {
+                verificar_documentos2($user->getIdRolInstitucion(), 10, $value, $em, "", $serviciosAscenso);
+            }else if($key === 'cath') {
+                verificar_documentos2($user->getIdRolInstitucion(), 11, $value, $em, "", $serviciosAscenso);
+            }else if($key === 'investigacion') {
+                verificar_documentos2($user->getIdRolInstitucion(), 15, $value, $em, "", $serviciosAscenso);
+            }else if($key === 'curriculo') {
+                verificar_documentos2($user->getIdRolInstitucion(), 16, $value, $em, "", $serviciosAscenso);
+            }else if($key === 'pertinencia') {
+                verificar_documentos2($user->getIdRolInstitucion(), 14, $value, $em, "", $serviciosAscenso);
+            }
+        }
            
        $em = $this->getDoctrine()->getManager();
        $em->persist($serviciosAscenso);       
@@ -599,13 +624,14 @@ class AscensoController extends Controller
         ));
        
        $pida = $this->getDoctrine()->getRepository('AppBundle:AdscripcionPida')->findOneByIdRolInstitucion($serviciosAscenso->getIdRolInstitucion());
-       
+       $docente = $this->getDoctrine()->getRepository("AppBundle:RolInstitucion")->findOneById($ascenso->getIdRolInstitucion()->getId());
         return $this->render('cea/ascenso_mostar.html.twig', array(
             'ascenso'   => $ascenso,
             'servicio'      => $serviciosAscenso,            
             'escalas'       => $escala,
             'pida'          => $pida,
-            'antiguedad' => $antiguedad
+            'antiguedad' => $antiguedad,
+            'docente'     => $docente
         ));
        
     }
