@@ -200,6 +200,7 @@
                         <div class="widget-content">
 
                             {% for verificado in todo.documentosVerificados %}
+                                {% if verificado.idServicio.id == servicio.id %}
 
                                 <div class="col-xs-4">
                                     <div class="thumbnail">
@@ -228,6 +229,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                {% endif %}
                             {% endfor %}
 
 
