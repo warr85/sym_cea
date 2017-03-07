@@ -129,6 +129,10 @@ class UserType extends AbstractType
                 ),
                 'class' => 'AppBundle:Escalafones',
                 'choice_label' => 'getNombre',
+                'query_builder' => function(EntityRepository $er) {
+                    return $er->createQueryBuilder('u')
+                        ->orderBy('u.id', 'ASC');
+                },
             ))
             ->add('fecha_oposicion', BirthdayType::class, array(
                 'label' => 'Fecha Concurso de Oposición',
