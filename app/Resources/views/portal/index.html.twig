@@ -319,6 +319,12 @@
     <script type="text/javascript" src="{{ asset('assets/vendor/smooth-scroll/dist/js/smooth-scroll.js') }}" ></script>
     <script type="text/javascript">
         smoothScroll.init();
+
+        $('.btn').on('click', function() {
+            var $this = $(this);
+            $this.button('loading');
+        });
+
     </script>
 {% endblock %}
 

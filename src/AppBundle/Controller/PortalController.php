@@ -19,12 +19,11 @@ class PortalController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $persona = $this->getDoctrine()->getRepository('AppBundle:Persona')
                               ->findOneByCedulaPasaporte($form->get('cedula')->getData());
             
              if (!$persona) {
-                $this->addFlash('danger', 'Docente no Registrado en la Base de Datos del Centro de Estudios.  Por Favor consulta con el Coordinador Regional del CEA');
+                $this->addFlash('danger', 'Docente no Registrado en la Base de Datos del Centro de Estudios.  Por Favor consulte con el Coordinador Regional del CEA');
                 return $this->redirect($this->generateUrl('homepage').'#adscripcion');
             }
             
@@ -36,7 +35,7 @@ class PortalController extends Controller
 
             //si no existe el rol del docente, enviar correo al encargado de la región para verificar.
             if (!$rol) {
-                $this->addFlash('danger', 'Hay un problema con el docente, no tiene ningún rol asignado en la UBV');
+                $this->addFlash('danger', 'Hay un problema con el registro y asignación del Rol del Docente. Por Favor consulte con el Coordinador Regional del CEA');
                 return $this->redirect($this->generateUrl('homepage').'#adscripcion');	
             }
 
@@ -82,6 +81,8 @@ class PortalController extends Controller
                                 'apellidos' => $form->get('apellidos')->getData(),
                                 'usuario'   => $login->getUsername(),
                                 'contra'    => $login->getPlainPassword(),
+                                'centro_estudios' => 'Centro de Estudios Ambientales',
+                                'siglas'        => 'CEA@UBV'
 
                             )
                         ),
@@ -102,15 +103,14 @@ class PortalController extends Controller
 
 
             }else{
-               $this->addFlash('notice', 'Ya ha solicitado datos de ingreso.  Revise la dirección de correo suministrada o Contáctenos a través de: cea.ubv@gmail.com');
-               
+               $this->addFlash('notice', 'Ya ha solicitado datos de ingreso.  Revise la dirección de correo suministrada al momento del registro en donde aparecen los datos para el ingreso.  ¿No recibió el Correo?  Contáctenos a través de: cea.ubv@gmail.com');
+                return $this->redirect($this->generateUrl('homepage').'#adscripcion');
             }
            
            return $this->redirect($this->generateUrl('homepage').'#adscripcion');
             //$request->getSession()->getFlashBag()->add('success', 'Your email has been sent! Thanks!');
         }
 
-        // replace this example code with whatever you need
         return $this->render('portal/index.html.twig', array(
             'base_dir' => realpath($this->container->getParameter('kernel.root_dir').'/..'),
             'form' => $form->createView(),

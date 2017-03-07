@@ -1,20 +1,28 @@
-<h2>Bienvido al CEA@UBV {{ nombres  }}, {{ apellidos }} A continuación sus datos de ingreso</h2>
+<h2>Bienvido al sistema del {{ centro_estudios }} de la
+    Universidad Bolivariana de Venezuela {{ siglas }}</h2>
+
+<h4>
+    Estimado Docente {{ nombres  }}, {{ apellidos }} A continuación sus datos de ingreso:
+</h4>
 
 
-<p><strong>usuario:</strong> {{ usuario }}</p>
-<p><strong>contraseña:</strong> {{ contra }}</p>
-<h4>Al Ingresar a tu cuenta, deberás formalizar el proceso de Adscripción al centro de estudios completando
-    el formulario de Formalización</h4>
+<p><strong>Nombre de Usuario:</strong> {{ usuario }}</p>
+<p><strong>Contraseña:</strong> {{ contra }}</p>
+<h4>
+    Al Ingresar a tu cuenta, deberás formalizar el proceso de Adscripción al
+    {{ centro_estudios }} completando
+    el formulario de Formalización. Este paso es Obligatorio.
+</h4>
 Documentos en formato digital para la formalización (PDF, JPG, PNG):
 
 <ol>
     <li>Constancia de Trabajo (obligatorio)</li>
     <li>Digital del Título de Pregrado (obligatorio)</li>
     <li>Digital del Título de Postgrado (si tiene postgrado) (en caso de tener varíos, usar el más reciente)</li>
-    <li>Digital de la aprobación del Concurso de Oposición ( si ya concursó )</li>
-    <li>Digital de certificados de Ascenso (si ha tenido ascensos)</li>
+    <li>Digital de la aprobación del Concurso de Oposición ( si ya concursó, de lo contrario no es obligatorio )</li>
+    <li>Digital de certificados de Ascenso (si ha tenido ascensos, de lo contrario no es obligatorio)</li>
 </ol>
 
 
-Para hacer login dirigete simplemente a la página de ingreso del Portal del Centro de Estudios Ambientales: 
-<a href="{{ url('login') }}">Login</a>.
+Para ingresar al sistema, dirígete simplemente a la página de ingreso del Portal del Centro de Estudios Ambientales:
+<a href="{{ url('login') }}">CEA@UBV</a>.

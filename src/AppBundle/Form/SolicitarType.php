@@ -63,6 +63,9 @@ class SolicitarType extends AbstractType
                     return $er->createQueryBuilder('pfg')
                             ->where('pfg.idTipoArea = 1');
                 },
+                'constraints' => array(
+                    new NotBlank()
+                ),
                 'choice_label' => 'getNombre',
             ))
                 
@@ -78,10 +81,16 @@ class SolicitarType extends AbstractType
                 'placeholder' => 'Seleccione el Eje al Cual está Adscrito',
                 'class' => 'AppBundle:Eje',
                 'choice_label' => 'getNombre',
+                'constraints' => array(
+                    new NotBlank()
+                )
             ))
             ->add('send', SubmitType::class, array(
                 'label' => 'Enviar Solicitud',
-                'attr'  => array('class' => 'btn btn-success')
+                'attr'  => array(
+                    'class' => 'btn btn-success',
+                    'data-loading-text' => "<i class='fa fa-circle-o-notch fa-spin'></i> Enviando Solicitud..."
+                )
              ));
     }
 
