@@ -78,23 +78,57 @@
             $("#user_titulo_trabajo").prop('required', $(this).prop("checked"));
         });
 
+
+
+        if ($('#user_ascenso').prop('checked')) {
+            $('#user_escala').prop('disabled', true);
+            $('#user_oposicion').prop('disabled',true);
+            if($("#user_escala").val() == 1)
+                $('.esc_asistente').show();
+            if($("#user_escala").val() == 2)
+                $('.esc_agregado').show();
+            if($("#user_escala").val() == 3)
+                $('.esc_asociado').show();
+            if($("#user_escala").val() == 4)
+                $('.esc_titular').show();
+        }
+
+
         $('#user_ascenso').click(function() {
 
-            if ((!$("#user_escala").val()) && ($('#user_ascenso').prop('checked'))){
+
+
+            if($("#user_escala").val() >= 1) $('#user_escala').prop('disabled', true);
+
+            if(!$('#user_ascenso').prop("checked")){
+                $('#user_escala').prop('disabled', false);
+            }
+
+            if (($("#user_escala").val() == "") && ($('#user_ascenso').prop('checked'))){
                 alert("Primero debe seleccionar a que escalafón aprobó concurso");
                 $('#user_ascenso').prop('checked', false);
+                $('#user_escala').prop('disabled', false);
             }
-        		
+
+            if (($("#user_escala").val() == 5 ) && ($('#user_ascenso').prop('checked'))){
+                alert("No existen mas escalafones");
+                $('#user_ascenso').prop('checked', false);
+                //$('#user_ascenso').attr('disabled', true);
+            }
+
+
         	if($("#user_escala").val() == 1)
            		$('.esc_asistente')[this.checked ? "show" : "hide"]();
           	if($("#user_escala").val() == 2)
-           		$('.esc_asociado')[this.checked ? "show" : "hide"]();
+           		$('.esc_agregado')[this.checked ? "show" : "hide"]();
                 if($("#user_escala").val() == 3)
-                    $('.esc_agregado')[this.checked ? "show" : "hide"]();
+                    $('.esc_asociado')[this.checked ? "show" : "hide"]();
                 if($("#user_escala").val() == 4)
                     $('.esc_titular')[this.checked ? "show" : "hide"]();
 
         });
+
+
         
         
         
@@ -115,18 +149,16 @@
                 
             }
         });
-        
-        
-        
-        
+
+
         $('#user_ascenso2').click(function() {                
-            	$('.esc_asociado')[this.checked ? "show" : "hide"]();
+            	$('.esc_agregado')[this.checked ? "show" : "hide"]();
 
         });
 
         $('#user_ascenso3').click(function() {
 
-                $('.esc_agregado')[this.checked ? "show" : "hide"]();
+                $('.esc_asociado')[this.checked ? "show" : "hide"]();
 
         });
 
@@ -136,15 +168,25 @@
         });
 
 
-        $('#user_escala').change(function(){            
-            if ($('#user_escala').val() >= 1) $('#user_oposicion').attr('disabled',true);
+        $('#user_escala').click(function(){
+
+            //alert($('#user_escala').val());
+            if ($('#user_escala').val() == "") $('#user_oposicion').prop('disabled',false);
+            if ($('#user_escala').val() >= 1) $('#user_oposicion').prop('disabled',true);
+            if ($('#user_escala').val() < 5) $('#user_ascenso').prop('disabled',false);
             else $('#user_oposicion').attr('disabled',false);
         });
 
-
+        //boton para mostrarle al usuario que estamos esperando
         $('.btn').on('click', function() {
             var $this = $(this);
             $this.button('loading');
+        });
+
+        //rehabilitamos todo lo que estaba bloqueado para que pueda ser enviado al servidor
+        $('form').on('submit', function() {
+            //alert("submit");
+            $('input, select').prop('disabled', false);
         });
         
     </script>

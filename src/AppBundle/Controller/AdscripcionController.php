@@ -62,6 +62,22 @@ class AdscripcionController extends Controller
                     $form->get('documento_oposicion')->addError(new FormError('Si selecciona que tiene concurso de oposción, debe subir el digital de la aprobación del concurso'));
                 }
             }
+
+
+            if ($form->get('ascenso')->getData()) {
+                //var_dump($form);
+                if (!$form->get('fecha_oposicion')->getData()) {
+                    $form->get('fecha_oposicion')->addError(new FormError('Fecha no puede estar en blanco'));
+                }
+
+                if (!$form->get('escala')->getData()) {
+                    $form->get('escala')->addError(new FormError('Si selecciona que tiene concurso de oposción, debe seleccionar a que escalafón lo aprobó'));
+                }
+
+                if (!$form->get('documento_oposicion')->getData()) {
+                    $form->get('documento_oposicion')->addError(new FormError('Si selecciona que tiene concurso de oposción, debe subir el digital de la aprobación del concurso'));
+                }
+            }
         }
 
         if ($form->isSubmitted() && $form->isValid()) {

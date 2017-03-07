@@ -233,48 +233,7 @@ class UserType extends AbstractType
             
 
 
-            //Asociado
-            ->add('fecha_ascenso_asociado', BirthdayType::class, array(
-                'label' => 'fecha ascenso ASOCIADO',
-                'label_attr'    => array( 'class' => 'esc_asociado'),
-                'required' => false,
-                'attr' => array(
-                    'class' =>  'esc_asociado'
-                ),
-                'years' => range(2003, date("Y"))
-            ))
 
-            ->add('documento_asociado', FileType::class, array(
-                'label' => 'Digital Documento asociado',
-                'label_attr'    => array( 'class' => 'esc_asociado'),
-                'required' => false,
-                'attr' => array(
-                    'style' => 'display:none;',
-                    'class' =>  'esc_asociado'
-                ),
-                'constraints' => array(
-                   new File(array(
-                       'maxSize'    => '1024K',
-                       'mimeTypes' => [
-                           'application/pdf',
-                           'application/x-pdf',
-                           'image/png',
-                           'image/jpg',
-                           'image/jpeg'
-                        ],
-                       'mimeTypesMessage' => 'Sólo se permiten extensiones png, jpeg y pdf'
-                   )) 
-                )
-            ))
-
-            ->add('ascenso3', CheckboxType::class, array(
-                'label'    => '¿Otro Ascenso?',
-                'label_attr'    => array( 'class' => 'esc_asociado'),
-                'required' => false,
-                'attr' => array(
-                    'class' =>  'esc_asociado'
-                )
-            ))
 
             //Agregado
             ->add('fecha_ascenso_agregado', BirthdayType::class, array(
@@ -310,12 +269,56 @@ class UserType extends AbstractType
                 )
             ))
 
-            ->add('ascenso4', CheckboxType::class, array(
+            ->add('ascenso3', CheckboxType::class, array(
                 'label'    => '¿Otro Ascenso?',
                 'label_attr'    => array( 'class' => 'esc_agregado'),
                 'required' => false,
                 'attr' => array(
                     'class' =>  'esc_agregado'
+                )
+            ))
+
+
+            //Asociado
+            ->add('fecha_ascenso_asociado', BirthdayType::class, array(
+                'label' => 'fecha ascenso ASOCIADO',
+                'label_attr'    => array( 'class' => 'esc_asociado'),
+                'required' => false,
+                'attr' => array(
+                    'class' =>  'esc_asociado'
+                ),
+                'years' => range(2003, date("Y"))
+            ))
+
+            ->add('documento_asociado', FileType::class, array(
+                'label' => 'Digital Documento asociado',
+                'label_attr'    => array( 'class' => 'esc_asociado'),
+                'required' => false,
+                'attr' => array(
+                    'style' => 'display:none;',
+                    'class' =>  'esc_asociado'
+                ),
+                'constraints' => array(
+                    new File(array(
+                        'maxSize'    => '1024K',
+                        'mimeTypes' => [
+                            'application/pdf',
+                            'application/x-pdf',
+                            'image/png',
+                            'image/jpg',
+                            'image/jpeg'
+                        ],
+                        'mimeTypesMessage' => 'Sólo se permiten extensiones png, jpeg y pdf'
+                    ))
+                )
+            ))
+
+            ->add('ascenso4', CheckboxType::class, array(
+                'label'    => '¿Otro Ascenso?',
+                'label_attr'    => array( 'class' => 'esc_asociado'),
+                'required' => false,
+                'attr' => array(
+                    'class' =>  'esc_asociado'
                 )
             ))
 
