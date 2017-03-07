@@ -54,6 +54,19 @@
 {% block javascripts  %}
     {{ parent() }}
     <script type="text/javascript">
+        //si recarga la página con errores y habia marcado que tenía concurso de opsoción
+        if ($('#user_oposicion').prop('checked')) {
+            $('.esc_oposicion').show();
+            $("#user_escala").prop('required', $(this).prop("checked"));
+            $("#user_fecha_oposicion_day").prop('required', $(this).prop("checked"));
+            $("#user_fecha_oposicion_month").prop('required', $(this).prop("checked"));
+            $("#user_fecha_oposicion_year").prop('required', $(this).prop("checked"));
+            $("#user_documento_oposicion").prop('required', $(this).prop("checked"));
+            $("#user_lineas_investigacion").prop('required', $(this).prop("checked"));
+            $("#user_titulo_trabajo").prop('required', $(this).prop("checked"));
+
+        }
+
         $('#user_oposicion').click(function() {
             $('.esc_oposicion')[this.checked ? "show" : "hide"]();
             $("#user_escala").prop('required', $(this).prop("checked"));
