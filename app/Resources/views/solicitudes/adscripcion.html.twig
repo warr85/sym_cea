@@ -22,22 +22,23 @@
 
 {% block body %}
     <div class="container">
-        <h4 class="alert alert-info"><i class="fa fa-info-circle"></i>
+        <h5 class="alert alert-info"><i class="fa fa-info-circle"></i>
             Estimado (a) Docente 
             <strong>{{app.user.idRolInstitucion.idRol.idPersona.primerNombre}}
                 {{app.user.idRolInstitucion.idRol.idPersona.primerApellido}}</strong>,
-            para poder gozar de los beneficios del sistema cea@ubv, primero debe
-            formalizar su adscripción ante este centro de estudios, llenando los datos que a continuación
+            para poder gozar de los beneficios del Sistema CEA@UBV, primero debe
+            <strong>formalizar su adscripción</strong> ante este centro de estudios,
+            llenando los datos que a continuación
             se solicitan. Recuerde que debe tener a su alcance los digitales de los 
             documentos descritos en el correo enviado.
             
-        </h4>
+        </h5>
     </div>
     <div class="account-container register">        
         <div class="content clearfix">            
-            <h1>Formalización Adscripción</h1>
+            <h2>Adscripción CEA@UBV</h2>
             {% form_theme form 'bootstrap_3_layout.html.twig' %}        
-            {{ form_start(form) }}
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
             {{ form_widget(form) }}
             {{ form_end(form) }}
         </div>
