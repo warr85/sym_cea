@@ -96,9 +96,11 @@ class UserType extends AbstractType
                 
                 
             ->add('lineas_investigacion', EntityType::class, array(
-            'label'         => false,            
+            'label'         => false,
+            'constraints' => array(
+                new NotBlank(),
+            ),
             'placeholder' => 'Seleccione Área y Línea de Investigación',
-            'required' => true,
             'class' => 'AppBundle:LineasInvestigacion',
 
             'choice_label' => 'getNombre',
@@ -106,16 +108,18 @@ class UserType extends AbstractType
             ))
 
             ->add('titulo_trabajo', TextType::class, array(
-                'label' => 'Título del Trabajo de Investigación',                
-                'required' => true,                
+                'label' => 'Título del Trabajo de Investigación',
+                'constraints' => array(
+                    new NotBlank(),
+                )
             ))
                 
-                
-                
+
             ->add('oposicion', CheckboxType::class, array(
                 'label'         => '¿Tiene Concurso de Oposición?',
                 'required' => false,
             ))
+
             ->add('escala', EntityType::class, array(
                 'label'         => false,
                 'placeholder' => 'Seleccione escala a la que concurso',
@@ -338,7 +342,10 @@ class UserType extends AbstractType
             
 		  ->add('send', SubmitType::class, array(
                       'label' => 'Formalizar Adscripción ante el CEA',
-                      'attr'  => array('class' => 'btn btn-success btn-block')
+                      'attr'  => array(
+                          'class' => 'btn btn-success btn-block',
+                          'data-loading-text' => "<i class='fa fa-circle-o-notch fa-spin'></i> Procesando Solicitud..."
+                      )
                       ))
 
 
