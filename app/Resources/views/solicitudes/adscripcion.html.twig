@@ -122,6 +122,12 @@
             if ($('#user_escala').val() >= 1) $('#user_oposicion').attr('disabled',true);
             else $('#user_oposicion').attr('disabled',false);
         });
+
+
+        $('.btn').on('click', function() {
+            var $this = $(this);
+            $this.button('loading');
+        });
         
     </script>
 {% endblock %}
