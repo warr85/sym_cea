@@ -48,6 +48,7 @@ class Adscripcion
     /** @ORM\Column(type="date", nullable=false, options={"comment" = "Fecha de de Ingreso a la Institucion"})  
      /**
      * @Assert\Date()
+     * @Assert\NotBlank()(groups={"Oposicion"})
      */      
     private $fecha_ingreso;
 

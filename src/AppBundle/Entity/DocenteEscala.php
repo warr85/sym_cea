@@ -55,7 +55,7 @@ class DocenteEscala
 
     /**
      * @var \AppBundle\Entity\TipoAscenso
-     *
+     *  @Assert\NotBlank()(groups={"Oposicion"})
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\TipoAscenso")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_tipo_escala", referencedColumnName="id", nullable=false)
@@ -67,7 +67,9 @@ class DocenteEscala
     
      /** @ORM\Column(type="date", nullable=false, options={"comment" = "Fecha de obtencion de la escala"})  
      /**
-     * @Assert\Date()
+      *
+      *  @Assert\NotBlank()(groups={"Oposicion"})
+      *  @Assert\Date()(groups={"Oposicion"})
      */      
     private $fecha_escala;
     

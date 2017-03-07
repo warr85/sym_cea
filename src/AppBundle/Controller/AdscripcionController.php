@@ -9,6 +9,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\DocumentosVerificados;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -43,10 +44,27 @@ class AdscripcionController extends Controller
         $form = $this->createForm('AppBundle\Form\UserType');
 	    $form->handleRequest($request);
 
-        $form->get('escala')->getData();
+
+        //valida el formulario de los campos que son no requeridos pero se vuelven
+        //requeridos al tildar el checkbox.
+        if ($form->isSubmitted()) {
+            if ($form->get('oposicion')->getData()) {
+                //var_dump($form);
+                if (!$form->get('fecha_oposicion')->getData()) {
+                    $form->get('fecha_oposicion')->addError(new FormError('Fecha no puede estar en blanco'));
+                }
+
+                if (!$form->get('escala')->getData()) {
+                    $form->get('escala')->addError(new FormError('Si selecciona que tiene concurso de oposción, debe seleccionar a que escalafón lo aprobó'));
+                }
+
+                if (!$form->get('documento_oposicion')->getData()) {
+                    $form->get('documento_oposicion')->addError(new FormError('Si selecciona que tiene concurso de oposción, debe subir el digital de la aprobación del concurso'));
+                }
+            }
+        }
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             //Crear la solicitud de Servicio
             $servicios = new DocenteServicio();
 
@@ -118,9 +136,8 @@ class AdscripcionController extends Controller
             }
             $adscripcion->setAnoAdscripcion($ano);
             $adscripcion->setCorrelativoAdscripcion($numero);
-               
 
-            if ($form->get('escala')->getData()){
+            if ($form->get('oposicion')->getData()){
                 $escala->setIdRolInstitucion($this->getUser()->getIdRolInstitucion());
                 $escala->setFechaEscala($form->get('fecha_oposicion')->getData());
                 $escala->setIdEscala($form->get('escala')->getData());

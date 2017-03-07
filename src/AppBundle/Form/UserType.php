@@ -9,6 +9,9 @@
 
 namespace AppBundle\Form;
 
+
+use Symfony\Component\Form\Deprecated\FormEvents;
+use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Validator\Constraints\Date;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -118,11 +121,12 @@ class UserType extends AbstractType
             ->add('oposicion', CheckboxType::class, array(
                 'label'         => '¿Tiene Concurso de Oposición?',
                 'required' => false,
+                'mapped'    => false,
             ))
 
             ->add('escala', EntityType::class, array(
                 'label'         => false,
-                'placeholder' => 'Seleccione escala a la que concurso',
+                'placeholder' => 'Seleccione escala a la que concursó',
                 'required' => false,
                 'attr' => array(
                     'class' =>  'esc_oposicion'
@@ -140,6 +144,13 @@ class UserType extends AbstractType
                 'required' => false,
                 'attr' => array(
                     'class' =>  'esc_oposicion'
+                ),
+                'placeholder' => array(
+                    'year' => 'Año', 'month' => 'Mes', 'day' => 'Día',
+                ),
+                'validation_groups' => 'Oposicion',
+                'constraints' => array(
+                    new Date(),
                 ),
                 'years' => range(2003, date("Y"))
             ))
@@ -356,8 +367,12 @@ class UserType extends AbstractType
         ;
 
 
+
+
+
     }
-    
+
+
     
 
 
