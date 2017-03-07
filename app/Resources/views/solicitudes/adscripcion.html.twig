@@ -79,6 +79,11 @@
         });
 
         $('#user_ascenso').click(function() {
+
+            if ((!$("#user_escala").val()) && ($('#user_ascenso').prop('checked'))){
+                alert("Primero debe seleccionar a que escalafón aprobó concurso");
+                $('#user_ascenso').prop('checked', false);
+            }
         		
         	if($("#user_escala").val() == 1)
            		$('.esc_asistente')[this.checked ? "show" : "hide"]();
