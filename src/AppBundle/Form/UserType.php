@@ -9,6 +9,7 @@
 
 namespace AppBundle\Form;
 
+use Symfony\Component\Validator\Constraints\Date;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
@@ -31,8 +32,14 @@ class UserType extends AbstractType
             ->add('fecha_ingreso', BirthdayType::class, array(
                  'widget' => 'choice',
                 'label' => 'Fecha de Ingreso UBV',
-                'data' => new \DateTime("01/01/2003"),
-                'years' => range(2003, date("Y"))
+                'years' => range(2003, date("Y")),
+                'placeholder' => array(
+                    'year' => 'Año', 'month' => 'Mes', 'day' => 'Día',
+                ),
+                'constraints' => array(
+                    new NotBlank(),
+                    new Date()
+                )
             ))
             ->add('trabajo', FileType::class, array(
                 'label' => 'Digital Constancia Trabajo',
