@@ -306,4 +306,18 @@
 {% block javascripts %}
     {{ parent() }}
     <script type="text/javascript" src="{{ asset('assets/vendor/lightbox2/dist/js/lightbox.min.js') }}"></script>
+    <script>
+        $('form').submit(function() {
+            console.log($(':radio:checked', this).length);
+            for (var i = 0; i < $(':radio:checked', this).length; i ++){
+                console.log($(':radio:checked', this)[i]);
+                if ( ($(':radio:checked', this)[i].value == "")) {
+                    alert('Debes revisar todos los documentos para poder enviar la solicitud!');
+                    return false;
+                }
+
+            }
+            return false;
+        });
+    </script>
 {% endblock %}
