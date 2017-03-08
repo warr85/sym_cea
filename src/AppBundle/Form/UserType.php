@@ -196,7 +196,10 @@ class UserType extends AbstractType
                 'attr' => array(
                     'class' =>  'esc_asistente'
                 ),
-                'years' => range(2003, date("Y"))
+                'years' => range(2003, date("Y")),
+                'constraints' => array(
+                    new Date(),
+                ),
             ))
             
             ->add('documento_asistente', FileType::class, array(
@@ -243,7 +246,10 @@ class UserType extends AbstractType
                 'attr' => array(
                     'class' =>  'esc_agregado'
                 ),
-                'years' => range(2003, date("Y"))
+                'years' => range(2003, date("Y")),
+                'constraints' => array(
+                    new Date(),
+                )
             ))
 
             ->add('documento_agregado', FileType::class, array(
@@ -287,7 +293,10 @@ class UserType extends AbstractType
                 'attr' => array(
                     'class' =>  'esc_asociado'
                 ),
-                'years' => range(2003, date("Y"))
+                'years' => range(2003, date("Y")),
+                'constraints' => array(
+                    new Date(),
+                )
             ))
 
             ->add('documento_asociado', FileType::class, array(
@@ -331,7 +340,10 @@ class UserType extends AbstractType
                 'attr' => array(
                     'class' =>  'esc_titular'
                 ),
-                'years' => range(2003, date("Y"))
+                'years' => range(2003, date("Y")),
+                'constraints' => array(
+                    new Date(),
+                )
             ))
 
             ->add('documento_titular', FileType::class, array(
@@ -364,7 +376,7 @@ class UserType extends AbstractType
                           'class' => 'btn btn-success btn-block',
                           'data-loading-text' => "<i class='fa fa-circle-o-notch fa-spin'></i> Procesando Solicitud..."
                       )
-                      ))
+          ))
 
 
         ;
