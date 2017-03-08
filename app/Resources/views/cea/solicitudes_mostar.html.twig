@@ -279,9 +279,10 @@
 
                     </div>
                 {% endif %}
-                {% if servicio.idEstatus.id == 2 or servicio.idEstatus.id == 3 %}
+                {% if servicio.idEstatus.id == 3 %}
                     <button type="submit" class="btn btn-success" id="aprobar" name="aprobar">Aprobar</button>
                  {% elseif servicio.idEstatus.id == 2 %}
+                     <button type="submit" class="btn btn-success" id="aprobar" name="aprobar">Aprobar</button>
                     <a data-toggle="modal" data-target="#motivo_rechazo" class="btn btn-danger">Rechazar</a>
                 {% endif %}
 
