@@ -220,9 +220,10 @@
                                                     </a>
                                                 {% endif %}
                                                 {% endif %}
-                                                {% if verificado.idEstatus.id == 2 or verificado.idEstatus.id == 3 %}
+
                                                 <div class="caption">
                                                     <p>{{ verificado.idTipoDocumentos.nombre }}</p>
+                                                    {% if verificado.idEstatus.id == 2 or verificado.idEstatus.id == 3 %}
                                                     <div class="wrapper">
                                                         <label for="yes_radio{{ loop.index }}" class="yes-lbl"><i class="fa fa-check"></i>
                                                         </label>
@@ -239,10 +240,11 @@
 
                                                         <div class="toggle"></div>
                                                     </div>
+                                                    {% endif %}
                                                 </div>
                                                 {% endif %}
                                             </div>
-                                            {% endif %}
+
                                 </div>
 
                             {% endfor %}
@@ -277,8 +279,11 @@
 
                     </div>
                 {% endif %}
-                <button type="submit" class="btn btn-success" id="aprobar" name="aprobar">Aprobar</button>
-                <a data-toggle="modal" data-target="#motivo_rechazo" class="btn btn-danger">Rechazar</a>
+                {% if servicio.idEstatus.id == 2 or servicio.idEstatus.id == 3 %}
+                    <button type="submit" class="btn btn-success" id="aprobar" name="aprobar">Aprobar</button>
+                 {% elseif servicio.idEstatus.id == 2 %}
+                    <a data-toggle="modal" data-target="#motivo_rechazo" class="btn btn-danger">Rechazar</a>
+                {% endif %}
 
 
                 <!-- Modal -->
