@@ -73,7 +73,7 @@ class AdscripcionController extends Controller
                     }
 
                     if (!$form->get('documento_asistente')->getData()) {
-                        $form->get('documento_asistente')->addError(new FormError('Si tildó este ascendo, documento de aprobación de ascenso no puede estar en blanco'));
+                        $form->get('documento_asistente')->addError(new FormError('Fecha no puede estar en blanco'));
                     }
 
                 }
@@ -85,7 +85,7 @@ class AdscripcionController extends Controller
                     }
 
                     if (!$form->get('documento_agregado')->getData()) {
-                        $form->get('documento_agregado')->addError(new FormError('Si tildó este ascendo, documento de aprobación de ascenso no puede estar en blanco'));
+                        $form->get('documento_agregado')->addError(new FormError('Fecha no puede estar en blanco'));
                     }
                 }
 
@@ -96,7 +96,7 @@ class AdscripcionController extends Controller
                     }
 
                     if (!$form->get('documento_asociado')->getData()) {
-                        $form->get('documento_asociado')->addError(new FormError('Si tildó este ascendo, documento de aprobación de ascenso no puede estar en blanco'));
+                        $form->get('documento_asociado')->addError(new FormError('Fecha no puede estar en blanco'));
                     }
                 }
 
@@ -108,7 +108,7 @@ class AdscripcionController extends Controller
                     }
 
                     if (!$form->get('documento_titular')->getData()) {
-                        $form->get('documento_titular')->addError(new FormError('Si tildó este ascendo, documento de aprobación de ascenso no puede estar en blanco'));
+                        $form->get('documento_titular')->addError(new FormError('Fecha no puede estar en blanco'));
                     }
                 }
 
@@ -126,7 +126,7 @@ class AdscripcionController extends Controller
                     }
 
                     if (!$form->get('documento_agregado')->getData()) {
-                        $form->get('documento_agregado')->addError(new FormError('Si tildó este ascendo, documento de aprobación de ascenso no puede estar en blanco'));
+                        $form->get('documento_agregado')->addError(new FormError('Fecha no puede estar en blanco'));
                     }
                 }
 
@@ -137,7 +137,7 @@ class AdscripcionController extends Controller
                     }
 
                     if (!$form->get('documento_asociado')->getData()) {
-                        $form->get('documento_asociado')->addError(new FormError('Si tildó este ascendo, documento de aprobación de ascenso no puede estar en blanco'));
+                        $form->get('documento_asociado')->addError(new FormError('Fecha no puede estar en blanco'));
                     }
                 }
 
@@ -263,7 +263,7 @@ class AdscripcionController extends Controller
             $constanciaTrabajo->move(
                 $this->container->getParameter('adscripcion_directory'),
                 $nombreTrabajo
-            );            
+            );
             thumbnail($nombreTrabajo, $this->container->getParameter('adscripcion_directory'), $this->container->getParameter('adscripcion_thumb_directory'));
              
             $nombrePregrado = md5(uniqid()).'.'.$constanciaPregrado->guessExtension();
@@ -335,7 +335,7 @@ class AdscripcionController extends Controller
                     $escala2->setIdEscala($asistente);
                     $escala2->setIdTipoEscala($this->getDoctrine()->getRepository('AppBundle:TipoAscenso')->findOneById(2));
                     $em->persist($escala2);
-                    verificar_documentos($this->getUser()->getIdRolInstitucion()->getId(), 5, 2, $em, $servicios);
+
 
                     $constanciaAsistente = $form->get('documento_asistente')->getData();
                     $nombreAsistente = md5(uniqid()).'.'.$constanciaAsistente->guessExtension();
@@ -378,6 +378,7 @@ class AdscripcionController extends Controller
                     $escala4->setIdEscala($agregado);
                     $escala4->setIdTipoEscala($this->getDoctrine()->getRepository('AppBundle:TipoAscenso')->findOneById(2));
                     $em->persist($escala4);
+
 
                     $constanciaAgregado = $form->get('documento_agregado')->getData();
                     $nombreAgregado = md5(uniqid()).'.'.$constanciaAgregado->guessExtension();
@@ -736,28 +737,30 @@ class AdscripcionController extends Controller
 
 /*funcion para crear miniaturas de las imagenes y carga más rapido la página */
 
-function thumbnail ($filename, $fuente, $destino){   
-     if(preg_match('/[.](jpeg)$/', $filename)) {
-        $im = imagecreatefromjpeg($fuente . "/" . $filename);
-    } else if (preg_match('/[.](jpg)$/', $filename)) {
-        $im = imagecreatefromjpeg($fuente . "/" . $filename);
-    }else if (preg_match('/[.](gif)$/', $filename)) {
-        $im = imagecreatefromgif($fuente . "/" . $filename);
-    } else if (preg_match('/[.](png)$/', $filename)) {
-        $im = imagecreatefrompng($fuente . "/" . $filename);
+function thumbnail ($filename, $fuente, $destino){
+    if(!preg_match('/[.](pdf)$/', $filename)) {
+        if (preg_match('/[.](jpeg)$/', $filename)) {
+            $im = imagecreatefromjpeg($fuente . "/" . $filename);
+        } else if (preg_match('/[.](jpg)$/', $filename)) {
+            $im = imagecreatefromjpeg($fuente . "/" . $filename);
+        } else if (preg_match('/[.](gif)$/', $filename)) {
+            $im = imagecreatefromgif($fuente . "/" . $filename);
+        } else if (preg_match('/[.](png)$/', $filename)) {
+            $im = imagecreatefrompng($fuente . "/" . $filename);
+        }
+
+        $ox = imagesx($im);
+        $oy = imagesy($im);
+
+        $nx = 80;
+        $ny = 80;
+
+        $nm = imagecreatetruecolor($nx, $ny);
+
+        imagecopyresized($nm, $im, 0, 0, 0, 0, $nx, $ny, $ox, $oy);
+
+        imagejpeg($nm, $destino . "/" . $filename);
     }
-
-    $ox = imagesx($im);
-    $oy = imagesy($im);
-
-    $nx = 80;
-    $ny = 80;
-
-    $nm = imagecreatetruecolor($nx, $ny);
-
-    imagecopyresized($nm, $im, 0,0,0,0,$nx,$ny,$ox,$oy);
-
-    imagejpeg($nm, $destino . "/" . $filename);
 }
 
 function verificar_documentos($idRolInstitucion, $tipo, $estatus, $em, $ubicacion="", $servicio){
