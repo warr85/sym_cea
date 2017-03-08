@@ -220,6 +220,7 @@
                                                     </a>
                                                 {% endif %}
                                                 {% endif %}
+                                                {% if verificado.idEstatus.id == 2 or verificado.idEstatus.id == 3 %}
                                                 <div class="caption">
                                                     <p>{{ verificado.idTipoDocumentos.nombre }}</p>
                                                     <div class="wrapper">
@@ -239,6 +240,7 @@
                                                         <div class="toggle"></div>
                                                     </div>
                                                 </div>
+                                                {% endif %}
                                             </div>
                                             {% endif %}
                                 </div>
