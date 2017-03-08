@@ -114,7 +114,8 @@
                 </div>
                 <div class="col-md-3">
                     {% if servicio.idEstatus.id == 1 %}
-                        <h4 class="alert alert-success">Estatus <strong>{{ servicio.idEstatus }}</strong></h4>
+                        <h4 class="alert alert-success">Estatus <strong>{{ servicio.idEstatus }}</strong> </h4>
+                        <small>Activo desde: {{ servicio.fechaUltimaActualizacion | date("d-m-Y h:i:s") }}</small>
                     {% elseif servicio.idEstatus.id == 3 %}
                         <h4 class="alert alert-danger">Estatus <strong>{{ servicio.idEstatus }}</strong></h4>
                     {% else %}
