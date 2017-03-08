@@ -63,15 +63,15 @@ class DocenteServicio {
      */
     protected $idServicioCe;
     
-    /** @ORM\Column(type="date", nullable=false, options={"comment" = "Fecha de creación de la solicitud"})  
+    /** @ORM\Column(type="datetime", nullable=false, options={"comment" = "Fecha de creación de la solicitud"})
      /**
-     * @Assert\Date()
+     * @Assert\DateTime()
      */      
     private $fechaSolicitud;
     
-    /** @ORM\Column(type="date", nullable=false, options={"comment" = "Fecha de actualizada la solicitud"})  
+    /** @ORM\Column(type="datetime", nullable=false, options={"comment" = "Fecha de actualizada la solicitud"})
      /**
-     * @Assert\Date()
+     * @Assert\DateTime()
      */      
     private $fechaUltimaActualizacion;
     
