@@ -620,7 +620,9 @@ class AdscripcionController extends Controller
             }
 
 
-
+            $servicio->setIdEstatus($this->getDoctrine()->getRepository("AppBundle:Estatus")->findOneById(2));
+            $em->persist($documento);
+            $em->flush();
             return $this->redirect($this->generateUrl('adscripcion_show', array('id' => $servicio->getId())));
         }
 
