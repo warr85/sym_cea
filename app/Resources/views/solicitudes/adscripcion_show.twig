@@ -1,0 +1,370 @@
+{% extends 'base_app.html.twig' %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('assets/vendor/lightbox2/dist/css/lightbox.css') }}" rel="stylesheet">
+    <style>
+        .wrapper {
+            width: 6.9rem;
+            height: 2rem;
+            position: relative;
+            margin: 0rem auto;
+            border-radius: 2rem;
+            background: gray;
+        }
+
+        .wrapper .toggle {
+            width: 1.8rem;
+            height: 1.8rem;
+            position: absolute;
+            left: 2.5rem;
+            top: 0.1rem;
+            border-radius: 50%;
+            box-sizing: border-box;
+            border: 0.1rem solid #ff6c00;
+            background: #ff8933;
+            box-shadow: 0 0 0.2rem 0.1rem #ff6c00 inset, 0 0 0.2rem 0.1rem #ff6c00;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .wrapper label {
+            cursor: pointer;
+            width: 2rem;
+            height: 2rem;
+            position: absolute;
+            margin: 0;
+            padding: 0;
+            z-index: 1;
+            display: inline-block;
+            text-align: center;
+            line-height: 2rem;
+            text-transform: uppercase;
+            font-family: FontAwesome;
+            font-style: normal;
+            font-weight: normal;
+            color: white;
+
+        }
+
+        .wrapper input {
+            position: absolute;
+            left: 0;
+            margin: 0;
+            padding: 0;
+            opacity: 0;
+        }
+
+        .yes_radio:checked ~ .toggle {
+            border: 0.1rem solid #008000;
+            background: #00b300;
+            box-shadow: 0 0 0.2rem 0.1rem #008000 inset, 0 0 0.2rem 0.1rem #008000;
+            left: 0.1rem;
+        }
+
+        .no_radio:checked {
+            background: red;
+        }
+
+        .no_radio:checked ~ .toggle {
+            border: 0.1rem solid #ff0000;
+            background: #ff3333;
+            box-shadow: 0 0 0.2rem 0.1rem #ff0000 inset, 0 0 0.2rem 0.1rem #ff0000;
+            left: 4.97rem;
+        }
+
+        .maybe_radio, .maybe-lbl {
+            left: 33.33333%;
+        }
+
+        .no_radio, .no-lbl {
+            left: 66.66667%;
+        }
+
+        .maybe-lbl {
+            -webkit-animation-delay: 2s;
+            -o-animation-delay: 2s;
+            -moz-animation-delay: 2s;
+            animation-delay: 2s;
+        }
+
+        .no-lbl {
+            -webkit-animation-delay: 4s;
+            -o-animation-delay: 4s;
+            -moz-animation-delay: 4s;
+            animation-delay: 4s;
+        }
+
+
+    </style>
+{% endblock %}
+
+{% block body %}
+
+    <div class="content-wrapper">
+        <div class="container">
+            {% for message in app.session.flashBag.get('notice') %}
+                <h4 class="alert alert-success">{{ message }}</h4>
+
+            {% endfor %}
+            <div class="row">
+                <div class="col-md-9">
+                    <h4 class="page-head-line">Solicitud de Adscripción número
+                        <code>CEA-{{ todo.idInstitucion.idEjeParroquia.IdEje.abreviacion }}-{{ todo.adscripcion.anoAdscripcion }}-{{ todo.adscripcion.correlativoAdscripcion }}</code>:
+                        {{ todo }}
+                    </h4>
+                </div>
+                <div class="col-md-3">
+                    {% if servicio.idEstatus.id == 1 %}
+                        <h4 class="alert alert-success">Estatus <strong>{{ servicio.idEstatus }}</strong> </h4>
+                        <small>Activo desde: {{ servicio.fechaUltimaActualizacion | date("d-m-Y h:i:s") }}</small>
+                    {% elseif servicio.idEstatus.id == 3 %}
+                        <h4 class="alert alert-danger">Estatus <strong>{{ servicio.idEstatus }}</strong></h4>
+                    {% else %}
+                        <h4 class="alert alert-warning">Estatus <strong>{{ servicio.idEstatus }}</strong></h4>
+                    {% endif %}
+
+                </div>
+
+            </div>
+            <form action="{{ path('cea_solicitudes_actualizar', { 'id': todo.adscripcion.id}) }}" method="POST"
+                  name="rechazar">
+                <div class="row">
+
+                    <div class="col-md-6">
+
+                        <div class="col-md-4">
+                            <img src="{{ asset('bundles/framework/images/portal/logo_ubv.png') }}"/>
+                        </div>
+
+                        <div class="col-md-8">
+
+
+                            <div class="form-group">
+                                <label for="username">Fecha de Ingreso UBV:</label>
+                                <input type="date" class="form-control" id="username" name="primerApellido"
+                                       value="{{ todo.adscripcion.fechaIngreso|date('Y-m-d') }}"/>
+                            </div>
+                            {% if todo.escalafones is not null %}
+                                <div class="form-group">
+                                    <label for="Escalafones">Escalafones:</label>
+                                    <table class="table table-striped table-bordered">
+                                        <th>Escalafón</th>
+                                        <th>Fecha</th>
+                                        <th>Tipo</th>
+                                        {% for escala in todo.escalafones %}
+
+                                            <tr>
+                                                <td>{{ escala.idEscala }}</td>
+                                                <td>{{ escala.fechaEscala | date('d-m-Y') }}</td>
+                                                <td>{{ escala.idTipoEscala }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </table>
+
+                                    {% if todo.escalafones is empty %}
+                                        <div class="form-group">
+                                            <h6 class="alert alert-warning">El Docente al momento de la solicitud
+                                                informa no
+                                                haber realizado Concurso de oposición</h6>
+                                        </div>
+                                        <!-- <button class="btn btn-success btn-sm">Añadir Concurso de Oposición</button>                               -->
+                                    {% endif %}
+
+
+                                </div>
+                            {% endif %}
+
+
+                            {% if todo.adscripcion.idLineaInvestigacion is not null %}
+                                <div class="form-group">
+                                    <label for="username">Area y Línea de Investigación:</label>
+                                    <ul>
+                                        <li>{{ todo.adscripcion.idLineaInvestigacion.idAreaInvestigacion }}</li>
+                                        <li>{{ todo.adscripcion.idLineaInvestigacion }}</li>
+                                    </ul>
+                                </div>
+                            {% endif %}
+
+
+                            {% if todo.adscripcion.tituloTrabajo is not null %}
+                                <div class="form-group">
+                                    <label for="titulo">Título del Trabajo:</label>
+                                    <input type="text" class="form-control"
+                                           value="{{ todo.adscripcion.tituloTrabajo }}"/>
+                                </div>
+                            {% endif %}
+
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <h3>Documentos Consignados</h3>
+
+                        <div class="widget-content">
+
+                            {% for verificado in todo.documentosVerificados %}
+                                {% if verificado.idServicio.id == servicio.id %}
+                                    {% set extension = verificado.ubicacion | split('.') | last %}
+                                    <div {% if extension != "pdf" %}class="col-xs-6"{% else %}class="col-xs-12"{% endif %}>
+
+                                            <div class="thumbnail">
+                                                {% if extension == "pdf" %}
+                                                    {% if verificado.idTipoDocumentos.id <= 4 %}
+                                                        <object type="application/pdf" data="{{asset('uploads/adscripcion/'~ verificado.ubicacion)}}" width="100%" height="300px"></object>
+                                                        {% else %}
+                                                        <object type="application/pdf" data="{{asset('uploads/ascenso/'~ verificado.ubicacion)}}" width="100%" height="300px"></object>
+                                                        {% endif %}
+                                                {% else %}
+                                                {% if verificado.idTipoDocumentos.id <= 4 %}
+                                                <a href="{{ asset('uploads/adscripcion/'~ verificado.ubicacion) }}"
+                                                   data-lightbox="adscripcion">
+                                                    <img src="{{ asset('uploads/adscripcion/thumb/'~ verificado.ubicacion) }}"/>
+                                                </a>
+                                                {% else %}
+                                                    <a href="{{ asset('uploads/ascenso/'~ verificado.ubicacion) }}"
+                                                       data-lightbox="adscripcion">
+                                                        <img src="{{ asset('uploads/ascenso/thumb/'~ verificado.ubicacion) }}"/>
+                                                    </a>
+                                                {% endif %}
+                                                {% endif %}
+
+                                                <div class="caption">
+                                                    <p>{{ verificado.idTipoDocumentos.nombre }}</p>
+                                                    {% if verificado.idEstatus.id == 2 or verificado.idEstatus.id == 3 %}
+                                                    <div class="wrapper">
+                                                        <label for="yes_radio{{ loop.index }}" class="yes-lbl"><i class="fa fa-check"></i>
+                                                        </label>
+                                                        <input type="radio" value="1" name="{{ verificado.idTipoDocumentos.identificador }}" class="yes_radio" id="yes_radio{{ loop.index }}" {% if verificado.idEstatus.id == 1 %} checked="checked" {% endif %}>
+                                                        <label for="maybe_radio{{ loop.index }}" class="maybe-lbl">
+                                                            <i class="fa fa-question"></i>
+                                                        </label>
+                                                        <input type="radio" value="" name="{{ verificado.idTipoDocumentos.identificador }}" class="maybe_radio" id="maybe_radio{{ loop.index }}" {% if verificado.idEstatus.id == 2 %} checked="checked" {% endif %} disabled>
+                                                        <label for="no_radio{{ loop.index }}" class="no-lbl"><i
+                                                                    class="fa fa-close"></i></label><input type="radio" value="3"
+                                                                                                           name="{{ verificado.idTipoDocumentos.identificador }}"
+                                                                                                           class="no_radio"
+                                                                                                           id="no_radio{{ loop.index }}" {% if verificado.idEstatus.id == 3 %} checked="checked" {% endif %}>
+
+                                                        <div class="toggle"></div>
+                                                    </div>
+                                                    {% endif %}
+                                                </div>
+                                                {% endif %}
+                                            </div>
+
+                                </div>
+
+                            {% endfor %}
+
+
+
+
+
+
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <!-- MOSTRAR ACTIVIDAD PIDA DEL DOCENTE  -->
+                {% if not todo.pida %}
+                    <p class="alert alert-warning">El Docente no ha registrado todavía su actividad PIDA</p>
+                {% else %}
+                    <div class="form-group">
+                        <label for="pida">PIDA:</label>
+                        {% for pida in todo.pida %}
+                            <ul>
+                                <li>Objetivo Estratégico: {{ pida.idPlanHistoricoNacionalEstrategico.nombre }}</li>
+                                <li>Ámbito: {{ pida.idActividadDocente.nombre }}</li>
+                                <li>Objetivo Específico: {{ pida.ObjetivoEspecifico }}</li>
+                                <li>Fecha inicio: {{ pida.fechaInicio | date('d-m-Y') }} </li>
+                                <li>Fecha final: {{ pida.fechaFinal | date('d-m-Y') }} </li>
+
+                            </ul>
+                        {% endfor %}
+
+                    </div>
+                {% endif %}
+                {% if servicio.idEstatus.id == 3 %}
+                    <button type="submit" class="btn btn-success" id="aprobar" name="aprobar">Aprobar</button>
+                 {% elseif servicio.idEstatus.id == 2 %}
+                     <button type="submit" class="btn btn-success" id="aprobar" name="aprobar">Aprobar</button>
+                    <a data-toggle="modal" data-target="#motivo_rechazo" class="btn btn-danger">Rechazar</a>
+                {% endif %}
+
+
+                <!-- Modal -->
+                <div class="modal fade" id="motivo_rechazo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal-dialog" role="document">
+
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                            aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="myModalLabel">Rechazo de Solicitud</h4>
+                            </div>
+
+                            <div class="modal-body">
+
+
+                                <div class="form-group">
+                                    <label for="message-text" class="control-label">Mensaje:</label>
+                                    <textarea class="form-control" id="message-text" name="message-text"></textarea>
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary" name="rechazar" id="rechazar">Enviar
+                                    Correo
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+        </div>
+
+    </div>
+    </form>
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('assets/vendor/lightbox2/dist/js/lightbox.min.js') }}"></script>
+    <script>
+
+        var buttonpressed;
+        $('#aprobar').click(function() {
+            buttonpressed = $(this).attr('name')
+        });
+
+        $('#rechazar').click(function() {
+            buttonpressed = $(this).attr('name')
+        });
+
+        $('form').submit(function() {
+            console.log($(':radio:checked', this).length);
+            for (var i = 0; i < $(':radio:checked', this).length; i ++){
+                console.log($(':radio:checked', this)[i]);
+                if ( ($(':radio:checked', this)[i].value == "")) {
+                    alert('Debes revisar todos los documentos para poder enviar la solicitud!');
+                    return false;
+                }
+
+            }
+            console.log($("input[type=submit][clicked=true]").val());
+            if (buttonpressed == "aprobar") {
+                for (var i = 0; i < $(':radio:checked', this).length; i++) {
+                    console.log($(':radio:checked', this)[i]);
+                    if (($(':radio:checked', this)[i].value == "3")) {
+                        alert('No puedes aprobar una solicitud con documentos en estatus de rechazado');
+                        return false;
+                    }
+
+                }
+            }
+
+        });
+    </script>
+{% endblock %}

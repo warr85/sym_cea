@@ -45,8 +45,11 @@
                           <!-- solo imprime el servicio si está activo -->
                           {%if servicio.idServicioCe.id == 1 and servicio.idEstatus.id == 1 %}
                             <a href="{{ path('servicio_antiguedad_imprimir', { 'id': servicio.id }) }}" target="_blank" class="btn btn-xs btn-info"><i class="fa fa-print"> </i></a>                        
-                          {% elseif servicio.idServicioCe.id == 2 and servicio.idEstatus.id == 1 %}
-                              <a href="{{ path('servicio_adscripcion_imprimir', { 'id': servicio.id }) }}" target="_blank" class="btn btn-xs btn-info"><i class="fa fa-print"> </i></a>                        
+                          {% elseif servicio.idServicioCe.id == 2 %}
+                              {% if servicio.idEstatus.id == 1 %}
+                                  <a href="{{ path('servicio_adscripcion_imprimir', { 'id': servicio.id }) }}" target="_blank" class="btn btn-xs btn-info"><i class="fa fa-print"> </i></a>
+                              {% endif %}
+                              <a href="{{ path('adscripcion_show', { 'id': servicio.id }) }}" class="btn btn-xs btn-info"><i class="fa fa-eye"> </i></a>
                           {%endif%}
                       </td>
                   </tr>

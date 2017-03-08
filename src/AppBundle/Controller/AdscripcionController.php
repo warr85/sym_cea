@@ -571,6 +571,29 @@ class AdscripcionController extends Controller
             'todo'      => $todo
         ));
     }
+
+
+
+    /**
+     * Encuentra y muestra una entidad de tipo Adscripción para los docentes.
+     *
+     * @Route("/adscripcion_show/{id}", name="adscripcion_show")
+     * @Method("GET")
+     *
+     */
+    public function adscripcionShowAction(DocenteServicio $servicio)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $todo = $em->getRepository("AppBundle:RolInstitucion")->findOneById($servicio->getIdRolInstitucion());
+
+
+
+        return $this->render('solicitudes/adscripcion_show.twig', array(
+            'servicio'  => $servicio,
+            'servicio' => $servicio,
+            'todo'      => $todo
+        ));
+    }
     
     
     /**
