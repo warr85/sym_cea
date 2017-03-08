@@ -204,10 +204,17 @@
 
                                 <div class="col-xs-4">
                                     <div class="thumbnail">
+                                        {% if verificado.idTipoDocumentos.id <= 4 %}
                                         <a href="{{ asset('uploads/adscripcion/'~ verificado.ubicacion) }}"
                                            data-lightbox="adscripcion">
                                             <img src="{{ asset('uploads/adscripcion/thumb/'~ verificado.ubicacion) }}"/>
                                         </a>
+                                        {% else %}
+                                            <a href="{{ asset('uploads/ascenso/'~ verificado.ubicacion) }}"
+                                               data-lightbox="adscripcion">
+                                                <img src="{{ asset('uploads/ascenso/thumb/'~ verificado.ubicacion) }}"/>
+                                            </a>
+                                        {% endif %}
                                         <div class="caption">
                                             <p>{{ verificado.idTipoDocumentos.nombre }}</p>
                                             <div class="wrapper">
@@ -339,7 +346,6 @@
                 }
             }
 
-            return false;
         });
     </script>
 {% endblock %}
