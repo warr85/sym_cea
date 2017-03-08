@@ -58,13 +58,16 @@
                             <span>Serv. CEA</span> <b class="caret"></b>
                         </a>
                        <ul class="dropdown-menu">
-                           <li><a href="{{ path('servicios_index') }}">Mis Servicios</a></li>                           
+                           <li><a href="{{ path('servicios_index') }}">Mis Servicios</a></li>
                            <li><a href="{{ path('cea_solicitud_ascenso') }}">Solicitar Ascenso</a></li>
                            <li><a href="{{ path('cea_solicitudes_estado_academico' ) }}">Solicitar Estado Académico</a></li>
                            <li><a href="{{ path('cea_solicitudes_recocimiento_antiguedad') }}">Reconocimiento de Antiguedad</a></li>
                            <li><a href="{{ path('cea_solicitud_recocimiento_escala') }}">Reconocimiento nuevo Escalafón</a></li>
                        </ul>
                    </li>
+
+                      {% else  %}
+                          <li><a href="{{path('servicios_index')}}"><i class="fa fa-leaf"></i><span>Mis Servicios</span> </a> </li>
                   {% endif %}   
                   
                   
