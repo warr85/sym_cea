@@ -64,20 +64,173 @@ class AdscripcionController extends Controller
             }
 
 
-            if ($form->get('ascenso')->getData()) {
-                //var_dump($form);
-                if (!$form->get('fecha_oposicion')->getData()) {
-                    $form->get('fecha_oposicion')->addError(new FormError('Fecha no puede estar en blanco'));
+            if ( ($form->get('ascenso')->getData()) ) {
+                //var_dump($form->get('escala')->getData()->getId()); exit;
+                if($form->get('escala')->getData()->getId() == 1) {
+
+                    if (!$form->get('fecha_ascenso_asistente')->getData()) {
+                        $form->get('fecha_ascenso_asistente')->addError(new FormError('Fecha no puede estar en blanco'));
+                    }
+
+                    if (!$form->get('documento_asistente')->getData()) {
+                        $form->get('documento_asistente')->addError(new FormError('Si tildó este ascendo, documento de aprobación de ascenso no puede estar en blanco'));
+                    }
+
                 }
 
-                if (!$form->get('escala')->getData()) {
-                    $form->get('escala')->addError(new FormError('Si selecciona que tiene concurso de oposción, debe seleccionar a que escalafón lo aprobó'));
+                if($form->get('escala')->getData()->getId() == 2) {
+
+                    if (!$form->get('fecha_ascenso_agregado')->getData()) {
+                        $form->get('fecha_ascenso_agregado')->addError(new FormError('Fecha no puede estar en blanco'));
+                    }
+
+                    if (!$form->get('documento_agregado')->getData()) {
+                        $form->get('documento_agregado')->addError(new FormError('Si tildó este ascendo, documento de aprobación de ascenso no puede estar en blanco'));
+                    }
                 }
 
-                if (!$form->get('documento_oposicion')->getData()) {
-                    $form->get('documento_oposicion')->addError(new FormError('Si selecciona que tiene concurso de oposción, debe subir el digital de la aprobación del concurso'));
+                if($form->get('escala')->getData()->getId() == 3) {
+
+                    if (!$form->get('fecha_ascenso_asociado')->getData()) {
+                        $form->get('fecha_ascenso_asociado')->addError(new FormError('Fecha no puede estar en blanco'));
+                    }
+
+                    if (!$form->get('documento_asociado')->getData()) {
+                        $form->get('documento_asociado')->addError(new FormError('Si tildó este ascendo, documento de aprobación de ascenso no puede estar en blanco'));
+                    }
                 }
+
+
+                if($form->get('escala')->getData()->getId() == 4) {
+
+                    if (!$form->get('fecha_ascenso_titular')->getData()) {
+                        $form->get('fecha_ascenso_titular')->addError(new FormError('Fecha no puede estar en blanco'));
+                    }
+
+                    if (!$form->get('documento_titular')->getData()) {
+                        $form->get('documento_titular')->addError(new FormError('Si tildó este ascendo, documento de aprobación de ascenso no puede estar en blanco'));
+                    }
+                }
+
+
             }
+
+
+
+            if ( ($form->get('ascenso2')->getData()) ) {
+                //var_dump($form->get('escala')->getData()->getId()); exit;
+                if($form->get('escala')->getData()->getId() == 1) {
+
+                    if (!$form->get('fecha_ascenso_agregado')->getData()) {
+                        $form->get('fecha_ascenso_agregado')->addError(new FormError('Fecha no puede estar en blanco'));
+                    }
+
+                    if (!$form->get('documento_agregado')->getData()) {
+                        $form->get('documento_agregado')->addError(new FormError('Si tildó este ascendo, documento de aprobación de ascenso no puede estar en blanco'));
+                    }
+                }
+
+                if($form->get('escala')->getData()->getId() == 2) {
+
+                    if (!$form->get('fecha_ascenso_asociado')->getData()) {
+                        $form->get('fecha_ascenso_asociado')->addError(new FormError('Fecha no puede estar en blanco'));
+                    }
+
+                    if (!$form->get('documento_asociado')->getData()) {
+                        $form->get('documento_asociado')->addError(new FormError('Si tildó este ascendo, documento de aprobación de ascenso no puede estar en blanco'));
+                    }
+                }
+
+                if($form->get('escala')->getData()->getId() == 3) {
+
+                    if (!$form->get('fecha_ascenso_titular')->getData()) {
+                        $form->get('fecha_ascenso_titular')->addError(new FormError('Fecha no puede estar en blanco'));
+                    }
+
+                    if (!$form->get('documento_titular')->getData()) {
+                        $form->get('documento_titular')->addError(new FormError('Si tildó este ascendo, documento de aprobación de ascenso no puede estar en blanco'));
+                    }
+                }
+
+
+            }
+
+
+            if ( ($form->get('ascenso3')->getData()) ) {
+                //var_dump($form->get('escala')->getData()->getId()); exit;
+                if($form->get('escala')->getData()->getId() == 1) {
+
+                    if (!$form->get('fecha_ascenso_asociado')->getData()) {
+                        $form->get('fecha_ascenso_asociado')->addError(new FormError('Fecha no puede estar en blanco'));
+                    }
+
+                    if (!$form->get('documento_asociado')->getData()) {
+                        $form->get('documento_asociado')->addError(new FormError('Si tildó este ascendo, documento de aprobación de ascenso no puede estar en blanco'));
+                    }
+                }
+
+                if (($form->get('escala')->getData()->getId() == 2)  && ($form->get('ascenso2')->getData() == false )) {
+
+                    if (!$form->get('fecha_ascenso_asociado')->getData()) {
+                        $form->get('fecha_ascenso_asociado')->addError(new FormError('Fecha no puede estar en blanco'));
+                    }
+
+                    if (!$form->get('documento_asociado')->getData()) {
+                        $form->get('documento_asociado')->addError(new FormError('Si tildó este ascendo, documento de aprobación de ascenso no puede estar en blanco'));
+                    }
+                }else if ($form->get('escala')->getData()->getId() == 2) {
+
+                    if (!$form->get('fecha_ascenso_titular')->getData()) {
+                        $form->get('fecha_ascenso_titular')->addError(new FormError('Fecha no puede estar en blanco'));
+                    }
+
+                    if (!$form->get('documento_titular')->getData()) {
+                        $form->get('documento_titular')->addError(new FormError('Si tildó este ascendo, documento de aprobación de ascenso no puede estar en blanco'));
+                    }
+                }
+
+
+            }
+
+
+            if ( ($form->get('ascenso4')->getData()) ) {
+
+                if($form->get('escala')->getData()->getId() == 1) {
+
+                    if (!$form->get('fecha_ascenso_asociado')->getData()) {
+                        $form->get('fecha_ascenso_asociado')->addError(new FormError('Fecha no puede estar en blanco'));
+                    }
+
+                    if (!$form->get('documento_asociado')->getData()) {
+                        $form->get('documento_asociado')->addError(new FormError('Si tildó este ascendo, documento de aprobación de ascenso no puede estar en blanco'));
+                    }
+                }
+
+                if($form->get('escala')->getData()->getId() == 2) {
+
+                    if (!$form->get('fecha_ascenso_titular')->getData()) {
+                        $form->get('fecha_ascenso_titular')->addError(new FormError('Fecha no puede estar en blanco'));
+                    }
+
+                    if (!$form->get('documento_titular')->getData()) {
+                        $form->get('documento_titular')->addError(new FormError('Si tildó este ascendo, documento de aprobación de ascenso no puede estar en blanco'));
+                    }
+                }
+
+                if($form->get('escala')->getData()->getId() == 3) {
+
+                    if (!$form->get('fecha_ascenso_titular')->getData()) {
+                        $form->get('fecha_ascenso_titular')->addError(new FormError('Fecha no puede estar en blanco'));
+                    }
+
+                    if (!$form->get('documento_titular')->getData()) {
+                        $form->get('documento_titular')->addError(new FormError('Si tildó este ascendo, documento de aprobación de ascenso no puede estar en blanco'));
+                    }
+                }
+
+            }
+
+
         }
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -225,7 +378,6 @@ class AdscripcionController extends Controller
                     $escala4->setIdEscala($agregado);
                     $escala4->setIdTipoEscala($this->getDoctrine()->getRepository('AppBundle:TipoAscenso')->findOneById(2));
                     $em->persist($escala4);
-                    verificar_documentos($this->getUser()->getIdRolInstitucion()->getId(), 7, 2, $em, $servicios);
 
                     $constanciaAgregado = $form->get('documento_agregado')->getData();
                     $nombreAgregado = md5(uniqid()).'.'.$constanciaAgregado->guessExtension();

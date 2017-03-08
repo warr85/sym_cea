@@ -83,8 +83,9 @@
         if ($('#user_ascenso').prop('checked')) {
             $('#user_escala').prop('disabled', true);
             $('#user_oposicion').prop('disabled',true);
-            if($("#user_escala").val() == 1)
+            if($("#user_escala").val() == 1) {
                 $('.esc_asistente').show();
+            }
             if($("#user_escala").val() == 2)
                 $('.esc_agregado').show();
             if($("#user_escala").val() == 3)
@@ -92,6 +93,39 @@
             if($("#user_escala").val() == 4)
                 $('.esc_titular').show();
         }
+
+
+        if ($('#user_ascenso2').prop('checked')) {
+            if($("#user_escala").val() == 1)
+                $('.esc_agregado').show();
+            if($("#user_escala").val() == 2)
+                $('.esc_asociado').show();
+            if($("#user_escala").val() == 3)
+                $('.esc_titular').show();
+        }
+
+
+        if ($('#user_ascenso3').prop('checked')) {
+            if($("#user_escala").val() == 1)
+                $('.esc_asociado').show();
+            if(($("#user_escala").val() == 2) && ($('#user_ascenso2').prop('checked') == false)) {
+                $('.esc_asociado').show();
+            }else if ($("#user_escala").val() == 2) {
+                $('.esc_titular').show();
+            }
+        }
+
+
+        if ($('#user_ascenso4').prop('checked')) {
+            if($("#user_escala").val() == 1)
+                $('.esc_asociado').show();
+            if($("#user_escala").val() == 2)
+                $('.esc_titular').show();
+            if($("#user_escala").val() == 3)
+                $('.esc_titular').show();
+        }
+
+
 
 
         $('#user_ascenso').click(function() {
