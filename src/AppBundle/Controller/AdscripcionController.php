@@ -578,20 +578,58 @@ class AdscripcionController extends Controller
      * Encuentra y muestra una entidad de tipo Adscripción para los docentes.
      *
      * @Route("/adscripcion_show/{id}", name="adscripcion_show")
-     * @Method("GET")
+     * @Method({"GET", "POST"})
      *
      */
-    public function adscripcionShowAction(DocenteServicio $servicio)
+    public function adscripcionShowAction(DocenteServicio $servicio, Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         $todo = $em->getRepository("AppBundle:RolInstitucion")->findOneById($servicio->getIdRolInstitucion());
 
+        $form = $this->createForm('AppBundle\Form\AdscripcionEditType');
+
+
+
+        $form->handleRequest($request);
+
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            foreach ($form->getData() as $key => $value) {
+
+                //var_dump($key); exit;
+                $constancia = $form->get($key)->getData();
+                $nombre = md5(uniqid()).'.'.$constancia->guessExtension();
+                $constancia->move(
+                    $this->container->getParameter('adscripcion_directory'),
+                    $nombre
+                );
+                thumbnail($nombre, $this->container->getParameter('adscripcion_directory'), $this->container->getParameter('adscripcion_thumb_directory'));
+
+                $documento = $this->getDoctrine()->getRepository("AppBundle:DocumentosVerificados")->findOneBy(array(
+                    'idRolInstitucion'  => $servicio->getIdRolInstitucion()->getId(),
+                    'idTipoDocumentos'  => $this->getDoctrine()->getRepository("AppBundle:TipoDocumentos")->findOneByIdentificador($key)->getId(),
+                    'idEstatus'         => 3
+                ));
+
+                $documento->setUbicacion($nombre);
+                $documento->setIdEstatus($this->getDoctrine()->getRepository("AppBundle:Estatus")->findOneById(2));
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($documento);
+                $em->flush();
+            }
+
+
+
+            return $this->redirect($this->generateUrl('adscripcion_show', array('id' => $servicio->getId())));
+        }
 
 
         return $this->render('solicitudes/adscripcion_show.twig', array(
             'servicio'  => $servicio,
             'servicio' => $servicio,
-            'todo'      => $todo
+            'todo'      => $todo,
+            'form'      => $form->createView()
         ));
     }
     

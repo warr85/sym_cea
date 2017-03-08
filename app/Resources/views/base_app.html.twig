@@ -191,6 +191,12 @@
 
    });
 
+   //boton para mostrarle al usuario que estamos esperando
+   $('.btn').on('click', function() {
+       var $this = $(this);
+       $this.button('loading');
+   });
+
 </script>
             
         {% endblock %}
