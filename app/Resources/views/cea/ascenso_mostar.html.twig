@@ -187,7 +187,7 @@
                                     {{ form_start(form) }}
                                     {{ form_widget(form) }}
                                     {{ form_end(form) }}
-                                    <button class="btn btn-primary btn-sm" id="anadirJurados">Añadir Jurados</button>
+                                    <button class="btn btn-primary btn-sm" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Añadiendo..." id="anadirJurados">Añadir Jurados</button>
                                 {% else %}
                                     <p id="falta" class="label label-success" data-faltaid = '0'>
                                         El docente completó los 6 Jurados Propuestos
@@ -386,6 +386,7 @@
                             cantidad = cantidad - 1;
                         }
                         $("#add_tutor_tutores_ascenso").val("");
+                        $( "#anadirJurados" ).button('reset');
 
                 },
                error: function (XMLHttpRequest, textStatus, errorThrown) { 
