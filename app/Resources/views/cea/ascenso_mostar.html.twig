@@ -298,8 +298,12 @@
 
                         </div>
                     </div>
-                    <button class="btn btn-success btn-sm" type="submit" name="aprobado" id="aprobado" ><span class="fa fa-check" ></span>&nbsp;Aprobar</button>
-                    <a id="modal_rechazo" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#motivo_rechazo"  ><span class="fa fa-close"></span>&nbsp;Rechazar</a>
+                    {% if servicio.idEstatus.id == 3 %}
+                        <button class="btn btn-success btn-sm" type="submit" name="aprobado" id="aprobado" ><span class="fa fa-check" ></span>&nbsp;Aprobar</button>
+                    {% elseif servicio.idEstatus.id == 2 %}
+                        <button class="btn btn-success btn-sm" type="submit" name="aprobado" id="aprobado" ><span class="fa fa-check" ></span>&nbsp;Aprobar</button>
+                        <a id="modal_rechazo" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#motivo_rechazo"  ><span class="fa fa-close"></span>&nbsp;Rechazar</a>
+                    {% endif %}
                 </form>
             </div>
                          <!-- MOSTRAR ACTIVIDAD PIDA DEL DOCENTE  -->
