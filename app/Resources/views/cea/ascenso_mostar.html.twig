@@ -153,16 +153,16 @@
                             </table>   
                             
                             <p><strong>Escalafón Solicita:</strong> {{ ascenso.idEscalafones.nombre }} </p>                                
-                                  {% set añadirJurado = false  %}                          
+                                  {% set anadirJurado = false  %}
                                 {% if (ascenso.tesisUbv or ascenso.tipoTrabajoInvestigacion == 'investigacion') %}
                                     <h4>Jurados propuestos por el Docente</h4>
-                                    {% set añadirJurado = true  %}
+                                    {% set anadirJurado = true  %}
                                     {% set cantidadJurado = 6 %}
                                      <div id="seccion_jurados" class="well">
                                          <ul>
                                     {% for tutor in ascenso.tutoresAscenso %}                                        
                                         {% if loop.length == 6 %} 
-                                            {% set añadirJurado = false %}
+                                            {% set anadirJurado = false %}
                                         {% else %}
                                             {% set cantidadJurado = cantidadJurado - 1 %}
                                         {% endif %}
@@ -179,7 +179,7 @@
                                 </ul>
                                 </div>
                                 {% endif %}
-                                {% if añadirJurado and ascenso.idEstatus.id == 2 %}
+                                {% if anadirJurado and ascenso.idEstatus.id == 2 %}
                                     <p id="falta" class="label label-danger" data-faltaid = '{{cantidadJurado}}'>
                                         El docente no tiene o le faltó completar posibles jurados
                                     </p>
@@ -187,7 +187,7 @@
                                     {{ form_start(form) }}
                                     {{ form_widget(form) }}
                                     {{ form_end(form) }}
-                                    <button class="btn btn-primary btn-sm" id="añadirJurados">Añadir Jurados</button>
+                                    <button class="btn btn-primary btn-sm" id="anadirJurados">Añadir Jurados</button>
                                 {% else %}
                                     <p id="falta" class="label label-success" data-faltaid = '0'>
                                         El docente completó los 6 Jurados Propuestos
@@ -371,7 +371,7 @@
         
         
         
-        $( "#añadirJurados" ).click(function() {           
+        $( "#anadirJurados" ).click(function() {
             $.ajax({
                method: "POST",
                url: "{{ url('ajax_adicionar_tutor') }}",
