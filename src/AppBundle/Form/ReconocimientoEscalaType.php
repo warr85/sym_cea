@@ -45,7 +45,10 @@ class ReconocimientoEscalaType extends AbstractType
            ))
             ->add('send', SubmitType::class, array(
                   'label' => 'Enviar reconocimiento de Escala',
-                  'attr'  => array('class' => 'btn btn-success btn-block')
+                  'attr'  => array(
+                      'class' => 'btn btn-success btn-block',
+                      'data-loading-text' => "<i class='fa fa-circle-o-notch fa-spin'></i> Procesando Solicitud..."
+                  )
             ))
 
         ;
