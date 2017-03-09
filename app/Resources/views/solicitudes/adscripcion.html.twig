@@ -211,11 +211,6 @@
             else $('#user_oposicion').attr('disabled',false);
         });
 
-        //boton para mostrarle al usuario que estamos esperando
-        $('.btn').on('click', function() {
-            var $this = $(this);
-            $this.button('loading');
-        });
 
         //rehabilitamos todo lo que estaba bloqueado para que pueda ser enviado al servidor
         $('form').on('submit', function() {
