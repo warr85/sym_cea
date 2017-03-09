@@ -10,6 +10,7 @@ namespace AppBundle\Controller;
 
 
 use AppBundle\Entity\DocumentosVerificados;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -125,7 +126,41 @@ class AscensoController extends Controller
         $tutoresAsignados = new TutoresAscenso();
         $form = $this->createForm('AppBundle\Form\AscensoType');
         $tutorForm = $this->createForm('AppBundle\Form\TutoresAscensoType', $tutoresAsignados);
-	$form->handleRequest($request);
+	    $form->handleRequest($request);
+
+
+        if ($form->isSubmitted()) {
+            //var_dump($form->get('tipoTrabajoInvestigacion')->getData()); exit;
+            if ($form->get('tipoTrabajoInvestigacion')->getData() === "tesis") {
+                //var_dump($form);
+                if (!$form->get('aprobacion')->getData()) {
+                    $form->get('aprobacion')->addError(new FormError('Si su trabajo es tesis, debe subir el digital del acta de aprobación de la misma'));
+                }
+
+                if ($form->get('tesisUbv')->getData()) {
+                    if (!$form->get('tutores_ascenso')->getData()) {
+                        $form->get('tutores_ascenso')->addError(new FormError('La tesis al ser fuera de la UBV debe postular seis(6) posibles jurados'));
+                    }
+
+                    if (!$form->get('curriculo')->getData()) {
+                        $form->get('curriculo')->addError(new FormError('Debe subir el digital del resumen curricular de los posibles jurados en fomato PDF'));
+                    }
+
+                    if (!$form->get('pertinencia')->getData()) {
+                        $form->get('pertinencia')->addError(new FormError('La tesis al ser fuera de la UBV debe incluir un informe de pertinencia'));
+                    }
+                }
+
+            }else if ($form->get('tipoTrabajoInvestigacion')->getData() === "investigacion"){
+                if (!$form->get('tutores_ascenso')->getData()) {
+                    $form->get('tutores_ascenso')->addError(new FormError('La tesis al ser fuera de la UBV debe postular seis(6) posibles jurados'));
+                }
+
+                if (!$form->get('curriculo')->getData()) {
+                    $form->get('curriculo')->addError(new FormError('Debe subir el digital del resumen curricular de los posibles jurados en fomato PDF'));
+                }
+            }
+        }
                 	        
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -166,7 +201,7 @@ class AscensoController extends Controller
             $constanciaTrabajo->move(
                 $this->container->getParameter('ascenso_directory'),
                 $nombreTrabajo
-            );             
+            );
             thumbnail2($nombreTrabajo, $this->container->getParameter('ascenso_directory'), $this->container->getParameter('ascenso_thumb_directory'));
              
             
