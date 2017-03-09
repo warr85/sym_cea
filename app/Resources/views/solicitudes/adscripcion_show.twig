@@ -157,7 +157,7 @@
                                             </tr>
                                         {% endfor %}
                                     </table>
-
+                                    {% if servicio.idServicioCe.id == 5 %} <p>Escalfón al que está solicitando: <strong>{{ proxEscala.nombre }} </strong></p>{% endif %}
                                     {% if todo.escalafones is empty %}
                                         <div class="form-group">
                                             <h6 class="alert alert-warning">El Docente al momento de la solicitud
@@ -210,13 +210,13 @@
                                         {% if verificado.idTipoDocumentos.id <= 4 %}
                                             <a style="color:green;" target="_blank" href="{{ asset('uploads/adscripcion/' ~ verificado.ubicacion) }}">{{ verificado.idTipoDocumentos.nombre }}</a><br>
                                         {% else %}
-                                            <a style="color:green;" target="_blank" href="{{ asset('uploads/ascenso/' ~ verificado.ubicacion) }}">{{ verificado.idTipoDocumentos.nombre }}</a>
+                                            <a style="color:green;" target="_blank" href="{{ asset('uploads/ascenso/' ~ verificado.ubicacion) }}">{{ verificado.idTipoDocumentos.nombre }}</a><br>
                                         {% endif %}
                                     {% else %}
                                         {% if verificado.idTipoDocumentos.id <= 4 %}
                                             <a target="_blank" style="color:yellow;" href="{{ asset('uploads/adscripcion/' ~ verificado.ubicacion) }}">{{ verificado.idTipoDocumentos.nombre }}</a><br>
                                         {% else %}
-                                            <a style="color:yellow;" target="_blank" href="{{ asset('uploads/ascenso/' ~ verificado.ubicacion) }}">{{ verificado.idTipoDocumentos.nombre }}</a>
+                                            <a style="color:yellow;" target="_blank" href="{{ asset('uploads/ascenso/' ~ verificado.ubicacion) }}">{{ verificado.idTipoDocumentos.nombre }}</a><br>
                                         {% endif %}
                                     {% endif %}
                                 {% endif %}
@@ -255,9 +255,9 @@
 
                     </div>
                 {% endif %}
-                {% if servicio.idEstatus.id == 3 %}
+            {#{% if servicio.idEstatus.id == 3 %}
                     <button type="submit" class="btn btn-success" id="actualizar" name="actualizar">Actualizar Adscripción</button>
-                {% endif %}
+                {% endif %}#}
 
 
         </div>

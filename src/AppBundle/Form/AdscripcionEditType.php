@@ -45,7 +45,7 @@ class AdscripcionEditType extends AbstractType
             $form = $event->getForm();
             $existe = false;
             foreach ($user->getIdRolInstitucion()->getDocumentosVerificados() as $documentos){
-                if($documentos->getIdServicio()->getIdServicioCe()->getId() == 2 && $documentos->getIdEstatus()->getId() == 3){
+                if($documentos->getIdEstatus()->getId() == 3){
                     $existe = true;
                     $form->add($documentos->getIdTipoDocumentos()->getIdentificador(), FileType::class, array(
                         'label' => $documentos->getIdTipoDocumentos()->getNombre(),

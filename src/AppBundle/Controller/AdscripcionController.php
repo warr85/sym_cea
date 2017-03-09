@@ -584,7 +584,7 @@ class AdscripcionController extends Controller
     public function adscripcionShowAction(DocenteServicio $servicio, Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $todo = $em->getRepository("AppBundle:RolInstitucion")->findOneById($servicio->getIdRolInstitucion());
+        $todo = $servicio->getIdRolInstitucion();
 
         $form = $this->createForm('AppBundle\Form\AdscripcionEditType');
 
@@ -598,17 +598,23 @@ class AdscripcionController extends Controller
             foreach ($form->getData() as $key => $value) {
 
                 //var_dump($key); exit;
+                $idDocumento = $this->getDoctrine()->getRepository("AppBundle:TipoDocumentos")->findOneByIdentificador($key)->getId();
+                if($servicio->getIdServicioCe()->getId() == 2 ){
+                    $directorio = 'adscripcion';
+                }else{
+                    $directorio = 'ascenso';
+                }
                 $constancia = $form->get($key)->getData();
                 $nombre = md5(uniqid()).'.'.$constancia->guessExtension();
                 $constancia->move(
-                    $this->container->getParameter('adscripcion_directory'),
+                    $this->container->getParameter($directorio . '_directory'),
                     $nombre
                 );
-                thumbnail($nombre, $this->container->getParameter('adscripcion_directory'), $this->container->getParameter('adscripcion_thumb_directory'));
+                thumbnail($nombre, $this->container->getParameter($directorio . '_directory'), $this->container->getParameter($directorio . '_thumb_directory'));
 
                 $documento = $this->getDoctrine()->getRepository("AppBundle:DocumentosVerificados")->findOneBy(array(
                     'idRolInstitucion'  => $servicio->getIdRolInstitucion()->getId(),
-                    'idTipoDocumentos'  => $this->getDoctrine()->getRepository("AppBundle:TipoDocumentos")->findOneByIdentificador($key)->getId(),
+                    'idTipoDocumentos'  => $idDocumento,
                     'idEstatus'         => 3
                 ));
 
@@ -626,12 +632,16 @@ class AdscripcionController extends Controller
             return $this->redirect($this->generateUrl('adscripcion_show', array('id' => $servicio->getId())));
         }
 
+        //var_dump($servicio->getIdRolInstitucion()->getEscalafones()->last()); exit;
+        $escalafon = $servicio->getIdRolInstitucion()->getEscalafones()->last();
+
+        $proxEscalafon = $em->getRepository("AppBundle:Escalafones")->findOneById($escalafon->getIdEscala()->getId() + 1);
 
         return $this->render('solicitudes/adscripcion_show.twig', array(
             'servicio'  => $servicio,
-            'servicio' => $servicio,
             'todo'      => $todo,
-            'form'      => $form->createView()
+            'form'      => $form->createView(),
+            'proxEscala' => $proxEscalafon
         ));
     }
     
