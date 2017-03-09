@@ -138,6 +138,10 @@
     {{ parent() }}
     <script type="text/javascript" src="{{ asset('assets/vendor/chosen/chosen.jquery.min.js') }}"></script>
     <script type="text/javascript">
+
+
+
+
         
 
         $('#ascenso_tipoTrabajoInvestigacion').click(function() {
@@ -248,6 +252,19 @@
        
        $("#ascenso_tutores_ascenso").on("chosen:ready", function() {
             $("#ascenso_tutores_ascenso_chosen").hide();
+           if($('#ascenso_tipoTrabajoInvestigacion').val() === 'investigacion'){
+               $('.esc_investigacion').show();
+               $('.esc_tesis').hide();
+               $("#ascenso_tutores_ascenso_chosen").show();
+           }else if($('#ascenso_tipoTrabajoInvestigacion').val() === 'tesis') {
+               $('.esc_investigacion').hide();
+               $('.esc_tesis').show();
+               if ($('#ascenso_tesisUbv').prop("checked")) {
+                   $("#ascenso_tutores_ascenso_chosen").show();
+               }else{
+                   $("#ascenso_tutores_ascenso_chosen").hide();
+               }
+           }
         });
        
        
