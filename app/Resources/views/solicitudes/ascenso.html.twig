@@ -41,7 +41,7 @@
         <div class="content clearfix">            
             <h2>Requisitos solicitud ascenso {{ nueva_escala.nombre }}</h2>
             {% form_theme form 'bootstrap_3_layout.html.twig' %}        
-            {{ form_start(form) }}
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
             {{ form_widget(form) }}
             {{ form_end(form) }}
         </div>
@@ -141,9 +141,6 @@
         
 
         $('#ascenso_tipoTrabajoInvestigacion').click(function() {
-            alert("click");
-                        
-                        
             if($('#ascenso_tipoTrabajoInvestigacion').val() === 'investigacion'){
                     $('.esc_investigacion').show(); 
                     $('.esc_tesis').hide();
@@ -153,7 +150,6 @@
                $('.esc_tesis').show();
                $("#ascenso_tutores_ascenso_chosen").hide();
             }
-            
         });  
         
         
@@ -252,7 +248,6 @@
        
        $("#ascenso_tutores_ascenso").on("chosen:ready", function() {
             $("#ascenso_tutores_ascenso_chosen").hide();
-            alert("hidden");
         });
        
        
