@@ -203,11 +203,14 @@ public function getFechaEscala()
     {
         return $this->idRolInstitucion;
     }
-    
-    
-    
-  
 
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getidEscala()->getNombre();
+    }
 
 
 }
