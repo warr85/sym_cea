@@ -246,6 +246,7 @@
                                 {% endif %}
                               <div class="caption">                                
                                 <p>{{ documento.idTipoDocumentos.nombre }}</p>
+                                  {% if documento.idEstatus.id == 2 or documento.idEstatus.id == 3 %}
                                   <div class="wrapper">
                                       <label for="yes_radio{{ loop.index }}" class="yes-lbl"><i class="fa fa-check"></i>
                                       </label>
@@ -262,6 +263,7 @@
 
                                       <div class="toggle"></div>
                                   </div>
+                                  {% endif %}
                               </div>
                           </div>
                         </div>
