@@ -297,7 +297,7 @@
                         </div>
                     </div>
                     <button class="btn btn-success btn-sm" type="submit" name="aprobado" id="aprobado" ><span class="fa fa-check" ></span>&nbsp;Aprobar</button>
-                    <a class="btn btn-danger btn-sm" data-toggle="modal" data-target="#motivo_rechazo"  ><span class="fa fa-close"></span>&nbsp;Rechazar</a>
+                    <a id="modal_rechazo" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#motivo_rechazo"  ><span class="fa fa-close"></span>&nbsp;Rechazar</a>
                 </form>
             </div>
                          <!-- MOSTRAR ACTIVIDAD PIDA DEL DOCENTE  -->
@@ -396,6 +396,25 @@
 
            });
        });
+
+        $('form').submit(function() {
+            console.log($(':radio:checked', this).length);
+            for (var i = 0; i < $(':radio:checked', this).length; i ++){
+                console.log($(':radio:checked', this)[i]);
+                if ( ($(':radio:checked', this)[i].value == "")) {
+                    alert('Debes revisar todos los documentos para poder enviar la solicitud!');
+                    $("#aprobado").button('reset');
+                    return false;
+                }
+
+            }
+
+
+        });
+
+        $('#motivo_rechazo').on('hidden.bs.modal', function (e) {
+            $("#modal_rechazo").button('reset');
+        })
            
         
     </script>
