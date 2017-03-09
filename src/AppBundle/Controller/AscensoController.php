@@ -130,7 +130,7 @@ class AscensoController extends Controller
 
 
         if ($form->isSubmitted()) {
-            //var_dump($form->get('tipoTrabajoInvestigacion')->getData()); exit;
+            //var_dump((!$form->get('tutores_ascenso')->getData()->toArray())); exit;
             if ($form->get('tipoTrabajoInvestigacion')->getData() === "tesis") {
                 //var_dump($form);
                 if (!$form->get('aprobacion')->getData()) {
@@ -138,7 +138,7 @@ class AscensoController extends Controller
                 }
 
                 if ($form->get('tesisUbv')->getData()) {
-                    if (!$form->get('tutores_ascenso')->getData()) {
+                    if (!$form->get('tutores_ascenso')->getData()->toArray()) {
                         $form->get('tutores_ascenso')->addError(new FormError('La tesis al ser fuera de la UBV debe postular seis(6) posibles jurados'));
                     }
 
@@ -152,7 +152,7 @@ class AscensoController extends Controller
                 }
 
             }else if ($form->get('tipoTrabajoInvestigacion')->getData() === "investigacion"){
-                if (!$form->get('tutores_ascenso')->getData()) {
+                if (!$form->get('tutores_ascenso')->getData()->toArray()) {
                     $form->get('tutores_ascenso')->addError(new FormError('La tesis al ser fuera de la UBV debe postular seis(6) posibles jurados'));
                 }
 
