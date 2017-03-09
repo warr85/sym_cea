@@ -397,6 +397,17 @@
            });
        });
 
+        var buttonpressed;
+        $('#aprobado').click(function() {
+            //alert("click"); return false;
+            buttonpressed = $(this).attr('name')
+        });
+
+        $('#rechazar').click(function() {
+            buttonpressed = $(this).attr('name')
+        });
+
+
         $('form').submit(function() {
             console.log($(':radio:checked', this).length);
             for (var i = 0; i < $(':radio:checked', this).length; i ++){
@@ -407,6 +418,18 @@
                     return false;
                 }
 
+            }
+
+            if (buttonpressed == "aprobado") {
+                for (var i = 0; i < $(':radio:checked', this).length; i++) {
+                    console.log($(':radio:checked', this)[i]);
+                    if (($(':radio:checked', this)[i].value == "3")) {
+                        alert('No puedes aprobar una solicitud con documentos en estatus de rechazado');
+                        $("#aprobado").button('reset');
+                        return false;
+                    }
+
+                }
             }
 
 
