@@ -99,6 +99,15 @@ class AscensoType extends AbstractType
                     ))
                 )
             ))
+            ->add('nombreNucleo', TextType::class, array(
+                'label' => 'Nombre del Núcleo al cual pertenece',
+
+                'required' => true,
+                'constraints' => array(
+                    new NotBlank(),
+                )
+
+            ))
             ->add('tipoTrabajoInvestigacion', ChoiceType::class, array(
                 'placeholder' => 'Seleccione el Tipo de Trabajo de Investigación',
                 'choices' => array(
@@ -154,6 +163,7 @@ class AscensoType extends AbstractType
                 'label' => 'Digital Trabajo de investigación / Tesis',
                 'required' => true,
                 'constraints' => array(
+                    new NotBlank(),
                     new File(array(
                         'maxSize' => '1024K',
                         'mimeTypes' => [
@@ -221,19 +231,12 @@ class AscensoType extends AbstractType
                     ))
                 )
             ))
-            ->add('nombreNucleo', TextType::class, array(
-                'label' => 'Nombre del Núcleo al cual pertenece',
-
-                'required' => true,
-                'constraints' => array(
-                    new NotBlank(),
-                )
-
-            ))
             ->add('send', SubmitType::class, array(
                 'label' => 'Crear Solicitud de Ascenso',
-                'attr' => array('class' => 'btn btn-success btn-block'),
-                'data-loading-text' => "<i class='fa fa-circle-o-notch fa-spin'></i> Procesando Solicitud..."
+                'attr' => array(
+                    'class' => 'btn btn-success btn-block',
+                    'data-loading-text' => "<i class='fa fa-circle-o-notch fa-spin'></i> Procesando Solicitud..."
+                ),
             ));
 
 
