@@ -190,11 +190,17 @@
                          {% for documento in docente.documentosVerificados %}
                          {% if documento.idServicio.id == servicio.id %}
                          {% if not ascenso %} {% set u = "adscripcion" %} {% else %} {% set u = "ascenso" %} {% endif %}
-                         <div class="col-xs-4">
-                            <div class="thumbnail">
-                                <a href="{{asset('uploads/'~u~'/'~ documento.ubicacion)}}" data-lightbox="adscripcion">
-                                    <img src="{{ asset('uploads/'~u~'/thumb/'~ documento.ubicacion) }}" />
-                                </a>
+                             {% set extension = documento.ubicacion | split('.') | last %}
+                             <div {% if extension != "pdf" %}class="col-xs-6"{% else %}class="col-xs-12"{% endif %}>
+                                 <div class="thumbnail">
+
+                                     {% if extension != "pdf" %}
+                                         <a href="{{asset('uploads/'~u~'/'~ documento.ubicacion)}}" data-lightbox="adscripcion">
+                                             <img src="{{ asset('uploads/'~u~'/thumb/'~ documento.ubicacion) }}" />
+                                         </a>
+                                     {% else %}
+                                         <object type="application/pdf" data="{{asset('uploads/'~u~'/'~ documento.ubicacion)}}" width="100%" height="300px"></object>
+                                     {% endif %}
                               <div class="caption">                                
                                 <p>{{ documento.idTipoDocumentos.nombre }}</p>
                                   <div class="wrapper">
