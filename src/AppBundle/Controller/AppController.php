@@ -272,6 +272,7 @@ class AppController extends Controller {
        $ea = $this->getDoctrine()->getRepository('AppBundle:EstadoAcademico')->findOneByIdDocenteServicio($servicios);
         return $this->render('cea/servicios_mostar.html.twig', array(
             'servicio' => $servicios,
+            'docente'   => $servicios->getIdRolInstitucion(),
             'oposicion' => $escala,
             'adscripcion' => $adscripcion,
             'estado_academico' => $ea            

@@ -113,13 +113,13 @@
                 </div>
                 <div class="col-md-3">
                     {% if servicio.idEstatus.id == 1 %}
-                        <h4 class="alert alert-success">Estatus <strong>{{servicio.idEstatus}}</strong>
+                        <h4 class="alert alert-success">Estatus <strong>{{servicio.idEstatus}}</strong></h4>
                     {% elseif servicio.idEstatus.id == 3 %}
-                        <h4 class="alert alert-danger">Estatus <strong>{{servicio.idEstatus}}</strong> 
+                        <h4 class="alert alert-danger">Estatus <strong>{{servicio.idEstatus}}</strong> </h4>
                     {% else %}
-                        <h4 class="alert alert-warning">Estatus <strong>{{servicio.idEstatus}}</strong> 
+                        <h4 class="alert alert-warning">Estatus <strong>{{servicio.idEstatus}}</strong> </h4>
                      {% endif %}
-                    </h4>                       
+
                 </div>
 
             </div>
@@ -131,9 +131,7 @@
                         <img src="{{ asset('bundles/framework/images/portal/logo_ubv.png') }}" />
                     </div>
 
-                    <div class="col-md-8">      
-                        
-                    <form action="{{ path('login') }}" method="post" role="form" >
+                    <div class="col-md-8">
                         
                         <div class="form-group">
                             <label for="username">Fecha de Solicitud:</label>
@@ -166,12 +164,16 @@
                            </div>                                                      
                            
                             
-                        {% endif %}   
-                            
-                              
+                        {% endif %}
 
-                        <a class="btn btn-success btn-sm" href="{{ path('cea_servicios_actualizar', { 'id': servicio.id, 'estatus' : 'true' }) }}"  ><span class="fa fa-check"></span>&nbsp;Aprobar</a>
-                        <a class="btn btn-danger btn-sm" data-toggle="modal" data-target="#motivo_rechazo"  ><span class="fa fa-close"></span>&nbsp;Rechazar</a>
+
+                        <form action="{{ path('cea_servicios_actualizar', { 'id': servicio.id, 'estatus' : 'true' }) }}" method="POST" name="aprobar">
+                        {% if servicio.idEstatus.id == 3 %}
+                            <button class="btn btn-success btn-sm" type="submit" name="aprobado" id="aprobado" ><span class="fa fa-check" ></span>&nbsp;Aprobar</button>
+                        {% elseif servicio.idEstatus.id == 2 %}
+                            <button class="btn btn-success btn-sm" type="submit" name="aprobado" id="aprobado" ><span class="fa fa-check" ></span>&nbsp;Aprobar</button>
+                            <a id="modal_rechazo" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#motivo_rechazo"  ><span class="fa fa-close"></span>&nbsp;Rechazar</a>
+                        {% endif %}
                         
                          </form>
                         <!-- Modal -->
@@ -208,20 +210,27 @@
                 </div>
                {% if servicio.idServicioCe.id == 1 %}                 
                 <div class="col-md-5">    
-                     <h3>Documentos Para confirmar</h3>    
+                     <h3>Documentos Para confirmar</h3>
                      <div class="widget-content">
                                              
                          
                          {% for documento in docente.documentosVerificados %}
 
                             {% if documento.idTipoDocumentos.identificador == "trabajo" or documento.idTipoDocumentos.identificador == "oposicion" %}
-                         <div class="col-xs-4">
+                                {% set extension = documento.ubicacion | split('.') | last %}
+                                <div {% if extension != "pdf" %}class="col-xs-6"{% else %}class="col-xs-12"{% endif %}>
                             <div class="thumbnail">
-                                <a href="{{asset('uploads/adscripcion/'~ documento.ubicacion)}}" data-lightbox="adscripcion">
-                                    <img src="{{ asset('uploads/adscripcion/thumb/'~ documento.ubicacion) }}" />
-                                </a>
+
+                                {% if extension != "pdf" %}
+                                    <a href="{{asset('uploads/adscripcion/'~ documento.ubicacion)}}" data-lightbox="trabajo">
+                                        <img src="{{ asset('uploads/adscripcion/thumb/'~ documento.ubicacion) }}" />
+                                    </a>
+                                {% else %}
+                                    <object type="application/pdf" data="{{asset('uploads/adscripcion/'~ documento.ubicacion)}}" width="100%" height="300px"></object>
+                                {% endif %}
                               <div class="caption">                                
                                 <p>{{ documento.idTipoDocumentos.nombre }}</p>
+                                  {% if documento.idEstatus.id == 2 or documento.idEstatus.id == 3 %}
                                   <div class="wrapper">
                                       <label for="yes_radio{{ loop.index }}" class="yes-lbl"><i class="fa fa-check"></i>
                                       </label>
@@ -238,6 +247,7 @@
 
                                       <div class="toggle"></div>
                                   </div>
+                                  {% endif %}
                               </div>
                           </div>
                         </div>
@@ -260,4 +270,20 @@
 {% block javascripts %}
     {{ parent() }}
     <script type="text/javascript" src="{{ asset('assets/vendor/lightbox2/dist/js/lightbox.min.js') }}"></script>
+    <script>
+        var buttonpressed;
+        $('#aprobado').click(function() {
+            //alert("click"); return false;
+            buttonpressed = $(this).attr('name')
+        });
+
+        $('#rechazar').click(function() {
+            buttonpressed = $(this).attr('name')
+        });
+
+        $('#motivo_rechazo').on('hidden.bs.modal', function (e) {
+            $("#modal_rechazo").button('reset');
+        })
+
+    </script>
     {% endblock %}

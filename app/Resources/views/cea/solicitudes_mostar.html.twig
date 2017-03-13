@@ -285,10 +285,10 @@
                     </div>
                 {% endif %}
                 {% if servicio.idEstatus.id == 3 %}
-                    <button type="submit" class="btn btn-success" id="aprobar" name="aprobar">Aprobar</button>
+                    <button type="submit" class="btn btn-success" data-loading-text = "<i class='fa fa-circle-o-notch fa-spin'></i> Procesando Solicitud..." id="aprobar" name="aprobar">Aprobar</button>
                  {% elseif servicio.idEstatus.id == 2 %}
-                     <button type="submit" class="btn btn-success" id="aprobar" name="aprobar">Aprobar</button>
-                    <a data-toggle="modal" data-target="#motivo_rechazo" class="btn btn-danger">Rechazar</a>
+                     <button type="submit" class="btn btn-success" id="aprobar" name="aprobar" data-loading-text = "<i class='fa fa-circle-o-notch fa-spin'></i> Procesando Solicitud...">Aprobar</button>
+                    <a data-toggle="modal" data-target="#motivo_rechazo" class="btn btn-danger" data-loading-text = "<i class='fa fa-circle-o-notch fa-spin'></i> Procesando Solicitud...">Rechazar</a>
                 {% endif %}
 
 
