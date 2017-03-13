@@ -40,8 +40,8 @@ class AscensoController extends Controller
         );
         if($solicitud){
             if($solicitud->getIdEstatus()->getId() != 4 ){
-                $this->addFlash('warning', 'Ya usted posee una solicitud de Ascenso en espera.  Puede consultar su estatus en el botón de "Mis servicios" ');
-                return $this->redirect($this->generateUrl('servicios_index'));	
+                $this->addFlash('warning', 'Ya usted posee una solicitud de Ascenso en espera.  Puede consultar su estatus en el botón de "Mis servicios".  Recuerde que al tener a la mano su constancia de aprobación de ascenso, debe subirla en el botón de servicios en el apartado Reconocimiento de nuevo Escalafón. ');
+                return $this->redirect($this->generateUrl('servicios_index'));
             }
         }
         
