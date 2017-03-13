@@ -751,67 +751,7 @@ class AscensoController extends Controller
     
     
     
-    
-    /**
-     * Encuentra y muestra una entidad de tipo Adscripción.
-     *
-     * @Route("/reconocimiento/escala/{id}/{escala}/{estatus}", name="cea_escala_actualizar")
-     * @Method({"GET", "POST"})
-     * @Security("has_role('ROLE_COORDINADOR_REGIONAL')")
-     */
-    public function actualizarEscalaAction(DocenteServicio $servicio, $escala, $estatus, Request $request)
-    {
-       $escala_docente = new DocenteEscala();
-       if ($request->getMethod() == 'POST') {                      
-            $escala_docente->setIdRolInstitucion($servicio->getIdRolInstitucion());
-            $escala_docente->setidEscala($this->getDoctrine()->getRepository('AppBundle:Escalafones')->findOneById($this->get('request')->request->get('escala')));
-            $escala_docente->setFechaEscala(new \DateTime($this->get('request')->request->get('fecha_escala')));
-            $escala_docente->setIdTipoEscala($this->getDoctrine()->getRepository('AppBundle:TipoAscenso')->findOneById($this->get('request')->request->get('tipo')));
 
-
-            $em = $this->getDoctrine()->getManager();            
-            $em->persist($escala_docente);
-            
-            if ($this->get('request')->request->get('tipo') == 2 ){
-                $ServicioAscenso = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->findOneBy(array(
-                    'idRolInstitucion'  => $servicio->getIdRolInstitucion(),
-                    'idServicioCe'      => 5,
-                    'idEstatus'         => 1
-                ));
-                
-                
-                $ascenso = $this->getDoctrine()->getRepository('AppBundle:Ascenso')->findOneBy(array(
-                    'idRolInstitucion'  => $servicio->getIdRolInstitucion(),
-                    'idEstatus'         => 1
-                ));
-                
-                
-                $ServicioAscenso->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(4));
-                $ascenso->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(4));
-                $em->persist($ServicioAscenso);
-                $em->persist($ascenso);
-            }
-
-           $documento = $em->getRepository("AppBundle:DocumentosVerificados")->findOneBy(array(
-               'idRolInstitucion'  => $servicio->getIdRolInstitucion(),
-               'idServicio'  => $servicio->getId(),
-               'idEstatus'  => 2
-           ));
-
-           $documento->setIdEstatus($em->getRepository("AppBundle:Estatus")->findOneById($this->get('request')->request->get('reconocimiento')));
-            
-            $servicio->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(4));
-            $em->persist($servicio);
-           $em->persist($documento);
-            
-            $em->flush();
-       }
-       
-       
-       $this->addFlash('success', 'Escala Agregada Satisfactoriamente');
-       return $this->redirect($this->generateUrl('cea_index'));  
-       
-    }
     
     
     /**
