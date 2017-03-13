@@ -54,7 +54,11 @@
 
                           {% if servicio.idServicioCe.id == 5 %}
                               <a href="{{ path('adscripcion_show', { 'id': servicio.id }) }}" class="btn btn-xs btn-info"><i class="fa fa-eye"> </i></a>
+
                           {%endif%}
+                        {% if servicio.idServicioCe.id == 6 %}
+                            <a href="{{ path('adscripcion_show', { 'id': servicio.id }) }}" class="btn btn-xs btn-info"><i class="fa fa-eye"> </i></a>
+                            {% endif %}
                       </td>
                   </tr>
                   {% endfor %}
