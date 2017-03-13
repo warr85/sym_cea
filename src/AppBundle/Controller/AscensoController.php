@@ -546,16 +546,18 @@ class AscensoController extends Controller
         
         $ascenso = $this->getDoctrine()->getRepository('AppBundle:Ascenso')->findOneBy(array(
            'idRolInstitucion'   =>  $servicio->getIdRolInstitucion(),
-            'idEstatus'         =>  1  
+            'idEstatus'         =>  1
         ));
                 
         $pida = $this->getDoctrine()->getRepository('AppBundle:AdscripcionPida')->findOneByIdRolInstitucion($servicio->getIdRolInstitucion());
-        
+        $ano = 2003;
         if($ascenso == NULL){
             $escalafones = $this->getDoctrine()->getRepository('AppBundle:Escalafones')->findAll();
         }else{
             $escalafones = $this->getDoctrine()->getRepository('AppBundle:Escalafones')->findOneById($ascenso->getIdEscalafones()->getId());
+            $ano = end($escala)->getFechaEscala()->format('Y');;
         }
+
 
 
         $form = $this->createFormBuilder()
@@ -563,7 +565,7 @@ class AscensoController extends Controller
             ->add('fechaAscenso', BirthdayType::class, array(
                 'widget' => 'choice',
                 'label' => 'Fecha de Ascenso',
-                'years' => range(2003, date("Y")),
+                'years' => range($ano, date("Y")),
                 'placeholder' => array(
                     'year' => 'Año', 'month' => 'Mes', 'day' => 'Día',
                 ),
