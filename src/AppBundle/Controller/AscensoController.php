@@ -10,6 +10,8 @@ namespace AppBundle\Controller;
 
 
 use AppBundle\Entity\DocumentosVerificados;
+use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -24,6 +26,8 @@ use AppBundle\Entity\TutoresAscenso;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\Validator\Constraints\Date;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class AscensoController extends Controller
 {
@@ -525,10 +529,10 @@ class AscensoController extends Controller
      * Encuentra y muestra una entidad de tipo Adscripción.
      *
      * @Route("/reconocimientoEscala/{id}", name="cea_reconocimientoEscala_show")
-     * @Method("GET")
+     * @Method({"GET", "POST"})
      * @Security("has_role('ROLE_COORDINADOR_REGIONAL')")
      */
-    public function reconocimientoEscalaShowAction(DocenteServicio $servicio)
+    public function reconocimientoEscalaShowAction(DocenteServicio $servicio, Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         $docente = $em->getRepository("AppBundle:RolInstitucion")->findOneById($servicio->getIdRolInstitucion()->getId());
@@ -552,9 +556,81 @@ class AscensoController extends Controller
         }else{
             $escalafones = $this->getDoctrine()->getRepository('AppBundle:Escalafones')->findOneById($ascenso->getIdEscalafones()->getId());
         }
-        
-        
-        
+
+
+        $form = $this->createFormBuilder()
+
+            ->add('fechaAscenso', BirthdayType::class, array(
+                'widget' => 'choice',
+                'label' => 'Fecha de Ascenso',
+                'years' => range(2003, date("Y")),
+                'placeholder' => array(
+                    'year' => 'Año', 'month' => 'Mes', 'day' => 'Día',
+                ),
+                'constraints' => array(
+                    new NotBlank(),
+                    new Date()
+                )
+            ))
+            ->getForm();
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()){
+            $parametros = $request->request->all();
+            $verificado = $this->getDoctrine()->getRepository("AppBundle:DocumentosVerificados")->findOneByIdServicio($servicio);
+            $ServicioAscenso = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->findOneBy(array(
+                'idRolInstitucion'  => $servicio->getIdRolInstitucion(),
+                'idServicioCe'      => 5,
+                'idEstatus'         => 1
+            ));
+
+
+            $ascenso = $this->getDoctrine()->getRepository('AppBundle:Ascenso')->findOneBy(array(
+                'idRolInstitucion'  => $servicio->getIdRolInstitucion(),
+                'idEstatus'         => 1
+            ));
+            if(isset($parametros['aprobado'])) {
+                $verificado->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(1));
+                $escala_docente = new DocenteEscala();
+                $escala_docente->setIdRolInstitucion($servicio->getIdRolInstitucion());
+                $escala_docente->setidEscala($this->getDoctrine()->getRepository('AppBundle:Escalafones')->findOneById($this->get('request')->request->get('escala')));
+                $escala_docente->setFechaEscala(new \DateTime($this->get('request')->request->get('fecha_escala')));
+                $escala_docente->setIdTipoEscala($this->getDoctrine()->getRepository('AppBundle:TipoAscenso')->findOneById($this->get('request')->request->get('tipo')));
+                $em->persist($escala_docente);
+
+
+                $servicio->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(4));
+
+
+                $ServicioAscenso->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(4));
+                $ascenso->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(4));
+
+            }else{
+                //$mensaje = $request->request->get('message-text');
+                $verificado->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(3));
+                $servicio->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(3));
+                $ascenso = $this->getDoctrine()->getRepository('AppBundle:Ascenso')->findOneBy(array(
+                    'idRolInstitucion'  => $servicio->getIdRolInstitucion(),
+                    'idEstatus'         => 1
+                ));
+
+                $servicio->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(3));
+
+
+                $ServicioAscenso->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(4));
+                $ascenso->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(4));
+            }
+
+            $em->persist($ServicioAscenso);
+            $em->persist($ascenso);
+            $em->persist($verificado);
+            $em->flush();
+            $this->addFlash('success', 'Escala Agregada Satisfactoriamente');
+            return $this->redirect($this->generateUrl('cea_index'));
+
+        }
+
+
         return $this->render('cea/reconocimiento_escala_mostrar.html.twig', array(
             'ascenso' => $ascenso, 
             'adscripcion' => $adscripcion,
@@ -562,7 +638,8 @@ class AscensoController extends Controller
             'escalas' => $escala,            
             'pida'      => $pida,
             'escalafones' => $escalafones,
-            'docente'       => $docente
+            'docente'       => $docente,
+            'form'      => $form->createView()
             
         ));
     }
