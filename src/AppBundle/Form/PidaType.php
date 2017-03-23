@@ -12,9 +12,10 @@ namespace AppBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+
 
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class PidaType extends AbstractType
 {
@@ -23,7 +24,7 @@ class PidaType extends AbstractType
         $builder
                 
                 ->add('id_plan_historico_nacional_estrategico', EntityType::class, array(
-                    'label'         => false,
+                    'label'         => 'Objetivos Históricos',
                     'attr' => array(
                                 'class' =>  'select2'
                                 ),                
@@ -35,7 +36,7 @@ class PidaType extends AbstractType
                 ))
 
                 ->add('id_actividad_docente', EntityType::class, array(
-                    'label'         => false,
+                    'label'         => 'Actividad Docente',
                     'attr' => array(
                                 'class' =>  'select2'
                              ),
@@ -47,16 +48,14 @@ class PidaType extends AbstractType
 
                 ))
                 
-                ->add('objetivo_especifico')
+                ->add('objetivo_especifico', TextType::class, array(
+                    'label' => 'Tarea'
+                ))
                 
                 ->add('fecha_inicio')
                 
                 ->add('fecha_final')
-                
-                ->add('send', SubmitType::class, array(
-                      'label' => 'Enviar Actividad PIDA',
-                      'attr'  => array('class' => 'btn btn-success btn-block')
-                ))
+
 
         ;
 
