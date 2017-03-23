@@ -9,6 +9,7 @@
 
 namespace AppBundle\Form;
 
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -52,9 +53,39 @@ class PidaType extends AbstractType
                     'label' => 'Tarea'
                 ))
                 
-                ->add('fecha_inicio')
+                ->add('idPidaPlazo', EntityType::class, array(
+                    'class' => 'AppBundle:PidaPlazo',
+                    'label' => 'Plazos de la Actividad: ',
+                    'label_attr' => array('class' => 'radio-inline'),
+
+
+
+                    'choice_label' => 'nombre',
+
+                    // used to render a select box, check boxes or radios
+                    // 'multiple' => true,
+                     'expanded' => true,
+                ))
+
+
+            ->add('idPidaEstatus', EntityType::class, array(
+                'class' => 'AppBundle:PidaEstatus',
+                'label' => false,
+                'label_attr' => array('class' => 'radio-inline'),
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('u')
+                        ->orderBy('u.id', 'ASC');
+                },
+
+                // use the User.username property as the visible option string
+                'choice_label' => 'nombre',
+
+                // used to render a select box, check boxes or radios
+                // 'multiple' => true,
+                'expanded' => true,
+            ))
                 
-                ->add('fecha_final')
+
 
 
         ;

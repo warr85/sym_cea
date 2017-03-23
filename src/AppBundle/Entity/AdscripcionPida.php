@@ -68,20 +68,20 @@ class AdscripcionPida
      * })
      */
     protected $idActividadDocente;
+
+
+    /**
+     * @var \AppBundle\Entity\PidaPlazo
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\PidaPlazo")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_pida_plazo", referencedColumnName="id", nullable=true)
+     * })
+     */
+    protected $idPidaPlazo;
     
     
-     /** @ORM\Column(type="datetime", nullable=false, options={"comment" = "Fecha de inicio de la activdad PIDA"})
-    
-    */
-    
-    private $fecha_inicio;
-    
-    
-     /** @ORM\Column(type="datetime", nullable=false, options={"comment" = "Fecha de fin de la actividad"})
-    
-    */
-    
-    private $fecha_final;
+
    
     
     /** @ORM\Column(type="datetime", nullable=false, options={"comment" = "Fecha de creación de la solicitud"})
@@ -96,6 +96,19 @@ class AdscripcionPida
     */
     
     private $fecha_ultima_actualizacion;
+
+
+    /**
+     * @var \AppBundle\Entity\PidaEstatus
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\PidaEstatus")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_pida_estatus", referencedColumnName="id", nullable=true)
+     * })
+     */
+    protected $idPidaEstatus;
+
+
     
      /**
      * @var \AppBundle\Entity\Estatus
@@ -252,51 +265,7 @@ class AdscripcionPida
         return $this->idActividadDocente;
     }
 
-    /**
-     * Set fecha_inicio
-     *
-     * @param \DateTime $fechaInicio
-     * @return AdscripcionPida
-     */
-    public function setFechaInicio($fechaInicio)
-    {
-        $this->fecha_inicio = $fechaInicio;
 
-        return $this;
-    }
-
-    /**
-     * Get fecha_inicio
-     *
-     * @return \DateTime 
-     */
-    public function getFechaInicio()
-    {
-        return $this->fecha_inicio;
-    }
-
-    /**
-     * Set fecha_final
-     *
-     * @param \DateTime $fechaFinal
-     * @return AdscripcionPida
-     */
-    public function setFechaFinal($fechaFinal)
-    {
-        $this->fecha_final = $fechaFinal;
-
-        return $this;
-    }
-
-    /**
-     * Get fecha_final
-     *
-     * @return \DateTime 
-     */
-    public function getFechaFinal()
-    {
-        return $this->fecha_final;
-    }
 
     /**
      * Set objetivoEspecifico
@@ -319,5 +288,51 @@ class AdscripcionPida
     public function getObjetivoEspecifico()
     {
         return $this->objetivoEspecifico;
+    }
+
+    /**
+     * Set idPidaPlazo
+     *
+     * @param \AppBundle\Entity\PidaPlazo $idPidaPlazo
+     * @return AdscripcionPida
+     */
+    public function setIdPidaPlazo(\AppBundle\Entity\PidaPlazo $idPidaPlazo = null)
+    {
+        $this->idPidaPlazo = $idPidaPlazo;
+
+        return $this;
+    }
+
+    /**
+     * Get idPidaPlazo
+     *
+     * @return \AppBundle\Entity\PidaPlazo 
+     */
+    public function getIdPidaPlazo()
+    {
+        return $this->idPidaPlazo;
+    }
+
+    /**
+     * Set idPidaEstatus
+     *
+     * @param \AppBundle\Entity\PidaEstatus $idPidaEstatus
+     * @return AdscripcionPida
+     */
+    public function setIdPidaEstatus(\AppBundle\Entity\PidaEstatus $idPidaEstatus)
+    {
+        $this->idPidaEstatus = $idPidaEstatus;
+
+        return $this;
+    }
+
+    /**
+     * Get idPidaEstatus
+     *
+     * @return \AppBundle\Entity\PidaEstatus 
+     */
+    public function getIdPidaEstatus()
+    {
+        return $this->idPidaEstatus;
     }
 }

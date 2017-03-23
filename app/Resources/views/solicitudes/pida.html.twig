@@ -35,6 +35,12 @@
             {% form_theme form 'bootstrap_3_layout.html.twig' %}        
             {{ form_start(form) }}
             {{ form_widget(form) }}
+
+            <ul class="actividad" data-prototype="{{ form_widget(form.contenido.vars.prototype)|e('html_attr') }}">
+
+            </ul>
+
+
             {{ form_end(form) }}
         </div>
         

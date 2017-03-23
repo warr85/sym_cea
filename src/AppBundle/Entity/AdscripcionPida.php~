@@ -39,7 +39,7 @@ class AdscripcionPida
 	/**
      * @var \AppBundle\Entity\RolInstitucion
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\RolInstitucion")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\RolInstitucion", inversedBy="pida")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_rol_institucion", referencedColumnName="id", nullable=false)
      * })
@@ -68,20 +68,20 @@ class AdscripcionPida
      * })
      */
     protected $idActividadDocente;
+
+
+    /**
+     * @var \AppBundle\Entity\PidaPlazo
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\PidaPlazo")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_pida_plazo", referencedColumnName="id", nullable=true)
+     * })
+     */
+    protected $idPidaPlazo;
     
     
-     /** @ORM\Column(type="datetime", nullable=false, options={"comment" = "Fecha de inicio de la activdad PIDA"})
-    
-    */
-    
-    private $fecha_inicio;
-    
-    
-     /** @ORM\Column(type="datetime", nullable=false, options={"comment" = "Fecha de fin de la actividad"})
-    
-    */
-    
-    private $fecha_final;
+
    
     
     /** @ORM\Column(type="datetime", nullable=false, options={"comment" = "Fecha de creación de la solicitud"})
@@ -96,6 +96,19 @@ class AdscripcionPida
     */
     
     private $fecha_ultima_actualizacion;
+
+
+    /**
+     * @var \AppBundle\Entity\PidaEstatus
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\PidaEstatus")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_pida_estatus", referencedColumnName="id", nullable=false)
+     * })
+     */
+    protected $idPidaEstatus;
+
+
     
      /**
      * @var \AppBundle\Entity\Estatus
@@ -252,49 +265,51 @@ class AdscripcionPida
         return $this->idActividadDocente;
     }
 
+
+
     /**
-     * Set fecha_inicio
+     * Set objetivoEspecifico
      *
-     * @param \DateTime $fechaInicio
+     * @param string $objetivoEspecifico
      * @return AdscripcionPida
      */
-    public function setFechaInicio($fechaInicio)
+    public function setObjetivoEspecifico($objetivoEspecifico)
     {
-        $this->fecha_inicio = $fechaInicio;
+        $this->objetivoEspecifico = $objetivoEspecifico;
 
         return $this;
     }
 
     /**
-     * Get fecha_inicio
+     * Get objetivoEspecifico
      *
-     * @return \DateTime 
+     * @return string 
      */
-    public function getFechaInicio()
+    public function getObjetivoEspecifico()
     {
-        return $this->fecha_inicio;
+        return $this->objetivoEspecifico;
     }
 
     /**
-     * Set fecha_final
+     * Set idPidaPlazo
      *
-     * @param \DateTime $fechaFinal
+     * @param \AppBundle\Entity\PidaPlazo $idPidaPlazo
      * @return AdscripcionPida
      */
-    public function setFechaFinal($fechaFinal)
+    public function setIdPidaPlazo(\AppBundle\Entity\PidaPlazo $idPidaPlazo = null)
     {
-        $this->fecha_final = $fechaFinal;
+        $this->idPidaPlazo = $idPidaPlazo;
 
         return $this;
     }
 
     /**
-     * Get fecha_final
+     * Get idPidaPlazo
      *
-     * @return \DateTime 
+     * @return \AppBundle\Entity\PidaPlazo 
      */
-    public function getFechaFinal()
+    public function getIdPidaPlazo()
     {
-        return $this->fecha_final;
+        return $this->idPidaPlazo;
     }
 }
