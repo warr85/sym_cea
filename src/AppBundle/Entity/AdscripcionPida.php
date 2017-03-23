@@ -3,13 +3,14 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 
 /**
  * AdscripcionPida
  *
- * @ORM\Table(name="solicitud_pida", uniqueConstraints={@ORM\UniqueConstraint(name="pida_id_rol_institucion_key", columns={"id_rol_institucion"})})
+ * @ORM\Table(name="solicitud_pida", uniqueConstraints={@ORM\UniqueConstraint(name="pida_id_rol_institucion_key", columns={"id_rol_institucion", "id_plan_historico_nacional_estrategico", "id_actividad_docente"})})
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks()
  */
@@ -25,14 +26,13 @@ class AdscripcionPida
      * @ORM\SequenceGenerator(sequenceName="adscripcion_id_seq", allocationSize=1, initialValue=1)
      */
     private $id;
-    
-    
+
+
     /**
-     * @var string
-     *
-     * @ORM\Column(name="objetivo_especifico", type="text", nullable=false, options={"comment" = "objetivo especifico a desarrollar dentro enmarcado en el plan patria"})
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\PidaTareaEspecifico", mappedBy="adscripcionPidaId",cascade={"all"})
+     * @var \Doctrine\Common\Collections\ArrayCollection
      */
-    private $objetivoEspecifico;
+    private $pidaTareaEspecifico;
     
     
     
@@ -70,15 +70,7 @@ class AdscripcionPida
     protected $idActividadDocente;
 
 
-    /**
-     * @var \AppBundle\Entity\PidaPlazo
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\PidaPlazo")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_pida_plazo", referencedColumnName="id", nullable=true)
-     * })
-     */
-    protected $idPidaPlazo;
+
     
     
 
@@ -98,15 +90,6 @@ class AdscripcionPida
     private $fecha_ultima_actualizacion;
 
 
-    /**
-     * @var \AppBundle\Entity\PidaEstatus
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\PidaEstatus")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_pida_estatus", referencedColumnName="id", nullable=true)
-     * })
-     */
-    protected $idPidaEstatus;
 
 
     
@@ -267,72 +250,50 @@ class AdscripcionPida
 
 
 
+
+
     /**
-     * Set objetivoEspecifico
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->pidaTareaEspecifico = new ArrayCollection();
+    }
+
+    /**
+     * Add pidaTareaEspecifico
      *
-     * @param string $objetivoEspecifico
+     * @param \AppBundle\Entity\PidaTareaEspecifico $pidaTareaEspecifico
      * @return AdscripcionPida
      */
-    public function setObjetivoEspecifico($objetivoEspecifico)
+    public function addPidaTareaEspecifico(\AppBundle\Entity\PidaTareaEspecifico $pidaTareaEspecifico)
     {
-        $this->objetivoEspecifico = $objetivoEspecifico;
+        $this->pidaTareaEspecifico[] = $pidaTareaEspecifico;
 
         return $this;
     }
 
     /**
-     * Get objetivoEspecifico
+     * Remove pidaTareaEspecifico
      *
-     * @return string 
+     * @param \AppBundle\Entity\PidaTareaEspecifico $pidaTareaEspecifico
      */
-    public function getObjetivoEspecifico()
+    public function removePidaTareaEspecifico(\AppBundle\Entity\PidaTareaEspecifico $pidaTareaEspecifico)
     {
-        return $this->objetivoEspecifico;
+        $this->pidaTareaEspecifico->removeElement($pidaTareaEspecifico);
     }
 
     /**
-     * Set idPidaPlazo
+     * Get pidaTareaEspecifico
      *
-     * @param \AppBundle\Entity\PidaPlazo $idPidaPlazo
-     * @return AdscripcionPida
+     * @return \Doctrine\Common\Collections\Collection 
      */
-    public function setIdPidaPlazo(\AppBundle\Entity\PidaPlazo $idPidaPlazo = null)
+    public function getPidaTareaEspecifico()
     {
-        $this->idPidaPlazo = $idPidaPlazo;
-
-        return $this;
+        return $this->pidaTareaEspecifico;
     }
 
-    /**
-     * Get idPidaPlazo
-     *
-     * @return \AppBundle\Entity\PidaPlazo 
-     */
-    public function getIdPidaPlazo()
-    {
-        return $this->idPidaPlazo;
-    }
-
-    /**
-     * Set idPidaEstatus
-     *
-     * @param \AppBundle\Entity\PidaEstatus $idPidaEstatus
-     * @return AdscripcionPida
-     */
-    public function setIdPidaEstatus(\AppBundle\Entity\PidaEstatus $idPidaEstatus)
-    {
-        $this->idPidaEstatus = $idPidaEstatus;
-
-        return $this;
-    }
-
-    /**
-     * Get idPidaEstatus
-     *
-     * @return \AppBundle\Entity\PidaEstatus 
-     */
-    public function getIdPidaEstatus()
-    {
-        return $this->idPidaEstatus;
+    public function __toString() {
+        return $this->getIdRolInstitucion()->getIdRol()->getIdPersona()->getPrimerNombre();
     }
 }

@@ -9,6 +9,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\DocumentosVerificados;
+use AppBundle\Entity\PidaTareaEspecifico;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -448,9 +449,19 @@ class AdscripcionController extends Controller
         if(!$adscripcion) return $this->redirect($this->generateUrl('solicitud_adscripcion'));
         
         //si ya se tiene PIDA
-        if($this->getDoctrine()->getRepository('AppBundle:AdscripcionPida')->findOneByIdRolInstitucion($this->getUser()->getIdRolInstitucion()->getId())){
-            return $this->redirect($this->generateUrl('cea_index'));
-        }
+         $pid = $this->getDoctrine()->getRepository('AppBundle:AdscripcionPida')->findByIdRolInstitucion(array(
+             'idRolInstitucion' => $this->getUser()->getIdRolInstitucion()->getId()
+         ));
+
+         $serv = "";
+
+         if($pid){
+             $serv = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->
+             findOneBy(array(
+                 'idRolInstitucion'  =>  $this->getUser()->getIdRolInstitucion()->getId(),
+                 'idServicioCe'      =>  4
+             ));
+         }
         
         $pida = new AdscripcionPida();
         $form = $this->createForm('AppBundle\Form\PidaType', $pida);
@@ -458,33 +469,42 @@ class AdscripcionController extends Controller
         
         
         if ($form->isSubmitted() && $form->isValid()) {
-            
+            $em = $this->getDoctrine()->getManager();
             //Crear la solicitud de Servicio
-            $servicios = new DocenteServicio();
+            if(!$pid) {
+                $servicios = new DocenteServicio();
 
-            $servicios->setIdRolInstitucion($this->getUser()->getIdRolInstitucion());
-            $servicios->setIdServicioCe($this->getDoctrine()->getRepository('AppBundle:ServiciosCe')->findOneById(4));
-            $servicios->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:estatus')->findOneById(2));
+                $servicios->setIdRolInstitucion($this->getUser()->getIdRolInstitucion());
+                $servicios->setIdServicioCe($this->getDoctrine()->getRepository('AppBundle:ServiciosCe')->findOneById(4));
+                $servicios->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:estatus')->findOneById(2));
+                $em->persist($servicios);
+            }
 
             
             
             $pida->setIdRolInstitucion($this->getUser()->getIdRolInstitucion());
             $pida->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(2));
+            foreach($pida->getPidaTareaEspecifico() as $especifico){
+                //var_dump($especifico); exit;
+                $especifico->setAdscripcionPidaId($pida);
+            }
+
             
-            $em = $this->getDoctrine()->getManager();
+
             $em->persist($pida);
-            $em->persist($servicios);
+
             $em->flush();
-            
-            return $this->redirectToRoute('cea_index');
+
+            return $this->redirectToRoute('solicitud_pida');
         
         }
-        
-        
-        return $this->render(
-            'solicitudes/pida.html.twig',
-            array('form' => $form->createView())
-        );
+
+
+        return $this->render('solicitudes/pida.html.twig', array(
+            'form' => $form->createView(),
+            'pida'  => $pid,
+            'servicio' => $serv
+        ));
         
         
     }

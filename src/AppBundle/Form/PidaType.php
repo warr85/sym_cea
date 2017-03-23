@@ -11,12 +11,12 @@ namespace AppBundle\Form;
 
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class PidaType extends AbstractType
 {
@@ -48,42 +48,14 @@ class PidaType extends AbstractType
                     'choice_label' => 'getNombre'                
 
                 ))
-                
-                ->add('objetivo_especifico', TextType::class, array(
-                    'label' => 'Tarea'
+
+                ->add('pidaTareaEspecifico', CollectionType::class, array(
+                    'entry_type' => PidaTareaEspecificoType::class,
+                    'allow_add'    => true,
+                    'label'         => false
                 ))
                 
-                ->add('idPidaPlazo', EntityType::class, array(
-                    'class' => 'AppBundle:PidaPlazo',
-                    'label' => 'Plazos de la Actividad: ',
-                    'label_attr' => array('class' => 'radio-inline'),
 
-
-
-                    'choice_label' => 'nombre',
-
-                    // used to render a select box, check boxes or radios
-                    // 'multiple' => true,
-                     'expanded' => true,
-                ))
-
-
-            ->add('idPidaEstatus', EntityType::class, array(
-                'class' => 'AppBundle:PidaEstatus',
-                'label' => false,
-                'label_attr' => array('class' => 'radio-inline'),
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('u')
-                        ->orderBy('u.id', 'ASC');
-                },
-
-                // use the User.username property as the visible option string
-                'choice_label' => 'nombre',
-
-                // used to render a select box, check boxes or radios
-                // 'multiple' => true,
-                'expanded' => true,
-            ))
                 
 
 

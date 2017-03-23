@@ -25,14 +25,13 @@ class AdscripcionPida
      * @ORM\SequenceGenerator(sequenceName="adscripcion_id_seq", allocationSize=1, initialValue=1)
      */
     private $id;
-    
-    
+
+
     /**
-     * @var string
-     *
-     * @ORM\Column(name="objetivo_especifico", type="text", nullable=false, options={"comment" = "objetivo especifico a desarrollar dentro enmarcado en el plan patria"})
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\PidaTareaEspecifico", mappedBy="AdscripcionPidaId",cascade={"all"})
+     * @var \Doctrine\Common\Collections\ArrayCollection
      */
-    private $objetivoEspecifico;
+    private $pidaTareaEspecifico;
     
     
     
@@ -103,7 +102,7 @@ class AdscripcionPida
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\PidaEstatus")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_pida_estatus", referencedColumnName="id", nullable=false)
+     *   @ORM\JoinColumn(name="id_pida_estatus", referencedColumnName="id", nullable=true)
      * })
      */
     protected $idPidaEstatus;
@@ -267,28 +266,6 @@ class AdscripcionPida
 
 
 
-    /**
-     * Set objetivoEspecifico
-     *
-     * @param string $objetivoEspecifico
-     * @return AdscripcionPida
-     */
-    public function setObjetivoEspecifico($objetivoEspecifico)
-    {
-        $this->objetivoEspecifico = $objetivoEspecifico;
-
-        return $this;
-    }
-
-    /**
-     * Get objetivoEspecifico
-     *
-     * @return string 
-     */
-    public function getObjetivoEspecifico()
-    {
-        return $this->objetivoEspecifico;
-    }
 
     /**
      * Set idPidaPlazo
@@ -311,5 +288,28 @@ class AdscripcionPida
     public function getIdPidaPlazo()
     {
         return $this->idPidaPlazo;
+    }
+
+    /**
+     * Set idPidaEstatus
+     *
+     * @param \AppBundle\Entity\PidaEstatus $idPidaEstatus
+     * @return AdscripcionPida
+     */
+    public function setIdPidaEstatus(\AppBundle\Entity\PidaEstatus $idPidaEstatus)
+    {
+        $this->idPidaEstatus = $idPidaEstatus;
+
+        return $this;
+    }
+
+    /**
+     * Get idPidaEstatus
+     *
+     * @return \AppBundle\Entity\PidaEstatus 
+     */
+    public function getIdPidaEstatus()
+    {
+        return $this->idPidaEstatus;
     }
 }

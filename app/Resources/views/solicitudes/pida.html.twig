@@ -13,6 +13,12 @@
         .container{
             margin-bottom: 0;
         }
+
+        .account-container{
+            width:100%;
+            margin-left: 50px;
+        }
+
     </style>
 {% endblock %}
 
@@ -29,23 +35,60 @@
             
         </h4>
     </div>
-    <div class="account-container register">        
-        <div class="content clearfix">            
-            <h1>PIDA</h1>
-            {% form_theme form 'bootstrap_3_layout.html.twig' %}        
-            {{ form_start(form) }}
-            {{ form_widget(form) }}
-
-            <ul class="actividad" data-prototype="{{ form_widget(form.contenido.vars.prototype)|e('html_attr') }}">
-
-            </ul>
+    <div class="row">
+        <div class="col-md-5">
 
 
-            {{ form_end(form) }}
+            <div class="account-container register">
+                <div class="content clearfix">
+                    <h1>PIDA</h1>
+                    {% form_theme form 'bootstrap_3_layout.html.twig' %}
+                    {{ form_start(form) }}
+                    {{ form_row(form.id_plan_historico_nacional_estrategico) }}
+                    {{ form_row(form.id_actividad_docente) }}
+                    <ul class="actividad" data-prototype="{{ form_widget(form.pidaTareaEspecifico.vars.prototype)|e('html_attr') }}">
+
+                    </ul>
+
+                    <button type="submit" class="btn btn-success">Añadir</button>
+                    <button type="submit" class="btn btn-primary">Añadir y Finalizar</button>
+                    {{ form_end(form) }}
+                </div>
+
+            </div>
         </div>
-        
-    </div>
+        {% if pida %}
+            <div class="col-md-6">
+                <div class="account-container register">
+                    <div class="content clearfix">
+                        <h2>Mi pida <span class="small" style="float: right;"> Estatus: {{ servicio.idEstatus }}</span></h2>
+                        <table class="table table-bordered">
+                            <th>Objetivo Histórico</th>
+                            <th>Actividad Docente</th>
+                            <th>Tarea Específica</th>
+                            <th>Plazo</th>
+                            <th>Estatus</th>
+                        {% for pid in pida %}
+                            <tr>
+                        <td rowspan="{{ pid.pidaTareaEspecifico | length }}">{{ pid.idPlanHistoricoNacionalEstrategico.nombre }}</td>
+                        <td rowspan="{{ pid.pidaTareaEspecifico | length }}">{{ pid.idActividadDocente.nombre }}</td>
 
+                        {% for tarea in pid.pidaTareaEspecifico %}
+                                <td>{{ tarea.pidaTareaEspecifico }}</td>
+                                <td>{{ tarea.idPidaPlazo }}</td>
+                                <td>{{ tarea.idPidaEstatus }}</td>
+                            </tr>
+                        {% endfor %}
+
+                            </tr>
+                        {% endfor %}
+                        </table>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+    </div>
 
 {% endblock %}
 
@@ -58,5 +101,57 @@
     <script type="text/javascript">
         
         $('select').select2();
+        var $addActividadLink = $('<a href="#" class="add_actividad_link">Añadir Tarea Específica</a>');
+        var $newLinkLiActividad = $('<li></li>').append($addActividadLink);
+        jQuery(document).ready(function() {
+            $ActividadHolder = $('ul.actividad');
+            $ActividadHolder.append($newLinkLiActividad);
+            $ActividadHolder.data('index', $ActividadHolder.find(':input').length);
+            console.log($ActividadHolder);
+            $addActividadLink.on('click', function(e) {
+                // prevent the link from creating a "#" on the URL
+                e.preventDefault();
+
+                // add a new tag form (see next code block)
+                addActividadForm($ActividadHolder, $newLinkLiActividad);
+            });
+
+        });
+
+        function addActividadForm($contenidoHolder, $newLinkLiContenido) {
+            // Get the data-prototype explained earlier
+            var prototype = $contenidoHolder.data('prototype');
+            console.log(prototype);
+
+            // get the new index
+            var index = $contenidoHolder.data('index');
+
+            // Replace '$$name$$' in the prototype's HTML to
+            // instead be a number based on how many items we have
+            var newFormContenido = prototype.replace(/__name__/g, index);
+
+            // increase the index with one for the next item
+            $contenidoHolder.data('index', index + 1);
+
+            // Display the form in the page in an li, before the "Add a tag" link li
+            var $newFormLiContenido = $('<li></li>').append(newFormContenido);
+
+            // also add a remove button, just for this example
+            $newFormLiContenido.append('<a href="#" class="remove-tag">x</a>');
+
+            $newLinkLiContenido.before($newFormLiContenido);
+
+            // handle the removal, just for this example
+            $('.remove-tag').click(function(e) {
+                e.preventDefault();
+
+                $(this).parent().remove();
+
+                return false;
+            });
+
+
+        }
+
     </script>
 {% endblock %}
