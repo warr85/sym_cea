@@ -194,7 +194,11 @@
                         </div>
                     </div>
                     <div class="col-md-5">
-                        <h4>Documentos en <span style="color: red;">Rojo</span> (rechazados), en <span style="color: green;">verde</span> (aprobados)</h4>
+                        <h4>
+                            Documentos en <span style="color: red;">Rojo</span> (rechazados),
+                            en <span style="color: green;">verde</span> (aprobados),
+                            <span style="color:#8A6D3B;" >amarrillos </span> en espera de revisión.
+                        </h4>
                         <div class="widget-content">
 
                             {% for verificado in todo.documentosVerificados | sort %}
@@ -214,9 +218,9 @@
                                         {% endif %}
                                     {% else %}
                                         {% if verificado.idTipoDocumentos.id <= 4 %}
-                                            <a target="_blank" style="color:yellow;" href="{{ asset('uploads/adscripcion/' ~ verificado.ubicacion) }}">{{ verificado.idTipoDocumentos.nombre }}</a><br>
+                                            <a target="_blank" style="color:#8A6D3B;" href="{{ asset('uploads/adscripcion/' ~ verificado.ubicacion) }}">{{ verificado.idTipoDocumentos.nombre }}</a><br>
                                         {% else %}
-                                            <a style="color:yellow;" target="_blank" href="{{ asset('uploads/ascenso/' ~ verificado.ubicacion) }}">{{ verificado.idTipoDocumentos.nombre }}</a><br>
+                                            <a style="color:#8A6D3B;" target="_blank" href="{{ asset('uploads/ascenso/' ~ verificado.ubicacion) }}">{{ verificado.idTipoDocumentos.nombre }}</a><br>
                                         {% endif %}
                                     {% endif %}
                                 {% endif %}

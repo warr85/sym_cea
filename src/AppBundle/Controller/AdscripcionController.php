@@ -597,9 +597,10 @@ class AdscripcionController extends Controller
 
             foreach ($form->getData() as $key => $value) {
 
-                //var_dump($key); exit;
+
                 $idDocumento = $this->getDoctrine()->getRepository("AppBundle:TipoDocumentos")->findOneByIdentificador($key)->getId();
-                if($servicio->getIdServicioCe()->getId() == 2 ){
+//                var_dump($idDocumento); exit;
+                if($idDocumento <= 4 ){
                     $directorio = 'adscripcion';
                 }else{
                     $directorio = 'ascenso';
