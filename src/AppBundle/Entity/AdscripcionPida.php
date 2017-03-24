@@ -45,6 +45,18 @@ class AdscripcionPida
      * })
      */
     protected $idRolInstitucion;
+
+
+    /**
+     * @var \AppBundle\Entity\DocenteServicio
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\DocenteServicio")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_docente_servicio", referencedColumnName="id", nullable=true)
+     * })
+     */
+    protected $idDocenteServicio;
+
     
     
 
@@ -295,5 +307,28 @@ class AdscripcionPida
 
     public function __toString() {
         return $this->getIdRolInstitucion()->getIdRol()->getIdPersona()->getPrimerNombre();
+    }
+
+    /**
+     * Set idDocenteServicio
+     *
+     * @param \AppBundle\Entity\DocenteServicio $idDocenteServicio
+     * @return AdscripcionPida
+     */
+    public function setIdDocenteServicio(\AppBundle\Entity\DocenteServicio $idDocenteServicio)
+    {
+        $this->idDocenteServicio = $idDocenteServicio;
+
+        return $this;
+    }
+
+    /**
+     * Get idDocenteServicio
+     *
+     * @return \AppBundle\Entity\DocenteServicio 
+     */
+    public function getIdDocenteServicio()
+    {
+        return $this->idDocenteServicio;
     }
 }
