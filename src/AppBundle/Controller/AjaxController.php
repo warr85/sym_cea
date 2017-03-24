@@ -239,10 +239,10 @@ class AjaxController extends Controller {
 
 
     /**
-     * @Route("/ajax/add/tarea", name="ajax_add_tarea")
+     * @Route("/ajax/add/tarea", name="ajax_eliminar_tarea")
      * @Method({"POST"})
      */
-    public function addTareaAction(Request $request){
+    public function eliminarTareaAction(Request $request){
 
         if($request->isXmlHttpRequest()){
             $encoders = array(new JsonEncoder());
@@ -250,26 +250,21 @@ class AjaxController extends Controller {
 
             $serializer = new Serializer($normalizers, $encoders);
 
-            $pida = filter_input(INPUT_POST, 'pida',  FILTER_SANITIZE_SPECIAL_CHARS);
+            $id = filter_input(INPUT_POST, 'eliminar',  FILTER_SANITIZE_SPECIAL_CHARS);
 
 
             $em = $this->getDoctrine()->getManager();
-            $pida = $em->getRepository("AppBundle:AdscripcionPida")->findOneById($pida);
-            var_dump($request->request); exit;
-            $pida->addPidaTareaEspecifico($tarea);
-            $em->persist($pida);
+            $tarea = $em->getRepository("AppBundle:PidaTareaEspecifico")->findOneById($id);
+            $em->remove($tarea);
             $em->flush();
+
+
 
 
             $response = new JsonResponse();
             $response->setStatusCode(200);
             $response->setData(array(
-                'response' => 'success',
-                'jurados' => $jurados,
-                'adicionar_nombres' => $nuevos_nombres,
-                'adicionar_institucion' => $nuevos_institucion,
-                'adicionar_id'          => $nuevos_id,
-                'ascenso'  => $ascensoId
+                'response' => 'success'
             ));
 
             return $response;

@@ -77,6 +77,8 @@
                                 <td>{{ tarea.pidaTareaEspecifico }}
                                     {% if loop.index == loop.length %}
                                         <a data-id="{{ pid.id }}"  id="add_actividad{{ pid.id }}" data-toggle="modal" data-target="#nueva_actividad" class="btn btn-xs btn-warning">+</a>
+                                    {% else %}
+                                        <a data-id="{{ tarea.id }}"  id="remove{{ tarea.id }}" class="btn btn-xs btn-danger">-</a>
                                     {% endif %}
                                 </td>
                                 <td>{{ tarea.idPidaPlazo }}</td>
@@ -199,6 +201,28 @@
         $('[id^="add_"]').click(function() {
             alert("presionado: " + $(this).attr('data-id'))
             $("#id_pida").val($(this).attr('data-id'));
+        });
+
+        $('[id^="remove"]').click(function() {
+            var x = confirm("eliminar tarea: " + $(this).attr('data-id'));
+            if(x) {
+                $.ajax({
+                    method: "POST",
+                    url: "{{ url('ajax_eliminar_tarea') }}",
+                    async: true,
+                    cache: false,
+                    data: ({eliminar: $(this).attr('data-id')}),
+                    success: function (data) {
+                        console.log(data);
+                        location.reload();
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        console.log(errorThrown);
+
+                    }
+
+                });
+            }
         });
 
 
