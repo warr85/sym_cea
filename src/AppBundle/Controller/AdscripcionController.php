@@ -10,6 +10,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\DocumentosVerificados;
 use AppBundle\Entity\PidaTareaEspecifico;
+use AppBundle\Form\PidaTareaEspecificoType;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -464,10 +465,13 @@ class AdscripcionController extends Controller
          }
         
         $pida = new AdscripcionPida();
+        $tarea = new PidaTareaEspecifico();
         $form = $this->createForm('AppBundle\Form\PidaType', $pida);
         $form->handleRequest($request);
-        
-        
+
+        $editForm = $this->createForm('AppBundle\Form\PidaTareaEspecificoType', $tarea);
+        $editForm->handleRequest($request);
+        $em = $this->getDoctrine()->getManager();
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             //Crear la solicitud de Servicio
@@ -499,11 +503,28 @@ class AdscripcionController extends Controller
         
         }
 
+        if ($editForm->isSubmitted() && $editForm->isValid()) {
+            $id = filter_input(INPUT_POST, 'id_pida',  FILTER_SANITIZE_SPECIAL_CHARS);
+            if($id) {
+
+                $pida = $this->getDoctrine()->getRepository("AppBundle:AdscripcionPida")->findOneById($id);
+                $tarea->setAdscripcionPidaId($pida);
+                $pida->addPidaTareaEspecifico($tarea);
+                $em->persist($pida);
+
+                $em->flush();
+
+                return $this->redirectToRoute('solicitud_pida');
+            }
+
+        }
+
 
         return $this->render('solicitudes/pida.html.twig', array(
             'form' => $form->createView(),
             'pida'  => $pid,
-            'servicio' => $serv
+            'servicio' => $serv,
+            'editForm'  => $editForm->createView()
         ));
         
         

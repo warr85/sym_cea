@@ -235,6 +235,50 @@ class AjaxController extends Controller {
        }
         
     }
+
+
+
+    /**
+     * @Route("/ajax/add/tarea", name="ajax_add_tarea")
+     * @Method({"POST"})
+     */
+    public function addTareaAction(Request $request){
+
+        if($request->isXmlHttpRequest()){
+            $encoders = array(new JsonEncoder());
+            $normalizers = array(new ObjectNormalizer());
+
+            $serializer = new Serializer($normalizers, $encoders);
+
+            $pida = filter_input(INPUT_POST, 'pida',  FILTER_SANITIZE_SPECIAL_CHARS);
+
+
+            $em = $this->getDoctrine()->getManager();
+            $pida = $em->getRepository("AppBundle:AdscripcionPida")->findOneById($pida);
+            var_dump($request->request); exit;
+            $pida->addPidaTareaEspecifico($tarea);
+            $em->persist($pida);
+            $em->flush();
+
+
+            $response = new JsonResponse();
+            $response->setStatusCode(200);
+            $response->setData(array(
+                'response' => 'success',
+                'jurados' => $jurados,
+                'adicionar_nombres' => $nuevos_nombres,
+                'adicionar_institucion' => $nuevos_institucion,
+                'adicionar_id'          => $nuevos_id,
+                'ascenso'  => $ascensoId
+            ));
+
+            return $response;
+
+
+        }
+
+    }
+
     
     
     /**

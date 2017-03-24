@@ -74,9 +74,14 @@
                         <td rowspan="{{ pid.pidaTareaEspecifico | length }}">{{ pid.idActividadDocente.nombre }}</td>
 
                         {% for tarea in pid.pidaTareaEspecifico %}
-                                <td>{{ tarea.pidaTareaEspecifico }}</td>
+                                <td>{{ tarea.pidaTareaEspecifico }}
+                                    {% if loop.index == loop.length %}
+                                        <a data-id="{{ pid.id }}"  id="add_actividad{{ pid.id }}" data-toggle="modal" data-target="#nueva_actividad" class="btn btn-xs btn-warning">+</a>
+                                    {% endif %}
+                                </td>
                                 <td>{{ tarea.idPidaPlazo }}</td>
                                 <td>{{ tarea.idPidaEstatus }}</td>
+
                             </tr>
                         {% endfor %}
 
@@ -88,6 +93,39 @@
             </div>
         {% endif %}
 
+    </div>
+
+
+
+    <div class="modal fade" id="nueva_actividad" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Nueva Actividad</h4>
+                </div>
+
+                <div class="modal-body">
+
+
+                    {% form_theme editForm 'bootstrap_3_layout.html.twig' %}
+                    {{ form_start(editForm) }}
+                    {{ form_widget(editForm) }}
+
+                    <input type="hidden" id="id_pida" name="id_pida" value="" >
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-success" name="rechazar" id="rechazar">Añadir Actividad
+
+                    </button>
+                </div>
+                {{ form_end(editForm) }}
+            </div>
+
+        </div>
     </div>
 
 {% endblock %}
@@ -152,6 +190,20 @@
 
 
         }
+
+        $('#nueva_actividad').on('hidden.bs.modal', function (e) {
+            $(".btn").button('reset');
+        });
+
+        var buttonpressed;
+        $('[id^="add_"]').click(function() {
+            alert("presionado: " + $(this).attr('data-id'))
+            $("#id_pida").val($(this).attr('data-id'));
+        });
+
+
+
+
 
     </script>
 {% endblock %}
