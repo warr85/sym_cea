@@ -3,6 +3,9 @@
     {{ parent() }}
     <link href="{{ asset('assets/vendor/lightbox2/dist/css/lightbox.css') }}" rel="stylesheet">
     <style>
+        .full{
+            width: 100%;
+        }
         .wrapper {
             width: 6.9rem;
             height: 2rem;
@@ -269,21 +272,46 @@
                 {% if not todo.pida %}
                     <p class="alert alert-warning">El Docente no ha registrado todavía su actividad PIDA</p>
                 {% else %}
-                    <div class="form-group">
-                        <label for="pida">PIDA:</label>
-                        {% for pida in todo.pida %}
-                            <ul>
-                                <li>Objetivo Estratégico: {{ pida.idPlanHistoricoNacionalEstrategico.nombre }}</li>
-                                <li>Ámbito: {{ pida.idActividadDocente.nombre }}</li>
-                                <li>Objetivo Específico: {{ pida.ObjetivoEspecifico }}</li>
-                                <li>Fecha inicio: {{ pida.fechaInicio | date('d-m-Y') }} </li>
-                                <li>Fecha final: {{ pida.fechaFinal | date('d-m-Y') }} </li>
+            <div class="col-md-12">
+                <div class="account-container full register">
+                    <div class="content clearfix">
+                        <h2>PIDA <span class="small" style="float: right;"> Estatus: {{ servicio.idEstatus }}</span></h2>
+                        <table class="table table-bordered">
+                            <th>Objetivo Histórico</th>
+                            <th>Actividad Docente</th>
+                            <th>Tarea Específica</th>
+                            <th>Plazo</th>
+                            <th>Estatus</th>
+                        {% for pid in todo.pida | sort %}
+                            <tr>
+                        <td rowspan="{{ pid.pidaTareaEspecifico | length }}">
+                            {{ pid.idPlanHistoricoNacionalEstrategico.nombre }}
 
-                            </ul>
+                        </td>
+                        <td rowspan="{{ pid.pidaTareaEspecifico | length }}">
+                            {{ pid.idActividadDocente.nombre }}
+                        </td>
+
+                        {% for tarea in pid.pidaTareaEspecifico | sort %}
+                                <td>{{ tarea.pidaTareaEspecifico }}
+
+                                </td>
+                                <td>{{ tarea.idPidaPlazo }}</td>
+                                <td>
+                                    {{ tarea.idPidaEstatus }}
+
+                                </td>
+
+                            </tr>
                         {% endfor %}
 
+                            </tr>
+                        {% endfor %}
+                        </table>
                     </div>
-                {% endif %}
+                </div>
+            </div>
+        {% endif %}
                 {% if servicio.idEstatus.id == 3 %}
                     <button type="submit" class="btn btn-success" data-loading-text = "<i class='fa fa-circle-o-notch fa-spin'></i> Procesando Solicitud..." id="aprobar" name="aprobar">Aprobar</button>
                  {% elseif servicio.idEstatus.id == 2 %}

@@ -4,6 +4,9 @@
     <link href="{{ asset('assets/vendor/lightbox2/dist/css/lightbox.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('assets/vendor/chosen/chosen.min.css') }}">
     <style>
+        .full {
+            width: 100%;
+        }
         .wrapper {
             width: 6.9rem;
             height: 2rem;
@@ -306,22 +309,47 @@
                     {% endif %}
                 </form>
             </div>
-                         <!-- MOSTRAR ACTIVIDAD PIDA DEL DOCENTE  -->
-                        {% if not pida %}
-                            <p class="alert alert-warning">El Docente no ha registrado todavía su actividad PIDA</p>
-                        {% else %}                            
-                             <div class="form-group">
-                            <label for="pida">PIDA:</label>
-                            <ul>
-                                <li>Objetivo Estratégico: {{pida.idPlanHistoricoNacionalEstrategico.nombre}}</li>
-                                <li>Ámbito: {{ pida.idActividadDocente.nombre }}</li>
-                                <li>Objetivo Específico: {{ pida.ObjetivoEspecifico }}</li>
-                                <li>Fecha inicio: {{ pida.fechaInicio | date('d-m-Y') }} </li>
-                                <li>Fecha final: {{ pida.fechaFinal | date('d-m-Y') }} </li>
-                                
-                            </ul>                            
-                        </div>  
-                        {% endif %}
+            <!-- MOSTRAR ACTIVIDAD PIDA DEL DOCENTE  -->
+            {% if not docente.pida %}
+                <p class="alert alert-warning">El Docente no ha registrado todavía su actividad PIDA</p>
+            {% else %}
+                <div class="col-md-12">
+                    <div class="account-container full register">
+                        <div class="content clearfix">
+                            <h2>PIDA <span class="small" style="float: right;"> Estatus: {{ servicio.idEstatus }}</span></h2>
+                            <table class="table table-bordered">
+                                <th>Objetivo Histórico</th>
+                                <th>Actividad Docente</th>
+                                <th>Tarea Específica</th>
+                                <th>Plazo</th>
+                                <th>Estatus</th>
+                                {% for pid in docente.pida | sort %}
+                                    <tr>
+                                    <td rowspan="{{ pid.pidaTareaEspecifico | length }}">
+                                        {{ pid.idPlanHistoricoNacionalEstrategico.nombre }}
+                                    </td>
+                                    <td rowspan="{{ pid.pidaTareaEspecifico | length }}">
+                                        {{ pid.idActividadDocente.nombre }}
+                                    </td>
+
+                                    {% for tarea in pid.pidaTareaEspecifico | sort %}
+                                        <td>{{ tarea.pidaTareaEspecifico }}
+                                        </td>
+                                        <td>{{ tarea.idPidaPlazo }}</td>
+                                        <td>
+                                            {{ tarea.idPidaEstatus }}
+                                        </td>
+
+                                        </tr>
+                                    {% endfor %}
+
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
 
                         
                         
