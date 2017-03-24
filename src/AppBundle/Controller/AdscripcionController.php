@@ -666,12 +666,15 @@ class AdscripcionController extends Controller
     {        
         $em = $this->getDoctrine()->getManager();
         $todo = $em->getRepository("AppBundle:RolInstitucion")->findOneById($servicio->getIdRolInstitucion());
-
+        $servicioPida = $this->getDoctrine()->getRepository("AppBundle:DocenteServicio")->findOneBy(array(
+           'idRolInstitucion' => $todo,
+            'idServicioCe' => 4
+        ));
 
 
         return $this->render('cea/solicitudes_mostar.html.twig', array(
             'servicio'  => $servicio,
-            'servicio' => $servicio,
+            'servicioPida' => $servicioPida,
             'todo'      => $todo
         ));
     }
@@ -689,6 +692,10 @@ class AdscripcionController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $todo = $servicio->getIdRolInstitucion();
+        $servicioPida = $this->getDoctrine()->getRepository("AppBundle:DocenteServicio")->findOneBy(array(
+            'idRolInstitucion' => $todo,
+            'idServicioCe' => 4
+        ));
 
         $form = $this->createForm('AppBundle\Form\AdscripcionEditType');
 
@@ -746,7 +753,8 @@ class AdscripcionController extends Controller
             'servicio'  => $servicio,
             'todo'      => $todo,
             'form'      => $form->createView(),
-            'proxEscala' => $proxEscalafon
+            'proxEscala' => $proxEscalafon,
+            'servicioPida' => $servicioPida
         ));
     }
     

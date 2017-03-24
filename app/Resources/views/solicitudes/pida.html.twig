@@ -36,7 +36,7 @@
         </h4>
     </div>
     <div class="row">
-        {% if servicio.idEstatus.id == 2 %}
+        {% if not servicio or servicio.idEstatus.id == 2 %}
         <div class="col-md-4">
 
 
@@ -87,7 +87,7 @@
                                 </div>
                                 {{ form_end(caducidadForm) }}
                         {% else %}
-                            PIDA válido desde: {{ caduca.fechaInicio | date('d-m-Y')}} hasta: {{ caduca.fechaFinal | date('m-d-Y') }}.   vigencia de ( {%  if caducaAnos > 0  %} %} y {{ caducaAnos }} años {% endif %}{{ caducaMeses }} meses con {{ caducaDias }} días  )
+                            PIDA válido desde: {{ caduca.fechaInicio | date('d-m-Y')}} hasta: {{ caduca.fechaFinal | date('m-d-Y') }}.   vigencia de ( {%  if caducaAnos > 0  %} {{ caducaAnos }} años {% endif %}{{ caducaMeses }} meses con {{ caducaDias }} días  )
 
                         {% endif %}
                         <table class="table table-bordered">
