@@ -36,7 +36,7 @@
         </h4>
     </div>
     <div class="row">
-        <div class="col-md-5">
+        <div class="col-md-4">
 
 
             <div class="account-container register">
@@ -58,10 +58,32 @@
             </div>
         </div>
         {% if pida %}
-            <div class="col-md-6">
+            <div class="col-md-7">
                 <div class="account-container register">
                     <div class="content clearfix">
                         <h2>Mi pida <span class="small" style="float: right;"> Estatus: {{ servicio.idEstatus }}</span></h2>
+
+                        {% if not caduca %}
+                            {% form_theme caducidadForm 'bootstrap_3_layout.html.twig' %}
+                                {{ form_start(caducidadForm) }}
+                            <div class="row">
+                                <div class="col-lg-5">
+                                {{ form_row(caducidadForm.fechaInicio) }}
+                                </div>
+                                <div class="col-lg-5">
+                                    {{ form_row(caducidadForm.fechaFinal) }}
+                                </div>
+                                {% if servicio %}
+                                    <div class="col-lg-2">
+                                        <button type="submit"> Asignar</button>
+                                    </div>
+                                {% endif %}
+                                </div>
+                                {{ form_end(caducidadForm) }}
+                        {% else %}
+                            PIDA válido desde: {{ caduca.fechaInicio | date('d-m-Y')}} hasta: {{ caduca.fechaFinal | date('m-d-Y') }}.   vigencia de ( {%  if caducaAnos > 0  %} %} y {{ caducaAnos }} años {% endif %}{{ caducaMeses }} meses con {{ caducaDias }} días  )
+
+                        {% endif %}
                         <table class="table table-bordered">
                             <th>Objetivo Histórico</th>
                             <th>Actividad Docente</th>

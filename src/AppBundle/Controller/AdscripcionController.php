@@ -9,6 +9,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\DocumentosVerificados;
+use AppBundle\Entity\PidaCaducidad;
 use AppBundle\Entity\PidaEstatus;
 use AppBundle\Entity\PidaTareaEspecifico;
 use AppBundle\Form\PidaTareaEspecificoType;
@@ -549,13 +550,44 @@ class AdscripcionController extends Controller
 
         }
 
+        $caducidad = new PidaCaducidad();
+        $caducidadForm = $this->createForm('AppBundle\Form\PidaCaducidadType', $caducidad);
+        $caducidadForm->handleRequest($request);
+        $days = $months = $years = 0;
+        if(!$this->getDoctrine()->getRepository("AppBundle:PidaCaducidad")->findOneByidDocenteServicio($serv)) {
+            $caduca = false;
+        }else{
+            $caduca = $this->getDoctrine()->getRepository("AppBundle:PidaCaducidad")->findOneByidDocenteServicio($serv);
+            $interval = $caduca->getFechaInicio()->diff($caduca->getFechaFinal());
+            $years = $interval->format('%y');
+            $months = $interval->format('%m');
+            $days = $interval->format('%d');
+        }
+
+
+        if ($caducidadForm->isSubmitted() && $caducidadForm->isValid()) {
+            //var_dump($estatusPida->getNombre()->getNombre()); die;
+            $caducidad->setIdDocenteServicio($serv);
+            $em->persist($caducidad);
+
+            $em->flush();
+
+            return $this->redirectToRoute('solicitud_pida');
+
+        }
 
         return $this->render('solicitudes/pida.html.twig', array(
             'form' => $form->createView(),
             'pida'  => $pid,
             'servicio' => $serv,
             'editForm'  => $editForm->createView(),
-            'estatusForm' => $Estatusform->createView()
+            'estatusForm' => $Estatusform->createView(),
+            'caduca'    => $caduca,
+            'caducidad' => $caducidad,
+            'caducaAnos'    => $years,
+            'caducaMeses'    => $months,
+            'caducaDias'    => $days,
+            'caducidadForm'     => $caducidadForm->createView()
         ));
         
         
