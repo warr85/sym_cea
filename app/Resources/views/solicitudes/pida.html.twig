@@ -68,12 +68,17 @@
                             <th>Tarea Específica</th>
                             <th>Plazo</th>
                             <th>Estatus</th>
-                        {% for pid in pida %}
+                        {% for pid in pida | sort %}
                             <tr>
-                        <td rowspan="{{ pid.pidaTareaEspecifico | length }}">{{ pid.idPlanHistoricoNacionalEstrategico.nombre }}</td>
-                        <td rowspan="{{ pid.pidaTareaEspecifico | length }}">{{ pid.idActividadDocente.nombre }}</td>
+                        <td rowspan="{{ pid.pidaTareaEspecifico | length }}">
+                            {{ pid.idPlanHistoricoNacionalEstrategico.nombre }}
+                            <a data-id="{{ pid.id }}"  id="delete{{ pid.id }}" class="btn btn-xs btn-danger">-</a>
+                        </td>
+                        <td rowspan="{{ pid.pidaTareaEspecifico | length }}">
+                            {{ pid.idActividadDocente.nombre }}
+                        </td>
 
-                        {% for tarea in pid.pidaTareaEspecifico %}
+                        {% for tarea in pid.pidaTareaEspecifico | sort %}
                                 <td>{{ tarea.pidaTareaEspecifico }}
                                     {% if loop.index == loop.length %}
                                         <a data-id="{{ pid.id }}"  id="add_actividad{{ pid.id }}" data-toggle="modal" data-target="#nueva_actividad" class="btn btn-xs btn-warning">+</a>
@@ -82,7 +87,10 @@
                                     {% endif %}
                                 </td>
                                 <td>{{ tarea.idPidaPlazo }}</td>
-                                <td>{{ tarea.idPidaEstatus }}</td>
+                                <td>
+                                    {{ tarea.idPidaEstatus }}
+                                    <a data-id="{{ tarea.id }}"  id="estatus{{ tarea.id }}" data-toggle="modal" data-target="#nuevo_estatus" class="btn btn-xs btn-default">.</a>
+                                </td>
 
                             </tr>
                         {% endfor %}
@@ -129,6 +137,37 @@
 
         </div>
     </div>
+
+
+    <div class="modal fade" id="nuevo_estatus" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Nueva Actividad</h4>
+                </div>
+
+                <div class="modal-body">
+                    {% form_theme estatusForm 'bootstrap_3_layout.html.twig' %}
+                    {{ form_start(estatusForm) }}
+                    {{ form_widget(estatusForm) }}
+
+                    <input type="hidden" id="id_estatus" name="id_estatus" value="" >
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-success" name="rechazar" id="rechazar">Añadir Actividad
+
+                    </button>
+                </div>
+                {{ form_end(editForm) }}
+            </div>
+
+        </div>
+    </div>
+
 
 {% endblock %}
 
@@ -223,6 +262,34 @@
 
                 });
             }
+        });
+
+
+        $('[id^="delete"]').click(function() {
+            var x = confirm("eliminar Labor completa: " + $(this).attr('data-id'));
+            if(x) {
+                $.ajax({
+                    method: "POST",
+                    url: "{{ url('ajax_eliminar_labor') }}",
+                    async: true,
+                    cache: false,
+                    data: ({eliminar: $(this).attr('data-id')}),
+                    success: function (data) {
+                        console.log(data);
+                        location.reload();
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        console.log(errorThrown);
+
+                    }
+
+                });
+            }
+        });
+
+        $('[id^="estatus"]').click(function() {
+            alert("presionado: " + $(this).attr('data-id'))
+            $("#id_estatus").val($(this).attr('data-id'));
         });
 
 

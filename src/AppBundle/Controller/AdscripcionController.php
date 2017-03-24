@@ -9,8 +9,10 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\DocumentosVerificados;
+use AppBundle\Entity\PidaEstatus;
 use AppBundle\Entity\PidaTareaEspecifico;
 use AppBundle\Form\PidaTareaEspecificoType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -471,6 +473,16 @@ class AdscripcionController extends Controller
 
         $editForm = $this->createForm('AppBundle\Form\PidaTareaEspecificoType', $tarea);
         $editForm->handleRequest($request);
+
+        $estatusPida = new PidaEstatus();
+        $Estatusform = $this->createFormBuilder($estatusPida)
+            ->add('nombre', EntityType::class, array(
+                'class' => 'AppBundle\Entity\PidaEstatus'
+            ))
+            ->getForm();
+
+        $Estatusform->handleRequest($request);
+
         $em = $this->getDoctrine()->getManager();
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
@@ -520,11 +532,29 @@ class AdscripcionController extends Controller
         }
 
 
+        if ($Estatusform->isSubmitted() && $Estatusform->isValid()) {
+            $id = filter_input(INPUT_POST, 'id_estatus',  FILTER_SANITIZE_SPECIAL_CHARS);
+            //var_dump($estatusPida->getNombre()->getNombre()); die;
+            if($id) {
+                $estatus = $this->getDoctrine()->getRepository("AppBundle:PidaEstatus")->findOneByNombre($estatusPida->getNombre()->getNombre());
+                $tarea = $this->getDoctrine()->getRepository("AppBundle:PidaTareaEspecifico")->findOneById($id);
+                $tarea->setIdPidaEstatus($estatus);
+                $em->persist($tarea);
+
+                $em->flush();
+
+                return $this->redirectToRoute('solicitud_pida');
+            }
+
+        }
+
+
         return $this->render('solicitudes/pida.html.twig', array(
             'form' => $form->createView(),
             'pida'  => $pid,
             'servicio' => $serv,
-            'editForm'  => $editForm->createView()
+            'editForm'  => $editForm->createView(),
+            'estatusForm' => $Estatusform->createView()
         ));
         
         

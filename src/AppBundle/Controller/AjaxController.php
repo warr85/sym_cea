@@ -239,7 +239,7 @@ class AjaxController extends Controller {
 
 
     /**
-     * @Route("/ajax/add/tarea", name="ajax_eliminar_tarea")
+     * @Route("/ajax/eliminar/tarea", name="ajax_eliminar_tarea")
      * @Method({"POST"})
      */
     public function eliminarTareaAction(Request $request){
@@ -256,6 +256,43 @@ class AjaxController extends Controller {
             $em = $this->getDoctrine()->getManager();
             $tarea = $em->getRepository("AppBundle:PidaTareaEspecifico")->findOneById($id);
             $em->remove($tarea);
+            $em->flush();
+
+
+
+
+            $response = new JsonResponse();
+            $response->setStatusCode(200);
+            $response->setData(array(
+                'response' => 'success'
+            ));
+
+            return $response;
+
+
+        }
+
+    }
+
+
+    /**
+     * @Route("/ajax/eliminar/labor", name="ajax_eliminar_labor")
+     * @Method({"POST"})
+     */
+    public function eliminarLaborAction(Request $request){
+
+        if($request->isXmlHttpRequest()){
+            $encoders = array(new JsonEncoder());
+            $normalizers = array(new ObjectNormalizer());
+
+            $serializer = new Serializer($normalizers, $encoders);
+
+            $id = filter_input(INPUT_POST, 'eliminar',  FILTER_SANITIZE_SPECIAL_CHARS);
+
+
+            $em = $this->getDoctrine()->getManager();
+            $pida = $em->getRepository("AppBundle:AdscripcionPida")->findOneById($id);
+            $em->remove($pida);
             $em->flush();
 
 
