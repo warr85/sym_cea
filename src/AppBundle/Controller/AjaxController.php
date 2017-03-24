@@ -311,6 +311,45 @@ class AjaxController extends Controller {
 
     }
 
+
+
+    /**
+     * @Route("/ajax/finalizar/pida", name="ajax_finalizar_pida")
+     * @Method({"POST"})
+     */
+    public function finalizarPidaAction(Request $request){
+
+        if($request->isXmlHttpRequest()){
+            $encoders = array(new JsonEncoder());
+            $normalizers = array(new ObjectNormalizer());
+
+            $serializer = new Serializer($normalizers, $encoders);
+
+            $id = filter_input(INPUT_POST, 'finalizar',  FILTER_SANITIZE_SPECIAL_CHARS);
+
+
+            $em = $this->getDoctrine()->getManager();
+            $servicio = $em->getRepository("AppBundle:DocenteServicio")->findOneById($id);
+            $servicio->setIdEstatus($this->getDoctrine()->getRepository("AppBundle:Estatus")->findOneById(4));
+            $em->persist($servicio);
+            $em->flush();
+
+
+
+
+            $response = new JsonResponse();
+            $response->setStatusCode(200);
+            $response->setData(array(
+                'response' => 'success'
+            ));
+
+            return $response;
+
+
+        }
+
+    }
+
     
     
     /**

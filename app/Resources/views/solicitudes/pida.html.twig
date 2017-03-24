@@ -36,6 +36,7 @@
         </h4>
     </div>
     <div class="row">
+        {% if servicio.idEstatus.id == 2 %}
         <div class="col-md-4">
 
 
@@ -51,14 +52,19 @@
                     </ul>
 
                     <button type="submit" class="btn btn-success">Añadir</button>
-                    <button type="submit" class="btn btn-primary">Añadir y Finalizar</button>
+
                     {{ form_end(form) }}
                 </div>
 
             </div>
         </div>
+        {% endif %}
         {% if pida %}
+        {% if servicio.idEstatus.id == 2 %}
             <div class="col-md-7">
+        {% else %}
+            <div class="col-md-11">
+        {% endif %}
                 <div class="account-container register">
                     <div class="content clearfix">
                         <h2>Mi pida <span class="small" style="float: right;"> Estatus: {{ servicio.idEstatus }}</span></h2>
@@ -94,7 +100,7 @@
                             <tr>
                         <td rowspan="{{ pid.pidaTareaEspecifico | length }}">
                             {{ pid.idPlanHistoricoNacionalEstrategico.nombre }}
-                            <a data-id="{{ pid.id }}"  id="delete{{ pid.id }}" class="btn btn-xs btn-danger">-</a>
+                            {% if servicio.idEstatus.id == 2 %}<a data-id="{{ pid.id }}"  id="delete{{ pid.id }}" class="btn btn-xs btn-danger">-</a>{% endif %}
                         </td>
                         <td rowspan="{{ pid.pidaTareaEspecifico | length }}">
                             {{ pid.idActividadDocente.nombre }}
@@ -103,9 +109,9 @@
                         {% for tarea in pid.pidaTareaEspecifico | sort %}
                                 <td>{{ tarea.pidaTareaEspecifico }}
                                     {% if loop.index == loop.length %}
-                                        <a data-id="{{ pid.id }}"  id="add_actividad{{ pid.id }}" data-toggle="modal" data-target="#nueva_actividad" class="btn btn-xs btn-warning">+</a>
+                                    {% if servicio.idEstatus.id == 2 %}<a data-id="{{ pid.id }}"  id="add_actividad{{ pid.id }}" data-toggle="modal" data-target="#nueva_actividad" class="btn btn-xs btn-warning">+</a>{% endif %}
                                     {% else %}
-                                        <a data-id="{{ tarea.id }}"  id="remove{{ tarea.id }}" class="btn btn-xs btn-danger">-</a>
+                                    {% if servicio.idEstatus.id == 2 %}<a data-id="{{ tarea.id }}"  id="remove{{ tarea.id }}" class="btn btn-xs btn-danger">-</a>{% endif %}
                                     {% endif %}
                                 </td>
                                 <td>{{ tarea.idPidaPlazo }}</td>
@@ -120,8 +126,11 @@
                             </tr>
                         {% endfor %}
                         </table>
+                        {% if servicio.idEstatus.id == 2 %}<button id="finalizarPida" data-servicio="{{ servicio.id }}" class="btn btn-primary">Finalizar PIDA</button>{% endif %}
                     </div>
+
                 </div>
+
             </div>
         {% endif %}
 
@@ -308,6 +317,30 @@
                 });
             }
         });
+
+        $('#finalizarPida').click(function() {
+            var x = confirm("Desea terminal la edición y Finalizar su pida?");
+            if(x) {
+                $.ajax({
+                    method: "POST",
+                    url: "{{ url('ajax_finalizar_pida') }}",
+                    async: true,
+                    cache: false,
+                    data: ({finalizar: $(this).attr('data-servicio')}),
+                    success: function (data) {
+                        console.log(data);
+                        location.reload();
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        console.log(errorThrown);
+
+                    }
+
+                });
+            }
+        });
+
+
 
         $('[id^="estatus"]').click(function() {
             alert("presionado: " + $(this).attr('data-id'))
