@@ -70,7 +70,14 @@ class AppController extends Controller {
             if($caducidad){
                 //saber si el pida actual caducó
                 $hoy = new \DateTime("now");
-                $vencido = (($hoy->diff($caducidad->getFechaFinal())->invert ? true : false));
+                $tiempo = ($hoy->diff($caducidad->getFechaFinal()));
+                if($tiempo->format('%a%') <= 60 && $tiempo->format('%a%') >= 30){
+                    $this->addFlash('warning', 'Estimado docente su PIDA estará vigente sólo por '  . $tiempo->format('%a%') . ' días más' );
+                }else if($tiempo->format('%a%') <= 29){
+                    $this->addFlash('danger', 'Estimado docente dentro de '  . $tiempo->format('%a%') . ' días su PIDA caducará y deberá crear uno nuevo');
+                }
+                //var_dump($tiempo); die;
+                $vencido = ($tiempo->invert ? true : false);
                 if($vencido){
                     $pida->setIdEstatus($this->getDoctrine()->getRepository("AppBundle:Estatus")->findOneById(5));
                     $em->persist($pida);
