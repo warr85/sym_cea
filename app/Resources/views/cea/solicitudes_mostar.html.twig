@@ -269,7 +269,7 @@
                 </div>
 
                 <!-- MOSTRAR ACTIVIDAD PIDA DEL DOCENTE  -->
-                {% if not todo.pida %}
+                {% if not servicioPida %}
                     <p class="alert alert-warning">El Docente no ha registrado todavía su actividad PIDA</p>
                 {% else %}
 
@@ -290,7 +290,7 @@
                             <th>Tarea Específica</th>
                             <th>Plazo</th>
                             <th>Estatus</th>
-                        {% for pid in todo.pida | sort %}
+                        {% for pid in pida | sort %}
                             <tr>
                         <td rowspan="{{ pid.pidaTareaEspecifico | length }}">
                             {{ pid.idPlanHistoricoNacionalEstrategico.nombre }}

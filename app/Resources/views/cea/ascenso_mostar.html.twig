@@ -316,7 +316,7 @@
                 <div class="col-md-12">
                     <div class="account-container full register">
                         <div class="content clearfix">
-                            <h2>PIDA <span class="small" style="float: right;"> Estatus: {{ servicio.idEstatus }}</span></h2>
+                            <h2>PIDA <span class="small" style="float: right;"> Estatus: {{ servicioPida.idEstatus }}</span></h2>
                             <table class="table table-bordered">
                                 <th>Objetivo Histórico</th>
                                 <th>Actividad Docente</th>
@@ -324,6 +324,8 @@
                                 <th>Plazo</th>
                                 <th>Estatus</th>
                                 {% for pid in docente.pida | sort %}
+                                    {#solo  muestre la vigente #}
+                                    {% if pid.idDocenteServicio.id == servicioPida.id %}
                                     <tr>
                                     <td rowspan="{{ pid.pidaTareaEspecifico | length }}">
                                         {{ pid.idPlanHistoricoNacionalEstrategico.nombre }}
@@ -344,6 +346,7 @@
                                     {% endfor %}
 
                                     </tr>
+                                {% endif %}
                                 {% endfor %}
                             </table>
                         </div>

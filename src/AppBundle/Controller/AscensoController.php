@@ -501,9 +501,13 @@ class AscensoController extends Controller
                 array('id' => 'DESC')
             );
         }
-                
-                
-        $pida = $this->getDoctrine()->getRepository('AppBundle:AdscripcionPida')->findOneByIdRolInstitucion($servicio->getIdRolInstitucion());
+
+        $servicioPida = $this->getDoctrine()->getRepository("AppBundle:DocenteServicio")->findOneBy(array(
+            'idRolInstitucion' => $docente,
+            'idServicioCe' => 4),
+            array('id' => 'DESC')
+        );
+        //$pida = $this->getDoctrine()->getRepository('AppBundle:AdscripcionPida')->findOneByIdRolInstitucion($servicio->getIdRolInstitucion());
         $antiguedad = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->findOneBy(array(
             'idRolInstitucion' => $servicio->getIdRolInstitucion(),
             'idServicioCe'  => 1            
@@ -515,7 +519,7 @@ class AscensoController extends Controller
             'ascenso' => $ascenso, 
             'servicio'  => $servicio,
             'escalas' => $escala,            
-            'pida'      => $pida,
+            'servicioPida'      => $servicioPida,
             'antiguedad' => $antiguedad,
             'form' => $form->createView(),
             'docente' => $docente
@@ -737,14 +741,7 @@ class AscensoController extends Controller
        
        $pida = $this->getDoctrine()->getRepository('AppBundle:AdscripcionPida')->findOneByIdRolInstitucion($serviciosAscenso->getIdRolInstitucion());
        $docente = $this->getDoctrine()->getRepository("AppBundle:RolInstitucion")->findOneById($ascenso->getIdRolInstitucion()->getId());
-        return $this->render('cea/ascenso_mostar.html.twig', array(
-            'ascenso'   => $ascenso,
-            'servicio'      => $serviciosAscenso,            
-            'escalas'       => $escala,
-            'pida'          => $pida,
-            'antiguedad' => $antiguedad,
-            'docente'     => $docente
-        ));
+        return $this->redirect($this->generateUrl('cea_ascenso_show', array('id' => $ascenso->getId())));
        
     }
     

@@ -266,6 +266,8 @@
                                 <th>Plazo</th>
                                 <th>Estatus</th>
                                 {% for pid in todo.pida | sort %}
+                                    {#solo  muestre la vigente #}
+                                    {% if pid.idDocenteServicio.id == servicioPida.id %}
                                     <tr>
                                     <td rowspan="{{ pid.pidaTareaEspecifico | length }}">
                                         {{ pid.idPlanHistoricoNacionalEstrategico.nombre }}
@@ -289,6 +291,7 @@
                                     {% endfor %}
 
                                     </tr>
+                                    {% endif %}
                                 {% endfor %}
                             </table>
                         </div>

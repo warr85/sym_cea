@@ -676,14 +676,26 @@ class AdscripcionController extends Controller
         $todo = $em->getRepository("AppBundle:RolInstitucion")->findOneById($servicio->getIdRolInstitucion());
         $servicioPida = $this->getDoctrine()->getRepository("AppBundle:DocenteServicio")->findOneBy(array(
            'idRolInstitucion' => $todo,
-            'idServicioCe' => 4
-        ));
+            'idServicioCe' => 4),
+            array ('id' => 'DESC')
+        );
+        $pida = false;
+
+        if($servicioPida){
+            $pida = $this->getDoctrine()->getRepository("AppBundle:AdscripcionPida")->findBy(array(
+                'idRolInstitucion' => $servicio->getIdRolInstitucion(),
+                'idDocenteServicio' => $servicioPida
+            ));
+        }
+
+
 
 
         return $this->render('cea/solicitudes_mostar.html.twig', array(
             'servicio'  => $servicio,
             'servicioPida' => $servicioPida,
-            'todo'      => $todo
+            'todo'      => $todo,
+            'pida' => $pida
         ));
     }
 
@@ -702,8 +714,9 @@ class AdscripcionController extends Controller
         $todo = $servicio->getIdRolInstitucion();
         $servicioPida = $this->getDoctrine()->getRepository("AppBundle:DocenteServicio")->findOneBy(array(
             'idRolInstitucion' => $todo,
-            'idServicioCe' => 4
-        ));
+            'idServicioCe' => 4),
+            array('id' => 'DESC')
+        );
 
         $form = $this->createForm('AppBundle\Form\AdscripcionEditType');
 
