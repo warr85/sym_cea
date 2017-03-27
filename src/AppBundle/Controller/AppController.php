@@ -53,21 +53,49 @@ class AppController extends Controller {
        
        //si no ha solicitado adscripción regresa a la pagina de adscripcion
         if(!$servicioAdscripcion){ return $this->redirect($this->generateUrl('solicitud_adscripcion')); }
-        
-        
-        
-        $pida = $this->getDoctrine()->getRepository('AppBundle:AdscripcionPida')->
-                findOneBy(array(
+
+
+
+        $pida = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->
+        findOneBy(array(
+            'idRolInstitucion'  =>  $this->getUser()->getIdRolInstitucion()->getId(),
+            'idServicioCe'      =>  4),
+            array('id' => 'DESC')
+        );
+        $em = $this->getDoctrine()->getManager();
+        if(!$pida){
+            return $this->redirect($this->generateUrl('solicitud_pida'));
+        }else{
+            $caducidad = $this->getDoctrine()->getRepository("AppBundle:PidaCaducidad")->findOneByIdDocenteServicio($pida);
+            if($caducidad){
+                //saber si el pida actual caducó
+                $hoy = new \DateTime("now");
+                $vencido = (($hoy->diff($caducidad->getFechaFinal())->invert ? true : false));
+                if($vencido){
+                    $pida->setIdEstatus($this->getDoctrine()->getRepository("AppBundle:Estatus")->findOneById(5));
+                    $em->persist($pida);
+                    $em->flush();
+                    $this->addFlash('danger', 'Su pida Actual venció, por favor registre un nuevo PIDA.');
+                    return $this->redirect($this->generateUrl('solicitud_pida'));
+
+                }
+            }
+
+        }
+
+        $adscripcionPida = $this->getDoctrine()->getRepository('AppBundle:AdscripcionPida')->
+                findBy(array(
                     'idRolInstitucion'  =>  $this->getUser()->getIdRolInstitucion()->getId()                    
         ));
                
         
-        if(!$pida){ return $this->redirect($this->generateUrl('solicitud_pida')); }
+
         
          $escalafon = $this->getDoctrine()->getRepository('AppBundle:DocenteEscala')->findOneBy(
                 array('idRolInstitucion'  => $this->getUser()->getIdRolInstitucion()),
                 array('id' => 'DESC')
-        );
+         );
+
          $tiempoTranscurrido = -1;
          $suffix = "";
          if ($escalafon){
