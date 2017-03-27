@@ -64,4 +64,4 @@ swiftmailer:
     #host:      "%mailer_host%"
     username:  wilmer.ramones@gmail.com
     password:  07102009RR
-    #spool:     { type: memory }
+    spool:     { type: memory }

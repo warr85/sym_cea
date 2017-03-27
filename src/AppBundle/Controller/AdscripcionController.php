@@ -460,6 +460,7 @@ class AdscripcionController extends Controller
              'idServicioCe'      =>  4),
              array('id' => 'DESC')
          );
+         $pid = false;
         if($serv) {
             //si el servicio está cadudado, debe solicitar uno nuevo
             if ($serv->getIdEstatus()->getId() == 5) {
@@ -878,7 +879,7 @@ class AdscripcionController extends Controller
             'idRolInstitucion' => $adscripcion->getIdRolInstitucion()->getId()
         ));
 
-        return $this->redirect($this->generateUrl('cea_adscripcion_show', array('id' => $serviciosAdscripcion->getId())));
+        return $this->redirect($this->generateUrl('aja', array('id' => $serviciosAdscripcion->getId())));
        
     }
     

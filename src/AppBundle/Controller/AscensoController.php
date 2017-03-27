@@ -708,7 +708,7 @@ class AscensoController extends Controller
        $em->persist($serviciosAscenso);       
        $em->persist($ascenso);
        $em->flush();
-       
+
        $message = \Swift_Message::newInstance()
                     ->setSubject('Resultado Ascenso CEA@UBV')
                     ->setFrom('wilmer.ramones@gmail.com')
@@ -724,23 +724,13 @@ class AscensoController extends Controller
                             )
                         ),
                         'text/html'
-                    )                    
+                    )
                 ;
                 $this->get('mailer')->send($message);
-       
+
        $this->addFlash('notice', 'Solicitud Actualizada Correctamente, hemos enviado un correo al docente notificandole los cambios.');
-       
-       $escala = $this->getDoctrine()->getRepository('AppBundle:DocenteEscala')->findBy(array(
-            'idRolInstitucion' => $ascenso->getIdRolInstitucion()->getId()
-        ));
-       
-       $antiguedad = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->findOneBy(array(
-            'idRolInstitucion' => $this->getUser()->getIdRolInstitucion(),
-            'idServicioCe'  => 1            
-        ));
-       
-       $pida = $this->getDoctrine()->getRepository('AppBundle:AdscripcionPida')->findOneByIdRolInstitucion($serviciosAscenso->getIdRolInstitucion());
-       $docente = $this->getDoctrine()->getRepository("AppBundle:RolInstitucion")->findOneById($ascenso->getIdRolInstitucion()->getId());
+
+
         return $this->redirect($this->generateUrl('cea_ascenso_show', array('id' => $ascenso->getId())));
        
     }

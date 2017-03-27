@@ -64,7 +64,7 @@ class AppController extends Controller {
         );
         $em = $this->getDoctrine()->getManager();
         if(!$pida){
-            $this->addFlash('danger', 'Estimado Docente Mientras se verifica su adscripción, le solicitamos que por favor cree su PIDA.');
+            $this->addFlash('warning', 'Estimado Docente Mientras se verifica su adscripción, le solicitamos que por favor cree su PIDA.');
             return $this->redirect($this->generateUrl('solicitud_pida'));
         }else{
             $caducidad = $this->getDoctrine()->getRepository("AppBundle:PidaCaducidad")->findOneByIdDocenteServicio($pida);

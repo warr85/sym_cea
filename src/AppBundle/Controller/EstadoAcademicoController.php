@@ -117,6 +117,7 @@ class EstadoAcademicoController extends Controller {
         $adscripcion = $this->getDoctrine()->getRepository('AppBundle:Adscripcion')->findOneByIdRolInstitucion($servicio->getIdRolInstitucion());
 
         return $this->render('cea/servicios_mostar.html.twig', array(
+            'docente' => $servicio->getIdRolInstitucion(),
             'estado_academico' => $ea, 
             'servicio'  => $servicio,            
         ));
