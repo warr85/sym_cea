@@ -26,17 +26,20 @@
 
 {% block body %}
     <div class="container">
-        <h4 class="alert alert-info"><i class="fa fa-info-circle"></i>
-            Estimado (a) Docente 
-            <strong>{{app.user.idRolInstitucion.idRol.idPersona.primerNombre}}
-                {{app.user.idRolInstitucion.idRol.idPersona.primerApellido}}</strong>,
-            Mientras se verifican sus datos de adscripción, lo invitamos a registrar el PIDA rellenando
-            los datos que solicitamos a continuación
-            
-        </h4>
+        {% for message in app.session.flashBag.get('danger') %}
+            <div class="alert alert-danger">{{ message }}</div>
+        {%endfor %}
+
+        {% for message in app.session.flashBag.get('success') %}
+            <div class="alert alert-success">{{ message }}</div>
+        {%endfor %}
+
+        {% for message in app.session.flashBag.get('warning') %}
+            <div class="alert alert-warning">{{ message }}</div>
+        {%endfor %}
     </div>
     <div class="row">
-        {% if not servicio or servicio.idEstatus.id == 2 %}
+        {% if not servicio or servicio.idEstatus.id == 2 or servicio.idEstatus.id == 5 %}
         <div class="col-md-4">
 
 
@@ -87,7 +90,7 @@
                                 </div>
                                 {{ form_end(caducidadForm) }}
                         {% else %}
-                            PIDA válido desde: {{ caduca.fechaInicio | date('d-m-Y')}} hasta: {{ caduca.fechaFinal | date('m-d-Y') }}.   vigencia de ( {%  if caducaAnos > 0  %} {{ caducaAnos }} años {% endif %}{{ caducaMeses }} meses con {{ caducaDias }} días  )
+                            PIDA válido desde: {{ caduca.fechaInicio | date('d-m-Y')}} hasta: {{ caduca.fechaFinal | date('m-d-Y') }}.   duración total PIDA: ( {%  if caducaAnos > 0  %} {{ caducaAnos }} años {% endif %}{{ caducaMeses }} meses con {{ caducaDias }} días  )
 
                         {% endif %}
                         <table class="table table-bordered">
@@ -117,7 +120,7 @@
                                 <td>{{ tarea.idPidaPlazo }}</td>
                                 <td>
                                     {{ tarea.idPidaEstatus }}
-                                    <a data-id="{{ tarea.id }}"  id="estatus{{ tarea.id }}" data-toggle="modal" data-target="#nuevo_estatus" class="btn btn-xs btn-default">.</a>
+                                    {% if servicio.idEstatus.id != 5 %}<a data-id="{{ tarea.id }}"  id="estatus{{ tarea.id }}" data-toggle="modal" data-target="#nuevo_estatus" class="btn btn-xs btn-default">.</a>{% endif %}
                                 </td>
 
                             </tr>

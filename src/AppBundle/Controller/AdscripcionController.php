@@ -453,19 +453,27 @@ class AdscripcionController extends Controller
         if(!$adscripcion) return $this->redirect($this->generateUrl('solicitud_adscripcion'));
         
         //si ya se tiene PIDA
-         $pid = $this->getDoctrine()->getRepository('AppBundle:AdscripcionPida')->findByIdRolInstitucion(array(
-             'idRolInstitucion' => $this->getUser()->getIdRolInstitucion()->getId()
-         ));
 
-         $serv = false;
+         $serv = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->
+         findOneBy(array(
+             'idRolInstitucion'  =>  $this->getUser()->getIdRolInstitucion()->getId(),
+             'idServicioCe'      =>  4),
+             array('id' => 'DESC')
+         );
+        if($serv) {
+            //si el servicio está cadudado, debe solicitar uno nuevo
+            if ($serv->getIdEstatus()->getId() == 5) {
+                $this->addFlash('warning', 'Su PIDA ha caducado, por ese motivo, se le solicita que cree uno Nuevo');
+                $serv = false;
+                $pid = false;
+            }else{
+                $pid = $this->getDoctrine()->getRepository("AppBundle:AdscripcionPida")->findBy(array(
+                    'idDocenteServicio' => $serv
+                ));
+            }
+        }
 
-         if($pid){
-             $serv = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->
-             findOneBy(array(
-                 'idRolInstitucion'  =>  $this->getUser()->getIdRolInstitucion()->getId(),
-                 'idServicioCe'      =>  4
-             ));
-         }
+
         
         $pida = new AdscripcionPida();
         $tarea = new PidaTareaEspecifico();

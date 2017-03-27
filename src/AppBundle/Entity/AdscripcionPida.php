@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * AdscripcionPida
  *
- * @ORM\Table(name="solicitud_pida", uniqueConstraints={@ORM\UniqueConstraint(name="pida_id_rol_institucion_key", columns={"id_rol_institucion", "id_plan_historico_nacional_estrategico", "id_actividad_docente"})})
+ * @ORM\Table(name="solicitud_pida", uniqueConstraints={@ORM\UniqueConstraint(name="pida_id_rol_institucion_key", columns={"id_rol_institucion", "id_plan_historico_nacional_estrategico", "id_actividad_docente", "id_docente_servicio"})})
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks()
  */

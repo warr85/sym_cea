@@ -64,16 +64,20 @@ class AppController extends Controller {
         );
         $em = $this->getDoctrine()->getManager();
         if(!$pida){
+            $this->addFlash('danger', 'Estimado Docente Mientras se verifica su adscripción, le solicitamos que por favor cree su PIDA.');
             return $this->redirect($this->generateUrl('solicitud_pida'));
         }else{
             $caducidad = $this->getDoctrine()->getRepository("AppBundle:PidaCaducidad")->findOneByIdDocenteServicio($pida);
             if($caducidad){
                 //saber si el pida actual caducó
                 $hoy = new \DateTime("now");
+
                 $tiempo = ($hoy->diff($caducidad->getFechaFinal()));
+                $vigente = $tiempo->invert ? false : true;
                 if($tiempo->format('%a%') <= 60 && $tiempo->format('%a%') >= 30){
-                    $this->addFlash('warning', 'Estimado docente su PIDA estará vigente sólo por '  . $tiempo->format('%a%') . ' días más' );
-                }else if($tiempo->format('%a%') <= 29){
+                    $suffix = ( $tiempo->invert ? ' venció hace' : 'estará viegene por' );
+                    $this->addFlash('warning', 'Estimado docente su PIDA '  . $suffix . $tiempo->format('%a%') . ' días más' );
+                }else if($tiempo->format('%a%') <= 29  && $vigente){
                     $this->addFlash('danger', 'Estimado docente dentro de '  . $tiempo->format('%a%') . ' días su PIDA caducará y deberá crear uno nuevo');
                 }
                 //var_dump($tiempo); die;
