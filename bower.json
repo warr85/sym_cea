@@ -21,6 +21,7 @@
     "font-awesome": "fontawesome#^4.6.3",
     "lightbox2": "lightbox#^2.8.2",
     "animate.css": "^3.5.2",
-    "smooth-scroll": "https://github.com/cferdinandi/smooth-scroll.git#^9.1.4"    
+    "smooth-scroll": "https://github.com/cferdinandi/smooth-scroll.git#^9.1.4",
+    "simple-line-icons": "^2.4.1"
   }
 }
