@@ -879,7 +879,7 @@ class AdscripcionController extends Controller
             'idRolInstitucion' => $adscripcion->getIdRolInstitucion()->getId()
         ));
 
-        return $this->redirect($this->generateUrl('aja', array('id' => $serviciosAdscripcion->getId())));
+        return $this->redirect($this->generateUrl('cea_servicio_show', array('id' => $serviciosAdscripcion->getId())));
        
     }
     
