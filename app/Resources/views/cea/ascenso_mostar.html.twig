@@ -163,7 +163,7 @@
                                     {% set cantidadJurado = 6 %}
                                      <div id="seccion_jurados" class="well">
                                          <ul>
-                                    {% for tutor in ascenso.tutoresAscenso %}                                        
+                                    {% for tutor in ascenso.tutores %}
                                         {% if loop.length == 6 %} 
                                             {% set anadirJurado = false %}
                                         {% else %}
@@ -172,8 +172,8 @@
                                        
                                     <li id="well_{{tutor.id}}">
                                         
-                                        <strong>{{ tutor.nombres }}  {{ tutor.apellidos }}:</strong>
-                                        {{ tutor.institucion }} -> {{ tutor.idEscala.nombre }}
+                                        <strong>{{ tutor.idTutor.nombres }}  {{ tutor.idTutor.apellidos }}:</strong>
+                                        {{ tutor.idTutor.institucion }} -> {{ tutor.idTutor.idEscala.nombre }}
                                         <input type="button" class="btn btn-warning btn-xs" value="act" id="actualizar_tutor">
                                         <input type="button" class="btn btn-danger btn-xs eliminar_jurado" value="X" id="{{ tutor.id }}">
                                     </li>
@@ -380,7 +380,7 @@
                cache: false,    
                data: ({ eliminar: eliminado, ascensoId: {{ ascenso.id }} }),
                success: function (data) {
-                        alert(cantidad);                        
+                        alert(cantidad);
                         console.log("esto es id: " + eliminado);
                         $("#well_" + eliminado).remove();
                         cantidad = cantidad + 1;

@@ -100,13 +100,7 @@ class TutoresAscenso
     protected $idEscala;
     
     
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Ascenso", mappedBy="tutoresAscenso")
-     */
-    protected $ascenso;
-   
+
 
     
 
@@ -317,44 +311,5 @@ class TutoresAscenso
         return $this->idEstado;
     }
     
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->ascenso = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
-    /**
-     * Add ascenso
-     *
-     * @param \AppBundle\Entity\Ascenso $ascenso
-     * @return TutoresAscenso
-     */
-    public function addAscenso(\AppBundle\Entity\Ascenso $ascenso)
-    {
-        $this->ascenso[] = $ascenso;
-
-        return $this;
-    }
-
-    /**
-     * Remove ascenso
-     *
-     * @param \AppBundle\Entity\Ascenso $ascenso
-     */
-    public function removeAscenso(\AppBundle\Entity\Ascenso $ascenso)
-    {
-        $this->ascenso->removeElement($ascenso);
-    }
-
-    /**
-     * Get ascenso
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getAscenso()
-    {
-        return $this->ascenso;
-    }
 }

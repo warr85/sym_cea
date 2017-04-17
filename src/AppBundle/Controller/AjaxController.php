@@ -7,6 +7,7 @@
  */
 
 namespace AppBundle\Controller;
+use AppBundle\Entity\AscensoTutores;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -202,19 +203,25 @@ class AjaxController extends Controller {
             $ascensoId = filter_input(INPUT_POST, 'ascensoId', FILTER_SANITIZE_SPECIAL_CHARS);
             
             
-            $ascenso = $this->getDoctrine()->getRepository("AppBundle:Ascenso")->findOneById($ascensoId);
-            
+           $ascenso = $this->getDoctrine()->getRepository("AppBundle:Ascenso")->findOneById($ascensoId);
+           $em = $this->getDoctrine()->getManager();
             foreach ($jurados as $jurado){
                 $adicionar = $this->getDoctrine()->getRepository("AppBundle:TutoresAscenso")->findOneById($jurado);
-                $ascenso->addTutoresAscenso($adicionar);
-                $nuevos_nombres[] = $adicionar->getNombres() . " " . $adicionar->getApellidos(); 
-                $nuevos_institucion[] = $adicionar->getInstitucion() . " -> " . $adicionar->getIdEscala()->getNombre();
-                $nuevos_id[] = $adicionar->getId();
+                $ascensoTutor = new AscensoTutores();
+                $ascensoTutor->setIdAscenso($ascenso);
+                $ascensoTutor->setIdTutor($adicionar);
+                $ascensoTutor->setIdEstatus($em->getRepository("AppBundle:Estatus")->findOneById(2));
+                $em->persist($ascensoTutor);
+                $em->flush();
+
+                $nuevos_nombres[] = $ascensoTutor->getIdTutor()->getNombres() . " " . $ascensoTutor->getIdTutor()->getApellidos();
+                $nuevos_institucion[] = $ascensoTutor->getIdTutor()->getInstitucion() . " -> " . $ascensoTutor->getIdTutor()->getIdEscala()->getNombre();
+                $nuevos_id[] = $ascensoTutor->getIdTutor()->getId();
             }
             
             
             
-            $em = $this->getDoctrine()->getManager();
+
             $em->persist($ascenso);
             $em->flush();
             
@@ -370,19 +377,20 @@ class AjaxController extends Controller {
             $eliminar = filter_input(INPUT_POST, 'eliminar', FILTER_SANITIZE_SPECIAL_CHARS);
             $ascensoId = filter_input(INPUT_POST, 'ascensoId', FILTER_SANITIZE_SPECIAL_CHARS);
             
-            
-            $ascenso = $this->getDoctrine()->getRepository("AppBundle:Ascenso")->findOneById($ascensoId);
-            
-            
-                $quitarJurado = $this->getDoctrine()->getRepository("AppBundle:TutoresAscenso")->findOneById($eliminar);
-                $ascenso->removeTutoresAscenso($quitarJurado);
+
+
+           $quitarJurado = $this->getDoctrine()->getRepository("AppBundle:AscensoTutores")->findOneById($eliminar);
+
+           if (!$quitarJurado) {
+               throw $this->createNotFoundException('no se encontró el jurado solicitado');
+           }
             
             
             
             
             $em = $this->getDoctrine()->getManager();
-            $em->persist($ascenso);
-            $em->flush();
+           $em->remove($quitarJurado);
+           $em->flush();
             
             $response = new JsonResponse();
             $response->setStatusCode(200);

@@ -48,6 +48,11 @@ class Ascenso
      * })
      */
     protected $idEscalafones;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\AscensoTutores", mappedBy="idAscenso")
+     */
+    private $tutores;
     
 
 
@@ -113,21 +118,6 @@ class Ascenso
     protected $idEstatus;
     
     
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\TutoresAscenso", inversedBy="ascenso")
-     * @ORM\JoinTable(name="ascenso_tutor",
-     *   joinColumns={
-     *     @ORM\JoinColumn(name="ascenso_id", referencedColumnName="id", nullable=false)
-     *   },
-     *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="tutor_id", referencedColumnName="id", nullable=false)
-     *   }
-     * )
-     */
-    protected $tutoresAscenso;
-
 
    /**
    * @ORM\PrePersist
@@ -299,47 +289,6 @@ class Ascenso
   
 
     /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->tutoresAscenso = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
-     * Add tutoresAscenso
-     *
-     * @param \AppBundle\Entity\TutoresAscenso $tutoresAscenso
-     * @return Ascenso
-     */
-    public function addTutoresAscenso(\AppBundle\Entity\TutoresAscenso $tutoresAscenso)
-    {
-        $this->tutoresAscenso[] = $tutoresAscenso;
-
-        return $this;
-    }
-
-    /**
-     * Remove tutoresAscenso
-     *
-     * @param \AppBundle\Entity\TutoresAscenso $tutoresAscenso
-     */
-    public function removeTutoresAscenso(\AppBundle\Entity\TutoresAscenso $tutoresAscenso)
-    {
-        $this->tutoresAscenso->removeElement($tutoresAscenso);
-    }
-
-    /**
-     * Get tutoresAscenso
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getTutoresAscenso()
-    {
-        return $this->tutoresAscenso;
-    }
-    
-    /**
      * 
      * @return string
      */
@@ -441,5 +390,45 @@ class Ascenso
     public function getTesisUbv()
     {
         return $this->tesisUbv;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->tutores = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add tutores
+     *
+     * @param \AppBundle\Entity\AscensoTutores $tutores
+     * @return Ascenso
+     */
+    public function addTutore(\AppBundle\Entity\AscensoTutores $tutores)
+    {
+        $this->tutores[] = $tutores;
+
+        return $this;
+    }
+
+    /**
+     * Remove tutores
+     *
+     * @param \AppBundle\Entity\AscensoTutores $tutores
+     */
+    public function removeTutore(\AppBundle\Entity\AscensoTutores $tutores)
+    {
+        $this->tutores->removeElement($tutores);
+    }
+
+    /**
+     * Get tutores
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTutores()
+    {
+        return $this->tutores;
     }
 }

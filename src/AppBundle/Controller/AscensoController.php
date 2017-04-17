@@ -9,6 +9,7 @@
 namespace AppBundle\Controller;
 
 
+use AppBundle\Entity\AscensoTutores;
 use AppBundle\Entity\DocumentosVerificados;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -262,7 +263,12 @@ class AscensoController extends Controller
             
             $tutores = $form->get('tutores_ascenso')->getData();
             foreach ($tutores as $tutor){
-                $ascenso->addTutoresAscenso($tutor);
+                $ascensoTutor = new AscensoTutores();
+                $ascensoTutor->setIdAscenso($ascenso);
+                $ascensoTutor->setIdTutor($tutor);
+                $ascensoTutor->setIdEstatus($em->getRepository("AppBundle:Estatus")->findOneById(2));
+                $em->persist($ascensoTutor);
+                $em->flush();
             }
             
             
