@@ -7,12 +7,11 @@
             <link rel="stylesheet" href="{{ asset('assets/vendor/bootstrap/dist/css/bootstrap.min.css') }}">
             <link rel="stylesheet" href="{{ asset('assets/vendor/font-awesome/css/font-awesome.css') }}">
             <link rel="stylesheet" href="{{ asset('assets/vendor/AppBundle/main.css') }}">
-            <link rel="stylesheet" href="{{ asset('assets/vendor/simple-line-icons/css/simple-line-icons.css') }}">
             <style>
-            .fade.in {
-                opacity: 0.8;
-                background-color:#398439;
-            }
+                .fade.in {
+                    opacity: 0.8;
+                    background-color:#398439;
+                }
             </style>
         {% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
@@ -267,6 +266,7 @@
                                 <li><a href="{{ path('cea_solicitudes_estado_academico' ) }}">Estado Académico </a></li>
                                 <li><a href="{{ path('cea_solicitudes_recocimiento_antiguedad') }}">Antiguedad</a></li>
                                 <li><a href="{{ path('cea_solicitud_recocimiento_escala') }}">Reconocer Ascenso</a></li>
+                                <li><a href="{{ path('cea_solicitud_acta_defensa') }}">Acta Defensa</a></li>
                             </ul>
                         </li>
                         {% else %}

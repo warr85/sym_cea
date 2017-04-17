@@ -1,0 +1,27 @@
+{% extends 'base_app.html.twig' %}
+
+
+{% block body %}
+    <div class="container">
+        <h4 class="alert alert-info"><i class="fa fa-info-circle"></i>
+            Estimado (a) Docente 
+            <strong>{{app.user.idRolInstitucion.idRol.idPersona.primerNombre}}
+                {{app.user.idRolInstitucion.idRol.idPersona.primerApellido}}</strong>,
+            Aqui podra enviar el Digital de la resolución de Consejo Universitario.
+            
+        </h4>
+
+    <div class="panel panel-white">
+        <div class="panel-body clearfix">
+            <h1>Enviar Resolución</h1>
+            <p>Por favor adjunte digital de la aprobación de Defensa a {{ tipo }} por parte de Consejo Universitario</p>
+            {% form_theme form 'bootstrap_3_layout.html.twig' %}        
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+            {{ form_widget(form) }}
+            {{ form_end(form) }}
+        </div>
+        
+    </div>
+    </div>
+
+{% endblock %}

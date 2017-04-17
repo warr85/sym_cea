@@ -195,6 +195,11 @@
                                     <p id="falta" class="label label-success" data-faltaid = '0'>
                                         El docente completó los 6 Jurados Propuestos
                                     </p>
+                                    {% form_theme form 'bootstrap_3_layout.html.twig' %}
+                                    {{ form_start(form) }}
+                                    {{ form_widget(form) }}
+                                    {{ form_end(form) }}
+                                    <button class="btn btn-primary btn-sm" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Añadiendo..." id="anadirJurados">Añadir Jurados</button>
                                 {% endif %}
                             
                             
@@ -275,6 +280,56 @@
 
                     </div>
                 </div>
+                    <!-- MOSTRAR ACTIVIDAD PIDA DEL DOCENTE  -->
+                    {% if not docente.pida %}
+                        <p class="alert alert-warning">El Docente no ha registrado todavía su actividad PIDA</p>
+                    {% else %}
+                        <div class="col-md-12">
+                            <div class="account-container full register">
+                                <div class="content clearfix">
+                                    <h2>PIDA <span class="small" style="float: right;"> Estatus: {{ servicioPida.idEstatus }}</span></h2>
+                                    <table class="table table-bordered">
+                                        <th>Objetivo Histórico</th>
+                                        <th>Actividad Docente</th>
+                                        <th>Tarea Específica</th>
+                                        <th>Plazo</th>
+                                        <th>Estatus</th>
+                                        {% for pid in docente.pida | sort %}
+                                            {#solo  muestre la vigente #}
+                                            {% if pid.idDocenteServicio.id == servicioPida.id %}
+                                                <tr>
+                                                <td rowspan="{{ pid.pidaTareaEspecifico | length }}">
+                                                    {{ pid.idPlanHistoricoNacionalEstrategico.nombre }}
+                                                </td>
+                                                <td rowspan="{{ pid.pidaTareaEspecifico | length }}">
+                                                    {{ pid.idActividadDocente.nombre }}
+                                                </td>
+
+                                                {% for tarea in pid.pidaTareaEspecifico | sort %}
+                                                    <td>{{ tarea.pidaTareaEspecifico }}
+                                                    </td>
+                                                    <td>{{ tarea.idPidaPlazo }}</td>
+                                                    <td>
+                                                        {{ tarea.idPidaEstatus }}
+                                                    </td>
+
+                                                    </tr>
+                                                {% endfor %}
+
+                                                </tr>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+
+
+
+                    <!-- Modal -->
+
+            </div>
 
                     <div class="modal fade" id="motivo_rechazo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                         <div class="modal-dialog" role="document">
@@ -309,56 +364,7 @@
                     {% endif %}
                 </form>
             </div>
-            <!-- MOSTRAR ACTIVIDAD PIDA DEL DOCENTE  -->
-            {% if not docente.pida %}
-                <p class="alert alert-warning">El Docente no ha registrado todavía su actividad PIDA</p>
-            {% else %}
-                <div class="col-md-12">
-                    <div class="account-container full register">
-                        <div class="content clearfix">
-                            <h2>PIDA <span class="small" style="float: right;"> Estatus: {{ servicioPida.idEstatus }}</span></h2>
-                            <table class="table table-bordered">
-                                <th>Objetivo Histórico</th>
-                                <th>Actividad Docente</th>
-                                <th>Tarea Específica</th>
-                                <th>Plazo</th>
-                                <th>Estatus</th>
-                                {% for pid in docente.pida | sort %}
-                                    {#solo  muestre la vigente #}
-                                    {% if pid.idDocenteServicio.id == servicioPida.id %}
-                                    <tr>
-                                    <td rowspan="{{ pid.pidaTareaEspecifico | length }}">
-                                        {{ pid.idPlanHistoricoNacionalEstrategico.nombre }}
-                                    </td>
-                                    <td rowspan="{{ pid.pidaTareaEspecifico | length }}">
-                                        {{ pid.idActividadDocente.nombre }}
-                                    </td>
 
-                                    {% for tarea in pid.pidaTareaEspecifico | sort %}
-                                        <td>{{ tarea.pidaTareaEspecifico }}
-                                        </td>
-                                        <td>{{ tarea.idPidaPlazo }}</td>
-                                        <td>
-                                            {{ tarea.idPidaEstatus }}
-                                        </td>
-
-                                        </tr>
-                                    {% endfor %}
-
-                                    </tr>
-                                {% endif %}
-                                {% endfor %}
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            {% endif %}
-
-
-
-                         <!-- Modal -->
-
-        </div>
         
     </div>
 {% endblock %}
