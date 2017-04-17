@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>{% block title %}CEA | UBV!{% endblock %}</title>
+        {% block stylesheets %}
+            <link rel="stylesheet" href="{{ asset('assets/vendor/bootstrap/dist/css/bootstrap.min.css') }}">
+            <link rel="stylesheet" href="{{ asset('assets/vendor/font-awesome/css/font-awesome.min.css') }}">
+            <style>
+                p{
+                    padding: 0;
+                    margin: 0;
+                }
+                
+                
+                .cuerpo-memo{
+                   line-height: 33px;
+                   text-indent: 30px;
+                   padding: 10px;                   
+                }
+                
+                header p{
+                    font-size: 12px;
+                }
+                
+                .firma{
+                    margin-top: 60px;
+                }
+                .firma p{
+                    
+                    font-size: 10px;
+                }
+                
+                footer{
+                    margin-top:20px;
+                }
+                
+                footer p{
+                    font-size: 10px;
+                }
+            </style>
+        {% endblock %}
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+    </head>
+    <body >
+        <div class="container">
+            {% block encabezado %} 
+
+                <header>
+                    <table>
+                        <tr>
+                            <td>
+                                <div >
+                                    <img width="50%" src="{{ asset('bundles/framework/images/portal/logo_ubv.png')}}" />
+                                </div>
+                            </td>
+                            <td >
+                                <div class="text-center">
+                                    <p>República Bolivariana de Venezuela</p>
+                                    <p>Ministerio para el Poder Popular de la Educación Universitaria</p>
+                                    <p>Universidad Bolivariana de Venezuela</p>
+                                    <p>Rectorado</p>
+                                    <p>Dirección General de Apoyo Socio Administrativo</p>
+                                    <p>Centro de Estudios Ambientales</p>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>                   
+                </header>
+
+            {% endblock %}
+        
+
+            <div class="row">
+                <div class="text-center"><br><br>
+                    <p><strong>ACTA DE ASCENSO A LA CATEGORÍA ACADÉMICA</strong></p>
+                    <p><strong>INFORME DE PERTINENCIA DE TRABAJO ESPECIAL DE GRADO O INVESTIGACIÓN</strong></p>
+                </div>
+            </div>
+                
+           {%block cuerpo %}
+               <div class="cuerpo-memo">
+               <p class="text-justify">
+                   Quienes suscriben: (Nombres, Apellidos, Nº Cédula de Identidad y Categoría Académica)</p>
+               <table class="table table-condensed tabler-bordered">
+                    {% block jurados %} {% endblock %}
+               </table>
+
+               <p>
+                   Miembros del Comité Académico designado por el Consejo Universitario de la Universidad Bolivariana de
+                    Venezuela conforme a la Resolución N° {% block resolucion %}{% endblock %}, para valorar,
+                    CONTEXTUALIZACIÓN, PRESENTACIÓN Y ARTICULACIÓN DEL Trabajo de Ascenso presentado por la
+                    Profesora:  {% block docente %} {% endblock %} bajo la Modalidad de {% block modalidad1 %} {% endblock %}
+                    a los fines de su Ascenso en el Escalafón Universitario a la Categoría de {% block categoria1 %}{% endblock %}
+                   dejan  constancia de lo siguiente:
+               </p>
+               <ol>
+                   <li>
+                       Actuó como Coordinador(a) del Comité Académico el (la) Profesor(a)  {% block presidente %}{% endblock %}
+                   </li>
+
+                   <li>
+                       Se revisó, por cada uno de los Miembros del Comité Académico,  el Trabajo de
+                       Investigación como Trabajo de Ascenso, titulado:  {% block titulo %}{% endblock %}
+                   </li>
+
+                   <li>
+                       Reunidos el día 03 de abril de 2017, en Sede: {% block eje %}{% endblock %}, UBV, a las _______,
+                       se dio lugar la instalación del Acto Académico Público a fin de proceder a la presentación con
+                       el/la autor(a) y el Comité Académico de conformidad con lo establecido en la Ley de Universidades
+                       y el Reglamento Interno de la Universidad Bolivariana de Venezuela para los/as Trabajadores/as
+                       Académicos/as a optar a la Categoría de profesores/as: {% block categoria2 %}{% endblock %}
+                   </li>
+
+                   <li>
+                       Finalizada la presentación, el comité académico procedió a deliberar y a elaborar el acta de
+                       ascenso a Asistente correspondiente a la Modalidad de {% block modalidad2 %}{% endblock %}
+
+                   </li>
+
+                   <li>
+                       Decisión: De conformidad con la Ley de Universidades y el Reglamento Interno de la
+                       Universidad Bolivariana de Venezuela para los/as Trabajadores/as Académicos/as a
+                       optar a la Categoría de profesores/as: {% block categoria3 %}{% endblock %} se acordó
+                       por:  _____________ la decisión de:   __________    el Trabajo de Investigación.
+                       <p>Por considerar:  _______________________________________________________________________________________
+                           _______________________________________________________________________________________
+                           __________________________________________________________________________________</p>
+                   </li>
+
+                   <li>
+                       Observación (Si fuere el caso): ________________________________________________________
+                   </li>
+
+                   <li>
+                       Mención Publicación (Si fuere el caso): _________________________________________________________
+                       _________________________________________________________________________________________________
+                       _________________________________________________________________________________________________
+                   </li>
+               </ol>
+
+
+               <p>
+                   En fe de lo cual se levanta la presente Acta, en Guanadito a los tres (03) días del mes de Abril de 2017.
+               </p>
+
+
+
+
+</div>
+            {% endblock %}
+
+            <div class="text-center firma">
+<br><br><br><br>
+               <table class="table table-condensed tabler-bordered">
+                  {% block firmas %}{% endblock %}
+               </table>
+
+            </div>
+
+             {% block pie %}
+
+<footer>
+    <div class="row ">
+
+        <div class="col-xs-10 text-right">
+          <p>Av. Leonardo Da Vinci</p>
+                <p>Edif. Universidad Bolivariana de Venezuela</p>
+                <p>Piso 8. Los Chaguaramos</p>
+                <p>Telf. 0212- 606.3449</p>
+                <p>RIF. G - 20003773-3</p>
+                <p>www.ubv.edu.ve - @ubv</p>
+                <p class="text-center">"Sembramos Saberes Cosechamos Patria"</p>
+        </div>
+        <div class="col-xs-2 push-left">
+            <img width="80%" src="{{ asset('bundles/framework/images/memorando/logoJuventud.jpg')}}" />
+            </div>
+
+
+        </div>
+
+
+    </footer>
+    </div>
+                
+
+            {% endblock %}
+        
+        </div><!-- Containter -->
+        {% block body %}
+            
+            {% block principal %} {% endblock %}
+
+        {% endblock %}
+
+        {% block javascripts %}
+            <script type="text/javascript" src="{{ asset('assets/vendor/jquery/dist/jquery.min.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('assets/vendor/bootstrap/dist/js/bootstrap.min.js') }}" ></script>
+        {% endblock %}
+    </body>
+</html>

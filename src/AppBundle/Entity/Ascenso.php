@@ -49,16 +49,14 @@ class Ascenso
      */
     protected $idEscalafones;
 
+
+
     /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\AscensoTutores", mappedBy="idAscenso")
      */
     private $tutores;
-    
 
 
-    
-    
-    
     /**
      * @ORM\Column(name="nombre_nucleo", type="string", nullable=true, options={"comment" = "Nombre del núcleo de investigación"})
      * @Assert\NotBlank(message="El nombre del núcleo de investigación es obligatorio.")

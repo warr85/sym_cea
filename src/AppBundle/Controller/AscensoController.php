@@ -506,16 +506,17 @@ class AscensoController extends Controller
         }
 
 
-        $solicitudAscenso = $this->getDoctrine()->getRepository('AppBundle:Ascenso')->findOneBy(
+        $solicitudDefensa = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->findOneBy(
             array(
                 'idRolInstitucion'  => $this->getUser()->getIdRolInstitucion(),
-                'idEstatus'         => 1
-            )
+                'idServicioCe'      => 7
+            ),
+            array('id' => 'DESC')
         );
 
 
-        if(!$solicitudAscenso){
-            $this->addFlash('danger', 'Estimado Docente, No posee ninguna solicitud de Ascenso Activa.');
+        if($solicitudDefensa->getIdEstatus()->getId() == 1 || $solicitudDefensa->getIdEstatus()->getId() == 2 ){
+            $this->addFlash('warning', 'Estimado Docente, Ya posee una solicitud Activa.');
             return $this->redirect($this->generateUrl('cea_index'));
         }
 
@@ -560,7 +561,7 @@ class AscensoController extends Controller
             'solicitudes/acta_defensa.html.twig',
             array(
                 'form' => $form->createView(),
-                'tipo'  => 'Ascenso ' . $solicitudAscenso->getIdEscalafones()->getNombre()
+                'tipo'  => 'Ascenso ' . $solicitudDefensa->getIdEscalafones()->getNombre()
             )
         );
 
@@ -891,6 +892,87 @@ class AscensoController extends Controller
         return $this->redirect($this->generateUrl('cea_ascenso_show', array('id' => $serviciosAscenso->getId())));
        
     }
+
+
+
+    /**
+     * Encuentra y muestra una entidad de tipo Adscripción.
+     *
+     * @Route("/solicitudes/acta_defensa_edit/{id}", name="cea_acta_defensa_actualizar")
+     * @Method({"GET", "POST"})
+     * @Security("has_role('ROLE_COORDINADOR_REGIONAL')")
+     */
+    public function actaDefensaEditAction(Ascenso $ascenso, Request $request)
+    {
+        $mensaje = "";
+        //$adscripciones = $this->getDoctrine()->getRepository('AppBundle:Adscripcion')->findOneById($adscripcion->getId());
+        $servicioDefensa = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->findOneBy(array(
+            'idRolInstitucion'   => $ascenso->getIdRolInstitucion(),
+            'idServicioCe'       => 7,
+            'idEstatus'          => 2
+        ));
+
+        $parametros = $request->request->all();
+        $resolucion = $parametros["resolucion"];
+
+        $user = $this->getDoctrine()->getRepository('AppBundle:Usuarios')->findOneByIdRolInstitucion($ascenso->getIdRolInstitucion());
+
+        if(isset($parametros['aprobado'])) {
+            $servicioDefensa->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(1));
+
+        }else{
+            $mensaje = $request->request->get('message-text');
+            $servicioDefensa->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(3));
+        }
+
+        $em = $this->getDoctrine()->getManager();
+
+
+        //Guardar el resultado de la verificación de Documentos
+        foreach ($parametros as $key => $value){
+            if($key === 'defensa') {
+                verificar_documentos2($user->getIdRolInstitucion(), 17, $value, $em, "", $servicioDefensa);
+            }
+            if (strpos($key, "jurado") !== false) {
+                $jur = explode("_", $key);
+                $actualizar = $this->getDoctrine()->getRepository("AppBundle:AscensoTutores")->findOneById($jur[1]);
+                $estatusTutor = $this->getDoctrine()->getRepository("AppBundle:EstatusTutor")->findOneById($value);
+                $actualizar->setIdEstatusTutor($estatusTutor);
+                $actualizar->setResolucion($resolucion);
+                $actualizar->setIdEstatus($this->getDoctrine()->getRepository("AppBundle:Estatus")->findOneById(1));
+                $em->persist($actualizar);
+                $em->flush();
+
+            }
+        }
+        $em->persist($servicioDefensa);
+        $em->flush();
+
+        $message = \Swift_Message::newInstance()
+            ->setSubject('Resultado Acta de defensa CEA@UBV')
+            ->setFrom('wilmer.ramones@gmail.com')
+            ->setTo($user->getEmail())
+            ->setBody(
+                $this->renderView(
+                    'correos/actualizar_ascenso.html.twig',
+                    array(
+                        'nombres'   => $user->getIdRolInstitucion()->getIdRol()->getIdPersona()->getPrimerNombre(),
+                        'apellidos'   => $user->getIdRolInstitucion()->getIdRol()->getIdPersona()->getPrimerApellido(),
+                        'estatus'   => $servicioDefensa->getIdEstatus(),
+                        'mensaje'   => $mensaje
+                    )
+                ),
+                'text/html'
+            )
+        ;
+        $this->get('mailer')->send($message);
+
+        $this->addFlash('notice', 'Solicitud Actualizada Correctamente, hemos enviado un correo al docente notificandole los cambios.');
+
+
+        return $this->redirect($this->generateUrl('cea_acta_defensa_show', array('id' => $servicioDefensa->getId())));
+
+    }
     
     
     
@@ -972,6 +1054,70 @@ class AscensoController extends Controller
         
         
     }
+
+
+
+    /**
+     * Muestra la página donde explica brevemente el reconocimiento de Antiguedad
+     * y permite realizar la solicitud
+     *
+     * @Route("/mis_servicios/acta_defensa/imprimir/{id}", name="servicio_defensa_imprimir")
+     * @Method({"GET", "POST"})
+     */
+    public function serviciosDefensaImprimirAction(DocenteServicio $servicio){
+
+
+        if ($servicio->getIdEstatus()->getId() == 1){
+
+
+            $ascenso = $this->getDoctrine()->getRepository('AppBundle:Ascenso')->findOneByIdRolInstitucion($servicio->getIdRolInstitucion());
+            $eje = $ascenso->getIdRolInstitucion()->getIdInstitucion()->getIdEjeParroquia()->getIdEje()->getAbreviacion();
+            $tutores = $ascenso->getTutores();
+            $resolucion = $tutores[0]->getResolucion();
+
+            $escala = $this->getDoctrine()->getRepository('AppBundle:DocenteEscala')->findOneBy(
+                array('idRolInstitucion'  => $this->getUser()->getIdRolInstitucion()),
+                array('id' => 'DESC')
+            );
+
+            if(!$escala){
+                $this->addFlash('danger', 'Estimado Docente, todavia no ha concursado, debe concursar primero para poder realizar una solicitud de ascenso.');
+                return $this->redirect($this->generateUrl('cea_index'));
+            }
+
+            $escalafones = $this->getDoctrine()->getRepository("AppBundle:Escalafones")->findOneById($escala->getIdEscala()->getId() + 1); //tiempo para el proximo escalafon
+            foreach ($tutores as $tutor) {
+                if ($tutor->getIdEstatusTutor()->getId() == 1){
+                    $presidente = $tutor;
+                }
+
+            }
+
+            return $this->render('memorando/acta_defensa.html.twig', array(
+                'ascenso'   =>  $ascenso,
+                'eje'           =>  $eje,
+                'resolucion'    => $resolucion,
+                'presidente'    => $presidente,
+                'categoria'     => $escalafones,
+                'jurados'        => $tutores
+            ));
+
+        }else{
+            $this->addFlash('danger', 'No Puede Imprimir el reconocimiento de Adscripcion hasta que esté aprobado por el coordinador del CEA.');
+
+            $servicios = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->findByIdRolInstitucion($this->getUser()->getIdRolInstitucion());
+            $adscripcion = $this->getDoctrine()->getRepository('AppBundle:Adscripcion')->findByIdRolInstitucion($this->getUser()->getIdRolInstitucion());
+
+
+            return $this->render('solicitudes/index.html.twig', array(
+                'servicios' => $servicios,
+                'adscripcion' => $adscripcion
+            ));
+        }
+
+
+    }
+
     
     
     

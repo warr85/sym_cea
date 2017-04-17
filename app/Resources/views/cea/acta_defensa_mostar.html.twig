@@ -101,7 +101,8 @@
     </style>
 {% endblock %}
 
-{%block body %} 
+{%block body %}
+    <form action="{{ path('cea_acta_defensa_actualizar', { 'id': ascenso.id }) }}" method="POST">
     {% set cantidadJurado = 6 %}
      <div class="content-wrapper">
         <div class="container">
@@ -140,7 +141,7 @@
                         
                         {% if escalas is not null %}
                         <div class="form-group">
-                            <label for="Escalafones">{{ cantidadJurado }}Escalafones Obtenidos:</label>
+                            <label for="Escalafones">Escalafones Obtenidos:</label>
                              <table class="table table-striped table-bordered">
                                     <th>Escalafón</th>
                                     <th>Fecha</th>
@@ -153,10 +154,12 @@
                                         <td>{{escala.idTipoEscala }}</td>
                                     </tr>                                                                                                    
                             {%endfor %}
-                            </table>   
-                            
+                            </table>
+
                             <p><strong>Escalafón Solicita:</strong> {{ ascenso.idEscalafones.nombre }} </p>                                
                                   {% set anadirJurado = false  %}
+                                  {% set actualizado = false  %}
+                            {% set resolucion = "" %}
                                 {% if (ascenso.tesisUbv or ascenso.tipoTrabajoInvestigacion == 'investigacion') %}
                                     <h4>Jurados propuestos por el Docente</h4>
                                     {% set anadirJurado = true  %}
@@ -173,13 +176,32 @@
                                     <li id="well_{{tutor.id}}">
                                         
                                         <strong>{{ tutor.idTutor.nombres }}  {{ tutor.idTutor.apellidos }}:</strong>
-                                        {{ tutor.idTutor.institucion }} -> {{ tutor.idTutor.idEscala.nombre }}
-                                        <input type="button" class="btn btn-warning btn-xs" value="act" id="actualizar_tutor">
-                                        <input type="button" class="btn btn-danger btn-xs eliminar_jurado" value="X" id="{{ tutor.id }}">
+                                        {{ tutor.idTutor.institucion }} -> {{ tutor.idTutor.idEscala.nombre }}<br>
+                                        {% if tutor.idEstatusTutor == NULL %}
+                                            {% set actualizado = false  %}
+                                            <input type="button" class="btn btn-warning btn-xs" value="act" id="actualizar_tutor">
+                                            <input type="button" class="btn btn-danger btn-xs eliminar_jurado" value="X" id="{{ tutor.id }}">
+                                            <input type="radio" name="jurado_{{ tutor.id }}" value="1" > Pdte.
+                                            <input type="radio" name="jurado_{{ tutor.id }}" value="2" > Ppal.
+                                            <input type="radio" name="jurado_{{ tutor.id }}" value="3" > Supl.
+                                        {% else %}
+                                            {% set actualizado = true  %}
+                                            {% set resolucion = tutor.resolucion %}
+                                            {% if tutor.idEstatusTutor.id == 1 %} Jurado Presidente {% endif %}
+                                            {% if tutor.idEstatusTutor.id == 2 %} Jurado Principal {% endif %}
+                                            {% if tutor.idEstatusTutor.id == 3 %} Jurado Suplente {% endif %}
+                                        {% endif %}
                                     </li>
-                                    
                                 {% endfor %}
+
+
                                 </ul>
+                                         {% if actualizado == false %}
+                                 <label for="resolucion">Resolución Jurados:</label>
+                                 <input type="text" placeholder="Numero de Resolución..." name="resolucion" id="resolucion" >
+                                             {% else %}
+                                                 <p>Aprobados Bajo Resolución N°: <strong>{{ resolucion }}</strong></p>
+                                 {% endif %}
                                 </div>
                                 {% endif %}
                                 {% if anadirJurado and ascenso.idEstatus.id == 2 %}
@@ -233,7 +255,7 @@
 
                         </div>
                 </div>
-                <form action="{{ path('cea_ascenso_actualizar', { 'id': ascenso.id }) }}" method="POST">
+
                 <div class="col-md-5">    
                      <h3>Documentos Consignados</h3>    
                      <div class="widget-content">
@@ -465,8 +487,8 @@
 
             if (buttonpressed == "aprobado") {
                 for (var i = 0; i < $(':radio:checked', this).length; i++) {
-                    console.log($(':radio:checked', this)[i]);
-                    if (($(':radio:checked', this)[i].value == "3")) {
+                    console.log($(':radio:checked', this)[i].name);
+                    if (($(':radio:checked', this)[i].value == "3") && (!$(':radio:checked', this)[i].name.include("jurado"))) {
                         alert('No puedes aprobar una solicitud con documentos en estatus de rechazado');
                         $("#aprobado").button('reset');
                         return false;

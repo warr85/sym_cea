@@ -1,0 +1,66 @@
+{% extends 'base_acta.html.twig' %}
+
+
+     {% block jurados %}
+        <th>Nombres y Apellidos</th>
+         <th>Cédula Identidad</th>
+         <th>Categoría</th>
+        {% for jurado in jurados %}
+            <tr>
+                <td>{{ jurado.idTutor.nombres }}</td>
+                <td>{{ jurado.idTutor.cedulaPasaporte }}</td>
+                <td>{{ jurado.idTutor.idEscala.nombre }}</td>
+            </tr>
+
+        {% endfor %}
+
+     {% endblock %}
+
+     {% block resolucion %}
+        {{ resolucion }}
+     {% endblock %}
+
+     {% block presidente %}
+         {{ presidente.idTutor.nombres }} {{ presidente.idTutor.apellidos }} {{ presidente.idTutor.cedulaPasaporte }}
+     {% endblock %}
+
+     {% block titulo %}
+         {{ ascenso.tituloTrabajo }}
+     {% endblock %}
+
+     {% block categoria1 %}
+         {{ categoria }}
+     {% endblock %}
+     {% block categoria2 %}
+         {{ categoria }}
+     {% endblock %}
+     {% block categoria3 %}
+         {{ categoria }}
+     {% endblock %}
+
+     {% block modalidad1 %}
+         {{ ascenso.tipoTrabajoInvestigacion }}
+     {% endblock %}
+
+     {% block modalidad2 %}
+         {{ ascenso.tipoTrabajoInvestigacion }}
+     {% endblock %}
+
+    {% block firmas %}
+        <tr>
+            {% for jurado in jurados %}
+                <td> {{ jurado.idTutor.cedulaPasaporte }} <br><br></td>
+            {% endfor %}
+        </tr>
+    {% endblock %}
+ 
+ {%block javascripts %} 
+     {{ parent() }}
+     <script type="text/javascript">
+         
+     window.onload = function () {
+            window.print(); //invoca la impresora tan pronto se carga el documento
+            setTimeout(function () { window.close(); }, 100); //cierra la venta si cierra el dialog de imprimir
+     }
+</script>
+ {% endblock %}

@@ -54,6 +54,11 @@ class AscensoTutores
      */
     protected $idTutor;
 
+    /**
+     * @ORM\Column(name="resolucion", type="string", nullable=true, options={"comment" = "resolucion aprobación de Jurado"})
+     */
+    private $resolucion;
+
 
 
     /**
@@ -181,5 +186,28 @@ class AscensoTutores
     public function getIdEstatus()
     {
         return $this->idEstatus;
+    }
+
+    /**
+     * Set resolucion
+     *
+     * @param string $resolucion
+     * @return AscensoTutores
+     */
+    public function setResolucion($resolucion)
+    {
+        $this->resolucion = $resolucion;
+
+        return $this;
+    }
+
+    /**
+     * Get resolucion
+     *
+     * @return string 
+     */
+    public function getResolucion()
+    {
+        return $this->resolucion;
     }
 }
