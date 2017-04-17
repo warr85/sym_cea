@@ -354,30 +354,10 @@ class AdscripcionController extends Controller
 
                 }
 
-               if ($form->get('documento_asociado')->getData()) {
-                    $escala3 = new DocenteEscala();
-                    $asociado = $this->getDoctrine()->getRepository('AppBundle:Escalafones')->findOneById(3);
-                    $escala3->setIdRolInstitucion($this->getUser()->getIdRolInstitucion());
-                    $escala3->setFechaEscala($form->get('fecha_ascenso_asociado')->getData());
-                    $escala3->setIdEscala($asociado);
-                    $escala3->setIdTipoEscala($this->getDoctrine()->getRepository('AppBundle:TipoAscenso')->findOneById(2));
-                    $em->persist($escala3);
-
-
-                   $constanciaAsociado = $form->get('documento_asociado')->getData();
-                   $nombreAsociado = md5(uniqid()).'.'.$constanciaAsociado->guessExtension();
-                   $constanciaAsociado->move(
-                       $this->container->getParameter('ascenso_directory'),
-                       $nombreAsociado
-                   );
-                   thumbnail($nombreAsociado, $this->container->getParameter('ascenso_directory'), $this->container->getParameter('ascenso_thumb_directory'));
-                   verificar_documentos($this->getUser()->getIdRolInstitucion(), 6, 2, $em, $nombreAsociado, $servicios);
-                }
-
 
                 if ($form->get('documento_agregado')->getData()) {
                     $escala4 = new DocenteEscala();
-                    $agregado = $this->getDoctrine()->getRepository('AppBundle:Escalafones')->findOneById(4);
+                    $agregado = $this->getDoctrine()->getRepository('AppBundle:Escalafones')->findOneById(3);
                     $escala4->setIdRolInstitucion($this->getUser()->getIdRolInstitucion());
                     $escala4->setFechaEscala($form->get('fecha_ascenso_agregado')->getData());
                     $escala4->setIdEscala($agregado);
@@ -393,6 +373,27 @@ class AdscripcionController extends Controller
                     );
                     thumbnail($nombreAgregado, $this->container->getParameter('ascenso_directory'), $this->container->getParameter('ascenso_thumb_directory'));
                     verificar_documentos($this->getUser()->getIdRolInstitucion(), 7, 2, $em, $nombreAgregado, $servicios);
+                }
+
+
+               if ($form->get('documento_asociado')->getData()) {
+                    $escala3 = new DocenteEscala();
+                    $asociado = $this->getDoctrine()->getRepository('AppBundle:Escalafones')->findOneById(4);
+                    $escala3->setIdRolInstitucion($this->getUser()->getIdRolInstitucion());
+                    $escala3->setFechaEscala($form->get('fecha_ascenso_asociado')->getData());
+                    $escala3->setIdEscala($asociado);
+                    $escala3->setIdTipoEscala($this->getDoctrine()->getRepository('AppBundle:TipoAscenso')->findOneById(2));
+                    $em->persist($escala3);
+
+
+                   $constanciaAsociado = $form->get('documento_asociado')->getData();
+                   $nombreAsociado = md5(uniqid()).'.'.$constanciaAsociado->guessExtension();
+                   $constanciaAsociado->move(
+                       $this->container->getParameter('ascenso_directory'),
+                       $nombreAsociado
+                   );
+                   thumbnail($nombreAsociado, $this->container->getParameter('ascenso_directory'), $this->container->getParameter('ascenso_thumb_directory'));
+                   verificar_documentos($this->getUser()->getIdRolInstitucion(), 6, 2, $em, $nombreAsociado, $servicios);
                 }
 
 
