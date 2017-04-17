@@ -1,35 +1,33 @@
 {% extends 'base_app.html.twig' %}
 {% block body %} 
-     <div class="main">       
-         <div class="main-inner">    
+
              <div class="container">                 
                 {% for message in app.session.flashBag.get('notice') %}                                
                     <h4 class="alert alert-success">{{ message }}</h4>                    
                 {%endfor %}
-                 <div class="widget widget-nopad">
-                      <div class="widget-header"> <i class="fa fa-list-alt"></i>            
-                          <h3> CEA@UBV Reconocimiento de Antiguedad</h3>                         
+                 <div class="panel panel-white">
+                      <div class="panel-header">
+                          <h2>CEA@UBV Reconocimiento de Antiguedad</h2>
                       </div>
-                     <div class="widget-content">
-                        <div class="widget big-stats-container">
-                             <div class="widget-content">                                                 
-                                 <h6 class="bigstats">           
+                     <div class="panel-body">
+
+                                 <p>
                                     A través de esta solicitud, el Centro de Estudios ambientales, previa verificación de la documentación enviada,
                                     reconocerá su antigüedad con fines de ascenso en escalafones de la carrera universitaria en esta Institución
                                     tomando en cuenta la resolución de <strong>Consejo Universitario Nº11-42-2015 de fecha 08/07/2015</strong>
                                     que establece en su primer resuelve “Aprobar que la antigüedad administrativa total, acumulada en el lapso 
                                     transcurrido entre el primer contrato como trabajador académico y el Concurso de Oposición.
-                              </h6>
+                              </p>
                                  
-                             </div>   
+
                             <div class="pull-right">
                             <a href="{{ path('cea_crear_servicio_antiguedad')}}" class="btn btn-sm btn-success"><span class="fa fa-check">Crear Solicitud</span></a>
                             <a href="{{ path('cea_index')}}" class="btn btn-sm btn-default"><span class="fa fa-arrow-left">Regresar</span></a>
                             </div>
                         </div>
-                     </div>
-                </div>
-            </div>
+                 </div>
+             </div>
+
         </div>
      </div>
     

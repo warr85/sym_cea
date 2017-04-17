@@ -49,6 +49,8 @@
                                                     <a href="{{ path('cea_ascenso_show', { 'id': servicio.id }) }}"  class="btn btn-xs btn-info"><i class="fa fa-eye"> </i></a>
                                                 {% elseif servicio.idServicioCe.id == 6 %}
                                                     <a href="{{ path('cea_reconocimientoEscala_show', { 'id': servicio.id }) }}"  class="btn btn-xs btn-info"><i class="fa fa-eye"> </i></a>
+                                                {% elseif servicio.idServicioCe.id == 7 %}
+                                                    <a href="{{ path('cea_acta_defensa_show', { 'id': servicio.id }) }}"  class="btn btn-xs btn-info"><i class="fa fa-eye"> </i></a>
                                                 {% endif %}
                                             </td>                       
                                         </tr>
@@ -82,6 +84,8 @@
                                             <a target="_blank" href="{{ path('ascenso_resumen', { 'id': servicio.id }) }}"  class="btn btn-xs btn-warning"><i class="fa fa-print"> </i></a>
                                         {% elseif servicio.idServicioCe.id == 6 %}
                                             <a href="{{ path('cea_reconocimientoEscala_show', { 'id': servicio.id }) }}"  class="btn btn-xs btn-info"><i class="fa fa-eye"> </i></a>
+                                                {% elseif servicio.idServicioCe.id == 7 %}
+                                                    <a href="{{ path('cea_acta_defensa_show', { 'id': servicio.id }) }}"  class="btn btn-xs btn-info"><i class="fa fa-eye"> </i></a>
                                         {% endif %}
                                     </td>
                                 </tr>

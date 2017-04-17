@@ -1,101 +1,110 @@
 {% extends 'base_app.html.twig' %}
-{% block body %} 
+{% block body %}
+    {{ parent() }}
 
-    <div class="main">
-        
-  <div class="main-inner">
-    <div class="container">  
-        
+    <div id="main-wrapper" class="container">
+        <div class="row">
+
+
         {% for message in app.session.flashBag.get('danger') %}
             <div class="alert alert-danger">{{ message }}</div>
         {%endfor %}
-        
+
         {% for message in app.session.flashBag.get('success') %}
             <div class="alert alert-success">{{ message }}</div>
         {%endfor %}
-        
+
         {% for message in app.session.flashBag.get('warning') %}
             <div class="alert alert-warning">{{ message }}</div>
         {%endfor %}
-        
-        {% if not adscrito %} 
+
+        {% if not adscrito %}
             <div class="alert alert-info">
-               <button type="button" class="close" data-dismiss="alert">&times;</button>
-               <strong>Información!</strong> Su solicitud de adscripción se encuentra en revisión.
-               Tan pronto sea activada, se le notificará por el correo institucional y podrá
-               disfrutar de los servicios que ofrecemos
-           </div>
-       {%endif %}
-      <div class="row">
-          <!-- Si no tiene una solicitud de ascenso activa -->
-          {% if ascenso %}
-            {% if ascenso.idEstatus.id > 2  %}
-              {% if tiempoProxEscalafon %}                                    
-                    {% if suffix == '' %}
-                        <h4 class="alert alert-info">
-                        Estimado docente, le recordamos que para solicitar ascenso aun le faltan: 
-                    {% else %}                    
-                        <h4 class="alert alert-warning">
-                        Estimado docente ya tiene el tiempo para solicitar ascenso desde hace: 
-                    {% endif %}
-                        <strong>
-                            {% if tiempoProxEscalafon.y > 0 %} {{ tiempoProxEscalafon.y }} año/s {% endif %}
-                            {% if tiempoProxEscalafon.m > 0 %} {{ tiempoProxEscalafon.m }} mes/es y {%  endif %}
-                            {% if tiempoProxEscalafon.d > 0 %} {{ tiempoProxEscalafon.d }} día/s {% endif %} 
-                        </strong>
-                    </h4>
-                {% endif %}                                                      
-              {% endif %}
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>Información!</strong> Su solicitud de adscripción se encuentra en revisión.
+                Tan pronto sea activada, se le notificará por el correo institucional y podrá
+                disfrutar de los servicios que ofrecemos
+            </div>
+        {%endif %}
+
+        <!-- Si no tiene una solicitud de ascenso activa -->
+        {% if ascenso %}
+        {% if ascenso.idEstatus.id > 2  %}
+        {% if tiempoProxEscalafon %}
+        {% if suffix == '' %}
+        <h4 class="alert alert-info">
+            Estimado docente, le recordamos que para solicitar ascenso aun le faltan:
             {% else %}
-                            {% if tiempoProxEscalafon %}
-                            {% if suffix == '' %}
-                            <h4 class="alert alert-info">
-                                Estimado docente, le recordamos que para solicitar ascenso aun le faltan:
-                                {% else %}
-                                <h4 class="alert alert-warning">
-                                    Estimado docente ya tiene el tiempo para solicitar ascenso desde hace:
-                                    {% endif %}
-                                    <strong>
-                                        {% if tiempoProxEscalafon.y > 0 %} {{ tiempoProxEscalafon.y }} año/s {% endif %}
-                                        {% if tiempoProxEscalafon.m > 0 %} {{ tiempoProxEscalafon.m }} mes/es y {%  endif %}
-                                        {% if tiempoProxEscalafon.d > 0 %} {{ tiempoProxEscalafon.d }} día/s {% endif %}
-                                    </strong>
-                                </h4>
-                                {% endif %}
-                                {% endif %}
-        <div class="col-md-6">
-          <div class="widget widget-nopad">
-            <div class="widget-header"> <i class="fa fa-list-alt"></i>
-                <h3>CEA@UBV{% if adscrito %}: CEA-{{adscripcion.idRolInstitucion.idInstitucion.idEjeParroquia.IdEje.abreviacion}}-{{ adscripcion.anoAdscripcion }}-{{adscripcion.correlativoAdscripcion}}{% endif %}</h3>
-            </div>
-            <!-- /widget-header -->
-            <div class="widget-content">
-              <div class="widget big-stats-container">
-                <div class="widget-content">
-                    
-                    <h6 class="bigstats">                        
-                        Estimado Docente, le damos la más cordial bienvenida al Sistema del 
-                        Centro de Estudios Ambientales (CEA) de la Universidad Bolivariana 
-                        de Venezuela (UBV) CEA@UBV.                        
-                        
-                    </h6>                    
-                  
+            <h4 class="alert alert-warning">
+                Estimado docente ya tiene el tiempo para solicitar ascenso desde hace:
+                {% endif %}
+                <strong>
+                    {% if tiempoProxEscalafon.y > 0 %} {{ tiempoProxEscalafon.y }} año/s {% endif %}
+                    {% if tiempoProxEscalafon.m > 0 %} {{ tiempoProxEscalafon.m }} mes/es y {%  endif %}
+                    {% if tiempoProxEscalafon.d > 0 %} {{ tiempoProxEscalafon.d }} día/s {% endif %}
+                </strong>
+            </h4>
+            {% endif %}
+            {% endif %}
+            {% else %}
+            {% if tiempoProxEscalafon %}
+            {% if suffix == '' %}
+            <h4 class="alert alert-info">
+                Estimado docente, le recordamos que para solicitar ascenso aun le faltan:
+                {% else %}
+                <h4 class="alert alert-warning">
+                    Estimado docente ya tiene el tiempo para solicitar ascenso desde hace:
+                    {% endif %}
+                    <strong>
+                        {% if tiempoProxEscalafon.y > 0 %} {{ tiempoProxEscalafon.y }} año/s {% endif %}
+                        {% if tiempoProxEscalafon.m > 0 %} {{ tiempoProxEscalafon.m }} mes/es y {%  endif %}
+                        {% if tiempoProxEscalafon.d > 0 %} {{ tiempoProxEscalafon.d }} día/s {% endif %}
+                    </strong>
+                </h4>
+                {% endif %}
+                {% endif %}
+                <div class="col-md-2 col-sm-3 col-xs-4">
+                    <div class="panel panel-white">
+                        <div class="visitors-chart">
+
+                            <div class="panel-body">
+                                <img style="width: 100%;" src="{{ asset('bundles/framework/images/portal/logo_ubv.png') }}"  />
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <!-- /widget-content --> 
-                
-              </div>
-            </div>
-          </div>
-          <!-- /widget -->
-        </div>
-          <div class="col-md-5 col-lg-offset-1">
-              
-              <img src="{{ asset('bundles/framework/images/portal/logo_ubv.png') }}" />
-              
-          </div>
-      </div>
-    </div>
-  </div>
+                <div class="col-sm-push-7 col-sm-3 col-xs-4">
+                    <div class="panel panel-white">
+                        <div class="visitors-chart">
+
+                            <div class="panel-body">
+                                <img style="width: 100%;" src="{{ asset('bundles/framework/images/portal/logo_cea.png') }}"  />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-pull-3 col-md-7 col-sm-6 col-xs-12">
+                    <div class="panel panel-white">
+                        <div class="visitors-chart">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">Bienvenido</h4>
+                            </div>
+                            <div class="panel-body">
+                                Estimado Docente, le damos la más cordial bienvenida al Sistema del
+                                Centro de Estudios Ambientales (CEA) de la Universidad Bolivariana
+                                de Venezuela (UBV) CEA@UBV. a través de este sistema usted puede
+                                gozar y hacer uso de todos los beneficios y responsabilidades que la adscripción
+                                al mismo le otorga.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+             </div>
+
     </div>
 
-{% endblock %}
+                {% endblock %}
