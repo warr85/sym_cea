@@ -1092,6 +1092,8 @@ class AscensoController extends Controller
                     $presidente = $tutor;
                 }
 
+
+
             }
 
             return $this->render('memorando/acta_defensa.html.twig', array(
