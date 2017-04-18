@@ -7,6 +7,24 @@
             <link rel="stylesheet" href="{{ asset('assets/vendor/bootstrap/dist/css/bootstrap.min.css') }}">
             <link rel="stylesheet" href="{{ asset('assets/vendor/font-awesome/css/font-awesome.min.css') }}">
             <style>
+
+
+
+
+                .pageBreak { page-break-after: always; }
+                .footer {  position: relative;
+                    right: 0;
+                    bottom: 0;
+                    left: 0;
+                    padding-top: 3rem;
+                    background-color: #efefef;
+                    text-align: center;}
+
+
+
+
+
+
                 p{
                     padding: 0;
                     margin: 0;
@@ -44,10 +62,10 @@
     </head>
     <body >
         <div class="container">
-            {% block encabezado %} 
+            {% block encabezado %}
 
                 <header>
-                    <table>
+                    <table id="pageHeader">
                         <tr>
                             <td>
                                 <div >
@@ -65,11 +83,11 @@
                                 </div>
                             </td>
                         </tr>
-                    </table>                   
+                    </table>
                 </header>
 
             {% endblock %}
-        
+
 
             <div class="row">
                 <div class="text-center"><br><br>
@@ -77,16 +95,16 @@
                     <p><strong>INFORME DE PERTINENCIA DE TRABAJO ESPECIAL DE GRADO O INVESTIGACIÓN</strong></p>
                 </div>
             </div>
-                
+
            {%block cuerpo %}
-               <div class="cuerpo-memo">
+               <div >
                <p class="text-justify">
                    Quienes suscriben: (Nombres, Apellidos, Nº Cédula de Identidad y Categoría Académica)</p>
                <table class="table table-condensed tabler-bordered">
                     {% block jurados %} {% endblock %}
                </table>
 
-               <p>
+               <p class="cuerpo-memo">
                    Miembros del Comité Académico designado por el Consejo Universitario de la Universidad Bolivariana de
                     Venezuela conforme a la Resolución N° {% block resolucion %}{% endblock %}, para valorar,
                     CONTEXTUALIZACIÓN, PRESENTACIÓN Y ARTICULACIÓN DEL Trabajo de Ascenso presentado por la
@@ -94,7 +112,7 @@
                     a los fines de su Ascenso en el Escalafón Universitario a la Categoría de {% block categoria1 %}{% endblock %}
                    dejan  constancia de lo siguiente:
                </p>
-               <ol>
+               <ol class="cuerpo-memo">
                    <li>
                        Actuó como Coordinador(a) del Comité Académico el (la) Profesor(a)  {% block presidente %}{% endblock %}
                    </li>
@@ -112,11 +130,62 @@
                        Académicos/as a optar a la Categoría de profesores/as: {% block categoria2 %}{% endblock %}
                    </li>
 
-                   <li>
+
+                   <li >
                        Finalizada la presentación, el comité académico procedió a deliberar y a elaborar el acta de
                        ascenso a Asistente correspondiente a la Modalidad de {% block modalidad2 %}{% endblock %}
 
                    </li>
+
+               </ol>
+
+                   <footer class="footer pageBreak">
+                       <div class="row ">
+
+                           <div class="col-xs-10 text-right">
+                               <p>Av. Leonardo Da Vinci</p>
+                               <p>Edif. Universidad Bolivariana de Venezuela</p>
+                               <p>Piso 8. Los Chaguaramos</p>
+                               <p>Telf. 0212- 606.3449</p>
+                               <p>RIF. G - 20003773-3</p>
+                               <p>www.ubv.edu.ve - @ubv</p>
+                               <p class="text-center">"Sembramos Saberes Cosechamos Patria"</p>
+                           </div>
+                           <div class="col-xs-2 push-left">
+                               <img width="80%" src="{{ asset('bundles/framework/images/memorando/logoJuventud.jpg')}}" />
+                           </div>
+
+
+                       </div>
+
+
+                   </footer>
+
+                   <header>
+                       <table id="pageHeader">
+                           <tr>
+                               <td>
+                                   <div >
+                                       <img width="50%" src="{{ asset('bundles/framework/images/portal/logo_ubv.png')}}" />
+                                   </div>
+                               </td>
+                               <td >
+                                   <div class="text-center">
+                                       <p>República Bolivariana de Venezuela</p>
+                                       <p>Ministerio para el Poder Popular de la Educación Universitaria</p>
+                                       <p>Universidad Bolivariana de Venezuela</p>
+                                       <p>Rectorado</p>
+                                       <p>Dirección General de Apoyo Socio Administrativo</p>
+                                       <p>Centro de Estudios Ambientales</p>
+                                   </div>
+                               </td>
+                           </tr>
+                       </table>
+                   </header>
+
+
+
+                <ol class="cuerpo-memo" start="5">
 
                    <li>
                        Decisión: De conformidad con la Ley de Universidades y el Reglamento Interno de la
@@ -160,10 +229,10 @@
 
              {% block pie %}
 
-<footer>
+<footer class="footer">
     <div class="row ">
 
-        <div class="col-xs-10 text-right">
+       <div class="col-xs-10 text-right">
           <p>Av. Leonardo Da Vinci</p>
                 <p>Edif. Universidad Bolivariana de Venezuela</p>
                 <p>Piso 8. Los Chaguaramos</p>
@@ -182,13 +251,13 @@
 
     </footer>
     </div>
-                
+
 
             {% endblock %}
-        
+
         </div><!-- Containter -->
         {% block body %}
-            
+
             {% block principal %} {% endblock %}
 
         {% endblock %}
