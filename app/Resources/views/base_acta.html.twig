@@ -16,7 +16,7 @@
                     right: 0;
                     bottom: 0;
                     left: 0;
-                    padding-top: 3rem;
+                    margin-top: 2rem;
                     background-color: #efefef;
                     text-align: center;}
 
@@ -29,30 +29,30 @@
                     padding: 0;
                     margin: 0;
                 }
-                
-                
+
+
                 .cuerpo-memo{
                    line-height: 33px;
                    text-indent: 30px;
-                   padding: 10px;                   
+                   padding: 10px;
                 }
-                
+
                 header p{
                     font-size: 12px;
                 }
-                
+
                 .firma{
                     margin-top: 60px;
                 }
                 .firma p{
-                    
+
                     font-size: 10px;
                 }
-                
+
                 footer{
                     margin-top:20px;
                 }
-                
+
                 footer p{
                     font-size: 10px;
                 }
@@ -90,9 +90,9 @@
 
 
             <div class="row">
-                <div class="text-center"><br><br>
+                <div class="text-center"><br>
                     <p><strong>ACTA DE ASCENSO A LA CATEGORÍA ACADÉMICA</strong></p>
-                    <p><strong>INFORME DE PERTINENCIA DE TRABAJO ESPECIAL DE GRADO O INVESTIGACIÓN</strong></p>
+                    <p><strong>INFORME DE PERTINENCIA DE TRABAJO ESPECIAL DE GRADO O INVESTIGACIÓN</strong></p><br>
                 </div>
             </div>
 
@@ -123,7 +123,7 @@
                    </li>
 
                    <li>
-                       Reunidos el día 03 de abril de 2017, en Sede: {% block eje %}{% endblock %}, UBV, a las _______,
+                       Reunidos el día ____ de ________ de 20____, en Sede: Eje Geopolítico {% block eje %}{% endblock %}, UBV {% block estado %}{% endblock %}, a las _______,
                        se dio lugar la instalación del Acto Académico Público a fin de proceder a la presentación con
                        el/la autor(a) y el Comité Académico de conformidad con lo establecido en la Ley de Universidades
                        y el Reglamento Interno de la Universidad Bolivariana de Venezuela para los/as Trabajadores/as
@@ -131,11 +131,6 @@
                    </li>
 
 
-                   <li >
-                       Finalizada la presentación, el comité académico procedió a deliberar y a elaborar el acta de
-                       ascenso a Asistente correspondiente a la Modalidad de {% block modalidad2 %}{% endblock %}
-
-                   </li>
 
                </ol>
 
@@ -185,7 +180,13 @@
 
 
 
-                <ol class="cuerpo-memo" start="5">
+                <ol class="cuerpo-memo" start="4">
+
+                    <li >
+                        Finalizada la presentación, el comité académico procedió a deliberar y a elaborar el acta de
+                        ascenso a Asistente correspondiente a la Modalidad de {% block modalidad2 %}{% endblock %}
+
+                    </li>
 
                    <li>
                        Decisión: De conformidad con la Ley de Universidades y el Reglamento Interno de la

@@ -80,7 +80,7 @@ class Ascenso
 
     
     /**
-     * @ORM\Column(name="titulo_trabajo", type="string", nullable=false, options={"comment" = "titulo del trabajo de investigacion"})
+     * @ORM\Column(name="titulo_trabajo", type="text", nullable=false, options={"comment" = "titulo del trabajo de investigacion"})
      * @Assert\NotBlank(message="Titulo del Trabajo es obligatorio.")
      */
     private $tituloTrabajo;

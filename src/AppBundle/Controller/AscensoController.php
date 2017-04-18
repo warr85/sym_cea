@@ -1071,7 +1071,8 @@ class AscensoController extends Controller
 
 
             $ascenso = $this->getDoctrine()->getRepository('AppBundle:Ascenso')->findOneByIdRolInstitucion($servicio->getIdRolInstitucion());
-            $eje = $ascenso->getIdRolInstitucion()->getIdInstitucion()->getIdEjeParroquia()->getIdEje()->getAbreviacion();
+            $eje = $ascenso->getIdRolInstitucion()->getIdInstitucion()->getIdEjeParroquia()->getIdEje()->getNombre();
+            $estado = $ascenso->getIdRolInstitucion()->getIdInstitucion()->getIdEjeParroquia()->getIdParroquia()->getIdMunicipio()->getIdEstado()->getNombre();
             $tutores = $ascenso->getTutores();
             $resolucion = $tutores[0]->getResolucion();
 
@@ -1096,6 +1097,7 @@ class AscensoController extends Controller
             return $this->render('memorando/acta_defensa.html.twig', array(
                 'ascenso'   =>  $ascenso,
                 'eje'           =>  $eje,
+                'estado'        => $estado,
                 'resolucion'    => $resolucion,
                 'presidente'    => $presidente,
                 'categoria'     => $escalafones,
