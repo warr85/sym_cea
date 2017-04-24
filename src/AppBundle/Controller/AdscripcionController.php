@@ -13,6 +13,7 @@ use AppBundle\Entity\PidaCaducidad;
 use AppBundle\Entity\PidaEstatus;
 use AppBundle\Entity\PidaTareaEspecifico;
 use AppBundle\Form\PidaTareaEspecificoType;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -483,7 +484,13 @@ class AdscripcionController extends Controller
         $estatusPida = new PidaEstatus();
         $Estatusform = $this->createFormBuilder($estatusPida)
             ->add('nombre', EntityType::class, array(
-                'class' => 'AppBundle\Entity\PidaEstatus'
+                'class' => 'AppBundle\Entity\PidaEstatus',
+                'expanded'  => true,
+                'multiple'  => false,
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('u')
+                        ->orderBy('u.nombre', 'ASC');
+                },
             ))
             ->getForm();
 
@@ -502,7 +509,7 @@ class AdscripcionController extends Controller
                 $em->persist($serv);
             }
 
-            
+
             
             $pida->setIdRolInstitucion($this->getUser()->getIdRolInstitucion());
             $pida->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(2));
@@ -518,7 +525,7 @@ class AdscripcionController extends Controller
 
             $em->flush();
 
-            return $this->redirectToRoute('solicitud_pida');
+            return $this->redirectToRoute('solicitud_pida', array('id' => $servicio->getId()));
         
         }
 
@@ -533,7 +540,7 @@ class AdscripcionController extends Controller
 
                 $em->flush();
 
-                return $this->redirectToRoute('solicitud_pida');
+                return $this->redirectToRoute('solicitud_pida', array('id' => $servicio->getId()));
             }
 
         }
@@ -550,7 +557,7 @@ class AdscripcionController extends Controller
 
                 $em->flush();
 
-                return $this->redirectToRoute('solicitud_pida');
+                return $this->redirectToRoute('solicitud_pida', array('id' => $servicio->getId()));
             }
 
         }
@@ -559,10 +566,8 @@ class AdscripcionController extends Controller
         $caducidadForm = $this->createForm('AppBundle\Form\PidaCaducidadType', $caducidad);
         $caducidadForm->handleRequest($request);
         $days = $months = $years = 0;
-        if(!$this->getDoctrine()->getRepository("AppBundle:PidaCaducidad")->findOneByidDocenteServicio($servicio)) {
-            $caduca = false;
-        }else{
-            $caduca = $this->getDoctrine()->getRepository("AppBundle:PidaCaducidad")->findOneByidDocenteServicio($servicio);
+        $caduca = $this->getDoctrine()->getRepository("AppBundle:PidaCaducidad")->findOneByidDocenteServicio($servicio);
+        if($caduca) {
             $interval = $caduca->getFechaInicio()->diff($caduca->getFechaFinal());
             $years = $interval->format('%y');
             $months = $interval->format('%m');
