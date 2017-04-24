@@ -95,6 +95,7 @@
                                 </li>
                             </ul>
                             <ul class="nav navbar-nav navbar-right">
+                                {% if is_granted('ROLE_COORDINADOR_REGIONAL') %}
                                 <li>
                                     <a href="javascript:void(0);" class="waves-effect waves-button waves-classic show-search"><i class="fa fa-search"></i></a>
                                 </li>
@@ -134,7 +135,7 @@
                                         <li class="drop-all"><a href="#" class="text-center">All Messages</a></li>
                                     </ul>
                                 </li>#}
-                                {% if is_granted('ROLE_COORDINADOR_REGIONAL') %}
+
 
                                     <li class="dropdown">
                                         <a href="#" class="dropdown-toggle waves-effect waves-button waves-classic" data-toggle="dropdown"><i class="fa fa-file-text"></i><span class="badge badge-success pull-right"></span></a>
