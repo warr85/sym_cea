@@ -175,8 +175,9 @@
            <input type="hidden" name="escala" value="{{ escalafones.id }}" />
        {% endif %}
        <br>
-
+            {{ form_start(form) }}
            {{ form_widget(form) }}
+
 
            {% if servicio.idEstatus.id == 3 %}
                <button class="btn btn-success btn-sm" type="submit" name="aprobado" id="aprobado" ><span class="fa fa-check" ></span>&nbsp;Aprobar</button>
@@ -184,6 +185,7 @@
                <button class="btn btn-success btn-sm" type="submit" name="aprobado" id="aprobado" ><span class="fa fa-check" ></span>&nbsp;Aprobar</button>
                <a id="modal_rechazo" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#motivo_rechazo"  ><span class="fa fa-close"></span>&nbsp;Rechazar</a>
            {% endif %}
+           {{ form_end(form) }}
 
 
        
