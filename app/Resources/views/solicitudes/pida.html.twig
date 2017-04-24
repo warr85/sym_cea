@@ -117,15 +117,15 @@
                         {% for tarea in pid.pidaTareaEspecifico | sort %}
                                 <td>{{ tarea.pidaTareaEspecifico }}
                                     {% if loop.index == loop.length %}
-                                    {% if servicio.idEstatus.id == 2 %}<a data-id="{{ pid.id }}"  id="add_actividad{{ pid.id }}" data-toggle="modal" data-target="#nueva_actividad" class="btn btn-xs btn-warning">+</a>{% endif %}
+                                    {% if servicio.idEstatus.id == 2 %}<button data-id="{{ pid.id }}"  id="add_actividad{{ pid.id }}" data-toggle="modal" data-target="#nueva_actividad" class="btn btn-xs btn-warning">+</button>{% endif %}
                                     {% else %}
-                                    {% if servicio.idEstatus.id == 2 %}<a data-id="{{ tarea.id }}"  id="remove{{ tarea.id }}" class="btn btn-xs btn-danger">-</a>{% endif %}
+                                    {% if servicio.idEstatus.id == 2 %}<button data-id="{{ tarea.id }}"  id="remove{{ tarea.id }}" class="btn btn-xs btn-danger">-</button>{% endif %}
                                     {% endif %}
                                 </td>
                                 <td>{{ tarea.idPidaPlazo }}</td>
                                 <td>
                                     {{ tarea.idPidaEstatus }}
-                                    {% if servicio.idEstatus.id != 5 %}<a data-id="{{ tarea.id }}"  id="estatus{{ tarea.id }}" data-toggle="modal" data-target="#nuevo_estatus" class="btn btn-xs btn-default">.</a>{% endif %}
+                                    {% if servicio.idEstatus.id != 5 %}<button data-id="{{ tarea.id }}"  id="estatus{{ tarea.id }}" data-toggle="modal" data-target="#nuevo_estatus" class="btn btn-xs btn-default">.</button>{% endif %}
                                 </td>
 
                             </tr>
@@ -351,9 +351,12 @@
 
 
         $('[id^="estatus"]').click(function() {
-            alert("presionado: " + $(this).attr('data-id'))
             $("#id_estatus").val($(this).attr('data-id'));
         });
+
+        $('#nuevo_estatus').on('hidden.bs.modal', function (e) {
+            $("#estatus" + $("#id_estatus").val()).button('reset');
+        })
 
 
 
