@@ -1096,15 +1096,41 @@ class AscensoController extends Controller
 
             }
 
-            return $this->render('memorando/acta_defensa.html.twig', array(
-                'ascenso'   =>  $ascenso,
-                'eje'           =>  $eje,
-                'estado'        => $estado,
-                'resolucion'    => $resolucion,
-                'presidente'    => $presidente,
-                'categoria'     => $escalafones,
-                'jurados'        => $tutores
-            ));
+
+            if ($ascenso->getTipoTrabajoInvestigacion() == "investigacion"  ) {
+
+                return $this->render('memorando/acta_defensa_investigacion.html.twig', array(
+                    'ascenso' => $ascenso,
+                    'eje' => $eje,
+                    'estado' => $estado,
+                    'resolucion' => $resolucion,
+                    'presidente' => $presidente,
+                    'categoria' => $escalafones,
+                    'jurados' => $tutores
+                ));
+            }else if (!$ascenso->getTesisUbv()) {
+
+                return $this->render('memorando/acta_defensa_investigacion.html.twig', array(
+                    'ascenso' => $ascenso,
+                    'eje' => $eje,
+                    'estado' => $estado,
+                    'resolucion' => $resolucion,
+                    'presidente' => $presidente,
+                    'categoria' => $escalafones,
+                    'jurados' => $tutores
+                ));
+
+            }else{
+                return $this->render('memorando/acta_defensa_investigacion.html.twig', array(
+                    'ascenso' => $ascenso,
+                    'eje' => $eje,
+                    'estado' => $estado,
+                    'resolucion' => $resolucion,
+                    'presidente' => $presidente,
+                    'categoria' => $escalafones,
+                    'jurados' => $tutores
+                ));
+            }
 
         }else{
             $this->addFlash('danger', 'No Puede Imprimir el reconocimiento de Adscripcion hasta que esté aprobado por el coordinador del CEA.');
