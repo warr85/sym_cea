@@ -125,7 +125,13 @@
                                 <td>{{ tarea.idPidaPlazo }}</td>
                                 <td>
                                     {{ tarea.idPidaEstatus }}
-                                    {% if servicio.idEstatus.id != 5 %}<button data-id="{{ tarea.id }}"  id="estatus{{ tarea.id }}" data-toggle="modal" data-target="#nuevo_estatus" class="btn btn-xs btn-default">.</button>{% endif %}
+                                    {% if servicio.idEstatus.id != 5 %}
+                                        {% if tarea.idPidaEstatus.id != 4 %}
+                                            <button data-id="{{ tarea.id }}"  id="estatus{{ tarea.id }}" data-toggle="modal" data-target="#nuevo_estatus" class="btn btn-xs btn-default">.</button>
+                                        {% else %}
+                                            <span class="fa fa-check"></span>
+                                        {% endif %}
+                                    {% endif %}
                                 </td>
 
                             </tr>
