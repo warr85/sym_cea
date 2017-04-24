@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\TutoresAscenso;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -141,4 +142,54 @@ class UsuariosController extends Controller
             ->getForm()
         ;
     }
+
+
+
+
+    /**
+     * Lists all Usuarios entities.
+     *
+     * @Route("/jurados/", name="admin_jurados_index")
+     * @Method("GET")
+     */
+    public function indexJuradosAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $usuarios = $em->getRepository('AppBundle:TutoresAscenso')->findAll();
+
+        return $this->render('usuarios/jurados_index.html.twig', array(
+            'usuarios' => $usuarios,
+        ));
+    }
+
+
+    /**
+     * Displays a form to edit an existing Usuarios entity.
+     *
+     * @Route("/jurados/{id}/edit", name="admin_jurados_edit")
+     * @Method({"GET", "POST"})
+     */
+    public function editJuradosAction(Request $request, TutoresAscenso $jurado)
+    {
+        //$deleteForm = $this->createDeleteForm($jurado);
+        $editForm = $this->createForm('AppBundle\Form\TutoresAscensoEditType', $jurado);
+        $editForm->handleRequest($request);
+
+        if ($editForm->isSubmitted() && $editForm->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($jurado);
+            $em->flush();
+
+            return $this->redirectToRoute('admin_jurados_edit', array('id' => $jurado->getId()));
+        }
+
+        return $this->render('usuarios/jurados_edit.html.twig', array(
+            'usuario' => $jurado,
+            'edit_form' => $editForm->createView(),
+            //'delete_form' => $deleteForm->createView(),
+        ));
+    }
+
+
 }
