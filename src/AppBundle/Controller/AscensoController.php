@@ -505,7 +505,9 @@ class AscensoController extends Controller
             return $this->redirect($this->generateUrl('cea_index'));
         }
 
-
+$ascenso = $this->getDoctrine()->getRepository('AppBundle:Ascenso')->findOneBy(
+    array('idRolInstitucion'  => $this->getUser()->getIdRolInstitucion(), 'idEstatus' => 1)
+);
         $solicitudDefensa = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->findOneBy(
             array(
                 'idRolInstitucion'  => $this->getUser()->getIdRolInstitucion(),
@@ -561,7 +563,7 @@ class AscensoController extends Controller
             'solicitudes/acta_defensa.html.twig',
             array(
                 'form' => $form->createView(),
-                'tipo'  => 'Ascenso ' . $solicitudDefensa->getIdEscalafones()->getNombre()
+                'tipo'  => 'Ascenso ' . $ascenso->getIdEscalafones()->getNombre()
             )
         );
 
@@ -702,7 +704,7 @@ class AscensoController extends Controller
                 $escala_docente = new DocenteEscala();
                 $escala_docente->setIdRolInstitucion($servicio->getIdRolInstitucion());
                 $escala_docente->setidEscala($this->getDoctrine()->getRepository('AppBundle:Escalafones')->findOneById($this->get('request')->request->get('escala')));
-                $escala_docente->setFechaEscala(new \DateTime($this->get('request')->request->get('fecha_escala')));
+                $escala_docente->setFechaEscala($this->get('request')->request->get('fecha_escala'));
                 $escala_docente->setIdTipoEscala($this->getDoctrine()->getRepository('AppBundle:TipoAscenso')->findOneById($this->get('request')->request->get('tipo')));
                 $em->persist($escala_docente);
 
