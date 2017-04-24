@@ -438,16 +438,16 @@ class AdscripcionController extends Controller
     /**
      * Solicita información al docente sobre su PIDA
      * 
-     * @Route("/solicitud/pida", name="solicitud_pida")
+     * @Route("/solicitud/pida/{id}", name="solicitud_pida")
      * @Method({"GET", "POST"})
      */
-    public function pidaAction(Request $request)
+    public function pidaAction(DocenteServicio $servicio,  Request $request)
     {
         
          //verificar en las solicitudes la adscripcion del docente
        $adscripcion = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->
                 findOneBy(array(
-                    'idRolInstitucion'  =>  $this->getUser()->getIdRolInstitucion()->getId(),
+                    'idRolInstitucion'  =>  $servicio->getIdRolInstitucion()->getId(),
                     'idServicioCe'      =>  2
         ));
        //si no ha solicitado adscripción regresa a la pagina de adscripcion
@@ -455,22 +455,17 @@ class AdscripcionController extends Controller
         
         //si ya se tiene PIDA
 
-         $serv = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->
-         findOneBy(array(
-             'idRolInstitucion'  =>  $this->getUser()->getIdRolInstitucion()->getId(),
-             'idServicioCe'      =>  4),
-             array('id' => 'DESC')
-         );
+
          $pid = false;
-        if($serv) {
+        if($servicio) {
             //si el servicio está cadudado, debe solicitar uno nuevo
-            if ($serv->getIdEstatus()->getId() == 5) {
+            if ($servicio->getIdEstatus()->getId() == 5) {
                 $this->addFlash('warning', 'Su PIDA ha caducado, por ese motivo, se le solicita que cree uno Nuevo');
-                $serv = false;
+                $servicio = false;
                 $pid = false;
             }else{
                 $pid = $this->getDoctrine()->getRepository("AppBundle:AdscripcionPida")->findBy(array(
-                    'idDocenteServicio' => $serv
+                    'idDocenteServicio' => $servicio
                 ));
             }
         }
@@ -498,7 +493,7 @@ class AdscripcionController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             //Crear la solicitud de Servicio
-            if(!$serv) {
+            if(!$servicio) {
                 $serv = new DocenteServicio();
 
                 $serv->setIdRolInstitucion($this->getUser()->getIdRolInstitucion());
@@ -564,10 +559,10 @@ class AdscripcionController extends Controller
         $caducidadForm = $this->createForm('AppBundle\Form\PidaCaducidadType', $caducidad);
         $caducidadForm->handleRequest($request);
         $days = $months = $years = 0;
-        if(!$this->getDoctrine()->getRepository("AppBundle:PidaCaducidad")->findOneByidDocenteServicio($serv)) {
+        if(!$this->getDoctrine()->getRepository("AppBundle:PidaCaducidad")->findOneByidDocenteServicio($servicio)) {
             $caduca = false;
         }else{
-            $caduca = $this->getDoctrine()->getRepository("AppBundle:PidaCaducidad")->findOneByidDocenteServicio($serv);
+            $caduca = $this->getDoctrine()->getRepository("AppBundle:PidaCaducidad")->findOneByidDocenteServicio($servicio);
             $interval = $caduca->getFechaInicio()->diff($caduca->getFechaFinal());
             $years = $interval->format('%y');
             $months = $interval->format('%m');
@@ -577,7 +572,7 @@ class AdscripcionController extends Controller
 
         if ($caducidadForm->isSubmitted() && $caducidadForm->isValid()) {
             //var_dump($estatusPida->getNombre()->getNombre()); die;
-            $caducidad->setIdDocenteServicio($serv);
+            $caducidad->setIdDocenteServicio($servicio);
             $em->persist($caducidad);
 
             $em->flush();
@@ -589,7 +584,7 @@ class AdscripcionController extends Controller
         return $this->render('solicitudes/pida.html.twig', array(
             'form' => $form->createView(),
             'pida'  => $pid,
-            'servicio' => $serv,
+            'servicio' => $servicio,
             'editForm'  => $editForm->createView(),
             'estatusForm' => $Estatusform->createView(),
             'caduca'    => $caduca,
