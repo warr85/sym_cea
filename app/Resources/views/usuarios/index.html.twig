@@ -15,23 +15,25 @@
                 <thead>
                   <tr>
                     <th>Id</th>                    
-                    <th>Nombres y Apellidos</th>
+                    <th>Nombres y Apellidos (Nombre usuario)</th>
                     <th>Eje</th>
                     <th>Estado</th>
-                    <th>Nombre de Usuario</th>
+                    <th>Adscripción</th>
                     <th>Acciones</th>
                   </tr>
                 </thead>
                 <tbody>
         {% for usuario in usuarios %}
             <tr>
-                <td>{{ usuario.id }}</td>
-                <td>{{ usuario.idRolInstitucion.idRol.idPersona.primerNombre }}, {{ usuario.idRolInstitucion.idRol.idPersona.primerApellido }}</td>
+                <td><a href="{{ path('admin_usuarios_show', { 'id': usuario.id }) }}">{{ usuario.id }}</a></td>
+                <td>{{ usuario.idRolInstitucion.idRol.idPersona.primerNombre }}, {{ usuario.idRolInstitucion.idRol.idPersona.primerApellido }}( {{ usuario.username }} )</td>
                 <td>{{usuario.idRolInstitucion.idInstitucion.idEjeParroquia.idEje}}</td>
                 <td>{{usuario.idRolInstitucion.idInstitucion.idEjeParroquia.idParroquia.idMunicipio.idEstado}}</td>
-                <td>
-                    <a href="{{ path('admin_usuarios_show', { 'id': usuario.id }) }}">{{ usuario.username }}</a>
-                </td>                          
+                {% if usuario.idRolInstitucion.adscripcion %}
+                    <td>CEA-UBV-{{ usuario.idRolInstitucion.adscripcion.anoAdscripcion }}-{{ usuario.idRolInstitucion.adscripcion.correlativoAdscripcion }}</td>
+                {% else %}
+                    <td>NO ADSCRITO</td>
+                {% endif %}
                 <td> 
                     <a href="{{ path('admin_usuarios_show', { 'id': usuario.id }) }}" class="btn btn-xs btn-info"><i class="fa fa-eye" ></i></a>
                     <a href="{{ path('admin_usuarios_edit', { 'id': usuario.id }) }}" class="btn btn-xs btn-primary"><i class="fa fa-edit"></i></a>                                            
