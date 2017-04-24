@@ -686,6 +686,7 @@ $ascenso = $this->getDoctrine()->getRepository('AppBundle:Ascenso')->findOneBy(
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()){
+            $data = $form->getData();
             $parametros = $request->request->all();
             $verificado = $this->getDoctrine()->getRepository("AppBundle:DocumentosVerificados")->findOneByIdServicio($servicio);
             $ServicioAscenso = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->findOneBy(array(
@@ -699,19 +700,26 @@ $ascenso = $this->getDoctrine()->getRepository('AppBundle:Ascenso')->findOneBy(
                 'idRolInstitucion'  => $servicio->getIdRolInstitucion(),
                 'idEstatus'         => 1
             ));
+
+            $servicioDefensa = $this->getDoctrine()->getRepository("AppBundle:DocenteServicio")->findOneBy(array(
+                'idRolInstitucion' => $docente,
+                'idServicioCe' => 7),
+                array('id' => 'DESC')
+            );
+
             if(isset($parametros['aprobado'])) {
                 $verificado->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(1));
                 $escala_docente = new DocenteEscala();
                 $escala_docente->setIdRolInstitucion($servicio->getIdRolInstitucion());
                 $escala_docente->setidEscala($this->getDoctrine()->getRepository('AppBundle:Escalafones')->findOneById($this->get('request')->request->get('escala')));
-                $escala_docente->setFechaEscala($this->get('request')->request->get('fecha_escala'));
+                $escala_docente->setFechaEscala($data['fechaAscenso']);
                 $escala_docente->setIdTipoEscala($this->getDoctrine()->getRepository('AppBundle:TipoAscenso')->findOneById($this->get('request')->request->get('tipo')));
                 $em->persist($escala_docente);
 
 
                 $servicio->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(4));
 
-
+                $servicioDefensa->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(4));
                 $ServicioAscenso->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(4));
                 $ascenso->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(4));
 
@@ -730,6 +738,7 @@ $ascenso = $this->getDoctrine()->getRepository('AppBundle:Ascenso')->findOneBy(
             }
 
             $em->persist($ServicioAscenso);
+            $em->persist($servicioDefensa);
             $em->persist($ascenso);
             $em->persist($verificado);
             $em->flush();
@@ -787,6 +796,9 @@ $ascenso = $this->getDoctrine()->getRepository('AppBundle:Ascenso')->findOneBy(
             'idServicioCe' => 4),
             array('id' => 'DESC')
         );
+
+
+
         //$pida = $this->getDoctrine()->getRepository('AppBundle:AdscripcionPida')->findOneByIdRolInstitucion($servicio->getIdRolInstitucion());
         $antiguedad = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->findOneBy(array(
             'idRolInstitucion' => $servicio->getIdRolInstitucion(),
@@ -1072,7 +1084,10 @@ $ascenso = $this->getDoctrine()->getRepository('AppBundle:Ascenso')->findOneBy(
         if ($servicio->getIdEstatus()->getId() == 1){
 
 
-            $ascenso = $this->getDoctrine()->getRepository('AppBundle:Ascenso')->findOneByIdRolInstitucion($servicio->getIdRolInstitucion());
+            $ascenso = $this->getDoctrine()->getRepository('AppBundle:Ascenso')->findOneBy(array(
+                'idRolInstitucion' => $servicio->getIdRolInstitucion(),
+                'idEstatus' => 1
+            ));
             $eje = $ascenso->getIdRolInstitucion()->getIdInstitucion()->getIdEjeParroquia()->getIdEje()->getNombre();
             $estado = $ascenso->getIdRolInstitucion()->getIdInstitucion()->getIdEjeParroquia()->getIdParroquia()->getIdMunicipio()->getIdEstado()->getNombre();
             $tutores = $ascenso->getTutores();
