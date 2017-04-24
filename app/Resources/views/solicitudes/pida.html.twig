@@ -19,6 +19,29 @@
             margin-left: 50px;
         }
 
+        @media print
+        {
+            * { visibility:hidden }
+
+            .printable * {
+                visibility: visible;
+            }
+
+            .no-print, .no-print *
+            {
+                display: none !important;
+            }
+        }
+
+        @media screen{
+            .no-screen, .no-screen *
+            {
+                display: none !important;
+            }
+        }
+
+        @page { size: landscape; }
+
     </style>
 {% endblock %}
 
@@ -68,11 +91,12 @@
         {% if servicio.idEstatus.id == 2 %}
             <div class="col-md-7">
         {% else %}
-            <div class="col-md-11">
+            <div class="col-md-11 printable" id="imprimir">
         {% endif %}
                 <div class="panel panel-white">
                     <div class="panel-heading clearfix">
-                        <h4>Mi PIDA</h4><span class="small" style="float: right;"> Estatus: {{ servicio.idEstatus }}</span>
+                        <h4 class="no-screen">PIDA del Docente: {{ app.user.idRolinstitucion.idRol.idPersona }}</h4>
+                        <h4 class="no-print">Mi PIDA</h4><span class="small" style="float: right;"> Estatus: {{ servicio.idEstatus }}</span>
                     </div>
                     <div class="panel-body">
 
@@ -98,7 +122,7 @@
                             PIDA válido desde: {{ caduca.fechaInicio | date('d-m-Y')}} hasta: {{ caduca.fechaFinal | date('m-d-Y') }}.   duración total PIDA: ( {%  if caducaAnos > 0  %} {{ caducaAnos }} años {% endif %}{{ caducaMeses }} meses con {{ caducaDias }} días  )
 
                         {% endif %}
-                        <table class="table table-bordered">
+                        <table class="table table-bordered" border="1" cellpadding="3">
                             <th>Objetivo Histórico</th>
                             <th>Actividad Docente</th>
                             <th>Tarea Específica</th>
@@ -140,7 +164,11 @@
                             </tr>
                         {% endfor %}
                         </table>
-                        {% if servicio.idEstatus.id == 2 %}<button id="finalizarPida" data-servicio="{{ servicio.id }}" class="btn btn-primary">Finalizar PIDA</button>{% endif %}
+                        {% if servicio.idEstatus.id == 2 %}
+                            <button id="finalizarPida" data-servicio="{{ servicio.id }}" class="btn btn-primary">Finalizar PIDA</button>
+                        {% elseif servicio.idEstatus.id == 4 %}
+                            <button id="printPida" data-servicio="{{ servicio.id }}" class="no-print btn btn-primary"><span class="fa fa-print"></span> Imprimir PIDA</button>
+                        {% endif %}
                     </div>
 
                 </div>
@@ -363,7 +391,13 @@
         $('#nuevo_estatus').on('hidden.bs.modal', function (e) {
             $("#estatus" + $("#id_estatus").val()).button('reset');
             $(".btn").button('reset');
-        })
+        });
+
+
+        $("#printPida").click(function() {
+           print();
+            $(".btn").button('reset');
+        });
 
 
 
