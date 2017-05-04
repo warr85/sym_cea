@@ -38,7 +38,11 @@ class PortalController extends Controller
                 $this->addFlash('danger', 'Hay un problema con el registro y asignación del Rol del Docente. Por Favor consulte con el Coordinador Regional del CEA');
                 return $this->redirect($this->generateUrl('homepage').'#adscripcion');	
             }
-
+            $em = $this->getDoctrine()->getManager();
+            $ejeParroquia = $form->get('eje_parroquia')->getData();
+            $institucion = $this->getDoctrine()->getRepository("AppBundle:Institucion")->findOneByIdEjeParroquia($ejeParroquia);
+            $rol->setIdInstitucion($institucion);
+            $em->persist($rol);
             //si el docente existe, crea el nombre de usuario.
             $usuario = mb_strtolower($rol->getIdRol()->getIdPersona()->getPrimerNombre()[0] .$rol->getIdRol()->getIdPersona()->getPrimerApellido());
             //busca en la base de datos para ver si ese nombre de usuario ya existe

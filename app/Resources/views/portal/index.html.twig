@@ -320,6 +320,34 @@
     <script type="text/javascript">
         smoothScroll.init();
 
+        $(function() {
+            $("#solicitar_eje").change(function(){
+
+                var data = {
+                    eje_id: this.value
+                };
+                console.log(data);
+                $.ajax({
+                    type: 'post',
+                    url: '{{ path("ajax_select_parroquias") }}',
+                    data: data,
+                    success: function(data) {
+                        estados = jQuery.parseJSON(data.estados);
+                        console.log(estados);
+                        var $parroquia_selector = $('#solicitar_eje_parroquia');
+
+                        $parroquia_selector.html('<option>Seleccione Estado del Eje</option>');
+
+                        for (var i=0, total = estados.length; i < total; i++) {
+                            $parroquia_selector.append('<option value="' + estados[i].id + '">' + estados[i].idParroquia.idMunicipio.idEstado.nombre + '</option>');
+                        }
+
+                    }
+                });
+
+            });
+        });
+
         $('.btn').on('click', function() {
             var $this = $(this);
             $this.button('loading');

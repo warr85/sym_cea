@@ -106,4 +106,17 @@ class EjeParroquia
     {
         return $this->idEje;
     }
+
+
+    /**
+     * Get nombre
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        // TODO: Implement __toString() method.
+        return $this->getIdParroquia()->getNombre();
+    }
+
 }

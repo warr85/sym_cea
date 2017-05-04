@@ -246,6 +246,42 @@ class AjaxController extends Controller {
 
 
     /**
+     * @Route("/ajax/buscar/parroquias", name="ajax_select_parroquias")
+     * @Method({"POST"})
+     */
+    public function buscarParroquiasAction(Request $request){
+
+        if($request->isXmlHttpRequest()){
+            $encoders = array(new JsonEncoder());
+            $normalizers = array(new ObjectNormalizer());
+
+            $serializer = new Serializer($normalizers, $encoders);
+
+
+            $eje = filter_input(INPUT_POST, 'eje_id', FILTER_SANITIZE_SPECIAL_CHARS);
+            $eje = $this->getDoctrine()->getRepository("AppBundle:Eje")->findOneById($eje);
+            $estados = $this->getDoctrine()->getRepository("AppBundle:EjeParroquia")->findByIdEje($eje);
+
+
+
+            $response = new JsonResponse();
+            $response->setStatusCode(200);
+            $response->setData(array(
+                'response' => 'success',
+                'eje'  => $eje,
+                'estados' => $serializer->serialize($estados, 'json')
+            ));
+
+            return $response;
+
+
+        }
+
+    }
+
+
+
+    /**
      * @Route("/ajax/eliminar/tarea", name="ajax_eliminar_tarea")
      * @Method({"POST"})
      */

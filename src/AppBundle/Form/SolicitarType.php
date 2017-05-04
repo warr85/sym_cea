@@ -16,6 +16,7 @@ use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
+
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -85,6 +86,17 @@ class SolicitarType extends AbstractType
                     new NotBlank()
                 )
             ))
+
+            ->add('eje_parroquia', EntityType::class, array(
+                'placeholder' => 'Seleccione Estado del Eje',
+                'label' => 'Estado',
+                'class' => 'AppBundle:EjeParroquia',
+
+                'constraints' => array(
+                    new NotBlank()
+                )
+            ))
+
             ->add('send', SubmitType::class, array(
                 'label' => 'Enviar Solicitud',
                 'attr'  => array(
@@ -92,6 +104,8 @@ class SolicitarType extends AbstractType
                     'data-loading-text' => "<i class='fa fa-circle-o-notch fa-spin'></i> Enviando Solicitud..."
                 )
              ));
+
+
     }
 
 
