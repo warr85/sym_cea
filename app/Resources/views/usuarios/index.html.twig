@@ -26,6 +26,7 @@
                 </thead>
                 <tbody>
         {% for usuario in usuarios %}
+            {% if is_granted('ROLE_COORDINADOR_NACIONAL') %}
             <tr>
                 <td><a href="{{ path('admin_usuarios_show', { 'id': usuario.id }) }}">{{ usuario.id }}</a></td>
                 <td>{{ usuario.idRolInstitucion.idRol.idPersona.primerNombre }}, {{ usuario.idRolInstitucion.idRol.idPersona.primerApellido }}( {{ usuario.username }} )</td>
@@ -69,6 +70,53 @@
                     <a href="{{ path('admin_usuarios_edit', { 'id': usuario.id }) }}" class="btn btn-xs btn-primary"><i class="fa fa-edit"></i></a>                                            
                 </td>
             </tr>
+        {% elseif is_granted('ROLE_COORDINADOR_REGIONAL') %}
+            {% if usuario.idRolInstitucion.idInstitucion.id == app.user.idRolInstitucion.idInstitucion.id %}
+            <tr>
+                <td><a href="{{ path('admin_usuarios_show', { 'id': usuario.id }) }}">{{ usuario.id }}</a></td>
+                <td>{{ usuario.idRolInstitucion.idRol.idPersona.primerNombre }}, {{ usuario.idRolInstitucion.idRol.idPersona.primerApellido }}( {{ usuario.username }} )</td>
+                <td>{{usuario.idRolInstitucion.idInstitucion.idEjeParroquia.idEje}}</td>
+                <td>{{usuario.idRolInstitucion.idInstitucion.idEjeParroquia.idParroquia.idMunicipio.idEstado}}</td>
+                {% if usuario.idRolInstitucion.adscripcion %}
+                    <td>CEA-UBV-{{ usuario.idRolInstitucion.adscripcion.anoAdscripcion }}-{{ usuario.idRolInstitucion.adscripcion.correlativoAdscripcion }}</td>
+                {% else %}
+                    <td>NO ADSCRITO.</td>
+                {% endif %}
+                <td>
+                    {% for escalafones in usuario.idRolInstitucion.escalafones | sort %}
+                        {% if loop.last %}
+                            {{ escalafones }} desde {{ escalafones.fechaEscala | date('d-m-Y') }}
+                        {% endif %}
+                    {% endfor %}
+
+
+                </td>
+                <td>
+                    {% set time = 0 %}
+                    {% for escalafones in usuario.idRolInstitucion.escalafones | sort %}
+                        {% if loop.last %}
+                            {% for escala in escalas %}
+                                {% if escala.id == (escalafones.idEscala.id + 1) %}
+                                    {% set time = date(escalafones.fechaEscala | date_modify("+4 years") |date("m/d/Y")) %}
+                                {% endif %}
+                            {% endfor %}
+                            {% set difference = date(time | date('Y/m/d')).diff(date('now' | date('Y/m/d'))) %}
+                            {% if difference.invert %}
+                                Falta:
+                            {% else %}
+                                desde:
+                            {% endif %}
+                            {{ difference | date("%Y años %m meses %d días") }}
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    <a href="{{ path('admin_usuarios_show', { 'id': usuario.id }) }}" class="btn btn-xs btn-info"><i class="fa fa-eye" ></i></a>
+                    <a href="{{ path('admin_usuarios_edit', { 'id': usuario.id }) }}" class="btn btn-xs btn-primary"><i class="fa fa-edit"></i></a>
+                </td>
+            </tr>
+                {% endif %}
+        {% endif %}
         {% endfor %}
         </tbody>
     </table>
