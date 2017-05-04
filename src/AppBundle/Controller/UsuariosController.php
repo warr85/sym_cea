@@ -28,9 +28,11 @@ class UsuariosController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $usuarios = $em->getRepository('AppBundle:Usuarios')->findAll();
+        $escalas = $em->getRepository('AppBundle:Escalafones')->findBy(array(), array('id' => 'ASC'));
 
         return $this->render('usuarios/index.html.twig', array(
             'usuarios' => $usuarios,
+            'escalas'   => $escalas
         ));
     }
 
