@@ -369,6 +369,17 @@ class AscensoController extends Controller
            $this->addFlash('danger', 'Debe tener una solicitud de Ascenso Activa para poder utilizar este servicio');
            return $this->redirect($this->generateUrl('cea_index'));
        }
+
+       $acta = $this->getDoctrine()->getRepository("AppBundle:DocenteServicio")->findOneBy(array(
+          'idRolInstitucion' =>  $this->getUser()->getIdRolInstitucion(),
+           'idServicioCe' => 7,
+           'idEstatus' => 1
+       ));
+
+        if (!$acta){
+            $this->addFlash('danger', 'Debe enviar primero su acta de aprobación de jurados para poder defender y subir su nuevo escalafón');
+            return $this->redirect($this->generateUrl('cea_index'));
+        }
         
          $concurso = $this->getDoctrine()->getRepository('AppBundle:DocumentosVerificados')->findOneBy(array(
              'idRolInstitucion'  => $this->getUser()->getIdRolInstitucion(),
