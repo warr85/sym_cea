@@ -109,6 +109,17 @@ class EjeParroquia
 
 
     /**
+     * Get estado
+     *
+     * @return string
+     */
+    public function getEstado()
+    {
+        return $this->getIdParroquia()->getIdMunicipio()->getIdEstado()->getNombre();
+    }
+
+
+    /**
      * Get nombre
      *
      * @return string

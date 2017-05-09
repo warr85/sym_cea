@@ -20,7 +20,11 @@ class PortalController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $persona = $this->getDoctrine()->getRepository('AppBundle:Persona')
-                              ->findOneByCedulaPasaporte($form->get('cedula')->getData());
+                              ->findOneBy(array(
+                                  'cedulaPasaporte' => $form->get('cedula')->getData(),
+                                  'primerNombre'    => ucwords($form->get('nombres')->getData()),
+                                  'primerApellido'    => ucwords($form->get('apellidos')->getData()),
+                              ));
             
              if (!$persona) {
                 $this->addFlash('danger', 'Docente no Registrado en la Base de Datos del Centro de Estudios.  Por Favor consulte con el Coordinador Regional del CEA');

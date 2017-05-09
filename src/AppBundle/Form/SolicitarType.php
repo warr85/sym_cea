@@ -21,7 +21,7 @@ use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Doctrine\ORM\EntityRepository;
-
+use Symfony\Component\Validator\Constraints\Regex;
 
 
 class SolicitarType extends AbstractType
@@ -34,17 +34,27 @@ class SolicitarType extends AbstractType
     {
         $builder
             ->add('nombres', TextType::class, array(
-                'attr' => array('placeholder' => 'Nombres...'),
+                'attr' => array('placeholder' => 'Primer Nombre...'),
+                'label' => 'Primer Nombre',
                 'constraints' => array(
                     new NotBlank(),
-                    new Length(array('min' => 3)),
+                    new Regex(array(
+                        'pattern'   => '/^([a-zA-ZáéíóúÁÉÍÓÚñÑ\']{2,30}\S+)$/',
+                        'match'     => true,
+                        'message'   => 'no debe contener espacios ni números y tener mínino tres caracteres.'
+                    ))
                 )
             ))
             ->add('apellidos', TextType::class, array(
-                'attr' => array('placeholder' => 'Apellidos...'),
+                'attr' => array('placeholder' => 'Primer Apellido...'),
+                'label' => 'Primer Apellido',
                 'constraints' => array(
                     new NotBlank(),
-                    new Length(array('min' => 3)),
+                    new Regex(array(
+                        'pattern'   => '/^([a-zA-ZáéíóúÁÉÍÓÚñÑ\']{2,30}\S+)$/',
+                        'match'     => true,
+                        'message'   => 'no debe contener espacios ni números y tener mínino tres caracteres.'
+                    ))
                 )
             ))
             ->add('cedula', NumberType::class, array(
@@ -91,7 +101,7 @@ class SolicitarType extends AbstractType
                 'placeholder' => 'Seleccione Estado del Eje',
                 'label' => 'Estado',
                 'class' => 'AppBundle:EjeParroquia',
-
+                'choice_label' => 'estado',
                 'constraints' => array(
                     new NotBlank()
                 )
