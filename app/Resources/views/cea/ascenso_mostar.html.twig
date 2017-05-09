@@ -140,12 +140,12 @@
                         
                         {% if escalas is not null %}
                         <div class="form-group">
-                            <label for="Escalafones">{{ cantidadJurado }}Escalafones Obtenidos:</label>
-                             <table class="table table-striped table-bordered">
+                            <label for="Escalafones"><strong>Escalafones Obtenidos:</strong></label>
+                             <table class="table table-striped table-bordered table-condensed">
                                     <th>Escalafón</th>
                                     <th>Fecha</th>
                                     <th>Tipo</th>
-                            {% for escala in escalas %}
+                            {% for escala in escalas | sort %}
                                
                                     <tr>
                                         <td>{{escala.idEscala }}</td>
