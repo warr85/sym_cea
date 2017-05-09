@@ -234,7 +234,7 @@
                      <div class="widget-content">
                                              
                          
-                         {% for documento in docente.documentosVerificados %}
+                         {% for documento in docente.documentosVerificados | sort %}
                              {% if documento.idServicio.id == servicio.id %}
                                  {% set extension = documento.ubicacion | split('.') | last %}
                          <div {% if extension != "pdf" %}class="col-xs-6"{% else %}class="col-xs-12"{% endif %}>
