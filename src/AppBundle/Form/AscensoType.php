@@ -241,9 +241,6 @@ class AscensoType extends AbstractType
                 'attr' => array(
                     'style' => 'display:none;',
                     'class' => 'esc_pertinencia'
-                ),
-                'constraints' => array(
-                    new NotBlank(),
                 )
             ))
             ->add('lugar_pertinencia', TextType::class, array(
@@ -256,9 +253,6 @@ class AscensoType extends AbstractType
                 'attr' => array(
                     'style' => 'display:none;',
                     'class' => 'esc_pertinencia'
-                ),
-                'constraints' => array(
-                    new NotBlank(),
                 )
             ))
             ->add('fecha_defensa', DateType::class, array(
@@ -276,7 +270,6 @@ class AscensoType extends AbstractType
                     'year' => 'Año', 'month' => 'Mes', 'day' => 'Día',
                 ),
                 'constraints' => array(
-                    new NotBlank(),
                     new Date()
                 )
             ))
