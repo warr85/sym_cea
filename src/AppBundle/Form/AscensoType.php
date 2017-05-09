@@ -9,8 +9,10 @@
 
 namespace AppBundle\Form;
 
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Date;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -227,6 +229,55 @@ class AscensoType extends AbstractType
                         ],
                         'mimeTypesMessage' => 'Sólo se permiten extensiones png, jpeg y pdf'
                     ))
+                )
+            ))
+            ->add('titulo_pertinencia', TextType::class, array(
+                'label' => 'Título del informe de pertinencia',
+                'label_attr' => array(
+                    'style' => 'display:none;',
+                    'class' => 'esc_pertinencia'
+                ),
+                'required' => false,
+                'attr' => array(
+                    'style' => 'display:none;',
+                    'class' => 'esc_pertinencia'
+                ),
+                'constraints' => array(
+                    new NotBlank(),
+                )
+            ))
+            ->add('lugar_pertinencia', TextType::class, array(
+                'label' => 'Lugar de defensa de la Tesis',
+                'label_attr' => array(
+                    'style' => 'display:none;',
+                    'class' => 'esc_pertinencia'
+                ),
+                'required' => false,
+                'attr' => array(
+                    'style' => 'display:none;',
+                    'class' => 'esc_pertinencia'
+                ),
+                'constraints' => array(
+                    new NotBlank(),
+                )
+            ))
+            ->add('fecha_defensa', DateType::class, array(
+                'widget' => 'choice',
+                'label' => 'Fecha defensa',
+                'label_attr' => array(
+                    'style' => 'display:none;',
+                    'class' => 'esc_pertinencia form-group'
+                ),
+                'attr' => array(
+                    'style' => 'display:none;',
+                    'class' => 'esc_pertinencia'
+                ),
+                'placeholder' => array(
+                    'year' => 'Año', 'month' => 'Mes', 'day' => 'Día',
+                ),
+                'constraints' => array(
+                    new NotBlank(),
+                    new Date()
                 )
             ))
             ->add('send', SubmitType::class, array(

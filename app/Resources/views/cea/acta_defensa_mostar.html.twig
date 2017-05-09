@@ -160,7 +160,7 @@
                                   {% set anadirJurado = false  %}
                                   {% set actualizado = false  %}
                             {% set resolucion = "" %}
-                                {% if (ascenso.tesisUbv or ascenso.tipoTrabajoInvestigacion == 'investigacion') %}
+                                {% if not ascenso.tesisUbv or ascenso.tipoTrabajoInvestigacion == 'investigacion' %}
                                     <h4>Jurados propuestos por el Docente</h4>
                                     {% set anadirJurado = true  %}
                                     {% set cantidadJurado = 6 %}
@@ -242,7 +242,7 @@
                              <input type="text" class="form-control" value="{{ascenso.tituloTrabajo}}" />
                              <p><strong>Tipo de Trabajo de Ascneso:</strong> {{ ascenso.tipoTrabajoInvestigacion }} </p> 
                              {% if ascenso.tipoTrabajoInvestigacion == 'tesis' %}
-                                {% if ascenso.tesisUbv %}
+                                {% if not ascenso.tesisUbv %}
                                     <p>Debe tener informe de pertinencia debido a que
                                     es una tesis fuera de UBV</p>
                                     {% else %}

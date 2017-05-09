@@ -30,6 +30,19 @@
          {{ ascenso.tituloTrabajo }}
      {% endblock %}
 
+{% block tituloPertinencia %}
+    {{ pertinencia.tituloPertinencia }}
+{% endblock %}
+
+{% block lugarDefensa %}
+    {{ pertinencia.lugarPertinencia }}
+{% endblock %}
+
+{% block fechaDefensa %}
+    {{ pertinencia.fechaDefensa | date('d-m-Y') }}
+{% endblock %}
+
+
 {% block titulo2 %}
     {{ ascenso.tituloTrabajo }}
 {% endblock %}

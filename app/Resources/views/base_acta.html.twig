@@ -91,7 +91,7 @@
 
             <div class="row">
                 <div class="text-center"><br>
-                    <p><strong>ACTA DE ASCENSO A LA CATEGORÍA ACADÉMICA</strong></p>
+                    <p><strong>ACTA DE ASCENSO A LA CATEGORÍA ACADÉMICA {% block categoria0 %}{% endblock %}</strong></p>
                     <p><strong>INFORME DE PERTINENCIA DE TRABAJO ESPECIAL DE GRADO O INVESTIGACIÓN</strong></p><br>
                 </div>
             </div>
@@ -107,8 +107,8 @@
                <p class="cuerpo-memo">
                    Miembros del Comité Académico designado por el Consejo Universitario de la Universidad Bolivariana de
                     Venezuela conforme a la Resolución N° {% block resolucion %}{% endblock %}, para valorar,
-                    CONTEXTUALIZACIÓN, PRESENTACIÓN Y ARTICULACIÓN DEL Trabajo de Ascenso presentado por la
-                    Profesora:  {% block docente %} {% endblock %} bajo la Modalidad de {% block modalidad1 %} {% endblock %}
+                    CONTEXTUALIZACIÓN, PRESENTACIÓN Y ARTICULACIÓN DEL Trabajo de Ascenso presentado por el/la
+                    Profesor/a:  {% block docente %} {% endblock %} bajo la Modalidad de {% block modalidad1 %} {% endblock %}
                     a los fines de su Ascenso en el Escalafón Universitario a la Categoría de {% block categoria1 %}{% endblock %}
                    dejan  constancia de lo siguiente:
                </p>
@@ -116,14 +116,26 @@
                    <li>
                        Actuó como Coordinador(a) del Comité Académico el (la) Profesor(a)  {% block presidente %}{% endblock %}
                    </li>
-
+                   {% if ascenso.tipoTrabajoInvestigacion == 'tesis' and not ascenso.tesisUbv %}
                    <li>
-                       Se revisó, por cada uno de los Miembros del Comité Académico,  el Trabajo de
-                       Investigación como Trabajo de Ascenso, titulado:  {% block titulo %}{% endblock %}
+                       Se revisó, por cada uno de los Miembros del Comité Académico,  el Informe de
+                       Pertinencia como Trabajo de Ascenso, titulado: <strong>Informe de Pertinencia:</strong>
+                       {% block tituloPertinencia %}{% endblock %}. Y consignado por el/la autor/a conjuntamente con el
+                       Trabajo de Grado o Investigación, titulado:{% block titulo %}{% endblock %}.<br>
+
+                       Defendido y aprobado en la Universidad o Instituto de Investigación: {% block lugarDefensa %}{% endblock %},
+                       conforme a lo establecido en el  Acta con Veredicto o Aval Aprobado, de fecha {% block fechaDefensa %}{% endblock %}
+                       (se anexa Acta Veredicto o Aval).
                    </li>
+                    {% else %}
+                        <li>
+                            Se revisó, por cada uno de los Miembros del Comité Académico,  el Trabajo de
+                            Investigación como Trabajo de Ascenso, titulado:  {% block titulo2 %}{% endblock %}
+                        </li>
+                   {% endif %}
 
                    <li>
-                       Reunidos el día ____ de ________ de 20____, en Sede: Eje Geopolítico {% block eje %}{% endblock %}, UBV {% block estado %}{% endblock %}, a las _______,
+                       Reunidos el día ____ de _______________ de 20____, en Sede: Eje Geopolítico {% block eje %}{% endblock %}, UBV {% block estado %}{% endblock %}, a las _______,
                        se dio lugar la instalación del Acto Académico Público a fin de proceder a la presentación con
                        el/la autor(a) y el Comité Académico de conformidad con lo establecido en la Ley de Universidades
                        y el Reglamento Interno de la Universidad Bolivariana de Venezuela para los/as Trabajadores/as
@@ -192,10 +204,17 @@
                        Decisión: De conformidad con la Ley de Universidades y el Reglamento Interno de la
                        Universidad Bolivariana de Venezuela para los/as Trabajadores/as Académicos/as a
                        optar a la Categoría de profesores/as: {% block categoria3 %}{% endblock %} se acordó
-                       por:  _____________ la decisión de:   __________    el Trabajo de Investigación.
+                       por:  _____________ la decisión de:   __________    el Trabajo de Investigación.<br>
+                       {% if ascenso.tipoTrabajoInvestigacion == 'investigacion' %}
                        <p>Por considerar:  _______________________________________________________________________________________
                            _______________________________________________________________________________________
                            __________________________________________________________________________________</p>
+                       {% else %}
+                           Por cosiderar:<br>
+                           Es consono con las políticas de estado y los fundamentos epistémicos de la UBV.
+                           _______________________________________________________________________Plasma la pertinencia
+                           de las políticas de formación para realizar un diplomado dirigido a los nuevos docentes.
+                       {% endif %}
                    </li>
 
                    <li>

@@ -9,6 +9,7 @@
 namespace AppBundle\Controller;
 
 
+use AppBundle\Entity\AscensoPertinencia;
 use AppBundle\Entity\AscensoTutores;
 use AppBundle\Entity\DocumentosVerificados;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
@@ -154,6 +155,18 @@ class AscensoController extends Controller
                     if (!$form->get('pertinencia')->getData()) {
                         $form->get('pertinencia')->addError(new FormError('La tesis al ser fuera de la UBV debe incluir un informe de pertinencia'));
                     }
+
+                    if (!$form->get('titulo_pertinencia')->getData()) {
+                        $form->get('titulo_pertinencia')->addError(new FormError('La tesis al ser fuera de la UBV debe incluir el titulo del informe de pertinencia'));
+                    }
+
+                    if (!$form->get('lugar_pertinencia')->getData()) {
+                        $form->get('pertinencia')->addError(new FormError('La tesis al ser fuera de la UBV debe incluir el lugar donde se defendió'));
+                    }
+
+                    if (!$form->get('fecha_defensa')->getData()) {
+                        $form->get('pertinencia')->addError(new FormError('La tesis al ser fuera de la UBV debe incluir la fecha de defensa'));
+                    }
                 }
 
             }else if ($form->get('tipoTrabajoInvestigacion')->getData() === "investigacion"){
@@ -253,7 +266,7 @@ class AscensoController extends Controller
 
             $ascenso->setTituloTrabajo($form->get('titulo_trabajo')->getData());
             $ascenso->setTipoTrabajoInvestigacion($form->get('tipoTrabajoInvestigacion')->getData());
-            $ascenso->setTesisUbv($form->get('tesisUbv')->getData());
+            $ascenso->setTesisUbv(!$form->get('tesisUbv')->getData());
             $ascenso->setNombreNucelo($form->get('nombreNucleo')->getData());
             $ascenso->setIdEscalafones($nueva_escala);
             $ascenso->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(2));
@@ -273,6 +286,14 @@ class AscensoController extends Controller
             
             
             if ($form->get('pertinencia')->getData()){
+
+                $pertinencia = new AscensoPertinencia();
+                $pertinencia->setIdAscenso($ascenso);
+                $pertinencia->setTituloPertinencia($form->get('titulo_pertinencia')->getData());
+                $pertinencia->setLugarPertinencia($form->get('lugar_pertinencia')->getData());
+                $pertinencia->setFechaDefensa($form->get('fecha_defensa')->getData());
+
+                $em->persist($pertinencia);
                 
                 $constanciaPertinencia = $form->get('pertinencia')->getData();
                 $nombrePertinencia = md5(uniqid()).'.'.$constanciaPertinencia->guessExtension();
@@ -1099,6 +1120,7 @@ $ascenso = $this->getDoctrine()->getRepository('AppBundle:Ascenso')->findOneBy(
                 'idRolInstitucion' => $servicio->getIdRolInstitucion(),
                 'idEstatus' => 1
             ));
+            $pertinencia = $this->getDoctrine()->getRepository("AppBundle:AscensoPertinencia")->findOneByIdAscenso($ascenso);
             $eje = $ascenso->getIdRolInstitucion()->getIdInstitucion()->getIdEjeParroquia()->getIdEje()->getNombre();
             $estado = $ascenso->getIdRolInstitucion()->getIdInstitucion()->getIdEjeParroquia()->getIdParroquia()->getIdMunicipio()->getIdEstado()->getNombre();
             $tutores = $ascenso->getTutores();
@@ -1120,8 +1142,6 @@ $ascenso = $this->getDoctrine()->getRepository('AppBundle:Ascenso')->findOneBy(
                     $presidente = $tutor;
                 }
 
-
-
             }
 
 
@@ -1134,18 +1154,19 @@ $ascenso = $this->getDoctrine()->getRepository('AppBundle:Ascenso')->findOneBy(
                     'resolucion' => $resolucion,
                     'presidente' => $presidente,
                     'categoria' => $escalafones,
-                    'jurados' => $tutores
+                    'jurados' => $tutores,
+                    'pertinencia' => $pertinencia
                 ));
             }else if (!$ascenso->getTesisUbv()) {
-
-                return $this->render('memorando/acta_defensa_investigacion.html.twig', array(
+                return $this->render('memorando/acta_defensa_pertinencia.html.twig', array(
                     'ascenso' => $ascenso,
                     'eje' => $eje,
                     'estado' => $estado,
                     'resolucion' => $resolucion,
                     'presidente' => $presidente,
                     'categoria' => $escalafones,
-                    'jurados' => $tutores
+                    'jurados' => $tutores,
+                    'pertinencia' => $pertinencia
                 ));
 
             }else{
@@ -1156,7 +1177,8 @@ $ascenso = $this->getDoctrine()->getRepository('AppBundle:Ascenso')->findOneBy(
                     'resolucion' => $resolucion,
                     'presidente' => $presidente,
                     'categoria' => $escalafones,
-                    'jurados' => $tutores
+                    'jurados' => $tutores,
+                    'pertinencia' => $pertinencia
                 ));
             }
 
