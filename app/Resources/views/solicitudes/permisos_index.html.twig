@@ -1,0 +1,54 @@
+{% extends 'base_app.html.twig' %}
+{% block body %} 
+
+             <div class="container">                 
+                {% for message in app.session.flashBag.get('notice') %}                                
+                    <h4 class="alert alert-success">{{ message }}</h4>                    
+                {%endfor %}
+                <hr>
+                 <div class="col-md-5">
+                     <div class="panel panel-green">
+                         <div class="panel-heading">
+                             <h3 class="panel-title">Solicitud de permiso</h3>
+                             <div class="panel-control">
+                                 <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="Expand/Collapse" class="panel-collapse"><i class="icon-arrow-down"></i></a>
+                                 <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="Reload" class="panel-reload"><i class="icon-reload"></i></a>
+                                 <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="Remove" class="panel-remove"><i class="icon-close"></i></a>
+                             </div>
+                         </div>
+                         <div class="panel-body">
+                             <p>
+                                 A través del sistema CEA@UBV, puedes solicitar el uso de permisos para años sabáticos,
+                                 permisos por estudio y/o permisos para salir al extranjero.
+                             </p>
+                         </div>
+                     </div>
+                 </div>
+
+                 <div class="col-md-7">
+                     <div class="panel panel-default">
+                         <div class="panel-heading">
+                             <h3 class="panel-title">Permisos disponibles</h3>
+                             <div class="panel-control">
+                                 <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="Expand/Collapse" class="panel-collapse"><i class="fa fa-arrow-circle-down"></i></a>
+                                 <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="Reload" class="panel-reload"><i class="icon-reload"></i></a>
+                                 <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="Remove" class="panel-remove"><i class="icon-close"></i></a>
+                             </div>
+                         </div>
+                         <div class="panel-body">
+                             <p>Al hacer click estará enviando la solicitud de permiso al coordinador del centro de estudios. Entre los permisos disponibles, tenemos los que se mencionan a continuación</p>
+                             <ul class="list-group">
+                                 <li class="list-group-item btn btn-success btn-xs btn-block">Permiso por estudio (max. tres meses) </li>
+                                 <li class="list-group-item btn btn-success btn-xs btn-block">Permiso para el extranjero (oblig. soporte) </li>
+                                 <li class="list-group-item btn btn-success btn-xs btn-block">Año Sabático </li>
+                             </ul>
+                         </div>
+                     </div>
+                 </div>
+
+             </div>
+
+        </div>
+     </div>
+    
+{% endblock %}
