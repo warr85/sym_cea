@@ -284,7 +284,7 @@
                                                        <div class="wrapper">
                                                            <label for="yes_radio{{ loop.index }}" class="yes-lbl"><i class="fa fa-check"></i>
                                                            </label>
-                                                           <input type="radio" value="1" name="{{ documento.idTipoDocumentos.identificador }}" class="yes_radio" id="yes_radio{{ loop.index }}" {% if documento.idEstatus.id == 1 %} checked="checked" {% endif %} disabled>
+                                                           <input type="radio" value="1" name="{{ documento.idTipoDocumentos.identificador }}" class="yes_radio" id="yes_radio{{ loop.index }}" {% if documento.idEstatus.id == 1 %} checked="checked" {% endif %} >
                                                            <label for="maybe_radio{{ loop.index }}" class="maybe-lbl">
                                                                <i class="fa fa-question"></i>
                                                            </label>
@@ -293,7 +293,7 @@
                                                                        class="fa fa-close"></i></label><input type="radio" value="3"
                                                                                                               name="{{ documento.idTipoDocumentos.identificador }}"
                                                                                                               class="no_radio"
-                                                                                                              id="no_radio{{ loop.index }}" {% if documento.idEstatus.id == 3 %} checked="checked" {% endif %} disabled>
+                                                                                                              id="no_radio{{ loop.index }}" {% if documento.idEstatus.id == 3 %} checked="checked" {% endif %} >
 
                                                            <div class="toggle"></div>
                                                        </div>
@@ -324,7 +324,29 @@
         var buttonpressed;
         $('#aprobado').click(function() {
             //alert("click"); return false;
-            buttonpressed = $(this).attr('name')
+            buttonpressed = $(this).attr('name');
+            console.log($(':radio:checked').length);
+            for (var i = 0; i < $(':radio:checked').length; i ++){
+                console.log($(':radio:checked')[i]);
+                if ( ($(':radio:checked')[i].value == "")) {
+                    alert('Debes revisar todos los documentos para poder enviar la solicitud!');
+                    $("#aprobado").button('reset');
+                    return false;
+                }
+
+            }
+            console.log($("input[type=submit][clicked=true]").val());
+            if (buttonpressed == "aprobado") {
+                for (var i = 0; i < $(':radio:checked').length; i++) {
+                    console.log($(':radio:checked')[i]);
+                    if (($(':radio:checked')[i].value == "3")) {
+                        alert('No puedes aprobar una solicitud con documentos en estatus de rechazado');
+                        $("#aprobado").button('reset');
+                        return false;
+                    }
+
+                }
+            }
         });
 
         $('#rechazar').click(function() {

@@ -2,9 +2,17 @@
 {% block body %} 
 
              <div class="container">                 
-                {% for message in app.session.flashBag.get('notice') %}                                
+                {% for message in app.session.flashBag.get('success') %}
                     <h4 class="alert alert-success">{{ message }}</h4>                    
                 {%endfor %}
+
+                 {% for message in app.session.flashBag.get('warning') %}
+                     <h4 class="alert alert-warning">{{ message }}</h4>
+                 {%endfor %}
+
+                 {% for message in app.session.flashBag.get('danger') %}
+                     <h4 class="alert alert-danger">{{ message }}</h4>
+                 {%endfor %}
                 <hr>
                  <div class="col-md-5">
                      <div class="panel panel-default">
@@ -74,7 +82,14 @@
                                      <div id="3" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree3">
                                          <div class="panel-body">
                                              Al tener el escalafón de asistente, puedes solicitar tu año sabático, siempre y
-                                             cuando lo hayas contemplado dentro de tus actividades del PIDA
+                                             cuando lo hayas contemplado dentro de tus actividades del PIDA y
+                                             nos incluyas una exposición de motivos
+                                             <br><br>
+
+                                             {% form_theme formSabatico 'bootstrap_3_layout.html.twig' %}
+                                             {{ form_start(formSabatico, {'attr': {'novalidate': 'novalidate'}}) }}
+                                             {{ form_widget(formSabatico) }}
+                                             {{ form_end(formSabatico) }}
                                          </div>
                                      </div>
                                  </div>

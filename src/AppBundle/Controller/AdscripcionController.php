@@ -434,21 +434,24 @@ class AdscripcionController extends Controller
             array('form' => $form->createView())
         );
     }
-    
-    
+
+
+
     /**
      * Solicita información al docente sobre su PIDA
      * 
-     * @Route("/solicitud/pida/{id}", name="solicitud_pida")
+     * @Route("/solicitud/pida/", name="solicitud_pida")
      * @Method({"GET", "POST"})
      */
-    public function pidaAction(DocenteServicio $servicio,  Request $request)
+    public function pidaAction(Request $request)
     {
-        
+
+        //var_dump($servicio->getId()); exit;
+
          //verificar en las solicitudes la adscripcion del docente
        $adscripcion = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->
                 findOneBy(array(
-                    'idRolInstitucion'  =>  $servicio->getIdRolInstitucion()->getId(),
+                    'idRolInstitucion'  =>  $this->getUser()->getIdRolInstitucion()->getId(),
                     'idServicioCe'      =>  2
         ));
        //si no ha solicitado adscripción regresa a la pagina de adscripcion
@@ -458,6 +461,11 @@ class AdscripcionController extends Controller
 
 
          $pid = false;
+         $servicio = $this->getDoctrine()->getRepository("AppBundle:DocenteServicio")->findOneBy(array(
+             'idRolInstitucion' => $this->getUser()->getIdRolInstitucion()->getId(),
+             'idServicioCe' => 4
+         ));
+
         if($servicio) {
             //si el servicio está cadudado, debe solicitar uno nuevo
             if ($servicio->getIdEstatus()->getId() == 5) {
@@ -501,19 +509,19 @@ class AdscripcionController extends Controller
             $em = $this->getDoctrine()->getManager();
             //Crear la solicitud de Servicio
             if(!$servicio) {
-                $serv = new DocenteServicio();
+                $servicio = new DocenteServicio();
 
-                $serv->setIdRolInstitucion($this->getUser()->getIdRolInstitucion());
-                $serv->setIdServicioCe($this->getDoctrine()->getRepository('AppBundle:ServiciosCe')->findOneById(4));
-                $serv->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:estatus')->findOneById(2));
-                $em->persist($serv);
+                $servicio->setIdRolInstitucion($this->getUser()->getIdRolInstitucion());
+                $servicio->setIdServicioCe($this->getDoctrine()->getRepository('AppBundle:ServiciosCe')->findOneById(4));
+                $servicio->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:estatus')->findOneById(2));
+                $em->persist($servicio);
             }
 
 
             
             $pida->setIdRolInstitucion($this->getUser()->getIdRolInstitucion());
             $pida->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(2));
-            $pida->setIdDocenteServicio($serv);
+            $pida->setIdDocenteServicio($servicio);
             foreach($pida->getPidaTareaEspecifico() as $especifico){
                 //var_dump($especifico); exit;
                 $especifico->setAdscripcionPidaId($pida);

@@ -65,7 +65,7 @@ class AppController extends Controller {
         $em = $this->getDoctrine()->getManager();
         if(!$pida){
             $this->addFlash('warning', 'Estimado Docente Mientras se verifica su adscripción, le solicitamos que por favor cree su PIDA.');
-            return $this->redirectToRoute('solicitud_pida', array('id' => $servicioAdscripcion->getId()));
+            return $this->redirectToRoute('solicitud_pida');
         }else{
             $caducidad = $this->getDoctrine()->getRepository("AppBundle:PidaCaducidad")->findOneByIdDocenteServicio($pida);
             if($caducidad){
@@ -265,6 +265,14 @@ class AppController extends Controller {
                 $user->addRol($this->getDoctrine()->getRepository('AppBundle:Role')->findOneByName("ROLE_ESTUDIANTE"));
                 $em->persist($user); 
            }
+
+           $parametros = $request->request->all();
+
+           //Guardar el resultado de la verificación de Documentos de los permisos sabaticos
+           if($servicios->getIdServicioCe()->getId() == 8){
+                   verificar_documentos4($servicios->getIdRolInstitucion(), 18, 1, $em, "", $servicios);
+           }
+
            
                                             
        }else{
@@ -275,6 +283,11 @@ class AppController extends Controller {
                 $user->removeRol($this->getDoctrine()->getRepository('AppBundle:Role')->findOneByName("ROLE_ESTUDIANTE"));
                 $em->persist($user); 
            }
+
+           //Guardar el resultado de la verificación de Documentos de los permisos sabaticos
+           if($servicios->getIdServicioCe()->getId() == 8){
+               verificar_documentos4($servicios->getIdRolInstitucion(), 18, 3, $em, "", $servicios);
+           }
        }
                   
        $em->persist($servicios);       
@@ -282,7 +295,7 @@ class AppController extends Controller {
        
        $user = $this->getDoctrine()->getRepository('AppBundle:Usuarios')->findOneByIdRolInstitucion($servicios->getIdRolInstitucion());
        
-       $message = \Swift_Message::newInstance()
+       /*$message = \Swift_Message::newInstance()
                     ->setSubject('Resultado Solicitud de Servicio Docente CEA@UBV')
                     ->setFrom('wilmer.ramones@gmail.com')
                     ->setTo($user->getEmail())
@@ -299,7 +312,7 @@ class AppController extends Controller {
                         'text/html'
                     )                    
                 ;
-                $this->get('mailer')->send($message);
+                $this->get('mailer')->send($message);*/
        
        $this->addFlash('notice', 'Servicio Actualizada Correctamente, hemos enviado un correo al docente notificandole los cambios.');
        
@@ -320,10 +333,31 @@ class AppController extends Controller {
        
     }
         
-    
-   
-    
-    
+
     
 }
- 
+
+function verificar_documentos4($idRolInstitucion, $tipo, $estatus, $em, $ubicacion="", $servicio){
+    $existe = $em->getRepository("AppBundle:DocumentosVerificados")->findOneBy(array(
+        'idRolInstitucion' => $idRolInstitucion,
+        'idTipoDocumentos'  => $tipo
+    ));
+
+    if(!$existe) {
+        $verificacion = new DocumentosVerificados();
+        $verificacion->setIdEstatus($em->getRepository("AppBundle:Estatus")->findOneById($estatus));
+        $verificacion->setIdRolInstitucion($idRolInstitucion);
+        $verificacion->setIdServicio($servicio);
+        $verificacion->setIdTipoDocumentos($em->getRepository("AppBundle:TipoDocumentos")->findOneById($tipo));
+        $verificacion->setUbicacion($ubicacion);
+        $em->persist($verificacion);
+        $em->flush();
+    }else{
+        $existe->setIdEstatus($em->getRepository("AppBundle:Estatus")->findOneById($estatus));
+        $em->persist($existe);
+        $em->flush();
+    }
+
+}
+
+

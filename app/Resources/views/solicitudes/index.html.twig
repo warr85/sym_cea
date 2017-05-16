@@ -74,6 +74,9 @@
                                   <a href="{{ path('servicio_defensa_imprimir', { 'id': servicio.id }) }}" target="_blank" class="btn btn-xs btn-info"><i class="fa fa-print"> </i></a>
                               {% endif %}
                           {%endif%}
+                        {% if servicio.idServicioCe.id > 7 %}
+                            <a href="{{ path('adscripcion_show', { 'id': servicio.id }) }}" class="btn btn-xs btn-info"><i class="fa fa-eye"> </i></a>
+                            {% endif %}
                       </td>
                   </tr>
                   {% endfor %}
