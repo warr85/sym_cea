@@ -7,6 +7,8 @@
  */
 
 namespace AppBundle\Controller;
+use AppBundle\Entity\DocentePermisoTiempo;
+use AppBundle\Entity\DocumentosVerificados;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -268,9 +270,23 @@ class AppController extends Controller {
 
            $parametros = $request->request->all();
 
+
            //Guardar el resultado de la verificación de Documentos de los permisos sabaticos
            if($servicios->getIdServicioCe()->getId() == 8){
                    verificar_documentos4($servicios->getIdRolInstitucion(), 18, 1, $em, "", $servicios);
+           }
+
+           if($servicios->getIdServicioCe()->getId() == 9){
+               verificar_documentos4($servicios->getIdRolInstitucion(), 19, 1, $em, "", $servicios);
+               verificar_documentos4($servicios->getIdRolInstitucion(), 20, 1, $em, "", $servicios);
+               verificar_documentos4($servicios->getIdRolInstitucion(), 21, 1, $em, "", $servicios);
+           }
+
+           if($servicios->getIdServicioCe()->getId() == 10){
+               verificar_documentos4($servicios->getIdRolInstitucion(), 19, 1, $em, "", $servicios);
+               verificar_documentos4($servicios->getIdRolInstitucion(), 20, 1, $em, "", $servicios);
+               verificar_documentos4($servicios->getIdRolInstitucion(), 22, 1, $em, "", $servicios);
+
            }
 
            
@@ -287,6 +303,18 @@ class AppController extends Controller {
            //Guardar el resultado de la verificación de Documentos de los permisos sabaticos
            if($servicios->getIdServicioCe()->getId() == 8){
                verificar_documentos4($servicios->getIdRolInstitucion(), 18, 3, $em, "", $servicios);
+           }
+
+           if($servicios->getIdServicioCe()->getId() == 9){
+               verificar_documentos4($servicios->getIdRolInstitucion(), 19, 3, $em, "", $servicios);
+               verificar_documentos4($servicios->getIdRolInstitucion(), 20, 3, $em, "", $servicios);
+               verificar_documentos4($servicios->getIdRolInstitucion(), 21, 3, $em, "", $servicios);
+           }
+
+           if($servicios->getIdServicioCe()->getId() == 10){
+               verificar_documentos4($servicios->getIdRolInstitucion(), 19, 3, $em, "", $servicios);
+               verificar_documentos4($servicios->getIdRolInstitucion(), 20, 3, $em, "", $servicios);
+               verificar_documentos4($servicios->getIdRolInstitucion(), 22, 3, $em, "", $servicios);
            }
        }
                   
@@ -338,10 +366,11 @@ class AppController extends Controller {
 }
 
 function verificar_documentos4($idRolInstitucion, $tipo, $estatus, $em, $ubicacion="", $servicio){
-    $existe = $em->getRepository("AppBundle:DocumentosVerificados")->findOneBy(array(
-        'idRolInstitucion' => $idRolInstitucion,
-        'idTipoDocumentos'  => $tipo
-    ));
+    $existe = $em->getRepository("AppBundle:DocumentosVerificados")->findOneBy(
+        array('idRolInstitucion' => $idRolInstitucion,  'idTipoDocumentos'  => $tipo),
+        array('id' => 'DESC')
+    );
+
 
     if(!$existe) {
         $verificacion = new DocumentosVerificados();

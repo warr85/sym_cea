@@ -261,6 +261,8 @@
                    {% else %}
                        <div class="col-md-5">
                            <h3>Documentos Para confirmar</h3>
+                           Permisio inicia: {{ servicio.docentePermisoTiempo.last.fechaInicio | date("m-d-Y") }} <br>
+                           Permisio finaliza: {{ servicio.docentePermisoTiempo.last.fechaFinal | date("m-d-Y") }} <br>
                            <div class="widget-content">
 
 

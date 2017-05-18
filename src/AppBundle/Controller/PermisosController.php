@@ -8,6 +8,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\DocentePermisoTiempo;
 use AppBundle\Entity\DocumentosVerificados;
 use AppBundle\Entity\PidaCaducidad;
 use AppBundle\Entity\PidaEstatus;
@@ -56,7 +57,7 @@ class PermisosController extends Controller
         );
 
         if($sabatico && ($sabatico->getIdEstatus()->getId() == 1 || $sabatico->getIdEstatus()->getId() == 2 )){
-            $tiempoEspera = $sabatico->getFechaSolicitud()->diff(new \DateTime("now"));
+            $tiempoEspera = $sabatico->getFechaUltimaActualizacion()->diff(new \DateTime("now"));
             if($tiempoEspera->y >= 7 && $sabatico->getIdEstatus()->getId() == 1){
                 $sabatico->setIdEstatus($this->getDoctrine()->getRepository("AppBundle:Estatus")->findOneById(4));
                 $em->persist($sabatico);
@@ -78,6 +79,18 @@ class PermisosController extends Controller
             $servicios->setIdServicioCe($this->getDoctrine()->getRepository('AppBundle:ServiciosCe')->findOneById(8));
             $servicios->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:estatus')->findOneById(2));
             $em->persist($servicios);
+
+
+            $permisoTiempo = new DocentePermisoTiempo();
+            $permisoTiempo->setFechaInicio($formSabatico->get('fechaInicio')->getData());
+            $fecha = strtotime($formSabatico->get('fechaInicio')->getData()->format('d-m-Y'));
+            $fecha = strtotime('+1 year', $fecha );
+            $newformat = date('Y-m-d', $fecha);
+
+            $permisoTiempo->setFechaFinal(new \DateTime($newformat));
+            $permisoTiempo->setIdDocenteServicio($servicios);
+            $em->persist($permisoTiempo);
+
             $em->flush();
 
             $motivo = $formSabatico->get('motivo')->getData();
@@ -105,52 +118,182 @@ class PermisosController extends Controller
             'idRolInstitucion' => $docente, 'idServicioCe'  => 9 ),
             array('id' => 'DESC')
         );
+        $cuantoAprobaron = $this->getDoctrine()->getRepository("AppBundle:DocentePermisoTiempo")->findOneByIdDocenteServicio($estudio);
+        $tiempoAprobaron = $cuantoAprobaron->getFechaFinal()->diff($cuantoAprobaron->getFechaInicio());
 
+        $caduco = $cuantoAprobaron->getFechaFinal()->diff(new \DateTime("now"));
         if($estudio && ($estudio->getIdEstatus()->getId() == 1 || $estudio->getIdEstatus()->getId() == 2 )){
-            $tiempoEspera = $estudio->getFechaSolicitud()->diff(new \DateTime("now"));
+            $tiempoEspera = $cuantoAprobaron->getFechaFinal()->diff(new \DateTime("now"));
             if($tiempoEspera->y >= 1 && $estudio->getIdEstatus()->getId() == 1){
                 $estudio->setIdEstatus($this->getDoctrine()->getRepository("AppBundle:Estatus")->findOneById(4));
                 $em->persist($estudio);
                 $em->flush();
-            }else {
-                $this->addFlash('warning', 'Ya posee una solicitud en espera o activa, no puede realizar otra solicitud.');
+            }else if($tiempoAprobaron->m == 3 || !$estudio->getIdEstatus()->getId() == 1 || !$caduco->m > 0) {
+                $this->addFlash('warning', 'Todavia no puede realizar otra solicitud, debe esperar que el tiempo caduque si fue aprobado menos de tres meses o esperar un año para una nueva solicitud.');
                 return $this->redirect($this->generateUrl('servicios_index'));
             }
         }
 
 
-        $formSabatico = $this->createForm('AppBundle\Form\PermisoSabaticoType');
-        $formSabatico->handleRequest($request);
-        if ($formSabatico->isSubmitted() && $formSabatico->isValid()) {
+        $formEstudio = $this->createForm('AppBundle\Form\PermisoEstudioType');
+        $formEstudio->handleRequest($request);
+        if ($formEstudio->isSubmitted() && $formEstudio->isValid()) {
 
             $servicios = new DocenteServicio();
 
             $servicios->setIdRolInstitucion($this->getUser()->getIdRolInstitucion());
-            $servicios->setIdServicioCe($this->getDoctrine()->getRepository('AppBundle:ServiciosCe')->findOneById(8));
+            $servicios->setIdServicioCe($this->getDoctrine()->getRepository('AppBundle:ServiciosCe')->findOneById(9));
             $servicios->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:estatus')->findOneById(2));
+            $servicios->setFechaSolicitud($formEstudio->get('fechaInicio')->getData());
             $em->persist($servicios);
+
+            $permisoTiempo = new DocentePermisoTiempo();
+            $permisoTiempo->setFechaInicio($formEstudio->get('fechaInicio')->getData());
+            $fecha = strtotime($formEstudio->get('fechaInicio')->getData()->format('d-m-Y'));
+            $meses = $formEstudio->get('tiempo')->getData();
+            $fecha = strtotime('+' . $meses . ' month', $fecha );
+            $newformat = date('Y-m-d', $fecha);
+            $permisoTiempo->setFechaFinal(new \DateTime($newformat));
+            $permisoTiempo->setIdDocenteServicio($servicios);
+            $em->persist($permisoTiempo);
+
+
             $em->flush();
 
-            $motivo = $formSabatico->get('motivo')->getData();
-            $nombreMotivo = md5(uniqid()).'.'.$motivo->guessExtension();
+            $socioAcademico = $formEstudio->get('permisoSocioAcademico')->getData();
+            $nombreSocioAcademico = md5(uniqid()).'.'.$socioAcademico->guessExtension();
 
-            $motivo->move(
+            $socioAcademico->move(
                 $this->container->getParameter('permiso_directory'),
-                $nombreMotivo
+                $nombreSocioAcademico
             );
-            thumbnail3($nombreMotivo, $this->container->getParameter('permiso_directory'), $this->container->getParameter('permiso_thumb_directory'));
+            thumbnail3($nombreSocioAcademico, $this->container->getParameter('permiso_directory'), $this->container->getParameter('permiso_thumb_directory'));
 
-            verificar_documentos3($servicios->getIdRolInstitucion(),18,2,$em, $nombreMotivo, $servicios);
-            $this->addFlash('success', 'Permiso solicitado satisfactoriamente');
+            verificar_documentos3($servicios->getIdRolInstitucion(),19,2,$em, $nombreSocioAcademico, $servicios);
+
+
+
+
+            $regional = $formEstudio->get('permisoCoordRegional')->getData();
+            $nombreRegional = md5(uniqid()).'.'. $regional->guessExtension();
+
+            $regional->move(
+                $this->container->getParameter('permiso_directory'),
+                $nombreRegional
+            );
+            thumbnail3($nombreRegional, $this->container->getParameter('permiso_directory'), $this->container->getParameter('permiso_thumb_directory'));
+
+            verificar_documentos3($servicios->getIdRolInstitucion(),20,2,$em, $nombreRegional, $servicios);
+
+            $cartaTesis = $formEstudio->get('cartaTesis')->getData();
+            $nombreCartaTesis = md5(uniqid()).'.'.$cartaTesis->guessExtension();
+
+            $cartaTesis->move(
+                $this->container->getParameter('permiso_directory'),
+                $nombreCartaTesis
+            );
+            thumbnail3($nombreCartaTesis, $this->container->getParameter('permiso_directory'), $this->container->getParameter('permiso_thumb_directory'));
+
+            verificar_documentos3($servicios->getIdRolInstitucion(),21,2,$em, $nombreCartaTesis, $servicios);
+            $this->addFlash('success', 'Permiso por estudio solicitado satisfactoriamente');
             return $this->redirect($this->generateUrl('servicios_index'));
         }
 
         /* Fin Estudio */
 
 
-        return $this->render('solicitudes/permisos_index.html.twig', array(
-            'formSabatico'      => $formSabatico->createView()
 
+
+
+        /* Permiso extranjero */
+        $estudio = $this->getDoctrine()->getRepository("AppBundle:DocenteServicio")->findOneBy(array(
+            'idRolInstitucion' => $docente, 'idServicioCe'  => 9 ),
+            array('id' => 'DESC')
+        );
+        $cuantoAprobaron = $this->getDoctrine()->getRepository("AppBundle:DocentePermisoTiempo")->findOneByIdDocenteServicio($estudio);
+        $tiempoAprobaron = $cuantoAprobaron->getFechaFinal()->diff($cuantoAprobaron->getFechaInicio());
+
+        $caduco = $cuantoAprobaron->getFechaFinal()->diff(new \DateTime("now"));
+        if($estudio && ($estudio->getIdEstatus()->getId() == 1 || $estudio->getIdEstatus()->getId() == 2 )){
+            $tiempoEspera = $cuantoAprobaron->getFechaFinal()->diff(new \DateTime("now"));
+            if($tiempoEspera->y >= 1 && $estudio->getIdEstatus()->getId() == 1){
+                $estudio->setIdEstatus($this->getDoctrine()->getRepository("AppBundle:Estatus")->findOneById(4));
+                $em->persist($estudio);
+                $em->flush();
+            }else{
+                $this->addFlash('warning', 'Ya posee una solicitud en espera o activa, no puede realizar otra solicitud.');
+                return $this->redirect($this->generateUrl('servicios_index'));
+            }
+        }
+
+
+        $formExtranjero = $this->createForm('AppBundle\Form\PermisoExtranjeroType');
+        $formExtranjero->handleRequest($request);
+        if ($formExtranjero->isSubmitted() && $formExtranjero->isValid()) {
+
+            $servicios = new DocenteServicio();
+
+            $servicios->setIdRolInstitucion($this->getUser()->getIdRolInstitucion());
+            $servicios->setIdServicioCe($this->getDoctrine()->getRepository('AppBundle:ServiciosCe')->findOneById(10));
+            $servicios->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:estatus')->findOneById(2));
+            $servicios->setFechaSolicitud($formExtranjero->get('fechaInicio')->getData());
+            $em->persist($servicios);
+
+            $permisoTiempo = new DocentePermisoTiempo();
+            $permisoTiempo->setFechaInicio($formExtranjero->get('fechaInicio')->getData());
+            $permisoTiempo->setFechaFinal($formExtranjero->get('fechaFinal')->getData());
+            $permisoTiempo->setIdDocenteServicio($servicios);
+            $em->persist($permisoTiempo);
+
+
+            $em->flush();
+
+            $socioAcademico = $formExtranjero->get('permisoSocioAcademico')->getData();
+            $nombreSocioAcademico = md5(uniqid()).'.'.$socioAcademico->guessExtension();
+
+            $socioAcademico->move(
+                $this->container->getParameter('permiso_directory'),
+                $nombreSocioAcademico
+            );
+            thumbnail3($nombreSocioAcademico, $this->container->getParameter('permiso_directory'), $this->container->getParameter('permiso_thumb_directory'));
+
+            verificar_documentos3($servicios->getIdRolInstitucion(),19,2,$em, $nombreSocioAcademico, $servicios);
+
+
+
+
+            $regional = $formExtranjero->get('permisoCoordRegional')->getData();
+            $nombreRegional = md5(uniqid()).'.'. $regional->guessExtension();
+
+            $regional->move(
+                $this->container->getParameter('permiso_directory'),
+                $nombreRegional
+            );
+            thumbnail3($nombreRegional, $this->container->getParameter('permiso_directory'), $this->container->getParameter('permiso_thumb_directory'));
+
+            verificar_documentos3($servicios->getIdRolInstitucion(),20,2,$em, $nombreRegional, $servicios);
+
+            $cartaInvitacion = $formExtranjero->get('cartaInvitacion')->getData();
+            $nombreCartaInvitacion = md5(uniqid()).'.'.$cartaInvitacion->guessExtension();
+
+            $cartaInvitacion->move(
+                $this->container->getParameter('permiso_directory'),
+                $nombreCartaInvitacion
+            );
+            thumbnail3($nombreCartaInvitacion, $this->container->getParameter('permiso_directory'), $this->container->getParameter('permiso_thumb_directory'));
+
+            verificar_documentos3($servicios->getIdRolInstitucion(),22,2,$em, $nombreCartaInvitacion, $servicios);
+            $this->addFlash('success', 'Permiso para el extranjero solicitado satisfactoriamente');
+            return $this->redirect($this->generateUrl('servicios_index'));
+        }
+
+        /* Fin extranjero */
+
+
+        return $this->render('solicitudes/permisos_index.html.twig', array(
+            'formSabatico'      => $formSabatico->createView(),
+            'formEstudio'      => $formEstudio->createView(),
+            'formExtranjero'      => $formExtranjero->createView()
         ));
     }
 

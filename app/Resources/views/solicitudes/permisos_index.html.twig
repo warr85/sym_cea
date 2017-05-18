@@ -51,7 +51,20 @@
                                      <div id="1" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne1">
                                          <div class="panel-body">
                                              Puedes solicitar permiso por estudio (finalizar tesis maestría o doctorado) hasta un
-                                             máximo de tres meses.
+                                             máximo de tres meses.<br><br>
+
+                                             {% form_theme formEstudio 'bootstrap_3_layout.html.twig' %}
+                                             {{ form_start(formEstudio, {'attr': {'novalidate': 'novalidate'}}) }}
+                                             <div class="row">
+                                                 <div class="col-lg-5">
+                                                     {{ form_row(formEstudio.fechaInicio) }}
+                                                 </div>
+                                                 <div class="col-lg-5">
+                                                     {{ form_row(formEstudio.tiempo) }}
+                                                 </div>
+
+                                             </div>
+                                             {{ form_end(formEstudio) }}
                                          </div>
                                      </div>
                                  </div>
@@ -67,7 +80,21 @@
                                          <div class="panel-body">
                                              Necesitar salir al extranjero a realizar una ponencia, taller, entre otros, gestiona
                                              tu permiso a través del CEA@UBV.  Necesario presentar un soporte que valide
-                                             el traslado al extranjero.
+                                             el traslado al extranjero.<br><br>
+
+                                             {% form_theme formExtranjero 'bootstrap_3_layout.html.twig' %}
+                                             {{ form_start(formExtranjero, {'attr': {'novalidate': 'novalidate'}}) }}
+                                             <div class="row">
+                                                 <div class="col-lg-5">
+                                                     {{ form_row(formExtranjero.fechaInicio) }}
+                                                 </div>
+                                                 <div class="col-lg-5">
+                                                     {{ form_row(formExtranjero.fechaFinal) }}
+                                                 </div>
+
+                                             </div>
+                                             {{ form_end(formExtranjero) }}
+
                                          </div>
                                      </div>
                                  </div>

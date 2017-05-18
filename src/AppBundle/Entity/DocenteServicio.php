@@ -51,6 +51,13 @@ class DocenteServicio {
      * })
      */
     protected $idRolInstitucion;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\DocentePermisoTiempo", mappedBy="idDocenteServicio",cascade={"all"})
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     */
+    private $docentePermisoTiempo;
     
     
     /**
@@ -200,5 +207,45 @@ class DocenteServicio {
     public function getFechaUltimaActualizacion()
     {
         return $this->fechaUltimaActualizacion;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->docentePermisoTiempo = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add docentePermisoTiempo
+     *
+     * @param \AppBundle\Entity\DocentePermisoTiempo $docentePermisoTiempo
+     * @return DocenteServicio
+     */
+    public function addDocentePermisoTiempo(\AppBundle\Entity\DocentePermisoTiempo $docentePermisoTiempo)
+    {
+        $this->docentePermisoTiempo[] = $docentePermisoTiempo;
+
+        return $this;
+    }
+
+    /**
+     * Remove docentePermisoTiempo
+     *
+     * @param \AppBundle\Entity\DocentePermisoTiempo $docentePermisoTiempo
+     */
+    public function removeDocentePermisoTiempo(\AppBundle\Entity\DocentePermisoTiempo $docentePermisoTiempo)
+    {
+        $this->docentePermisoTiempo->removeElement($docentePermisoTiempo);
+    }
+
+    /**
+     * Get docentePermisoTiempo
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getDocentePermisoTiempo()
+    {
+        return $this->docentePermisoTiempo;
     }
 }

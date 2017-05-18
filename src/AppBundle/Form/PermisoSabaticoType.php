@@ -10,9 +10,11 @@
 namespace AppBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
+use Symfony\Component\Validator\Constraints\Date;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -23,6 +25,20 @@ class PermisoSabaticoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+
+            ->add('fechaInicio',DateType::class, array(
+                'widget' => 'choice',
+                'label' => 'Permisio inicia desde',
+                'label_attr' => array('class' => 'form-group'),
+                'years' => range(date("Y"), date("Y")+2),
+                'placeholder' => array(
+                    'year' => 'Año', 'month' => 'Mes', 'day' => 'Día',
+                ),
+                'constraints' => array(
+                    new NotBlank(),
+                    new Date()
+                )
+            ))
                 
             ->add('motivo', FileType::class, array(
                 'label' => 'Digital Carta Exposición de Motivos',
