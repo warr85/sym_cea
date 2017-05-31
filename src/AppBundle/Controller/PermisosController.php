@@ -118,22 +118,24 @@ class PermisosController extends Controller
             'idRolInstitucion' => $docente, 'idServicioCe'  => 9 ),
             array('id' => 'DESC')
         );
-        $cuantoAprobaron = $this->getDoctrine()->getRepository("AppBundle:DocentePermisoTiempo")->findOneByIdDocenteServicio($estudio);
-        $tiempoAprobaron = $cuantoAprobaron->getFechaFinal()->diff($cuantoAprobaron->getFechaInicio());
+        if($estudio) {
+            $cuantoAprobaron = $this->getDoctrine()->getRepository("AppBundle:DocentePermisoTiempo")->findOneByIdDocenteServicio($estudio);
+            $tiempoAprobaron = $cuantoAprobaron->getFechaFinal()->diff($cuantoAprobaron->getFechaInicio());
 
-        $caduco = $cuantoAprobaron->getFechaFinal()->diff(new \DateTime("now"));
-        if($estudio && ($estudio->getIdEstatus()->getId() == 1 || $estudio->getIdEstatus()->getId() == 2 )){
-            $tiempoEspera = $cuantoAprobaron->getFechaFinal()->diff(new \DateTime("now"));
-            if($tiempoEspera->y >= 1 && $estudio->getIdEstatus()->getId() == 1){
-                $estudio->setIdEstatus($this->getDoctrine()->getRepository("AppBundle:Estatus")->findOneById(4));
-                $em->persist($estudio);
-                $em->flush();
-            }else if($tiempoAprobaron->m == 3 || !$estudio->getIdEstatus()->getId() == 1 || !$caduco->m > 0) {
-                $this->addFlash('warning', 'Todavia no puede realizar otra solicitud, debe esperar que el tiempo caduque si fue aprobado menos de tres meses o esperar un año para una nueva solicitud.');
-                return $this->redirect($this->generateUrl('servicios_index'));
+
+            $caduco = $cuantoAprobaron->getFechaFinal()->diff(new \DateTime("now"));
+            if ($estudio && ($estudio->getIdEstatus()->getId() == 1 || $estudio->getIdEstatus()->getId() == 2)) {
+                $tiempoEspera = $cuantoAprobaron->getFechaFinal()->diff(new \DateTime("now"));
+                if ($tiempoEspera->y >= 1 && $estudio->getIdEstatus()->getId() == 1) {
+                    $estudio->setIdEstatus($this->getDoctrine()->getRepository("AppBundle:Estatus")->findOneById(4));
+                    $em->persist($estudio);
+                    $em->flush();
+                } else if ($tiempoAprobaron->m == 3 || !$estudio->getIdEstatus()->getId() == 1 || !$caduco->m > 0) {
+                    $this->addFlash('warning', 'Todavia no puede realizar otra solicitud, debe esperar que el tiempo caduque si fue aprobado menos de tres meses o esperar un año para una nueva solicitud.');
+                    return $this->redirect($this->generateUrl('servicios_index'));
+                }
             }
         }
-
 
         $formEstudio = $this->createForm('AppBundle\Form\PermisoEstudioType');
         $formEstudio->handleRequest($request);
@@ -210,22 +212,23 @@ class PermisosController extends Controller
             'idRolInstitucion' => $docente, 'idServicioCe'  => 9 ),
             array('id' => 'DESC')
         );
-        $cuantoAprobaron = $this->getDoctrine()->getRepository("AppBundle:DocentePermisoTiempo")->findOneByIdDocenteServicio($estudio);
-        $tiempoAprobaron = $cuantoAprobaron->getFechaFinal()->diff($cuantoAprobaron->getFechaInicio());
+        if($estudio) {
+            $cuantoAprobaron = $this->getDoctrine()->getRepository("AppBundle:DocentePermisoTiempo")->findOneByIdDocenteServicio($estudio);
+            $tiempoAprobaron = $cuantoAprobaron->getFechaFinal()->diff($cuantoAprobaron->getFechaInicio());
 
-        $caduco = $cuantoAprobaron->getFechaFinal()->diff(new \DateTime("now"));
-        if($estudio && ($estudio->getIdEstatus()->getId() == 1 || $estudio->getIdEstatus()->getId() == 2 )){
-            $tiempoEspera = $cuantoAprobaron->getFechaFinal()->diff(new \DateTime("now"));
-            if($tiempoEspera->y >= 1 && $estudio->getIdEstatus()->getId() == 1){
-                $estudio->setIdEstatus($this->getDoctrine()->getRepository("AppBundle:Estatus")->findOneById(4));
-                $em->persist($estudio);
-                $em->flush();
-            }else{
-                $this->addFlash('warning', 'Ya posee una solicitud en espera o activa, no puede realizar otra solicitud.');
-                return $this->redirect($this->generateUrl('servicios_index'));
+            $caduco = $cuantoAprobaron->getFechaFinal()->diff(new \DateTime("now"));
+            if ($estudio && ($estudio->getIdEstatus()->getId() == 1 || $estudio->getIdEstatus()->getId() == 2)) {
+                $tiempoEspera = $cuantoAprobaron->getFechaFinal()->diff(new \DateTime("now"));
+                if ($tiempoEspera->y >= 1 && $estudio->getIdEstatus()->getId() == 1) {
+                    $estudio->setIdEstatus($this->getDoctrine()->getRepository("AppBundle:Estatus")->findOneById(4));
+                    $em->persist($estudio);
+                    $em->flush();
+                } else {
+                    $this->addFlash('warning', 'Ya posee una solicitud en espera o activa, no puede realizar otra solicitud.');
+                    return $this->redirect($this->generateUrl('servicios_index'));
+                }
             }
         }
-
 
         $formExtranjero = $this->createForm('AppBundle\Form\PermisoExtranjeroType');
         $formExtranjero->handleRequest($request);
