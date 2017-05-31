@@ -385,6 +385,7 @@
                 console.log($(':radio:checked', this)[i]);
                 if ( ($(':radio:checked', this)[i].value == "")) {
                     alert('Debes revisar todos los documentos para poder enviar la solicitud!');
+                    $(".btn").button('reset');
                     return false;
                 }
 
@@ -395,6 +396,7 @@
                     console.log($(':radio:checked', this)[i]);
                     if (($(':radio:checked', this)[i].value == "3")) {
                         alert('No puedes aprobar una solicitud con documentos en estatus de rechazado');
+                        $(".btn").button('reset');
                         return false;
                     }
 
@@ -402,5 +404,9 @@
             }
 
         });
+
+        $('#motivo_rechazo').on('hidden.bs.modal', function (e) {
+            $(".btn").button('reset');
+        })
     </script>
 {% endblock %}
