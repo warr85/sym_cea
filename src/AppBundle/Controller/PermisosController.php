@@ -45,8 +45,8 @@ class PermisosController extends Controller
         ));
 
         if(!$escalafones){
-            $this->addFlash('danger', 'Estimado Docente, debe ser mínimo Asistente para poder realizar esta solicitud');
-            return $this->redirect($this->generateUrl('permisos_index'));
+            $this->addFlash('danger', 'Estimado Docente, debe estar como mínino en la categoría Asistente para poder realizar esta solicitud');
+            return $this->redirect($this->generateUrl('cea_index'));
         }
 
 
