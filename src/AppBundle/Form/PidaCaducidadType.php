@@ -23,7 +23,7 @@ class PidaCaducidadType extends AbstractType
         'widget' => 'choice',
         'label' => 'Pida inicia desde',
         'label_attr' => array('class' => 'form-group'),
-        'years' => range(date("Y")-4, date("Y")),
+        'years' => range(date("Y")-2, date("Y")),
         'placeholder' => array(
             'year' => 'Año', 'month' => 'Mes', 'day' => 'Día',
         ),
@@ -36,7 +36,7 @@ class PidaCaducidadType extends AbstractType
                 'widget' => 'choice',
                 'label' => 'Pida inicia desde',
                 'label_attr' => array('class' => 'form-group'),
-                'years' => range(date("Y")-4, date("Y")+4),
+                'years' => range(date("Y")-2, date("Y")+4),
                 'placeholder' => array(
                     'year' => 'Año', 'month' => 'Mes', 'day' => 'Día',
                 ),
