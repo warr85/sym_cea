@@ -385,15 +385,7 @@ class AscensoController extends Controller
             'idTipoDocumentos' => 4
         ));
 
-        if(!$concurso){
-            return $this->render(
-                'solicitudes/reconocimientoEscala.html.twig',
-                array(
-                    'form' => $form->createView(),
-                    'tipo'  => 'Concurso de Oposición'
-                )
-            );
-        }
+
 
         //si ya tiene una solicitud en espera, enviarlo a la pagina de los  servicios
 	    $solicitud = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->findOneBy(
@@ -401,7 +393,7 @@ class AscensoController extends Controller
         );
         
         
-       if (!$solicitud){
+       if ($concurso && !$solicitud){
            $this->addFlash('danger', 'Debe tener una solicitud de Ascenso Activa para poder utilizar este servicio');
            return $this->redirect($this->generateUrl('cea_index'));
        }
@@ -412,7 +404,7 @@ class AscensoController extends Controller
            'idEstatus' => 1
        ));
 
-        if (!$acta){
+        if ($concurso && !$acta){
             $this->addFlash('danger', 'Debe enviar primero su acta de aprobación de jurados para poder defender y subir su nuevo escalafón');
             return $this->redirect($this->generateUrl('cea_index'));
         }
@@ -426,6 +418,12 @@ class AscensoController extends Controller
                     'idEstatus'         => 1
                 )                
         );
+
+
+        if($concurso && !$solicitudAscenso){
+            $this->addFlash('danger', 'Estimado Docente, No posee ninguna solicitud de Ascenso Activa.');
+            return $this->redirect($this->generateUrl('cea_index'));
+        }
          
          
 
@@ -486,21 +484,16 @@ class AscensoController extends Controller
             $this->addFlash('success', 'Solicitud de Reconocimiento de escala Registrada Satisfactoriamente');
             return $this->redirect($this->generateUrl('cea_index'));		
         }
-       
-               
 
-            
-        
-        
-        if(!$solicitudAscenso){
-            $this->addFlash('danger', 'Estimado Docente, No posee ninguna solicitud de Ascenso Activa.');
-                return $this->redirect($this->generateUrl('cea_index'));            
+        if(!$concurso){
+            return $this->render(
+                'solicitudes/reconocimientoEscala.html.twig',
+                array(
+                    'form' => $form->createView(),
+                    'tipo'  => 'Concurso de Oposición'
+                )
+            );
         }
-        
-        
-         
-        
-        
         
         return $this->render(
                 'solicitudes/reconocimientoEscala.html.twig',
@@ -755,9 +748,9 @@ $ascenso = $this->getDoctrine()->getRepository('AppBundle:Ascenso')->findOneBy(
 
                 $servicio->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(4));
 
-                $servicioDefensa->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(4));
-                $ServicioAscenso->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(4));
-                $ascenso->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(4));
+                if($servicioDefensa) $servicioDefensa->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(4));
+                if($ServicioAscenso) $ServicioAscenso->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(4));
+                if($ascenso) $ascenso->setIdEstatus($this->getDoctrine()->getRepository('AppBundle:Estatus')->findOneById(4));
 
             }else{
                 //$mensaje = $request->request->get('message-text');
@@ -773,9 +766,9 @@ $ascenso = $this->getDoctrine()->getRepository('AppBundle:Ascenso')->findOneBy(
 
             }
 
-            $em->persist($ServicioAscenso);
-            $em->persist($servicioDefensa);
-            $em->persist($ascenso);
+            if($ServicioAscenso) $em->persist($ServicioAscenso);
+            if($servicioDefensa) $em->persist($servicioDefensa);
+            if($ascenso) $em->persist($ascenso);
             $em->persist($verificado);
             $em->flush();
             $this->addFlash('success', 'Escala Agregada Satisfactoriamente');
