@@ -24,7 +24,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * DocenteServicio
  *
- * @ORM\Table(name="docente_servicio" )
+ * @ORM\Table(name="docente_servicio",uniqueConstraints={@ORM\UniqueConstraint(name="rol_institucion_servicio_status", columns={"id_rol_institucion", "id_servicio_ce", "id_estatus", "fecha_solicitud"})})
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks()
  */
@@ -70,9 +70,9 @@ class DocenteServicio {
      */
     protected $idServicioCe;
     
-    /** @ORM\Column(type="datetime", nullable=false, options={"comment" = "Fecha de creación de la solicitud"})
+    /** @ORM\Column(type="date", nullable=false, options={"comment" = "Fecha de creación de la solicitud"})
      /**
-     * @Assert\DateTime()
+     * @Assert\Date()
      */      
     private $fechaSolicitud;
     
