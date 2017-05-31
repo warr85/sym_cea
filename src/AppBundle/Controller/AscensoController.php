@@ -378,7 +378,22 @@ class AscensoController extends Controller
      */
     public function reconocimientoEscalaAction(Request $request)
     {
-        
+
+        $form = $this->createForm('AppBundle\Form\ReconocimientoEscalaType');
+        $concurso = $this->getDoctrine()->getRepository('AppBundle:DocumentosVerificados')->findOneBy(array(
+            'idRolInstitucion'  => $this->getUser()->getIdRolInstitucion(),
+            'idTipoDocumentos' => 4
+        ));
+
+        if(!$concurso){
+            return $this->render(
+                'solicitudes/reconocimientoEscala.html.twig',
+                array(
+                    'form' => $form->createView(),
+                    'tipo'  => 'Concurso de Oposición'
+                )
+            );
+        }
 
         //si ya tiene una solicitud en espera, enviarlo a la pagina de los  servicios
 	    $solicitud = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->findOneBy(
@@ -402,10 +417,7 @@ class AscensoController extends Controller
             return $this->redirect($this->generateUrl('cea_index'));
         }
         
-         $concurso = $this->getDoctrine()->getRepository('AppBundle:DocumentosVerificados')->findOneBy(array(
-             'idRolInstitucion'  => $this->getUser()->getIdRolInstitucion(),
-             'idTipoDocumentos' => 4
-         ));
+
          
          
          $solicitudAscenso = $this->getDoctrine()->getRepository('AppBundle:Ascenso')->findOneBy(
@@ -416,7 +428,7 @@ class AscensoController extends Controller
         );
          
          
-	$form = $this->createForm('AppBundle\Form\ReconocimientoEscalaType');
+
         
         $form->handleRequest($request);
         $em = $this->getDoctrine()->getManager();
@@ -476,15 +488,7 @@ class AscensoController extends Controller
         }
        
                
-         if(!$concurso){
-              return $this->render(
-                'solicitudes/reconocimientoEscala.html.twig',
-                array(
-                    'form' => $form->createView(), 
-                    'tipo'  => 'Concurso de Oposición'
-                )
-            );
-         } 
+
             
         
         
