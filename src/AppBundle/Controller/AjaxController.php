@@ -373,18 +373,29 @@ class AjaxController extends Controller {
 
             $em = $this->getDoctrine()->getManager();
             $servicio = $em->getRepository("AppBundle:DocenteServicio")->findOneById($id);
-            $servicio->setIdEstatus($this->getDoctrine()->getRepository("AppBundle:Estatus")->findOneById(4));
-            $em->persist($servicio);
-            $em->flush();
+            $caducidad = $em->getRepository("AppBundle:PidaCaducidad")->findOneByIdDocenteServicio($servicio);
+            if($caducidad) {
+                $servicio->setIdEstatus($this->getDoctrine()->getRepository("AppBundle:Estatus")->findOneById(4));
+                $em->persist($servicio);
+                $em->flush();
+                $response = new JsonResponse();
+                $response->setStatusCode(200);
+                $response->setData(array(
+                    'response' => 'success'
+                ));
+            }else{
+                $response = new JsonResponse();
+                $response->setStatusCode(200);
+                $response->setData(array(
+                    'response' => 'caducidad'
+                ));
+            }
 
 
 
 
-            $response = new JsonResponse();
-            $response->setStatusCode(200);
-            $response->setData(array(
-                'response' => 'success'
-            ));
+
+
 
             return $response;
 

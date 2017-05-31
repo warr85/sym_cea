@@ -98,11 +98,15 @@
                         <h4 class="no-screen">PIDA del Docente: {{ app.user.idRolinstitucion.idRol.idPersona }}</h4>
                         <h4 class="no-print">Mi PIDA</h4><span class="small" style="float: right;"> Estatus: {{ servicio.idEstatus }}</span>
                     </div>
+
                     <div class="panel-body">
 
-
                         {% if not caduca %}
+                            <div class="row">
+                                <a class="alert alert-info">Es importante que le asigne duración al PIDA.</a>
+                            </div>
                             {% form_theme caducidadForm 'bootstrap_3_layout.html.twig' %}
+                            <br>
                                 {{ form_start(caducidadForm) }}
                             <div class="row">
                                 <div class="col-lg-5">
@@ -370,8 +374,13 @@
                     cache: false,
                     data: ({finalizar: $(this).attr('data-servicio')}),
                     success: function (data) {
-                        console.log(data);
-                        location.reload();
+                        if (data.response == "caducidad"){
+                            alert("No se puede finalizar un PIDA sin antes asignarle Caducidad");
+                            $(".btn").button('reset');
+                        }else {
+                            console.log(data);
+                            location.reload();
+                        }
                     },
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
                         console.log(errorThrown);
