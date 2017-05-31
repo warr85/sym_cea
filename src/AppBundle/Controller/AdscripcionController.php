@@ -463,8 +463,9 @@ class AdscripcionController extends Controller
          $pid = false;
          $servicio = $this->getDoctrine()->getRepository("AppBundle:DocenteServicio")->findOneBy(array(
              'idRolInstitucion' => $this->getUser()->getIdRolInstitucion()->getId(),
-             'idServicioCe' => 4
-         ));
+             'idServicioCe' => 4),
+             array ('id' => 'DESC')
+         );
 
         if($servicio) {
             //si el servicio está cadudado, debe solicitar uno nuevo
