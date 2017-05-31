@@ -21,7 +21,7 @@ class PidaCaducidadType extends AbstractType
         $builder
             ->add('fechaInicio',DateType::class, array(
         'widget' => 'choice',
-        'label' => 'Pida inicia desde',
+        'label' => 'Pida inicia desde: ',
         'label_attr' => array('class' => 'form-group'),
         'years' => range(date("Y")-2, date("Y")),
         'placeholder' => array(
@@ -34,7 +34,7 @@ class PidaCaducidadType extends AbstractType
     ))
             ->add('fechaFinal',DateType::class, array(
                 'widget' => 'choice',
-                'label' => 'Pida inicia desde',
+                'label' => 'Pida Finaliza el: ',
                 'label_attr' => array('class' => 'form-group'),
                 'years' => range(date("Y")-2, date("Y")+4),
                 'placeholder' => array(
