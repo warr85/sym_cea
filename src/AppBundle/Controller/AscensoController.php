@@ -546,7 +546,7 @@ $ascenso = $this->getDoctrine()->getRepository('AppBundle:Ascenso')->findOneBy(
         );
 
 
-        if($solicitudDefensa->getIdEstatus()->getId() == 1 || $solicitudDefensa->getIdEstatus()->getId() == 2 ){
+        if($solicitudDefensa && ($solicitudDefensa->getIdEstatus()->getId() == 1 || $solicitudDefensa->getIdEstatus()->getId() == 2) ){
             $this->addFlash('warning', 'Estimado Docente, Ya posee una solicitud Activa, ¿desea imprimirla? busque en mis servicios solicitados un acta de defensa activa');
             return $this->redirect($this->generateUrl('servicios_index'));
         }
