@@ -112,7 +112,7 @@ class AppController extends Controller {
          $tiempoTranscurrido = 0;
          $suffix = "";
 
-         if ($escalafon->getidEscala()->getId() != 5){
+         if ($escalafon && $escalafon->getidEscala()->getId() != 5){
              $escalafones = $this->getDoctrine()->getRepository("AppBundle:Escalafones")->findOneById($escalafon->getIdEscala()->getId() + 1); //tiempo para el proximo escalafon
              if($escalafones){
                  //tiempo para el prox escalafon
