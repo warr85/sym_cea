@@ -35,6 +35,7 @@ class AppController extends Controller {
      *
      * @Route("/", name="cea_index")
      * @Method("GET")
+     * @Security("has_role('ROLE_USUARIO')")
      */
     public function indexAction()
     {
