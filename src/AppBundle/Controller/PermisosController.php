@@ -44,10 +44,10 @@ class PermisosController extends Controller
             'idEscala' => $em->getRepository("AppBundle:Escalafones")->findOneById(2)
         ));
 
-        if(!$escalafones){
+        /*if(!$escalafones){
             $this->addFlash('danger', 'Estimado Docente, debe estar como mínino en la categoría Asistente para poder realizar esta solicitud');
             return $this->redirect($this->generateUrl('cea_index'));
-        }
+        }*/
 
 
         /* Permiso sabatico */
@@ -296,7 +296,8 @@ class PermisosController extends Controller
         return $this->render('solicitudes/permisos_index.html.twig', array(
             'formSabatico'      => $formSabatico->createView(),
             'formEstudio'      => $formEstudio->createView(),
-            'formExtranjero'      => $formExtranjero->createView()
+            'formExtranjero'      => $formExtranjero->createView(),
+            'asistente'         => $escalafones
         ));
     }
 

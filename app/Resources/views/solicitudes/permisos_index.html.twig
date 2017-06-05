@@ -112,11 +112,15 @@
                                              cuando lo hayas contemplado dentro de tus actividades del PIDA y
                                              nos incluyas una exposición de motivos
                                              <br><br>
-
-                                             {% form_theme formSabatico 'bootstrap_3_layout.html.twig' %}
-                                             {{ form_start(formSabatico, {'attr': {'novalidate': 'novalidate'}}) }}
-                                             {{ form_widget(formSabatico) }}
-                                             {{ form_end(formSabatico) }}
+                                                {% if asistente %}
+                                                     {% form_theme formSabatico 'bootstrap_3_layout.html.twig' %}
+                                                     {{ form_start(formSabatico, {'attr': {'novalidate': 'novalidate'}}) }}
+                                                     {{ form_widget(formSabatico) }}
+                                                     {{ form_end(formSabatico) }}
+                                             {% else %}
+                                                    <p>Estimado docente, para gozar de este permiso, debe haber alcanzado
+                                                    como mínimo el escalafón o categoría de <strong>asistente</strong>.</p>
+                                             {% endif %}
                                          </div>
                                      </div>
                                  </div>
