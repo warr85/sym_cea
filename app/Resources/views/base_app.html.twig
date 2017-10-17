@@ -12,6 +12,16 @@
                     opacity: 0.8;
                     background-color:#398439;
                 }
+
+                .dropdown-submenu {
+                    position: relative;
+                }
+
+                .dropdown-submenu .dropdown-menu {
+                    top: 60%!important;
+                    left: 35%;
+                    margin-top: -1px;
+                }
             </style>
         {% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
@@ -271,12 +281,18 @@
                         <li class="droplink"><a href="#"><span class="fa fa-leaves-cea fa-2x" style="font-size: 1.7em;"></span><p> Servicios CEA</p><span class="arrow"></span></a>
                             <ul class="sub-menu">
                                 <li><a href="{{ path('servicios_index') }}">Mis Servicios</a></li>
-                                <li><a href="{{ path('cea_solicitud_ascenso') }}">Solicitar Ascenso</a></li>
-                                <li><a href="{{ path('cea_solicitudes_estado_academico' ) }}">Estado Académico </a></li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">Ascensos <span class="caret"></span></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a tabindex="-1" href="{{ path('cea_solicitud_ascenso') }}">Nuevo Ascenso</a></li>
+                                        <li><a tabindex="-1" href="{{ path('cea_solicitud_acta_defensa') }}">Acta de Defensa</a></li>
+                                        <li><a tabindex="-1" href="{{ path('cea_solicitud_recocimiento_escala') }}">Reconocer nuevo Escalafón</a></li>
+                                    </ul>
+                                </li>
                                 <li><a href="{{ path('cea_solicitudes_recocimiento_antiguedad') }}">Reconocimiento Antiguedad</a></li>
                                 <li><a href="{{ path('permisos_index') }}">Solicitud Permisos</a></li>
-                                <li><a href="{{ path('cea_solicitud_recocimiento_escala') }}">Reconocer Ascenso</a></li>
-                                <li><a href="{{ path('cea_solicitud_acta_defensa') }}">Acta Defensa</a></li>
+                                <li><a href="{{ path('cea_solicitudes_estado_academico' ) }}">Estado Académico </a></li>
+
                             </ul>
                         </li>
                         {% else %}
@@ -381,6 +397,12 @@
 
 
    $(document).ready(function () {
+
+       $('.dropdown-submenu a.test').on("click", function(e){
+           $(this).next('ul').toggle();
+           e.stopPropagation();
+           e.preventDefault();
+       });
 
        // Toggle Search
        $('.show-search').click(function(){
