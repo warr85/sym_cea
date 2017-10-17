@@ -12,7 +12,7 @@
 /bin/
 /composer.phar
 /nbproject/private/
-
+!AppController.php
 # Linux
 .*
 !.gitignore

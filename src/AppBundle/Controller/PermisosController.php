@@ -39,6 +39,17 @@ class PermisosController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $docente = $this->getUser()->getIdRolInstitucion();
+
+        $adscrito = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->findOneBy(
+            array('idRolInstitucion'  => $this->getUser()->getIdRolInstitucion(), 'idServicioCe' => 2, 'idEstatus' => 1),
+            array('id' => 'DESC')
+        );
+
+        if(!$adscrito){
+            $this->addFlash('warning', 'Su Adscripción está en Espera, Al cambiar a aprobada se le notifcará por correo');
+            return $this->redirect($this->generateUrl('servicios_index'));
+        }
+
         $escalafones = $em->getRepository("AppBundle:DocenteEscala")->findOneBy(array(
             'idRolInstitucion' => $docente,
             'idEscala' => $em->getRepository("AppBundle:Escalafones")->findOneById(2)

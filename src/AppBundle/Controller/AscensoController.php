@@ -39,6 +39,17 @@ class AscensoController extends Controller
     public function ascensoAction(Request $request)
     {
         $formalizarTiempo = false;
+
+        $adscrito = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->findOneBy(
+            array('idRolInstitucion'  => $this->getUser()->getIdRolInstitucion(), 'idServicioCe' => 2, 'idEstatus' => 1),
+            array('id' => 'DESC')
+        );
+
+        if(!$adscrito){
+                $this->addFlash('warning', 'Su Adscripción está en Espera, Al cambiar a aprobada se le notifcará por correo');
+                return $this->redirect($this->generateUrl('servicios_index'));
+        }
+
 	//si ya tiene una solicitud en espera, enviarlo a la pagina de los  servicios
 	$solicitud = $this->getDoctrine()->getRepository('AppBundle:DocenteServicio')->findOneBy(
                 array('idRolInstitucion'  => $this->getUser()->getIdRolInstitucion(), 'idServicioCe' => 5),

@@ -79,7 +79,8 @@ class AppController extends Controller {
                 $vigente = $tiempo->invert ? false : true;
                 if($tiempo->format('%a%') <= 60 && $tiempo->format('%a%') >= 30){
                     $suffix = ( $tiempo->invert ? ' venció hace' : 'estará viegene por' );
-                    $this->addFlash('warning', 'Estimado docente su PIDA '  . $suffix . $tiempo->format('%a%') . ' días más' );
+                    $this->addFlash('warning', 'E12345
+                    stimado docente su PIDA '  . $suffix . $tiempo->format('%a%') . ' días más' );
                 }else if($tiempo->format('%a%') <= 29  && $vigente){
                     $this->addFlash('danger', 'Estimado docente dentro de '  . $tiempo->format('%a%') . ' días su PIDA caducará y deberá crear uno nuevo');
                 }

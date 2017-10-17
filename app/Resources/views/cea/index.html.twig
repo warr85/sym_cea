@@ -25,7 +25,7 @@
                 Tan pronto sea activada, se le notificará por el correo institucional y podrá
                 disfrutar de los servicios que ofrecemos
             </div>
-        {%endif %}
+        {% else %}
 
         <!-- Si no tiene una solicitud de ascenso activa -->
         {% if ascenso %}
@@ -61,6 +61,7 @@
                         {% if tiempoProxEscalafon.d > 0 %} {{ tiempoProxEscalafon.d }} día/s {% endif %}
                     </strong>
                 </h4>
+                {% endif %}
                 {% endif %}
                 {% endif %}
                 <div class="col-md-2 col-sm-3 col-xs-4">
