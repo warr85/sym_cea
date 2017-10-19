@@ -33,32 +33,8 @@ class SolicitarType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('nombres', TextType::class, array(
-                'attr' => array('placeholder' => 'Primer Nombre...'),
-                'label' => 'Primer Nombre',
-                'constraints' => array(
-                    new NotBlank(),
-                    new Regex(array(
-                        'pattern'   => '/^([a-zA-ZáéíóúÁÉÍÓÚñÑ\']{2,30}\S+)$/',
-                        'match'     => true,
-                        'message'   => 'no debe contener espacios ni números y tener mínino tres caracteres.'
-                    ))
-                )
-            ))
-            ->add('apellidos', TextType::class, array(
-                'attr' => array('placeholder' => 'Primer Apellido...'),
-                'label' => 'Primer Apellido',
-                'constraints' => array(
-                    new NotBlank(),
-                    new Regex(array(
-                        'pattern'   => '/^([a-zA-ZáéíóúÁÉÍÓÚñÑ\']{2,30}\S+)$/',
-                        'match'     => true,
-                        'message'   => 'no debe contener espacios ni números y tener mínino tres caracteres.'
-                    ))
-                )
-            ))
             ->add('cedula', NumberType::class, array(
-                'attr' => array('placeholder' => 'Cédula o Pasaporte...'),
+                'attr' => array('placeholder' => 'Cédula o Pasaporte del docente...'),
                 'constraints' => array(
                     new NotBlank(),
                     new Length(array('min' => 7)),
@@ -81,7 +57,7 @@ class SolicitarType extends AbstractType
             ))
                 
             ->add('correo', EmailType::class, array(
-                'attr' => array('placeholder' => 'Dirección de Correo...'),
+                'attr' => array('placeholder' => 'Dirección de Correo Electrónico...'),
                 'constraints' => array(
                     new NotBlank(),
                     new Email()
@@ -98,7 +74,7 @@ class SolicitarType extends AbstractType
             ))
 
             ->add('eje_parroquia', EntityType::class, array(
-                'placeholder' => 'Seleccione Estado del Eje',
+                'placeholder' => 'Seleccione Estado del Eje Adscrito',
                 'label' => 'Estado',
                 'class' => 'AppBundle:EjeParroquia',
                 'choice_label' => 'estado',

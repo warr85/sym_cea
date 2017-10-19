@@ -319,6 +319,8 @@
     <script type="text/javascript" src="{{ asset('assets/vendor/smooth-scroll/dist/js/smooth-scroll.js') }}" ></script>
     <script type="text/javascript">
         smoothScroll.init();
+        $('#solicitar_eje_parroquia').empty().append('<option selected="selected" value="">Seleccione el Estado asociado al Eje Adscrito</option>');
+
 
         $(function() {
             $("#solicitar_eje").change(function(){

@@ -21,9 +21,7 @@ class PortalController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $persona = $this->getDoctrine()->getRepository('AppBundle:Persona')
                               ->findOneBy(array(
-                                  'cedulaPasaporte' => $form->get('cedula')->getData(),
-                                  'primerNombre'    => ucwords($form->get('nombres')->getData()),
-                                  'primerApellido'    => ucwords($form->get('apellidos')->getData()),
+                                  'cedulaPasaporte' => $form->get('cedula')->getData()
                               ));
             
              if (!$persona) {
@@ -85,8 +83,8 @@ class PortalController extends Controller
                         $this->renderView(
                             'correos/solicitud_adscripcion.html.twig',
                             array(
-                                'nombres'   => $form->get('nombres')->getData(),
-                                'apellidos' => $form->get('apellidos')->getData(),
+                                'nombres'   => $persona->getPrimerNombre(),
+                                'apellidos' => $persona->getPrimerApellido(),
                                 'usuario'   => $login->getUsername(),
                                 'contra'    => $login->getPlainPassword(),
                                 'centro_estudios' => 'Centro de Estudios Ambientales',
