@@ -110,7 +110,7 @@ class SolicitarType extends AbstractType
             ->add('send', SubmitType::class, array(
                 'label' => 'Enviar Solicitud',
                 'attr'  => array(
-                    'class' => 'btn btn-success',
+                    'class' => 'btn btn-success cargando',
                     'data-loading-text' => "<i class='fa fa-circle-o-notch fa-spin'></i> Enviando Solicitud..."
                 )
              ));
